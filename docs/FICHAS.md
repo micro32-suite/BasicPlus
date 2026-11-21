@@ -36,6 +36,13 @@
 
 ---
 
+## 🟢 V9, EN CURSO — desde el 21-nov-2026
+
+Eduardo: *«Lo de la versión 8 ya es historia. A partir de ahora trabajaremos sobre la versión 9.»* Sus hitos los nombra
+él; aún sin nombrar. Lo que V8 le pasa, en su bloque de §ABIERTAS y en `PENDIENTES` («Para V9»). Con la versión abierta,
+sus normas: nada sube a GitHub hasta cerrarla, salvo el parche de un fallo de lo publicado; y sus charlas de diseño, a
+`notas/`, no a `docs/`.
+
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
 No cambia nada del producto: reorganiza el proyecto. BasicPlus pasa a la organización `micro32-suite`, con `toolchain`
