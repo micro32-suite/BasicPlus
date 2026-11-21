@@ -43,6 +43,29 @@ Eduardo: *«Lo de la versión 8 ya es historia. A partir de ahora trabajaremos s
 sus normas: nada sube a GitHub hasta cerrarla, salvo el parche de un fallo de lo publicado; y sus charlas de diseño, a
 `notas/`, no a `docs/`.
 
+**El alcance de V9** (Eduardo, 21-nov): *«Tenemos bastantes pendientes heredados de V8. También tenemos la 2ª parte de
+las pruebas de Mono. En el IDE me gustaría poner todos los textos como resources y poder cambiar fácilmente entre
+inglés y español. En un futuro podemos añadir algún idioma adicional pero no en V9. Además tenemos que hacer que la IA
+pueda manejar el IDE, para empezar lo que hablamos en su día. Lo principal de la V9 será actualizar y ampliar las
+librerías de dispositivos (I2C, SPI, UART, etc.). De las que podamos hacemos una versión software para los micros con
+pocos puertos. Y poco más, con eso será suficiente.»* Cinco temas; los hitos, con su número, cuando él los nombre:
+
+- **Lo principal: las librerías de dispositivos** —I2C, SPI, UART…, al día y ampliadas; y, donde se pueda, su versión
+  por software para los micros con pocos puertos—. Lo ya decidido: el plan del 14-nov (📋 bajo la tabla de hitos de
+  V8): primero los streams y las interfaces (`#723`, el modelo de `V8_IDEAS` §E8) y los dispositivos encima, porque
+  los streams cambian sus clases; la UART, una interfaz y sus clases (el número de UART en el micro; un nombre en el
+  PC); en la Pico 2, el driver de la PIO y la UART y el SPI por PIO; lo de software, en C y mejor en natives o en un
+  motor de un pack, para no engordar el firmware (la SRAM y la flash de los micros pequeños).
+- **Los pendientes heredados de V8:** las fichas pasadas a V9 (una veintena: `#845`, la (b) de `#847`, `#848`…) y
+  `PENDIENTES` «Para V9».
+- **Mono, la 2ª parte:** los temas que quedaron de la tabla de 22 (🧩 H6, H7 y H8). Con lo dicho el 7-nov: a V9 no se
+  le promete nada del lenguaje; se estudia qué es razonable llevar a JC.
+- **El IDE en dos idiomas:** todos sus textos como recursos y el cambio fácil entre inglés y español (otro idioma,
+  después de V9). Hoy, unos doscientos textos a la vista en 11 de sus 50 ficheros (contados por encima), sin
+  `ResourceBundle`, y la ventana mezcla los dos idiomas.
+- **La IA maneja el IDE:** `#728`, por donde quedó dicho el 24-oct: compilar y ejecutar (PC, micro simulado y placa)
+  con la salida de la consola; después, el depurador.
+
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
 No cambia nada del producto: reorganiza el proyecto. BasicPlus pasa a la organización `micro32-suite`, con `toolchain`
