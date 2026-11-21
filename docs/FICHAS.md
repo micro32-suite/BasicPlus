@@ -65,6 +65,12 @@ pocos puertos. Y poco más, con eso será suficiente.»* Cinco temas; los hitos,
   `ResourceBundle`, y la ventana mezcla los dos idiomas.
 - **La IA maneja el IDE:** `#728`, por donde quedó dicho el 24-oct: compilar y ejecutar (PC, micro simulado y placa)
   con la salida de la consola; después, el depurador.
+- **Y una placa, cuando llegue: la ESP32-S31 con su pantalla** (Eduardo: *«Es casi una P4 pero con la radio
+  integrada. A partir de lo que tenemos no creo que nos cueste mucho tener una imagen para esa placa»*).
+
+**El orden** (Eduardo, ese mismo día): *«Igual es mejor empezar por los pendientes, no me gusta tener tantos abiertos.
+Hacemos una primera tanda cerrando unos cuantos y después vamos haciendo el resto de temas. El orden lo vamos
+improvisando un poco pero los temas ya los tenemos aquí.»* Lo primero, pues, una tanda de pendientes.
 
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
