@@ -66,7 +66,8 @@ pocos puertos. Y poco más, con eso será suficiente.»* Cinco temas; los hitos,
 - **La IA maneja el IDE:** `#728`, por donde quedó dicho el 24-oct: compilar y ejecutar (PC, micro simulado y placa)
   con la salida de la consola; después, el depurador.
 - **Y una placa, cuando llegue: la ESP32-S31 con su pantalla** (Eduardo: *«Es casi una P4 pero con la radio
-  integrada. A partir de lo que tenemos no creo que nos cueste mucho tener una imagen para esa placa»*).
+  integrada. A partir de lo que tenemos no creo que nos cueste mucho tener una imagen para esa placa»*): 16 MB de
+  PSRAM y 16 MB de flash; la pantalla, de 4,3" o de 5" (por confirmar cuando llegue).
 
 **El orden** (Eduardo, ese mismo día): *«Igual es mejor empezar por los pendientes, no me gusta tener tantos abiertos.
 Hacemos una primera tanda cerrando unos cuantos y después vamos haciendo el resto de temas. El orden lo vamos
