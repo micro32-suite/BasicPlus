@@ -8538,6 +8538,33 @@ ve sin analizar:
   llegaba a donde tenía que bajar), y lo arregló la colecta propia.
 - **Lo que se estudia en V9:** la marca, un porcentaje de la tabla (un 10 %); y si crecer antes de colectar, que gasta 8 B
   por slot de basura dentro del bloque de la VM (en la C3 y la C6 cuenta). La misma regla en las dos VMs.
+- **Estudiado (22-nov, la segunda tanda de V9):** lo que decide de verdad es CUÁNDO CRECE, no dónde está la marca. Hoy, tras
+  la colecta de la marca, la tabla sólo crece si no se recicló NINGÚN hueco (`tabla_con_sitio`, `heap.c`; en miVM, la
+  puerta de `heapAlloc`): si se recicla aunque sea uno, no crece, y vuelve a colectar en cuanto se gasta lo reciclado. Un
+  modelo de la tabla (un programa con S objetos vivos que reserva basura sin parar, de objetos chicos: el umbral de volumen
+  no llega; 200 000 reservas; colectas por la tabla / veces que crece), con cuatro reglas: **hoy**; **pct**, la marca al
+  10 %; **histe**, la marca al 10 % y crecer si tras colectar queda libre menos del doble de la marca; y **h64**, la marca
+  de hoy y crecer si tras colectar queda libre menos del 20 % de la tabla (con tablas chicas, de 128 huecos):
+
+  | vivos (tabla de 4096) | hoy | pct | histe | h64 |
+  |---|---|---|---|---|
+  | 50 % | 97 / 0 | 116 / 0 | 116 / 0 | 97 / 0 |
+  | 80 % | 242 / 0 | 338 / 0 | 338 / 0 | 242 / 0 |
+  | 85 % | 322 / 0 | 455 / 0 | 51 / 1 | 42 / 1 |
+  | 92 % | 604 / 0 | 55 / 1 | 55 / 1 | 45 / 1 |
+  | 97 % | **1610** / 0 | 58 / 1 | 58 / 1 | 47 / 1 |
+
+  Con la tabla casi llena de vivos, hoy colecta sin parar (al 97 %, una colecta cada 124 reservas) y nunca crece. La marca
+  al 10 % lo arregla por encima del 90 %, pero con el 50–88 % vivo colecta más que hoy: deja sin usar el último 10 %. Con
+  **h64**, hasta el 80 % vivo, las mismas colectas que hoy; por encima, crece una vez (8 B por hueco, con el tope de
+  siempre en la VM-C, el 12,5 % del heap) y la colecta repetida desaparece. Con 512 huecos, lo mismo desde el 75 %. Y
+  crecer antes de colectar no hace falta: se decide después, por los vivos, así que la basura no hace crecer. El margen de
+  la marca no pide más de 64 huecos: las altas en vuelo son, como mucho, una por worker, y el caso de `#829` lo arregló la
+  colecta propia.
+- **Propuesta, para Eduardo:** **h64**, en las dos VMs; la marca, como está.
+- **22-nov, decidido** (Eduardo: *«OK, me parece bien»*): h64. Tras la colecta de la marca, la tabla crece si lo libre
+  (lo que no se ha repartido nunca y lo reciclado) queda por debajo del 20 % de la tabla, o de 128 huecos con tablas
+  chicas; si no puede crecer (el tope de la VM-C), sigue con lo reciclado, como hoy.
 
 #### ✅ `#829` — la red: `HeapEstres` en la VM-C con dos workers, otra vez «No space in heap» en un hilo después del arreglo de `#762`; esta vez, la tabla de handles se rendía sin una colecta propia (abierta y **CERRADA el 15-nov**, el commit de `#829`; en la red de `#827`; preexistente; Eduardo: *«Lo arreglamos en V8.»*)
 
@@ -13782,7 +13809,7 @@ el IDE, que es el H2 (abajo).
 
 | apartado | qué | ficha | del análisis | estado |
 |---|---|---|---|---|
-| **H1.1** | el clic inyectado tras `Gui.start()` se pierde sin ventana | `#852` | F-1 | ⬜ |
+| **H1.1** | el clic inyectado tras `Gui.start()` se pierde sin ventana | `#852` | F-1 | ✅ 22-nov, `333c8f0d` |
 | **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ⬜ |
 | **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ⬜ |
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | ⬜ |
@@ -13811,7 +13838,7 @@ probaremos más cosas.»*
 (`#852`); la forma de las pruebas y la API pública de la GUI (`#859`); y si compensa que el lector de JC siga tras un
 error (`#860`).
 
-#### 🧬 `#852` — H1.1: `Gui.__guiClick` desde `Main`, con el lazo de `Gui.start()` en marcha, se pierde sin ventana (abierta el 22-nov · F-1 del análisis)
+#### ✅ `#852` — H1.1: `Gui.__guiClick` desde `Main`, con el lazo de `Gui.start()` en marcha, se pierde sin ventana (abierta el 22-nov · F-1 del análisis · **CERRADA el 22-nov**, `333c8f0d`: el error que dice qué hacer)
 
 El caso, `verificacion/sonda-gui/ClickT.bp` del análisis: el manejador del botón suscrito, `Gui.start()`, 100 ms, el clic
 desde `Main`, 300 ms, `Gui.stop()` y `Gui.join()` (los casos C, D y E). **Medido aquí el 22-nov** (el C): miVM con su
@@ -13822,6 +13849,43 @@ placa, no. Y se pierde sin decir nada. El mecanismo, sin mirar (acotar antes de 
 - **Cuál tiene razón:** decide Eduardo (lo natural: que llegue).
 - **Hecho cuando:** `ClickT.bp` y `ClickE.bp`, los casos A–E, dan la misma salida en miVM con ventana y sin ella, en la
   VM-C y en el micro simulado; y el caso, en la red.
+- **Acotada (22-nov, por la tarde): no es un fallo de una VM, es la regla del lazo sin pantalla.** `__guiRunOnce()`
+  devuelve -1, «no queda nada, sal», cuando en su pasada no ha atendido nada y no quedan eventos de BP en la cola
+  (`builtins.c`, `GUI_RUN_ONCE`; en miVM, `guiEventLoopOnce`, donde sin ventana el cierre llega en la primera pasada), y
+  entonces el hilo de la GUI (`HiloGui`, en `Gui.bp`) acaba. Con ventana, o con el panel de una placa, no devuelve -1
+  mientras siga abierta. Sin pantalla, pues, el lazo que arranca `Gui.start()` termina en cuanto no le queda trabajo, y un
+  clic que llega después se queda en la cola sin que nadie lo atienda, y sin decir nada. **Medido** (`ClickF` y `ClickG`:
+  el clic justo tras `start()` y 100 ms después): justo después, llega en todas (miVM sin ventana y la VM-C, 3 de 3; la
+  P4, 2 de 2); 100 ms después, se pierde sin pantalla (miVM sin ventana y la VM-C, 0 de 3) y llega con ella (miVM con
+  ventana, 3 de 3; la P4, 2 de 2). La paridad que importa, el PC con ventana frente a la placa, se cumple; lo distinto es
+  el modo sin pantalla, que es el de las pruebas.
+- **Y esa regla es a propósito** (`#324`, `#462`, `samples/GuiEvSpike.bp`): sin pantalla, `Gui.run()` atiende lo que hay
+  en la cola y vuelve, y por eso un programa con GUI acaba en la red. Es el patrón de los cinco programas que inyectan
+  clics (`GuiClickDemo`, `GuiEvSpike`, `GuiGcRootQ`, `GuiRotDemo` y `FormEv`): el clic y, después, `Gui.run()`
+  («verificable headless»). Los ocho que usan `Gui.start()` llaman todos a `Gui.stop()`.
+- **Las dos salidas, para Eduardo:** **A, que llegue**: con `start()`, el lazo vive hasta `stop()` también sin pantalla
+  (`run()`, como hoy); pide distinguir «sin pantalla» de «la cerró el usuario», que hoy dan las dos -1; una prueba así
+  depende de esperas (`sleep`), y sin pantalla un `start()` sin `stop()` ya no acaba. **B, la regla de hoy, pero no en
+  silencio**: un clic inyectado con el lazo ya acabado da un error que dice qué hacer, y la guía enseña el patrón (el clic
+  y `Gui.run()`), sin esperas y siempre igual. Recomendada, B.
+- **22-nov, decidido** (Eduardo: *«OK, B»*): la regla de hoy, pero sin silencio. Con eso, el «hecho cuando» de arriba
+  cambia: sin pantalla, el clic de después da el error, igual en las dos VMs; con pantalla, llega.
+- **Hecho (22-nov, la segunda tanda de V9; `333c8f0d`; la red, VERDE: paridad 218, MOD8 210 + 8 SKIP, dos workers 218):** en `Gui.bp`, el hilo de la GUI apunta que su lazo acabó (`HiloGui.haAcabado`), y `__guiClick` y
+  `__guiChange`, antes de inyectar, miran con `exigirLazo` que el lazo de `start()` no haya acabado; si acabó, un
+  `RuntimeError` que dice qué hacer: «Gui.__guiClick: el lazo de la GUI acabó; sin pantalla, el clic va antes de
+  Gui.run()». Corto a propósito: la VM-C guarda 90 bytes del mensaje de una excepción no atrapada (`exceptions.c`,
+  `%.90s`), y es ese el que llega al IDE desde la placa (85 y 88 bytes; la primera versión, más larga, salía cortada antes
+  de decir qué hacer). Antes de `start()` o de `run()` —o tras `join()`—, o con el lazo en marcha, el evento se encola
+  como siempre. Por eso los dos dejan de ser un builtin a secas (el builtin, en `clicSintetico` y `cambioSintetico`); lo
+  que ya estaba compilado lleva el builtin dentro y sigue como antes, sin la comprobación. La guía, en los dos idiomas
+  (§18.4 y §24.1): qué hacen `run()` y `start()` sin pantalla, y dónde va un clic de prueba. Y en la red,
+  `samples/GuiLazoAcabado.bp`: el patrón, el error y, tras `join()`, el patrón otra vez.
+- **Verificado:** la misma salida en las dos VMs en `GuiLazoAcabado`, `ClickF` y `ClickG`; los cinco que inyectan clics
+  (`GuiClickDemo`, `GuiEvSpike`, `GuiGcRootQ`, `GuiRotDemo` y `FormEv`), iguales en las dos y sin el error; los casos del
+  análisis: en `ClickT`, A y B atienden el clic y C, D y E dan el error, en las dos, y `ClickE` (el clic antes de
+  `start()`), 3 de 3 en las dos; la stdlib, rehecha con su proyecto (cambian `Gui.mod` y `Stdlib.mod`), y su pack, igual
+  byte a byte a los 35 `.mod`; los fragmentos de las dos guías, 0 FALLO. En una placa con panel el lazo no acaba, y el
+  clic de después llega (la P4, 2 de 2): allí la comprobación no salta.
 
 #### 🧬 `#853` — H1.2: lo que la documentación de la 8.1 manda teclear no está en su ZIP (abierta el 22-nov · F-3, F-4, M-1 y H-002 del análisis)
 
