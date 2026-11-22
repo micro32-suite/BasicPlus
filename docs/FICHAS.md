@@ -9090,7 +9090,7 @@ ve sin analizar:
   (39 líneas), y si una operación no falla o `fileExists` dice que sí, una línea FALLO; con `sandboxPath` como antes, la
   VM-Java muere en el primer `fileExists` (exit 1). Lo de `--workdir` (las rutas relativas) queda en `#823`.
 
-#### 🧬 `#809` — la zona de packs de la VM del PC, en un fichero binario permanente que se cargue al arrancar (abierta el 8-nov, en H2; **para más adelante** · **a V9 el 14-nov**)
+#### ✅ `#809` — la zona de packs de la VM del PC, en un fichero binario permanente que se cargue al arrancar (abierta el 8-nov, en H2; **para más adelante** · **a V9 el 14-nov** · **CERRADA el 22-nov**: la del micro simulado, con la librería sólo la primera vez)
 
 - **La idea, de Eduardo (8-nov):** *«Y para la zona de Pack un fichero binario permanente que se cargue al arrancar la
   VM»*. Hoy la VM-C de consola y el micro simulado la tienen en la RAM: se rellena al arrancar con los `--pack=`, y lo
@@ -9102,6 +9102,18 @@ ve sin analizar:
   arrancar y se escribe al cambiar; y la biblioteca de packs del IDE se graba cuando la zona está virgen (el primer
   arranque, o tras borrar la carpeta del simulado), como en una placa: lo instalado se queda, y se cambia desde el
   panel de Packs. La VM-C de consola, como está (las pruebas quieren la zona limpia).
+- **Hecho (22-nov, la primera tanda de V9):** el micro simulado, con `--packs-file=F`: el fichero es el espejo de la
+  zona, byte a byte —se carga al arrancar si tiene el tamaño de la zona (si no está, o es de otro, la zona arranca
+  virgen y el fichero se rehace); tras los `--pack=` del arranque se vuelca entero; y cada borrado o escritura de la
+  cintura lleva su tramo al fichero en el momento, porque el IDE para el simulador sin despedirse—. La flash estricta
+  (`#647`) no guarda estado propio (mira los bytes), así que cargar la zona de un fichero casa. Y `SimRunner` pasa
+  siempre `--packs-file=<carpeta>/micro.packs`, y la librería sólo si el fichero no existe (la zona virgen); si no,
+  lo dice en la consola. La prueba, `tools/sim_packs_fichero_smoke.py` (en la red, `check-sim`; y `make
+  simpacks-smoke`), con el simulador muerto como lo para el IDE entre paso y paso: lo grabado por el cable, el
+  `PACK_FORMAT` y el `--pack=` del arranque siguen al volver; un fichero de otro tamaño, zona virgen y el fichero
+  rehecho. Con el espejo anulado a mano, cae. Lo que conviene saber: con la zona guardada, un `Stdlib.pack` nuevo de
+  la librería no llega solo al micro simulado —como a una placa—: se graba desde el panel de Packs, o se borra la
+  carpeta del simulado.
 
 #### ✅ `#808` — la VM del PC, con su flash: una carpeta que no se borra (abierta el 8-nov, en H2 · **CERRADA el 13-nov**, el commit de `#808`; Eduardo: *«La b»*)
 

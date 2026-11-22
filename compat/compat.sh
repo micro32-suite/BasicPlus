@@ -969,7 +969,9 @@ check_sim() {
   # cada pieza rota a propósito—.
   # raices_smoke: V8 #799 (13-nov) —en la pila de un hilo BP, un entero que cae justo en un objeto ya no lo retiene (con
   # Core en el pack, el heap empieza donde viven los enteros pequeños); con el sabotaje, sí—.
-  local smokes="sim_smoke boardsim_smoke io_smoke list_trunc_smoke sd_smoke reset_smoke env_smoke sim_dbg_smoke run_smoke run_tarea_smoke stat_base_smoke traza_smoke overlay_smoke raices_smoke" total   # reset_smoke: V7/H8 (28-sep); env_smoke: #626
+  # sim_packs_fichero_smoke: V9 #809 (22-nov) —la zona de packs, permanente (--packs-file): lo grabado por el cable, el
+  # PACK_FORMAT y los --pack= del arranque siguen ahí al volver; un fichero de otro tamaño, zona virgen—.
+  local smokes="sim_smoke boardsim_smoke io_smoke list_trunc_smoke sd_smoke reset_smoke env_smoke sim_dbg_smoke run_smoke run_tarea_smoke stat_base_smoke traza_smoke overlay_smoke raices_smoke sim_packs_fichero_smoke" total   # reset_smoke: V7/H8 (28-sep); env_smoke: #626
   total=$(( $(echo $smokes | wc -w) + 1 ))
   bash "$HERE/stdlib_pack.sh" || fails=$((fails+1))
   if ls "$ROOT"/bpgenvm-c/build/.flavor-*lvgl1 >/dev/null 2>&1; then
