@@ -14118,17 +14118,34 @@ variables y sigue.
   `runOnVmRemote` al volver; el fin, a quien lo espera, cuando ya está suelta.
 - **Probado:** lo mismo, y el Run on Device de después, exit 0, con la salida del programa.
 
-#### 🧬 `#863` — reconectar enseguida al micro simulado: a veces, «handshake con 127.0.0.1:5099 no completado» (abierta el 22-nov · salió al pasar la conexión del panel a comandos, H2.2)
+#### ✅ `#863` — reconectar enseguida al micro simulado: a veces, «handshake con 127.0.0.1:5099 no completado» (abierta el 22-nov · salió al pasar la conexión del panel a comandos, H2.2 · **CERRADA el mismo día con `#864`: la misma carrera**, `717e090` en `toolchain`)
 
 - **Lo visto:** con la ventana del IDE sin enseñar y los comandos por su nombre: arrancar el micro simulado (se
   conecta), dos órdenes que no tocan el cable, desconectar y volver a conectar enseguida: «no se pudo conectar a
   127.0.0.1:5099: handshake con 127.0.0.1:5099 no completado». **Una vez en unas siete reconexiones**; las demás, bien,
   también sin esperar nada (0, 3 y 8 s) y en tres vueltas más de la misma secuencia.
-- **Lo que se sospecha** (sin medir): el simulador atiende una conexión a la vez, y al llegar la nueva aún estaba con
-  la anterior: el escrutinio de primera conexión le pide su STATE en otro hilo justo al conectar, y el INFO y el
-  refresco van detrás. Con una persona al ratón no pasa (o casi); a una IA, que encadena órdenes deprisa, le pasará.
-- **Hecho cuando:** se sabe la causa (lo que hace el simulador con la conexión vieja cuando llega la nueva), y
-  reconectar enseguida no falla, o si falla, reintenta y lo dice (como la comunicación de `#693`).
+- **Lo que se sospechó, y no era:** que el simulador siguiera con la conexión anterior. Era el IDE: la carrera del
+  HELLO de `#864`, que no sabe de transportes (aquí, por TCP).
+- **Probado:** 20 reconexiones seguidas por los comandos: con el IDE de antes del arreglo, 1 mala («handshake no
+  completado»); con el arreglo, 0.
+
+#### ✅ `#864` — el Connect del IDE fallaba a veces, «handshake con COM15 no completado», con un HELLO que SÍ había contestado: una carrera en el `BpvmClient` (abierta el 22-nov · Eduardo, al probar la 4a del H2.2: *«Con la P4 me conecta a veces»* · **CERRADA el mismo día**, `717e090` en `toolchain`)
+
+- **Lo visto** (la consola de Eduardo): la Pico 2 conecta; la P4, «[Placa ERROR] handshake con COM15 no completado»; a
+  la siguiente, conecta. **Está en lo publicado:** medido con el IDE de V8.1 (la dist): 2 de 30 conexiones, una en la P4
+  y otra en la Pico.
+- **La sospecha, falsa:** que al abrir el puerto (DTR y RTS activos) la P4 se reiniciara y el HELLO se perdiera
+  mientras arrancaba, como con `tanda.py` el 24-sep. Medido abriendo el puerto como el IDE, 120 veces, con su tiempo
+  encendida tras cada una: nunca se reinició (crece seguido, unas 3,4 h).
+- **Lo que era** (lo enseñó la secuencia de Eduardo, la Pico y después la P4): en los fallos, el diagnóstico del propio
+  cliente decía «handshake con VM: bpvm-pico … protoVersion=1», el HELLO contestado. En el hilo que lee el cable, al
+  llegar el HELLO_REPLY, `handleMessage` despertaba a quien lo esperaba (`fut.complete`) y DESPUÉS lo daba por hecho
+  (`helloLatch.countDown`); el connect despertaba con lo primero y miraba `isHandshakeDone()` antes de lo segundo
+  (`AbstractBpvmBackend.connect`). No sabe de transportes: es también `#863` (por TCP, el micro simulado).
+- **Hecho:** el HELLO se da por hecho ANTES de despertar a quien lo espera.
+- **Probado:** la secuencia de Eduardo (la Pico, soltarla, la P4), 60 vueltas, 120 conexiones: con el IDE de V8.1, 2
+  carreras en 30; con el arreglo, 0 en 120. El micro simulado, `#863`. Y lo de los comandos, otra vez entero (las
+  pruebas de las tandas, `VmJavaRunnerSmoke`, `ComandosSmoke`): igual que antes.
 
 ## 📦 CERRADAS EN V6 (con su commit, para no volver a darlas por abiertas) — V6 publicada el 12-sep-2026
 
