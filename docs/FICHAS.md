@@ -14094,7 +14094,7 @@ panel de la placa; 48 diálogos modales en `FrmMain`, que pasan a ser resultados
 | apartado | qué | estado |
 |---|---|---|
 | **H2.1** | el análisis: el inventario de las acciones, el comando y sus reglas, y por dónde entra la IA (`#728` estaba «por analizar» desde el 24-oct) | ✅ 22-nov (`notas/V9_H2_comandos.md`) |
-| **H2.2** | **los comandos**: la capa, y las acciones de `FrmMain` y del panel de la placa pasadas a comandos con su `Action`, sin cambiar nada de lo que se ve (lo prueba Eduardo en el IDE); por tandas: ficheros, compilar, ejecutar y parar primero | ⬜ |
+| **H2.2** | **los comandos**: la capa, y las acciones de `FrmMain` y del panel de la placa pasadas a comandos con su `Action`, sin cambiar nada de lo que se ve (lo prueba Eduardo en el IDE); por tandas: ficheros, compilar, ejecutar y parar primero | ⏳ la primera tanda (nuevo, abrir, guardar, compilar, ejecutar en el PC y parar), hecha el 22-nov (`1eb638e` en `toolchain`; `ComandosSmoke`, 15/15), a falta de probarla Eduardo en el IDE |
 | **H2.3** | **la IA llama a los comandos** (MCP por HTTP dentro del IDE, en `127.0.0.1`, apagado por defecto): compilar y ejecutar —en el PC, en el micro simulado y en la placa— con la consola y su código de salida | ⬜ |
 | **H2.4** | **el depurador, por la IA**: los puntos de parada, el paso a paso y las variables | ⬜ |
 
