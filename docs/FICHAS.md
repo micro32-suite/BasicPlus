@@ -8575,6 +8575,8 @@ ve sin analizar:
   daba unas 35); con `--sabotaje-crecer`, la regla de antes, se queda en 512 con 231. Los dos ganchos de la prueba, al
   final de `bpvm_cola_t` (`sabotaje_crecer`, `ensayo_tabla_inicial`), no en `bpvm_t`: su layout es la ABI de los `.mdn`.
   Y `HEAP_LAYOUT.md`, cuándo crece la tabla.
+- **En placa (22-nov, con `#781`):** la Pico 2 y la P4 con la imagen nueva; `HeapInfo` y `HeapCompact`, IDÉNTICOS al PC
+  en las dos (`compat/informes/tanda_v9_22nov.md`).
 
 #### ✅ `#829` — la red: `HeapEstres` en la VM-C con dos workers, otra vez «No space in heap» en un hilo después del arreglo de `#762`; esta vez, la tabla de handles se rendía sin una colecta propia (abierta y **CERRADA el 15-nov**, el commit de `#829`; en la red de `#827`; preexistente; Eduardo: *«Lo arreglamos en V8.»*)
 
@@ -9892,7 +9894,7 @@ que lleva la newlib entera, la `memcpy` es la de Arm en ensamblador; en las ESP,
 - **Decidido** (Eduardo, 3-nov: *«b) también pero sin fecha para hacerlo»*). Sin diseñar.
 - **14-nov, a V9, sin fecha** (Eduardo: *«a V9»*).
 
-#### 🧬 `#781` — quitar el tope de los datos de un módulo: un prefijo `WIDE`, como el de la JVM, para los datos que no llegan con el operando de 16 bits (abierta el 3-nov, tras `#768`; **decidido, para más adelante** · **a V9 el 14-nov**)
+#### ✅ `#781` — quitar el tope de los datos de un módulo: un prefijo `WIDE`, como el de la JVM, para los datos que no llegan con el operando de 16 bits (abierta el 3-nov, tras `#768`; **decidido, para más adelante** · **a V9 el 14-nov** · **CERRADA el 22-nov**, `0f1ba0a` en `toolchain` y `e23faf9` en `runtime`; en placa, la Pico 2 y la P4)
 
 - **Por qué** (Eduardo, 3-nov: *«A mi me da la impresión que la restricción de 64K es una limitación del compilador,
   probablemente del generador de código»*): lo es. Las instrucciones que tocan un dato del módulo llevan su posición
@@ -9930,6 +9932,14 @@ que lleva la newlib entera, la `memcpy` es la de Arm en ensamblador; en las ESP,
     MOD8 de la red, `DatosAnchos` sale como SKIP, declarado (`// mod8: fuera`).
   - **La documentación:** `OPCODES.md` (su sección, la convención del `doff` y los códigos libres), `MOD_FORMAT.md` y el
     manual §10, en los dos idiomas (los datos de un módulo, sin tope desde V9).
+  - **En placa (22-nov; Eduardo: *«Tienes la Pico2 y la P4 conectadas, graba cuando quieras»*):** las dos imágenes
+    nuevas (llevan `#830` y `#781`), grabadas: la Pico 2 con `flash_pico.py` y la P4 con `app-flash`, tras el `nm` (el
+    texto, +638 B, y el rodata, +64, en sus mismas páginas de 64 KB; el heap, quieto): sus packs sellados aguantaron,
+    `SQLite` y `Gui` con `rc=0`. En la P4, además, el `Stdlib.pack` nuevo (con el `Gui.mod` de `#852`); en la Pico 2 se
+    queda el de antes, que sólo difiere en `Gui` (no tiene pantalla) y no cabe sin formatear la zona. La tanda corta
+    (`bpgenvm-c/tools/tanda_v9.json`; informe `compat/informes/tanda_v9_22nov.md`): en las dos, todo IDÉNTICO al PC
+    —la prueba de fuego, `DatosGrandes`, **`DatosAnchos`, con `WIDE`**, `HeapInfo` y `HeapCompact`—, `MachineId` sin
+    petar, y en la P4 la GUI (`GuiWinJson` IDÉNTICO; la captura de `GuiShot`, mirada: bien).
 
 #### ✅ `#780` — `samples/errores`: tres ejemplos sin caso en `h13-errores.sh` (nadie vigila su mensaje), y `AnnMal` falla por algo que no es lo suyo (abierta el 3-nov, al añadir el de `#768`; **CERRADA el mismo día**, el commit de `#780`)
 
@@ -13922,6 +13932,8 @@ placa, no. Y se pierde sin decir nada. El mecanismo, sin mirar (acotar antes de 
   `start()`), 3 de 3 en las dos; la stdlib, rehecha con su proyecto (cambian `Gui.mod` y `Stdlib.mod`), y su pack, igual
   byte a byte a los 35 `.mod`; los fragmentos de las dos guías, 0 FALLO. En una placa con panel el lazo no acaba, y el
   clic de después llega (la P4, 2 de 2): allí la comprobación no salta.
+- **En placa (22-nov, con `#781`):** la P4 lleva ya el `Stdlib.pack` nuevo, con este `Gui.mod`; su tanda, con la GUI
+  (`GuiWinJson` IDÉNTICO, `GuiShot` sin petar), bien (`compat/informes/tanda_v9_22nov.md`).
 
 #### 🧬 `#853` — H1.2: lo que la documentación de la 8.1 manda teclear no está en su ZIP (abierta el 22-nov · F-3, F-4, M-1 y H-002 del análisis)
 
