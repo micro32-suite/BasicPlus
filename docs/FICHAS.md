@@ -39,7 +39,7 @@
 ## 🟢 V9, EN CURSO — desde el 21-nov-2026
 
 Eduardo: *«Lo de la versión 8 ya es historia. A partir de ahora trabajaremos sobre la versión 9.»* Sus hitos los nombra
-él; aún sin nombrar. Lo que V8 le pasa, en su bloque de §ABIERTAS y en `PENDIENTES` («Para V9»). Con la versión abierta,
+él (el primero, el 22-nov: abajo). Lo que V8 le pasa, en su bloque de §ABIERTAS y en `PENDIENTES` («Para V9»). Con la versión abierta,
 sus normas: nada sube a GitHub hasta cerrarla, salvo el parche de un fallo de lo publicado; y sus charlas de diseño, a
 `notas/`, no a `docs/`.
 
@@ -72,6 +72,14 @@ pocos puertos. Y poco más, con eso será suficiente.»* Cinco temas; los hitos,
 **El orden** (Eduardo, ese mismo día): *«Igual es mejor empezar por los pendientes, no me gusta tener tantos abiertos.
 Hacemos una primera tanda cerrando unos cuantos y después vamos haciendo el resto de temas. El orden lo vamos
 improvisando un poco pero los temas ya los tenemos aquí.»* Lo primero, pues, una tanda de pendientes.
+
+🏁 **Los hitos de V9** (los nombra Eduardo; el primero, el 22-nov, a la vista del análisis de otra sesión: *«Lo que veas
+que se puede aprovechar apúntalo como mejoras pendientes y le dedicamos un hito»*). El detalle, en §ABIERTAS, en el
+bloque de V9:
+
+| hito | qué | estado |
+|---|---|---|
+| **H1** *(el nombre y el número, provisionales)* | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`; y `#728`, si entra) | ⬜ abierto el 22-nov |
 
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
@@ -187,7 +195,9 @@ el PC sin placa, como en el host.
 > quedó pendiente pasa a V7 y deja de ser de V6** — la misma decisión de Eduardo del 23-ago, aplicada
 > igual. Hay tres bloques: las fichas que se abran en V7 (arriba), las que vienen de V6 (movidas
 > enteras, con su texto intacto) y la cola que venía de V5 y V6 no llegó a abrir. **Y desde el 24-sep, un
-> cuarto al final: V8** —la WiFi, el Bluetooth y el bajo consumo, por decisión de Eduardo—, que NO es de V7.
+> cuarto al final: V8** —la WiFi, el Bluetooth y el bajo consumo, por decisión de Eduardo—, que NO es de V7. **Y desde
+> el 22-nov, un quinto, detrás del de V8: V9**, con sus hitos y sus fichas (`#852` en adelante); lo que V8 le pasa
+> sigue en el bloque de V8.
 >
 > 🔎 **LO ABIERTO DE VERDAD, al 24-sep por la noche** (la tabla de hitos, limpia ese día a petición de Eduardo: las
 > cerradas que seguían sin tachar, tachadas, y los restos de las cerradas, llamados «restos»): **H1 y H2, cerrados.**
@@ -11735,6 +11745,8 @@ dispositivo, ejecutar, etc.»* Lo visto ese día:
 Eduardo: *«OK»*. Apuntada; se retoma cuando él diga.
 
 - **14-nov, a V9** (Eduardo: *«a V9»*).
+- **22-nov, propuesta para el H1 de V9** (una IA trabaja con BasicPlus): su último apartado, H1.11, encima del cable por
+  línea de órdenes (`#857`), con el adaptador MCP —el bloque 6 del análisis—. Si entra, decide Eduardo.
 
 #### ✅ `#727` — `test-tablasim` (`#639`), caso 4: con un byte menos que la línea base espera que algo no entre; pero si lo último que pide la carga es el array de registros, crece menos y cabe todo (abierta el 23-oct, al pasar la red de `#725`; **CERRADA el mismo día**: el caso busca el presupuesto con el que algo no entra, `8f1ca68b`)
 
@@ -13735,6 +13747,204 @@ propia revisión dice que no se puede extender a otra placa. Sin línea base, la
 contra qué compararse.
 
 - **14-nov, el repaso de los pendientes** (Eduardo: *«a V9»*): se queda en V9.
+
+### ═══ V9 — EN CURSO DESDE EL 21-NOV-2026 ═══
+
+> Lo que se abre en V9, aquí, por hitos; lo que V8 le pasa sigue en su bloque, arriba (con la primera tanda de V9,
+> `#845`–`#851`, cerrada el 22-nov). Los hitos los nombra Eduardo; su tabla, en el registro de V9, arriba del todo.
+
+#### 🧩 H1 — una IA trabaja con BasicPlus: lo que les falta a las herramientas (abierto el 22-nov · el nombre y el número, provisionales)
+
+Eduardo, 22-nov: *«Le he pedido a Claude Code en otra sesión que probase a hacer una aplicación con BasicPlus para ver
+cómo sería el desarrollo de una aplicación con la IA y que lo analizase. […] Lo que veas que se puede aprovechar
+apúntalo como mejoras pendientes y le dedicamos un hito.»*
+
+**El análisis** (otra sesión, en `C:\lenguajes\bp-analisis\temas\ia-herramientas\`; sólo lectura, sobre `pm@572cfd34` y el
+ZIP de la 8.1): tres sondas en las que una IA que no conocía BasicPlus escribió, compiló, ejecutó y capturó programas con
+sólo lo publicado —uno de consola de 66 líneas (a la 3ª vuelta), una GUI de 161 (a la 1ª, con la misma salida y el mismo
+árbol de widgets en las dos VMs) y JC (10 vueltas sin la guía; con ella, a la primera)—; 16 hallazgos (H-001…H-016,
+`hallazgos/README.md`) y su traspaso: 5 fallos (F-1…F-5) y 19 mejoras (M-1…M-19), cada una con su «hecho cuando»
+(`especificacion/TRASPASO-CLAUDE-CODE.md`), más un borrador de la guía para IA (`especificacion/AGENTS-borrador.md`). Su
+conclusión: en el PC una IA ya puede; con la placa o el micro simulado, no sin escribirse un cliente del cable (lo hizo, en
+109 líneas); lo que falta es el último metro —el empaquetado, la documentación para máquinas, los diagnósticos y un
+cliente del cable sin ventana—. Y la baza: la regla de oro (el PC ejecuta lo mismo que el micro, byte a byte) es el bucle
+de comprobación que una IA necesita.
+
+**Lo visto aquí** (22-nov, contra el código y el ZIP): se aprovecha casi todo, y va abajo en diez fichas. Con cuatro
+matices: el clic perdido de F-1 no es la VM Java frente a la C, sino con ventana o sin ella (`#852`); «Run Window» del
+IDE, que el análisis dejó por confirmar, no puede funcionar con sólo el ZIP (`#853`); `--interface` sí escribe —los
+`.bpi`, que no son para leer— (`#858`); y para el cliente del cable ya está en el repositorio `wire_serie.py`, que el
+análisis no conocía porque no va en el ZIP (`#857`). Y una ficha que ya era de V9 encaja dentro: `#728`, la IA maneja el
+IDE (H1.11, si Eduardo la mete).
+
+| apartado | qué | ficha | del análisis | estado |
+|---|---|---|---|---|
+| **H1.1** | el clic inyectado tras `Gui.start()` se pierde sin ventana | `#852` | F-1 | ⬜ |
+| **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ⬜ |
+| **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ⬜ |
+| **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | ⬜ |
+| **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ⬜ |
+| **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ⬜ |
+| **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | ⬜ |
+| **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | ⬜ |
+| **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | ⬜ |
+| **H1.10** | las placas, descritas para leer | `#861` | su pregunta abierta | ⬜ |
+| **H1.11** | la IA maneja el IDE, con MCP encima del cable | `#728` | el bloque 6 | ⬜ si entra |
+
+**El orden**, el del análisis, que es bueno: H1.1 lo primero (es un fallo, y silencioso); después lo barato que se nota
+desde el primer día (H1.2, H1.3); lo que necesita cada vuelta de corrección (H1.4, H1.5); el cable (H1.6); y lo demás.
+H1.11, al final. Lo que no entra: un servidor de lenguaje (LSP, la otra mitad del bloque 6), que sirve a los editores más
+que a la IA; si un día se pide.
+
+**Se da por hecho** cuando una sesión nueva de IA, con sólo el ZIP nuevo, repita las tres sondas —y la que el análisis
+dejó pendiente: un proyecto de varios módulos con `.bpbuild` y `.win`, hilos, `native` y hardware simulado— sin tropezar
+con nada de lo de abajo, y llegue al micro simulado sin escribirse nada.
+
+**Por decidir** (Eduardo), cada cosa al llegar a su ficha: el nombre de los lanzadores (`#853`); que el clic llegue
+(`#852`); la forma de las pruebas y la API pública de la GUI (`#859`); si compensa que el lector de JC siga tras un error
+(`#860`); y si `#728` entra en el hito. Y el nombre y el número del hito.
+
+#### 🧬 `#852` — H1.1: `Gui.__guiClick` desde `Main`, con el lazo de `Gui.start()` en marcha, se pierde sin ventana (abierta el 22-nov · F-1 del análisis)
+
+El caso, `verificacion/sonda-gui/ClickT.bp` del análisis: el manejador del botón suscrito, `Gui.start()`, 100 ms, el clic
+desde `Main`, 300 ms, `Gui.stop()` y `Gui.join()` (los casos C, D y E). **Medido aquí el 22-nov** (el C): miVM con su
+ventana de Swing, `CLICK recibido` 3 de 3; miVM sin ventana (`-Djava.awt.headless=true`), nada, 6 de 6; la VM-C de host,
+nada, 6 de 6; y según el análisis, el micro simulado, tampoco. Con el clic antes de `Gui.run()` (los casos A y B), llega
+en todas. El análisis lo daba por la VM Java frente a la C; es con ventana o sin ella: en el PC, con el IDE, llega; en la
+placa, no. Y se pierde sin decir nada. El mecanismo, sin mirar (acotar antes de tocar).
+- **Cuál tiene razón:** decide Eduardo (lo natural: que llegue).
+- **Hecho cuando:** `ClickT.bp` y `ClickE.bp`, los casos A–E, dan la misma salida en miVM con ventana y sin ella, en la
+  VM-C y en el micro simulado; y el caso, en la red.
+
+#### 🧬 `#853` — H1.2: lo que la documentación de la 8.1 manda teclear no está en su ZIP (abierta el 22-nov · F-3, F-4, M-1 y H-002 del análisis)
+
+- **Los comandos:** nueve páginas de `docs/` (la chuleta, el manual, la referencia, JC y la base de datos; la chuleta,
+  sólo en español) enseñan `java -jar basicplus-frontend.jar …` (19 veces) y `java -jar bpgenvm.jar …` (11); el ZIP trae
+  `BpIde-8.1.jar`, `bpide.bat` y `bin/bpvm-sim.exe`. Funciona, sin estar dicho: el jar del IDE lleva los dos,
+  `java -cp BpIde-8.1.jar basicplus.frontend.Main …` y `… edu.bpgenvm.Main …`.
+- **La GUI:** `gui.html` §23.2 manda `bpgenvm-c MiApp.mod` y §23.5 `shot2png.py`; el ZIP no trae ninguno. Y «Run Window
+  (VM-C)» del IDE busca, subiendo desde el `.bp`, una carpeta `bpgenvm-c` con `build/bpgenvm-c.exe` (`FrmMain.java:2395`):
+  con sólo el ZIP no la encuentra nunca («compílala con `make LVGL=1`»).
+- **Lo propuesto:** lanzadores (`.bat`, y `.sh`) del compilador y de la VM sobre el jar del IDE —y con ellos deja de
+  importar H-002: `bpgenvm-1.0.jar` suelto pide `lib/pack-1.0.jar` al lado—; la VM-C de host con LVGL en `bin/`, y «Run
+  Window» buscándola allí; el conversor de capturas (hoy `shot2png.py`, en Python, que el usuario del ZIP puede no tener);
+  y la documentación diciendo esos nombres. **Los nombres** (`bpc` y `bpvm`, o uno solo, `bp build|run`): decide Eduardo.
+- Es un fallo de lo publicado: entra en la próxima publicación (un parche antes, sólo si Eduardo lo pide).
+- **Hecho cuando:** desde el ZIP recién descomprimido, los comandos de la chuleta compilan y ejecutan `samples/blink.bp`;
+  «Run Window» ejecuta una GUI; y una captura pasa a PNG, por línea de órdenes, como dice la guía.
+
+#### 🧬 `#854` — H1.3: una guía para IA (`AGENTS.md`) en el ZIP y en cada proyecto nuevo (abierta el 22-nov · M-2 del análisis)
+
+La chuleta en Markdown, los comandos de compilar y ejecutar (los de `#853`), dónde está la API (`bpstdlib/*.bp`) y los
+ejemplos (`samples/`), y **las trampas** de quien viene de Java o de C# —las cuatro de la sonda 1: `length()` y no
+`size()`; sin `Map<K,V>`, `Collections.stringMap()`; un número en un `Object`, en su caja, `Integer(5)`; las cadenas, sin
+métodos, `upper(s)` y `strlen(s)`— y las de JC. En la primera línea, que no es el BASIC-PLUS de DEC ni Visual Basic. El
+borrador, `especificacion/AGENTS-borrador.md`, con sólo hechos comprobados; se repasa contra el código al escribirla (lo
+del clic cambia con `#852`, y los comandos con `#853`). En los dos idiomas, como el README. Y «New Project» del IDE la
+deja en la carpeta del proyecto, donde una IA la encuentra sola.
+- **Hecho cuando:** está en la raíz del ZIP, y un proyecto creado con el IDE la lleva.
+
+#### 🧬 `#855` — H1.4: las VMs, para que las conduzca un programa: sin ventana, la salida del programa sola, la traza con su línea y `--help` (abierta el 22-nov · F-2, F-5, M-7 y M-8 del análisis)
+
+- **(a) miVM sin ventana, `--no-screen`**, el nombre de la VM-C y del micro simulado: hoy, sólo
+  `-Djava.awt.headless=true`; con escritorio, abre su ventana y `Gui.run()` espera a que la cierren, y un proceso
+  automático se cuelga.
+- **(b) La salida del programa, sola:** cada VM escribe en el stdout líneas suyas, y distintas —miVM
+  `=== INICIANDO EJECUCIÓN DE LA VM ===` y `heapStart=…`; la VM-C `=== INICIANDO EJECUCION DE LA VM-C ===`—: sin
+  filtrar, `miVM X.mod > a` y `VM-C X.mod > b` nunca dan el mismo fichero —tampoco el gesto de paridad de `CLAUDE.md`;
+  la red sí las filtra (`compat.sh`, `mezcla.py`…)—. Una opción, o llevarlas al stderr: antes, contar los consumidores
+  (la red, el IDE, la tanda). Es la regla de oro, al alcance del usuario.
+- **(c) La traza de un error sin capturar, con fichero y línea:** hoy, en las dos y al stderr,
+  `=== traza: Rompe+122 Rompe+39 ===`, con el `.dbg` al lado. El IDE ya la traduce (`TrazaError`, `#582`, `#788`); la
+  VM-C es device puro, sin `.dbg`: la traducción, del lado del host, nunca en el firmware.
+- **(d) `--help`:** miVM lo tiene; la VM-C de host y el micro simulado contestan `Argumento desconocido: --help`, y el
+  compilador lo toma por un fichero («No se encuentra el archivo: …\--help»).
+- **Hecho cuando:** miVM con `--no-screen` no abre ventana en un escritorio; con (b), los dos ficheros, idénticos sin
+  filtrar en el corpus de paridad; `Rompe.bp` da fichero, línea y función en las dos VMs del PC; y `--help` imprime las
+  opciones y sale con 0 en las cuatro herramientas.
+
+#### 🧬 `#856` — H1.5: los diagnósticos del compilador, para que los lea una máquina (abierta el 22-nov · M-4, M-5 y M-6 del análisis)
+
+- **(a) `fichero:línea:col: error: mensaje`:** hoy `[45:24] error semántico: …`, y el fichero sólo en la cabecera
+  (`=== Procesando`).
+- **(b) Un `--quiet` que lo sea:** hoy sólo apaga el AST y los tokens (`Main.java:446`); siguen la cabecera,
+  `>>> compile`, `=== Procesando`, las interfaces cargadas y el resumen.
+- **(c) La salida en UTF-8, como las VMs:** hoy, la de la plataforma; en Windows, cp1252, y «Diagnósticos» sale roto en
+  una consola UTF-8 (el rodeo, `-Dfile.encoding=UTF-8`).
+- **Cuidado:** el IDE lee esos errores para marcar el editor, la red y `compara_mods` los comparan, y los samples de
+  error llevan su texto esperado: (a), mejor como una opción, o cambiándolo a la vez en todos sus lectores (contarlos
+  antes: la lección de `#542`).
+- **Hecho cuando:** en un proyecto de dos módulos, cada error dice su fichero; sin errores, `--quiet` no imprime nada; y
+  los acentos se leen bien en una consola UTF-8, sin opciones de Java.
+
+#### 🧬 `#857` — H1.6: el cable, por línea de órdenes, contra la placa y el micro simulado (abierta el 22-nov · M-14 y M-15 del análisis)
+
+Subir y ejecutar un `.mod` recogiendo su salida y su código de salida, listar, bajar un fichero (una captura), parar y
+grabar un pack; contra la placa (serie o red) y contra el micro simulado, al que arranca y para él solo, como `SimRunner`
+en el IDE. Hoy el único cliente que va en el ZIP es el IDE (`BpvmClient`); en el repositorio están
+`bpgenvm-c/tools/wire_serie.py` (el de la tanda) y los smokes, fuera del ZIP; la sonda 2 se escribió uno de 109 líneas
+(`verificacion/sonda-gui/bpwire.py`) y le bastó para subir, ejecutar y bajar una captura del micro simulado. Sobre qué
+—`BpvmClient`, en Java, que el usuario del ZIP ya tiene, o `wire_serie.py`, en Python, el probado con las placas—, al
+analizarla. Es el suelo de H1.11 (`#728`).
+- **Hecho cuando:** un comando ejecuta un `.mod` en el micro simulado sin lanzar nada antes, imprime su salida y devuelve
+  su código; otro baja un fichero; y lo mismo, contra una placa.
+
+#### 🧬 `#858` — H1.7: lo que una IA lee: la interfaz de un módulo en texto, la documentación en Markdown, `llms.txt`, la chuleta de JC y ejemplos en JC (abierta el 22-nov · M-3, M-10, M-11, M-18 y M-19 del análisis)
+
+- **(a) La interfaz de un módulo, en texto:** el `.mod` la lleva dentro, y `--interface DIR` escribe los `.bpi`, que no
+  son para leer; falta un volcado de sus clases, funciones y propiedades públicas: el índice de la API, sin leer los
+  250 KB de la referencia.
+- **(b) La chuleta y la guía gráfica, también en Markdown**, en el ZIP (la chuleta, hoy sólo en español).
+- **(c) Una chuleta de una página para JC**, hermana de `cheatsheet.html`: la §17 de `jc.html` es casi el contenido.
+- **(d) `llms.txt` en la web**, que apunte a lo de (b): y es también lo que busca Eduardo, que lo encuentre quien lo
+  necesite (`#851`).
+- **(e) Ejemplos en JC:** hoy uno (`samplesJC/JsonDemo.jc`) frente a unos 380 en BP. El traductor los da
+  (`--escribir-jc`), sin los comentarios: generados al empaquetar, no en el repositorio, y compilados en la red. Si
+  compensa, al llegar.
+- **Hecho cuando:** un comando imprime la API pública de `Collections.mod`; (b) y (c) existen y dicen lo mismo que su
+  `.html`; (d), en `micro32-suite.github.io/BasicPlus/`; y (e), si se hace, `samplesJC/` con lo que se traduce,
+  compilando en la red.
+
+#### 🧬 `#859` — H1.8: probar un programa sin nadie delante, también una GUI (abierta el 22-nov · M-12, M-13, H-011 y H-012 del análisis)
+
+- **(a) Una forma estándar de probar un programa:** la salida esperada (el programa imprime; se compara con un fichero)
+  y el código de salida, en las dos VMs —la paridad de `compat/`, para el usuario—, y un módulo de aserciones mínimo, que
+  la stdlib no tiene. Su forma: decide Eduardo.
+- **(b) La GUI:** `Gui.__guiClick` y `Gui.__guiDumpTree`, hoy internos y fuera de `gui.html`, con nombre público y
+  documentados, con lo que hacen frente a `start()` y `run()` (`#852`). Va con la inyección de eventos en la placa, de V9
+  desde el 14-nov (un verbo del cable que pulse en la GUI de la placa).
+- **(c) La captura de miVM** (`Gui.shot`: el fondo negro, sin `Chart` ni `Led`, el texto del botón sin color ni
+  alineación): arreglarla, o decir en `gui.html` (§23.5 o §25) que la que vale es la de LVGL.
+- **(d) Un `Button` con `setBounds` no centra su texto:** si es un fallo de `Gui.bp`, arreglarlo; si es a propósito,
+  una línea en §20.1.
+- **(e) `Gui.shot("X.shot")`, con una ruta relativa,** cae en `/` en el micro simulado, no en `/app` junto al `.mod`:
+  coherente con «la ruta, tal cual», pero decirlo (con `#823`: recomendar `/data`).
+- **Hecho cuando:** un comando ejecuta las pruebas de un proyecto y sale con 0 o 1; la §24 de `gui.html` lista la API
+  de prueba de la GUI y un ejemplo de GUI se prueba solo; y (c), (d) y (e), hechos o dichos.
+
+#### 🧬 `#860` — H1.9: los mensajes que enseñan: el arreglo en los de BP, y en JC las costumbres de Java (abierta el 22-nov · M-9, M-16 y M-17 del análisis)
+
+- **(a) BP:** tres mensajes que dicen el fallo y no el arreglo —una sobrecarga que no casa (listar las candidatas), un
+  miembro protegido (sugerir el público) y «'string' no tiene miembros» (nombrar las funciones: `strlen`, `upper`…)—;
+  el caso, `verificacion/sonda/Inventario.bp`, en su primera vuelta.
+- **(b) JC, las costumbres de Java**, al nivel de los mensajes que ya hay para las de C# («en JC es 'base', como en C#»):
+  `extends`, un constructor o un método sin `function`, `@Override`, `for (T x : c)`, `var x = 5`, `String`, `final`,
+  `System.out.println`, `x++` dentro de una expresión y una lambda; el caso,
+  `verificacion/sonda-jc/Inventario-como-en-java.jc`.
+- **(c) JC, más de un error de sintaxis por pasada:** hoy el lector para en el primero; al menos uno por declaración. Si
+  compensa: decide Eduardo.
+- **Hecho cuando:** cada caso da un mensaje que dice cómo se escribe; y los samples de error, al día.
+
+#### 🧬 `#861` — H1.10: las placas, descritas para leer: sus pines y sus periféricos (abierta el 22-nov · la pregunta abierta del análisis)
+
+No hay, por placa, una descripción que se pueda leer de qué pines y periféricos tiene: `board.json` es sólo de las
+RP2350 y sólo lleva `name`, `variant`, `ledPin`, `neopixelPin` y `psramCsPin`; la imagen sabe qué pines son del sistema
+(`#574`, `#581`, `samples/PinesSistema.bp`), pero no está escrito en ningún sitio para leerlo. Sin ella, una IA —y una
+persona— inventa números de pin. Por placa: los pines libres, los de cada bus (I2C, SPI, UART…) y los del sistema (la
+flash, la PSRAM, la pantalla, el USB), en la referencia y en un fichero de la release, sacados de lo que sabe la imagen y
+no copiados a mano. Va con el tema principal de V9, las librerías de dispositivos.
+- **Hecho cuando:** cada una de las once placas, con su tabla y su fichero; y lo que dicen casa con lo que contesta la
+  placa.
 
 ## 📦 CERRADAS EN V6 (con su commit, para no volver a darlas por abiertas) — V6 publicada el 12-sep-2026
 
