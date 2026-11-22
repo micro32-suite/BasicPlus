@@ -2126,10 +2126,10 @@ e.etiqueta := <span class="str">"cuadrado de 2"</span>              <span class=
 <!-- =========================================================== -->
 <h2 id="modulos">10. Modules</h2>
 <p>
-  <strong>The limit of a module.</strong> A module's data —its module variables, its literals (each distinct one,
-  once), its constants and what describes each class— fit in <strong>64 KB</strong> (until V8, in 32). A module that
-  does not fit is a compile error that says how much it already takes and what does not fit; for something bigger, it
-  is split into two modules (each one carries its own) or read from a file.
+  <strong>A module's data.</strong> A module's data —its module variables, its literals (each distinct one, once), its
+  constants and what describes each class— <strong>have no cap since V9</strong> (until V8, 64 KB; before, 32): the
+  ones more than 64 KB away from the code are read with a slightly longer instruction, and what rules is the board's
+  memory. For something really big, split it into two modules (each one carries its own) or read it from a file.
 </p>
 <h3 id="raiz">10.0 The root module: <code>Core</code></h3>
 <p>

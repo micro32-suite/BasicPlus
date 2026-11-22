@@ -9904,6 +9904,32 @@ que lleva la newlib entera, la `memcpy` es la de Arm en ensamblador; en las ESP,
   El opcode, en las dos VMs, el desensamblador y el compilador (el `ModWriter` ya sabe la posición al emitir).
 - **Decidido** (Eduardo, 3-nov: *«a) si pero se puede hacer mas adelante»*).
 - **14-nov, a V9** (Eduardo: *«a V9»*).
+- **22-nov, la segunda tanda de V9** (Eduardo: *«OK, adelante»*; `0f1ba0a` en `toolchain`, `e23faf9` en `runtime`; la
+  red, VERDE: paridad 219, MOD8 210 + 9 SKIP —el de `DatosAnchos`, declarado—, dos workers 219; la placa, después).
+  **Hecho en el PC**, como decía la ficha: `WIDE`, `0xC4`, delante
+  de una de las 19 instrucciones con `doff`, hace de 32 bits (con signo) cada uno de sus desplazamientos de dato.
+  - **Las dos VMs:** `WIDE` lee el opcode que sigue, mira que lleve un dato (`OpCode.llevaDato`; `op_lleva_dato`) y
+    vuelve a despachar sin pasar otra vez por el prólogo: el par es UNA instrucción (el depurador, el cuanto). Los 19
+    lectores del `doff` (`leeDato` con su `ancho`; `LEE_DOFF`, en `interp.c`) leen 32 bits tras el prefijo; sin él, una
+    comparación que nunca se cumple. Y una convención fijada: el `handler` de `TRY_BEGIN` es relativo a la dirección del
+    prefijo (miVM ya usaba `currentPC`; la VM-C, `pc - 1`, pasa a `pc - 1 - ancho`). Delante de una instrucción sin dato,
+    el `.mod` está roto: falla como un opcode desconocido.
+  - **El compilador** (`ModWriter`): `prefijoAncho` y `escribeDato` en cada instrucción con dato, y sólo en MOD9; en MOD8
+    el tope de 64 KB sigue (`DatosLlenos`). Lo aplazado (#447, #507) lleva su hueco ancho si el bloque de datos ya pasa
+    de 64 KB al emitir; si no, de 16, y si al parchear no llegara, un error claro. `inline WIDE`, prohibido. Los saltos
+    no se recompactan después, así que `WIDE` no les afecta. El AOT no lo necesita: una native ya lee los datos con
+    desplazamientos de 32 bits.
+  - **El desensamblador**, el par en una línea (`WIDE GET_GLOBAL -70068`).
+  - **Las pruebas:** en miVM, `DatosDe64KTest` (qué llega en 16 bits, las 19, sus operandos anchos, y en MOD9 sin tope),
+    69/69; en el compilador, `ModuloNoCabeTest` (en MOD8 el error de siempre; en MOD9, 80 000 bytes compilan), 408/408; y
+    en el corpus, `DatosAnchos` (el hermano de `DatosGrandes`, con 70 000 bytes de relleno delante de todo: la misma
+    salida en las dos VMs). En su `.mod`, 47 instrucciones tras `WIDE`, de siete clases (`GET_GLOBAL`, `SET_GLOBAL`, sus
+    largas, `LEA_STR`, `CHECKCAST` y `CHECKCAST_REF`). Las de un descriptor en los datos (`NEW_OBJECT`, `INSTANCEOF`,
+    `TRY_BEGIN` y el `CHECKCAST` de una clase) no salen hoy en MOD9: las clases de un módulo de usuario van por ref, porque
+    todas heredan de `Object`, que vive en `Core`; las VMs las aceptan tras `WIDE` igual, por la misma macro. En la pasada
+    MOD8 de la red, `DatosAnchos` sale como SKIP, declarado (`// mod8: fuera`).
+  - **La documentación:** `OPCODES.md` (su sección, la convención del `doff` y los códigos libres), `MOD_FORMAT.md` y el
+    manual §10, en los dos idiomas (los datos de un módulo, sin tope desde V9).
 
 #### ✅ `#780` — `samples/errores`: tres ejemplos sin caso en `h13-errores.sh` (nadie vigila su mensaje), y `AnnMal` falla por algo que no es lo suyo (abierta el 3-nov, al añadir el de `#768`; **CERRADA el mismo día**, el commit de `#780`)
 

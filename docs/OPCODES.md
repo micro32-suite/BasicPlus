@@ -1,13 +1,13 @@
 # Catálogo de opcodes de la VM BasicPlus
 
-Documento canónico de los opcodes del bytecode `.mod`: los **194** que
-define `bpgenvm-c/include/bpvm_opcodes.h` (V8). Los de `0x00..0x70` son los
+Documento canónico de los opcodes del bytecode `.mod`: los **195** que
+define `bpgenvm-c/include/bpvm_opcodes.h` (V9). Los de `0x00..0x70` son los
 de V1; los de `0x6F` y `0x71..0xB0` se añadieron después (long, double,
 potencia, `CHECKCAST`), los `0xB1..0xBB` son los `_REF` del enlace tardío
 (MOD9, V7/H2), `0xBC..0xBD`, `LEA_FIELD` y `LEA_FIELD_REF` (V7/H1), `0xBE`,
 `INVOKE_SLOT` (V7/H7), `0xBF..0xC1`, los de las interfaces (V8/H7.3), y
-`0xC2..0xC3`, los literales de cadena (V8/H9.1); están en sus propias
-secciones al final de las tablas.
+`0xC2..0xC3`, los literales de cadena (V8/H9.1), y `0xC4`, el prefijo `WIDE`
+(V9 `#781`); están en sus propias secciones al final de las tablas.
 Cada entrada incluye:
 - Byte (`code`), mnemonic.
 - Operando inmediato (si lo hay): tipo + tamaño en bytes.
@@ -35,6 +35,8 @@ Convenciones:
   (una cadena) y de `TRY_BEGIN` (cualquier excepción). Hasta 64 KB de datos por módulo (65 532 bytes; el compilador
   lo dice si un módulo no cabe). Antes era un `i16` con signo (32 KB): lo de entonces se lee igual. En la VM-Java,
   `OpCode.desplazamientoDeDato`; en la VM-C, `bpvm_read_csoff_be`. Los locales (`soff`) y los saltos, con signo.
+  **V9 `#781`:** tras el prefijo `WIDE` (`0xC4`), un `doff` va en `i32` con signo, y en MOD9 el tope de 64 KB se va
+  (en la VM-C, `LEE_DOFF`; en la VM-Java, `leeDato` con su `ancho`).
 - Stack effect notación: `( a b -- c )` significa pop b, pop a, push c.
 - "tc.X" = campos del ThreadContext (ver `HEAP_LAYOUT.md` §5).
 
@@ -492,6 +494,34 @@ Lo demás del bloque de datos (un array fijo, un array constante) sigue con `LEA
 
 ---
 
+## 0xC4 — `WIDE`, el prefijo de los datos lejanos (V9 `#781`)
+
+Un `doff` va en 16 bits y llega a 64 KB por debajo del `CS`. Delante de una instrucción que lleva el desplazamiento de
+un dato del módulo, `WIDE` hace que **cada uno de sus desplazamientos de dato vaya en 32 bits con signo**; lo demás de
+su operando, igual. Como el `wide` de la JVM. Lo pone el compilador, y sólo cuando un dato no llega en 16 bits: un
+`.mod` que no lo necesita no cambia en un byte (y en MOD8, que una VM de entonces no lo conoce, el tope de 64 KB sigue).
+
+| Code | Op | Operando | Stack effect | Semántica |
+|---|---|---|---|---|
+| 0xC4 | `WIDE` | — (prefijo) | el de la instrucción que sigue | La instrucción que sigue lleva sus `doff` en `i32`. El par es UNA instrucción: el depurador para delante del prefijo, y el `handler` de `TRY_BEGIN` es relativo a la dirección del prefijo. Delante de una instrucción sin dato, el `.mod` está roto: falla como un opcode desconocido. |
+
+Las que pueden ir detrás (las 19 con `doff`), y su operando tras `WIDE`:
+
+| Instrucciones | Operando normal | Tras `WIDE` |
+|---|---|---|
+| `GET_GLOBAL`, `SET_GLOBAL`, `LEA_GLOBAL`, `GET/SET_GLOBAL_I8/U8/I16/U16`, `GET/SET_GLOBAL_L`, `NEW_OBJECT`, `INSTANCEOF`, `LEA_STR` | `u16` doff | `i32` doff |
+| `TRY_BEGIN` | `i32` handler + `u16` clsOff | `i32` handler + `i32` clsOff |
+| `CHECKCAST` | `u16` clsOff + `u16` nameOff | `i32` clsOff + `i32` nameOff |
+| `CHECKCAST_EXT` | `i32` clsOff + `u16` nameOff | `i32` clsOff + `i32` nameOff |
+| `CHECKCAST_REF`, `CHECKCAST_IFAZ_REF` | `u16` idx + `u16` nameOff | `u16` idx + `i32` nameOff |
+
+Una global a -100 000 es `WIDE GET_GLOBAL FF FE 79 60` (`C4 04 FF FE 79 60`). Las variantes `_S8` no van detrás: ya
+llegan con su byte. Hoy, en un módulo de MOD9, el compilador lo emite con las globales, los literales y los `CHECKCAST`
+del nombre: las clases de un módulo de usuario van por ref (`_REF`), sin descriptor en los datos. La prueba, en las dos
+VMs: `bpgenvm-c/samples/DatosAnchos.bp`, del corpus (70 000 bytes de relleno delante de todo lo demás).
+
+---
+
 ## Codes no asignados
 
 `0x4F .. 0x50` asignados (I32_TO_I16, I32_TO_U16). `0x6D .. 0x6E` libres
@@ -499,8 +529,8 @@ Lo demás del bloque de datos (un array fijo, un array constante) sigue con `LEA
 campos de 8 bytes, `NATIVE_RETURN`, `TRY_BEGIN_EXT`, potencia, `CHECKCAST`).
 `0xB1 .. 0xBB` los `_REF` del enlace tardío (MOD9); `0xBC .. 0xBD`,
 `LEA_FIELD` y `LEA_FIELD_REF` (V7/H1); `0xBE`, `INVOKE_SLOT` (V7/H7 `#607`); `0xBF .. 0xC1`,
-las interfaces (V8/H7.3 `#756`); `0xC2 .. 0xC3`, los literales de cadena (V8/H9.1 `#786`).
-**`0xC4 .. 0xFF` libres** (con `0x6D .. 0x6E`, 62 en total). Total asignado: 194 (miVM, 193:
+las interfaces (V8/H7.3 `#756`); `0xC2 .. 0xC3`, los literales de cadena (V8/H9.1 `#786`); `0xC4`, `WIDE` (V9 `#781`).
+**`0xC5 .. 0xFF` libres** (con `0x6D .. 0x6E`, 61 en total). Total asignado: 195 (miVM, 194:
 `0xAA`, `NATIVE_RETURN`, es sólo de la VM-C).
 
 Si una implementación encuentra un opcode no listado, debe fallar con

@@ -543,6 +543,10 @@ Convenciones clave:
   `w - 65536`, y `w == 0` es 0, su centinela (`OPCODES.md`, convenciones). El bloque llega así a 65 532 bytes; uno
   mayor no compila, y el compilador lo dice («el módulo 'X' no cabe: …», con el dato que ya no cabe). Hasta el 3-nov,
   un `i16` con signo: 32 KB. Un `.mod` de entonces se lee igual (sus offsets, de -32 768 a -1, son el mismo word).
+- **Y desde V9 (`#781`), sin tope en MOD9**: una instrucción cuyo dato queda a más de 64 KB va tras el prefijo `WIDE`
+  (`0xC4`, `OPCODES.md`), con el `doff` en `i32` con signo; las demás, como siempre, así que un `.mod` que no lo necesita
+  no cambia. El formato del fichero no se mueve (`dataSize` ya era de 32 bits, y las exportaciones de datos también).
+  En MOD8 el tope de 64 KB sigue: una VM de MOD8 no conoce `WIDE`.
 - La ext-table es per-module; cada import resuelto ocupa 4 bytes con
   la dirección absoluta. `CALL_EXT idx` lee `mem[extTableAddress +
   idx*4]` para obtener la dirección destino.
