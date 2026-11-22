@@ -1,0 +1,55 @@
+// GuiLazoAcabado.bp — V9 #852: un clic inyectado (Gui.__guiClick) con el lazo de la GUI ya acabado.
+//
+// Sin pantalla —en la red, o con --no-screen—, el lazo que arranca Gui.start() acaba en cuanto no le queda trabajo: es lo
+// que deja a Gui.run() atender lo que hay en la cola y volver, y que un programa con GUI acabe solo. Un clic que llegaba
+// después se quedaba en la cola sin que nadie lo atendiera, y sin decir nada; ahora da un error que dice qué hacer. Con
+// ventana, o con el panel de una placa, el lazo sigue mientras esté abierta, y el clic llega: por eso este caso es de la
+// red, que va sin pantalla (con ventana, el Gui.run() del paso 1 espera a que la cierren).
+//
+// Los tres pasos: (1) el patrón que vale sin pantalla, el clic y después Gui.run(); (2) el clic con el lazo de start()
+// ya acabado, que da el error; (3) tras Gui.join(), otra vez el patrón.
+module GuiLazoAcabado
+  import Gui
+
+  class Ventana
+    public property boton: Gui.Button
+    var clics: integer
+
+    public function Ventana(scr: Gui.Screen)
+      this.boton := Gui.Button(scr, "Pulsa")
+      this.boton.onClick := this::boton_onClick
+      this.clics := 0
+    end Ventana
+
+    function event boton_onClick(quien: Gui.Component)
+      this.clics := this.clics + 1
+      print "  clic atendido (" + intToString(this.clics) + ")"
+    end boton_onClick
+  end Ventana
+
+  function Main()
+    var scr: Gui.Screen := Gui.Screen()
+    var v: Ventana := Ventana(scr)
+
+    print "1) el clic, y después Gui.run()"
+    Gui.__guiClick(v.boton)
+    Gui.run()
+
+    print "2) Gui.start(), y el clic con el lazo ya acabado"
+    Gui.start()
+    sleep(100)
+    try
+      Gui.__guiClick(v.boton)
+      print "  (no debería llegar aquí)"
+    catch e: RuntimeError
+      print "  error: " + e.msg
+    endtry
+    Gui.stop()
+    Gui.join()
+
+    print "3) tras Gui.join(), otra vez el patrón"
+    Gui.__guiClick(v.boton)
+    Gui.run()
+    print "fin"
+  end Main
+end GuiLazoAcabado

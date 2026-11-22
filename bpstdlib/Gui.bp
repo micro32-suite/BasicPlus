@@ -719,12 +719,23 @@ import Core          // V6/G2: OwnerList extends Core.List — el import no es t
   public function __guiBindClick(handle: integer, self: Component)
     inline CALL_BUILTIN 151
   end __guiBindClick
+  // V9 #852 — el clic y el cambio sintéticos miran antes que el lazo no haya acabado (exigirLazo, junto a start()): sin
+  // pantalla, el lazo de start() acaba en cuanto no le queda trabajo, y lo que se inyectaba después se perdía en silencio.
+  // Por eso ya no son un builtin a secas: el builtin va en clicSintetico y en cambioSintetico.
   public function __guiClick(w: Component)
-    inline CALL_BUILTIN 152
+    exigirLazo("Gui.__guiClick", "el clic")
+    clicSintetico(w)
   end __guiClick
   public function __guiChange(w: Component)   // cambio de valor sintético (diagnóstico)
-    inline CALL_BUILTIN 165
+    exigirLazo("Gui.__guiChange", "el cambio")
+    cambioSintetico(w)
   end __guiChange
+  function clicSintetico(w: Component)
+    inline CALL_BUILTIN 152
+  end clicSintetico
+  function cambioSintetico(w: Component)
+    inline CALL_BUILTIN 165
+  end cambioSintetico
   // V8/H2, paso 4 (10-nov) — la pantalla de scr.onKey: la apunta Screen() (y load()), y la recibe la última. La VM le
   // entrega cada tecla en el hilo de la GUI, por NOMBRE: __guiDispatchKey(self, k, cp) → self.__fireKey(k, cp).
   public function __guiKeyTarget(self: Component)
@@ -1525,16 +1536,23 @@ import Core          // V6/G2: OwnerList extends Core.List — el import no es t
     // de la casa (#143: «sin variables publicas; lo publico es property»). Y
     // ademas es su sitio: lo que se para es ESTE hilo.
     var parar: boolean
+    var acabado: boolean      // V9 #852: el lazo ya salió; sin pantalla, en cuanto no le quedó trabajo
 
     public function HiloGui()
       super(8192)
       this.parar := false
+      this.acabado := false
     end HiloGui
 
     // Lo llama otro hilo (o un handler del propio GUI). No espera.
     public function pedirParada()
       this.parar := true
     end pedirParada
+
+    // V9 #852 — lo mira exigirLazo antes de inyectar un evento.
+    public function haAcabado(): boolean
+      return this.acabado
+    end haAcabado
 
     public function run()
       // SIN `sleep` AQUI, y es a proposito. Yo habia apuntado como hallazgo que
@@ -1571,6 +1589,7 @@ import Core          // V6/G2: OwnerList extends Core.List — el import no es t
           endif
         endif
       endwh
+      this.acabado := true
     end run
   end HiloGui
 
@@ -1601,6 +1620,21 @@ import Core          // V6/G2: OwnerList extends Core.List — el import no es t
       hilo := null
     endif
   end join
+
+  // ---- V9 #852 — un evento inyectado (__guiClick, __guiChange) con el lazo de start() ya acabado no lo atendería
+  //      nadie. El lazo acaba con stop(), al cerrar la ventana y, sin pantalla (miVM sin ventana, la VM-C sin ella o con
+  //      --no-screen), en cuanto no le queda trabajo (__guiRunOnce da -1): es lo que deja a run() atender lo que hay y
+  //      volver, y que un programa con GUI acabe. Antes se perdía sin decir nada. Antes de start() o de run() —o tras
+  //      join(), que deja el hilo a null—, o con el lazo en marcha, el evento se encola como siempre.
+  //      El mensaje, corto A PROPÓSITO: la VM-C guarda 90 bytes del de una excepción no atrapada (exceptions.c, %.90s),
+  //      y es ese el que llega al IDE desde la placa. Los dos caben (85 y 88). ----
+  function exigirLazo(quien: string, que: string)
+    if hilo != null then
+      if hilo.haAcabado() then
+        throw RuntimeError(quien + ": el lazo de la GUI acabó; sin pantalla, " + que + " va antes de Gui.run()")
+      endif
+    endif
+  end exigirLazo
 
 
   // ---- run — SIGUE SIENDO SINCRONO: arranca el hilo y lo espera. Decision de
