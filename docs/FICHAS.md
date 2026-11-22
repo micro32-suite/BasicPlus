@@ -7855,7 +7855,7 @@ documentación de JC. En el IDE las 2 opciones de traducción nuevas también ha
 - **Lo que queda es suyo, si quiere:** una foto o un vídeo corto de una placa con el IDE, lo mejor para arriba; la
   imagen social; y la difusión fuera (Hacker News, Reddit, Hackaday).
 
-#### 🔵 `#848` — en el panel de la placa, «VM Java (TCP v1)» sólo se conecta a una VM ya en marcha (`localhost:7332` por defecto): no la arranca, como sí hace el micro simulado con su botón (abierta el 21-nov, en la pasada de Eduardo por el IDE de la V8.1; igual en V8.0 · **a V9**: Eduardo, *«de momento solamente publicamos»*)
+#### ✅ `#848` — en el panel de la placa, «VM Java (TCP v1)» sólo se conecta a una VM ya en marcha (`localhost:7332` por defecto): no la arranca, como sí hace el micro simulado con su botón (abierta el 21-nov, en la pasada de Eduardo por el IDE de la V8.1; igual en V8.0 · **a V9**: Eduardo, *«de momento solamente publicamos»*)
 
 - **Lo visto** (Eduardo): *«Es la de Java la que no me va»*: «[Placa ERROR] no se pudo conectar a la VM remota
   localhost:7332 — ¿está corriendo `bpgenvm --listen 7332 --workdir ...` allí?». La VM-C y el Run de la barra (que
@@ -7867,7 +7867,8 @@ documentación de JC. En el IDE las 2 opciones de traducción nuevas también ha
   Java (`java -cp BpIde-8.1.jar edu.bpgenvm.Main --listen 7332 --workdir …`) arranca y escucha.
 - **Para V9**: que la opción de Java tenga, como el micro simulado, su botón para arrancar una VM local (el `spawnVmProcess`
   del Run ya existe); o que el mensaje diga cómo.
-- **Hecho (22-nov, la primera tanda de V9; `62ce9e8`, en `toolchain`) — falta verlo en el IDE (Eduardo):** el botón,
+- **Hecho (22-nov, la primera tanda de V9; `62ce9e8`, en `toolchain`) — CERRADA: probada por Eduardo en el IDE**
+  (*«#848 probado OK»*): el botón,
   como el del simulado. `VmJavaRunner` (como `SimRunner`) lanza la VM Java escuchando en el puerto del endpoint, si es
   de este PC; espera a que escuche (hasta 15 s) y la para esperando a que se vaya de verdad; su FS y su flash, en
   `~/.bpide-vmjava` (`fs/` y `flash/`), que persiste como una placa; la stdlib, la del `BpVM.cfg` o la `bpstdlib/` del
