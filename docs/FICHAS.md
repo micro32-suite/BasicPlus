@@ -7854,6 +7854,14 @@ documentación de JC. En el IDE las 2 opciones de traducción nuevas también ha
   Java (`java -cp BpIde-8.1.jar edu.bpgenvm.Main --listen 7332 --workdir …`) arranca y escucha.
 - **Para V9**: que la opción de Java tenga, como el micro simulado, su botón para arrancar una VM local (el `spawnVmProcess`
   del Run ya existe); o que el mensaje diga cómo.
+- **Hecho (22-nov, la primera tanda de V9; `62ce9e8`, en `toolchain`) — falta verlo en el IDE (Eduardo):** el botón,
+  como el del simulado. `VmJavaRunner` (como `SimRunner`) lanza la VM Java escuchando en el puerto del endpoint, si es
+  de este PC; espera a que escuche (hasta 15 s) y la para esperando a que se vaya de verdad; su FS y su flash, en
+  `~/.bpide-vmjava` (`fs/` y `flash/`), que persiste como una placa; la stdlib, la del `BpVM.cfg` o la `bpstdlib/` del
+  ZIP. La orden, `BpvmClient.ordenVmJava`, la misma del Run (sacada de `spawnVmProcess`). El mensaje de cuando no
+  conecta dice qué hacer. Probado sin la ventana: `VmJavaRunnerSmoke` (arrancar, conectar con HELLO y LIST, volver a
+  conectar, parar y el puerto libre), tres veces seguidas en el mismo puerto; la primera vez cazó que `stop()` no
+  esperaba al forzar (arreglado). Y el Run con la orden sacada, `CarpetaDelProgramaSmoke`, OK.
 
 #### ✅ `#847` — el AOT del IDE no ve los módulos que sólo viajan en un pack: `SqlDemo`, sin una `native`, sale con «[aot] omitido SqlDemo.bp: … falta el modulo 'SQLite' … ¿BpVM.cfg o --stdlibDir?, ¿compilado antes? (se ejecutará interpretado)» (abierta el 20-nov, en las pruebas finales: Eduardo, con el IDE del ZIP en una carpeta limpia; desde V7 · **(a), hecha el 20-nov, en V8; (b), a V9** · **CERRADA el 22-nov: (b), hecha en V9**, `b8d5d89` en `toolchain`)
 
