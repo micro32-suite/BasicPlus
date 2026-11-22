@@ -14235,6 +14235,10 @@ variables y sigue.
 - **Probado** (la ventana sin enseñar, lanzada desde una carpeta sin cfg): el fuente de fuera con `strlen` y `parseInt`
   compila y ejecuta (4 y 42); un proyecto, igual (8 y 100); y un fuente con SU cfg (una stdlib mínima con `Marca.mod`)
   usa la suya: `Marca` sí y `Json` no, como antes del cambio. Desde la raíz del repo, la batería de siempre, igual.
+- **Visto en la máquina de Eduardo** (22-nov, la consola de la segunda prueba de verdad del H2.3, con el fuente en la
+  misma carpeta, `C:\tmp\prueba_Ia`): «interfaz de 'Core' desde Core.mod» y `classes=19`, donde la primera vez salió
+  «no se localizó … 'Core'» y `classes=0`. Y al subir, el `Core.mod` de esa stdlib, idéntico al del `Stdlib.pack` de la
+  Pico 2 (crc `69CD983A`): no se sube.
 
 #### ✅ `#866` — cerrar una pestaña del editor con su «×» tira lo que no se ha guardado, sin preguntar (abierta el 22-nov · salió al repasar las acciones que quedaban sin comando, H2.2 · **CERRADA el mismo día**, `0038e24` en `toolchain`, con la tanda (a) del H2.3; probado por Eduardo: *«OK, todo funciona»*)
 
