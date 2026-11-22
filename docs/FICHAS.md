@@ -39,7 +39,7 @@
 ## 🟢 V9, EN CURSO — desde el 21-nov-2026
 
 Eduardo: *«Lo de la versión 8 ya es historia. A partir de ahora trabajaremos sobre la versión 9.»* Sus hitos los nombra
-él (el primero, el 22-nov: abajo). Lo que V8 le pasa, en su bloque de §ABIERTAS y en `PENDIENTES` («Para V9»). Con la versión abierta,
+él (los dos primeros, el 22-nov: abajo). Lo que V8 le pasa, en su bloque de §ABIERTAS y en `PENDIENTES` («Para V9»). Con la versión abierta,
 sus normas: nada sube a GitHub hasta cerrarla, salvo el parche de un fallo de lo publicado; y sus charlas de diseño, a
 `notas/`, no a `docs/`.
 
@@ -73,13 +73,15 @@ pocos puertos. Y poco más, con eso será suficiente.»* Cinco temas; los hitos,
 Hacemos una primera tanda cerrando unos cuantos y después vamos haciendo el resto de temas. El orden lo vamos
 improvisando un poco pero los temas ya los tenemos aquí.»* Lo primero, pues, una tanda de pendientes.
 
-🏁 **Los hitos de V9** (los nombra Eduardo; el primero, el 22-nov, a la vista del análisis de otra sesión: *«Lo que veas
-que se puede aprovechar apúntalo como mejoras pendientes y le dedicamos un hito»*). El detalle, en §ABIERTAS, en el
-bloque de V9:
+🏁 **Los hitos de V9** (los nombra Eduardo; los dos primeros, el 22-nov, a la vista del análisis de otra sesión: *«Lo
+que veas que se puede aprovechar apúntalo como mejoras pendientes y le dedicamos un hito»*; del nombre, *«OK, puede ser
+el hito 1»*; y de `#728`, *«lo puedes meter dentro o lo puedes poner como hito 2, y sí, se complementan»*). El detalle,
+en §ABIERTAS, en el bloque de V9:
 
 | hito | qué | estado |
 |---|---|---|
-| **H1** *(el nombre y el número, provisionales)* | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`; y `#728`, si entra) | ⬜ abierto el 22-nov |
+| **H1** | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`) | ⬜ abierto el 22-nov |
+| **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA y con un adaptador MCP; encima del cable por línea de órdenes del H1 (`#857`) | ⬜ abierto el 22-nov |
 
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
@@ -11720,7 +11722,7 @@ Metro diga «ancla: en 0x1016…, y es LA misma», y la Pico 2, la suya.
 - **Visto en el lote del 3-nov:** con la imagen de hoy, el arranque de la Metro dice «ancla: en 0x10167F3C (la
   busqueda la encuentra, y es LA misma)», sin la falsa alarma.
 
-#### 🧬 `#728` — idea de Eduardo: una interfaz del IDE para la IA —cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar, cerrar— (abierta el 24-oct; **por analizar** · **a V9 el 14-nov**)
+#### 🧬 `#728` — idea de Eduardo: una interfaz del IDE para la IA —cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar, cerrar— (abierta el 24-oct; **por analizar** · **a V9 el 14-nov** · **el H2 de V9 el 22-nov**)
 
 Eduardo, 24-oct: *«Como idea. Estoy pensando si te sería útil a Claude y a otras IAs dotarle al IDE de una interfaz
 accesible desde la IA. Que pueda efectuar operaciones como cerrar el IDE, cargar un source, compilar, conectar a un
@@ -11745,8 +11747,9 @@ dispositivo, ejecutar, etc.»* Lo visto ese día:
 Eduardo: *«OK»*. Apuntada; se retoma cuando él diga.
 
 - **14-nov, a V9** (Eduardo: *«a V9»*).
-- **22-nov, propuesta para el H1 de V9** (una IA trabaja con BasicPlus): su último apartado, H1.11, encima del cable por
-  línea de órdenes (`#857`), con el adaptador MCP —el bloque 6 del análisis—. Si entra, decide Eduardo.
+- **22-nov, el H2 de V9** (Eduardo: *«lo puedes meter dentro o lo puedes poner como hito 2, y sí, se complementan»*): la
+  IA maneja el IDE, con su adaptador MCP, encima del cable por línea de órdenes del H1 (`#857`); el hito, en el bloque
+  de V9.
 
 #### ✅ `#727` — `test-tablasim` (`#639`), caso 4: con un byte menos que la línea base espera que algo no entre; pero si lo último que pide la carga es el array de registros, crece menos y cabe todo (abierta el 23-oct, al pasar la red de `#725`; **CERRADA el mismo día**: el caso busca el presupuesto con el que algo no entra, `8f1ca68b`)
 
@@ -13753,7 +13756,7 @@ contra qué compararse.
 > Lo que se abre en V9, aquí, por hitos; lo que V8 le pasa sigue en su bloque, arriba (con la primera tanda de V9,
 > `#845`–`#851`, cerrada el 22-nov). Los hitos los nombra Eduardo; su tabla, en el registro de V9, arriba del todo.
 
-#### 🧩 H1 — una IA trabaja con BasicPlus: lo que les falta a las herramientas (abierto el 22-nov · el nombre y el número, provisionales)
+#### 🧩 H1 — una IA trabaja con BasicPlus: lo que les falta a las herramientas (abierto el 22-nov; Eduardo: *«OK, puede ser el hito 1»*)
 
 Eduardo, 22-nov: *«Le he pedido a Claude Code en otra sesión que probase a hacer una aplicación con BasicPlus para ver
 cómo sería el desarrollo de una aplicación con la IA y que lo analizase. […] Lo que veas que se puede aprovechar
@@ -13774,8 +13777,8 @@ de comprobación que una IA necesita.
 matices: el clic perdido de F-1 no es la VM Java frente a la C, sino con ventana o sin ella (`#852`); «Run Window» del
 IDE, que el análisis dejó por confirmar, no puede funcionar con sólo el ZIP (`#853`); `--interface` sí escribe —los
 `.bpi`, que no son para leer— (`#858`); y para el cliente del cable ya está en el repositorio `wire_serie.py`, que el
-análisis no conocía porque no va en el ZIP (`#857`). Y una ficha que ya era de V9 encaja dentro: `#728`, la IA maneja el
-IDE (H1.11, si Eduardo la mete).
+análisis no conocía porque no va en el ZIP (`#857`). Y una ficha que ya era de V9 lo complementa: `#728`, la IA maneja
+el IDE, que es el H2 (abajo).
 
 | apartado | qué | ficha | del análisis | estado |
 |---|---|---|---|---|
@@ -13789,20 +13792,19 @@ IDE (H1.11, si Eduardo la mete).
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | ⬜ |
 | **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | ⬜ |
 | **H1.10** | las placas, descritas para leer | `#861` | su pregunta abierta | ⬜ |
-| **H1.11** | la IA maneja el IDE, con MCP encima del cable | `#728` | el bloque 6 | ⬜ si entra |
 
 **El orden**, el del análisis, que es bueno: H1.1 lo primero (es un fallo, y silencioso); después lo barato que se nota
-desde el primer día (H1.2, H1.3); lo que necesita cada vuelta de corrección (H1.4, H1.5); el cable (H1.6); y lo demás.
-H1.11, al final. Lo que no entra: un servidor de lenguaje (LSP, la otra mitad del bloque 6), que sirve a los editores más
-que a la IA; si un día se pide.
+desde el primer día (H1.2, H1.3); lo que necesita cada vuelta de corrección (H1.4, H1.5); el cable (H1.6); y lo demás. Su
+bloque 6: el adaptador MCP, al H2; y un servidor de lenguaje (LSP), que sirve a los editores más que a la IA, no entra; si
+un día se pide.
 
 **Se da por hecho** cuando una sesión nueva de IA, con sólo el ZIP nuevo, repita las tres sondas —y la que el análisis
 dejó pendiente: un proyecto de varios módulos con `.bpbuild` y `.win`, hilos, `native` y hardware simulado— sin tropezar
 con nada de lo de abajo, y llegue al micro simulado sin escribirse nada.
 
 **Por decidir** (Eduardo), cada cosa al llegar a su ficha: el nombre de los lanzadores (`#853`); que el clic llegue
-(`#852`); la forma de las pruebas y la API pública de la GUI (`#859`); si compensa que el lector de JC siga tras un error
-(`#860`); y si `#728` entra en el hito. Y el nombre y el número del hito.
+(`#852`); la forma de las pruebas y la API pública de la GUI (`#859`); y si compensa que el lector de JC siga tras un
+error (`#860`).
 
 #### 🧬 `#852` — H1.1: `Gui.__guiClick` desde `Main`, con el lazo de `Gui.start()` en marcha, se pierde sin ventana (abierta el 22-nov · F-1 del análisis)
 
@@ -13885,7 +13887,7 @@ en el IDE. Hoy el único cliente que va en el ZIP es el IDE (`BpvmClient`); en e
 `bpgenvm-c/tools/wire_serie.py` (el de la tanda) y los smokes, fuera del ZIP; la sonda 2 se escribió uno de 109 líneas
 (`verificacion/sonda-gui/bpwire.py`) y le bastó para subir, ejecutar y bajar una captura del micro simulado. Sobre qué
 —`BpvmClient`, en Java, que el usuario del ZIP ya tiene, o `wire_serie.py`, en Python, el probado con las placas—, al
-analizarla. Es el suelo de H1.11 (`#728`).
+analizarla. Es el suelo del H2 (`#728`).
 - **Hecho cuando:** un comando ejecuta un `.mod` en el micro simulado sin lanzar nada antes, imprime su salida y devuelve
   su código; otro baja un fichero; y lo mismo, contra una placa.
 
@@ -13945,6 +13947,32 @@ flash, la PSRAM, la pantalla, el USB), en la referencia y en un fichero de la re
 no copiados a mano. Va con el tema principal de V9, las librerías de dispositivos.
 - **Hecho cuando:** cada una de las once placas, con su tabla y su fichero; y lo que dicen casa con lo que contesta la
   placa.
+
+#### 🧩 H2 — la IA maneja el IDE (`#728`) (abierto el 22-nov)
+
+Del alcance de V9 (Eduardo, 21-nov): *«Además tenemos que hacer que la IA pueda manejar el IDE, para empezar lo que
+hablamos en su día.»* Y el 22-nov, a si `#728` iba dentro del H1: *«lo puedes meter dentro o lo puedes poner como hito 2,
+y sí, se complementan»*. Va aparte porque es uno de los temas de V9 y tiene su propio diseño: el H1 da las herramientas a
+la IA que trabaja con sólo el ZIP; el H2, al IDE que tiene delante quien programa.
+
+La ficha es `#728` (abierta el 24-oct; sigue en el bloque de V8, con su texto intacto). Lo que pide el diseño: las mismas
+acciones que el menú, sin lógica nueva; las respuestas como datos, no capturas; sólo en local, apagada por defecto, dentro
+del workspace y sin comandos arbitrarios; nunca tirar trabajo sin guardar; y quién manda si el IDE lo usan a la vez
+Eduardo y la IA. La forma: MCP, que sirve a Claude y a otras IAs; con el IDE en Java 8, quizá un protocolo de órdenes
+propio y un adaptador MCP aparte, que puede servir también las órdenes del cable del H1 (`#857`; el bloque 6 del análisis).
+
+| apartado | qué | estado |
+|---|---|---|
+| **H2.1** | el análisis: el protocolo, el adaptador MCP y sus reglas (`#728` está «por analizar» desde el 24-oct) | ⬜ |
+| **H2.2** | compilar y ejecutar —en el PC, en el micro simulado y en la placa— con la salida de la consola y su código de salida | ⬜ |
+| **H2.3** | el depurador: los puntos de parada, el paso a paso y las variables | ⬜ |
+
+**El orden:** después del cable del H1 (`#857`), del que aprovecha las órdenes; dentro, el de `#728`: primero compilar y
+ejecutar, después el depurador.
+
+**Se da por hecho** cuando una IA, por el adaptador, carga un fuente en el IDE, lo compila, lo ejecuta en el PC, en el
+micro simulado y en una placa, y lee la consola con su código de salida; y después, depura: para en un punto, lee las
+variables y sigue.
 
 ## 📦 CERRADAS EN V6 (con su commit, para no volver a darlas por abiertas) — V6 publicada el 12-sep-2026
 
