@@ -72,6 +72,8 @@ pocos puertos. Y poco más, con eso será suficiente.»* Cinco temas; los hitos,
 **El orden** (Eduardo, ese mismo día): *«Igual es mejor empezar por los pendientes, no me gusta tener tantos abiertos.
 Hacemos una primera tanda cerrando unos cuantos y después vamos haciendo el resto de temas. El orden lo vamos
 improvisando un poco pero los temas ya los tenemos aquí.»* Lo primero, pues, una tanda de pendientes.
+Y el 22-nov, cerradas las dos primeras tandas: *«Si te parece bien aparcamos las pendientes por ahora. Yo empezaría H2
+para después hacer H1»*. Los pendientes, aparcados; ahora, el H2 (la IA maneja el IDE), y después el H1.
 
 🏁 **Los hitos de V9** (los nombra Eduardo; los dos primeros, el 22-nov, a la vista del análisis de otra sesión: *«Lo
 que veas que se puede aprovechar apúntalo como mejoras pendientes y le dedicamos un hito»*; del nombre, *«OK, puede ser
@@ -81,7 +83,7 @@ en §ABIERTAS, en el bloque de V9:
 | hito | qué | estado |
 |---|---|---|
 | **H1** | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`) | ⬜ abierto el 22-nov |
-| **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA y con un adaptador MCP; encima del cable por línea de órdenes del H1 (`#857`) | ⬜ abierto el 22-nov |
+| **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA; cada acción del IDE, un comando, con la `Action` de Swing como su cara en la ventana y MCP como la de la IA (Eduardo, 22-nov). Va antes que el H1 | ⬜ abierto el 22-nov; H2.1, el análisis, hecho |
 
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
@@ -14078,14 +14080,26 @@ del workspace y sin comandos arbitrarios; nunca tirar trabajo sin guardar; y qui
 Eduardo y la IA. La forma: MCP, que sirve a Claude y a otras IAs; con el IDE en Java 8, quizá un protocolo de órdenes
 propio y un adaptador MCP aparte, que puede servir también las órdenes del cable del H1 (`#857`; el bloque 6 del análisis).
 
+**La forma, decidida (22-nov):** Eduardo, *«Quizás sería mejor trabajar con comandos. Java tiene una clase para ello.
+Sería transformar los eventos de los botones a comandos y luego es trivial llamar a un comando desde un botón. La ventaja
+es que los comandos se pueden llamar desde casi cualquier sitio.»*; y a la propuesta, *«OK, me parece bien»*. Cada
+acción del IDE, un **comando** nuestro (su nombre, su texto de un solo sitio, si se puede ahora y por qué no, sus
+parámetros, y ejecutarlo, que devuelve un resultado en datos), con la `Action` de Swing como su cara en la ventana (el
+menú y el botón, la misma; lo que falta, por sus diálogos; el resultado, como hoy). La IA, la otra cara: lista los
+comandos y los llama. Los dos idiomas del IDE, después, pero el texto de cada comando, ya en un solo sitio. El análisis,
+en `notas/V9_H2_comandos.md`: unas 30 acciones en `FrmMain` (las del menú y la barra, cada una con su lambda) y 18 en el
+panel de la placa; 48 diálogos modales en `FrmMain`, que pasan a ser resultados; el depurador, ya separado
+(`DebugSession`).
+
 | apartado | qué | estado |
 |---|---|---|
-| **H2.1** | el análisis: el protocolo, el adaptador MCP y sus reglas (`#728` está «por analizar» desde el 24-oct) | ⬜ |
-| **H2.2** | compilar y ejecutar —en el PC, en el micro simulado y en la placa— con la salida de la consola y su código de salida | ⬜ |
-| **H2.3** | el depurador: los puntos de parada, el paso a paso y las variables | ⬜ |
+| **H2.1** | el análisis: el inventario de las acciones, el comando y sus reglas, y por dónde entra la IA (`#728` estaba «por analizar» desde el 24-oct) | ✅ 22-nov (`notas/V9_H2_comandos.md`) |
+| **H2.2** | **los comandos**: la capa, y las acciones de `FrmMain` y del panel de la placa pasadas a comandos con su `Action`, sin cambiar nada de lo que se ve (lo prueba Eduardo en el IDE); por tandas: ficheros, compilar, ejecutar y parar primero | ⬜ |
+| **H2.3** | **la IA llama a los comandos** (MCP por HTTP dentro del IDE, en `127.0.0.1`, apagado por defecto): compilar y ejecutar —en el PC, en el micro simulado y en la placa— con la consola y su código de salida | ⬜ |
+| **H2.4** | **el depurador, por la IA**: los puntos de parada, el paso a paso y las variables | ⬜ |
 
-**El orden:** después del cable del H1 (`#857`), del que aprovecha las órdenes; dentro, el de `#728`: primero compilar y
-ejecutar, después el depurador.
+**El orden:** el de los apartados; el H2 va antes que el H1 (Eduardo, 22-nov). Lo que el H1 pensaba darle (el cable por
+línea de órdenes, `#857`) no hace falta para empezar: los comandos usan el `BpvmClient` del IDE.
 
 **Se da por hecho** cuando una IA, por el adaptador, carga un fuente en el IDE, lo compila, lo ejecuta en el PC, en el
 micro simulado y en una placa, y lee la consola con su código de salida; y después, depura: para en un punto, lee las
