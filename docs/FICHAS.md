@@ -8528,7 +8528,7 @@ ve sin analizar:
 - **La referencia** (§13.9, `Mutex`), en los dos idiomas.
 - **En las placas**, con la imagen que se grabe para repetir la prueba de resistencia.
 
-#### 🧬 `#830` — la marca de la tabla de handles, un porcentaje y no 64 slots fijos: más margen con tablas grandes y varios hilos (abierta el 15-nov, de `#829`; idea de Eduardo; **a V9**)
+#### ✅ `#830` — la marca de la tabla de handles, un porcentaje y no 64 slots fijos: más margen con tablas grandes y varios hilos (abierta el 15-nov, de `#829`; idea de Eduardo; **a V9** · **CERRADA el 22-nov**, `e3942d6` en `runtime` y `030b140` en `toolchain`: la marca se queda; la tabla crece si los vivos pasan del 80 %)
 
 - Eduardo (15-nov): *«Lo de el número de handlers se podría hacer que tenga que crecer cuando llegué al 90% y no esperar
   al 100%, así igual hay menos problemas.»*; y *«Si, para V9. Ahora solamente cambiamos lo imprescindible.»*
@@ -8565,6 +8565,16 @@ ve sin analizar:
 - **22-nov, decidido** (Eduardo: *«OK, me parece bien»*): h64. Tras la colecta de la marca, la tabla crece si lo libre
   (lo que no se ha repartido nunca y lo reciclado) queda por debajo del 20 % de la tabla, o de 128 huecos con tablas
   chicas; si no puede crecer (el tope de la VM-C), sigue con lo reciclado, como hoy.
+- **Hecho (22-nov, la segunda tanda de V9; `e3942d6` en `runtime`, `030b140` en `toolchain`; la red, VERDE: paridad 218,
+  MOD8 210 + 8 SKIP, dos workers 218, `test-cola` con su caso nuevo):** en la VM-C, `tabla_casi_llena` y la regla en
+  `tabla_con_sitio` (`heap.c`), con `bpvm_handles_puede_crecer` (`bpvm_handles.c`), que hace la cuenta de
+  `bpvm_handles_grow` sin mover nada: crecer para el mundo antes de saber si cabe, y una tabla casi llena en su tope lo
+  pararía en cada cruce de la marca para nada. En miVM, `tablaCasiLlena`, la misma regla. La prueba, la 24 de
+  `test_cola` (`samples/TablaCasiLlena.bp`: unos 415 vivos en una tabla que nace con 512 huecos, y 20 000 bloques de
+  basura con la colecta por volumen apagada): la tabla crece a 1024 y hace como mucho 36 colectas por pasada (el modelo
+  daba unas 35); con `--sabotaje-crecer`, la regla de antes, se queda en 512 con 231. Los dos ganchos de la prueba, al
+  final de `bpvm_cola_t` (`sabotaje_crecer`, `ensayo_tabla_inicial`), no en `bpvm_t`: su layout es la ABI de los `.mdn`.
+  Y `HEAP_LAYOUT.md`, cuándo crece la tabla.
 
 #### ✅ `#829` — la red: `HeapEstres` en la VM-C con dos workers, otra vez «No space in heap» en un hilo después del arreglo de `#762`; esta vez, la tabla de handles se rendía sin una colecta propia (abierta y **CERRADA el 15-nov**, el commit de `#829`; en la red de `#827`; preexistente; Eduardo: *«Lo arreglamos en V8.»*)
 

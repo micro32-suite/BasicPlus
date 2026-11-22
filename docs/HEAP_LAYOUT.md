@@ -92,6 +92,14 @@ memorySize└──────────────────────�
   cerrojo mientras espera. El alta del handle no crece la tabla con otros workers en marcha. En miVM crecer hace
   arrays nuevos y deja intactos los viejos.
 
+- **Cuándo crece la tabla** (`#430`; V9 `#830`): repartir uno de los últimos 64 huecos sin estrenar (la **marca**) arma
+  la presión, y la reserva siguiente colecta. Tras esa colecta, la tabla crece al doble si no se recicló nada **o si lo
+  libre —lo no repartido y lo reciclado— queda por debajo del 20 % de la tabla** (de 128 huecos, con las chicas); si
+  no, sigue con lo reciclado. Hasta `#830` sólo crecía si no se reciclaba nada, y con los vivos cerca del tope colectaba
+  sin parar (al 97 % vivo, una colecta cada 124 reservas). Se decide después de colectar, así que la basura no la hace
+  crecer. La misma regla en las dos VMs (`tabla_casi_llena`, `heap.c`; `tablaCasiLlena`, miVM); en la VM-C, con su
+  límite, el heap vivo y el tope del puerto (`bpvm_handles_puede_crecer` lo mira antes de parar el mundo).
+
 - **Un overlay** (V8 H9, `#786`; `Overlays.bp`) mueve la frontera entre los módulos y el heap con el programa en
   marcha. Un módulo va siempre detrás del último, y un literal se reconoce por estar por debajo de `heap_start`, así que
   lo que se mueve son los objetos: se compacta (§2.5), todo lo vivo sube hasta el techo del heap, se carga como al
