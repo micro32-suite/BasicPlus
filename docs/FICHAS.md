@@ -7855,7 +7855,7 @@ documentación de JC. En el IDE las 2 opciones de traducción nuevas también ha
 - **Para V9**: que la opción de Java tenga, como el micro simulado, su botón para arrancar una VM local (el `spawnVmProcess`
   del Run ya existe); o que el mensaje diga cómo.
 
-#### 🔵 `#847` — el AOT del IDE no ve los módulos que sólo viajan en un pack: `SqlDemo`, sin una `native`, sale con «[aot] omitido SqlDemo.bp: … falta el modulo 'SQLite' … ¿BpVM.cfg o --stdlibDir?, ¿compilado antes? (se ejecutará interpretado)» (abierta el 20-nov, en las pruebas finales: Eduardo, con el IDE del ZIP en una carpeta limpia; desde V7 · **(a), hecha el 20-nov, en V8; (b), a V9**)
+#### ✅ `#847` — el AOT del IDE no ve los módulos que sólo viajan en un pack: `SqlDemo`, sin una `native`, sale con «[aot] omitido SqlDemo.bp: … falta el modulo 'SQLite' … ¿BpVM.cfg o --stdlibDir?, ¿compilado antes? (se ejecutará interpretado)» (abierta el 20-nov, en las pruebas finales: Eduardo, con el IDE del ZIP en una carpeta limpia; desde V7 · **(a), hecha el 20-nov, en V8; (b), a V9** · **CERRADA el 22-nov: (b), hecha en V9**, `b8d5d89` en `toolchain`)
 
 - **Lo visto** (el log de Eduardo, *Run on Device* de `samples/SqlDemo.bp` en la P4 del kit): «compilación OK», el aviso
   de arriba, «AOT: sin funciones native que compilar», y el programa, entero y bien (`exit 0`). El aviso asusta y
@@ -7885,6 +7885,14 @@ documentación de JC. En el IDE las 2 opciones de traducción nuevas también ha
   norma, enteras; `packs-abi` y stdlib embebida). Lo que queda, (b), en `PENDIENTES` («Para V9») y en las notas.
   Comprobado por Eduardo con el ZIP de después (`c6648f46…`), en una carpeta limpia: `SqlDemo` en la P4 del kit da
   «AOT: sin funciones native que compilar», sin el aviso, y el programa, entero (`exit 0`).
+- **(b), hecha (22-nov, la primera tanda de V9; `b8d5d89`, en `toolchain`):** `Main.interfacesDeLosPacks`, los dos
+  pasos de los packs del compilador —el `from pack P` y el 2b, si el módulo no está en disco ni tiene fuente— para el
+  AOT, con las mismas funciones y la misma lista de carpetas; `AotMain` la llama antes de cargar los imports. Dos packs
+  con el mismo módulo, un error con los dos (el texto, `Main.variosPacks`, el mismo que el del compilador). Tres
+  pruebas en `AotImportsTest`, con el `Stdlib.pack` de BasicPlus y sin la stdlib en disco, que sin el arreglo caen; la
+  suite, 407/407. El corpus, igual (764 `.mod`, los mismos errores). Y el caso real, con los packs del ZIP 8.1: una
+  native en un programa que importa `SQLite` —antes, «no se traduce: falta el modulo 'SQLite'»; ahora, su
+  `aot_ConSql.c`—. `PENDIENTES` («Para V9»), sin la limitación.
 
 #### ✅ `#846` — la ESP32-P4X (la P4 de la revisión v3.x): su imagen, del mismo código que la de la P4 (abierta y **CERRADA el 19-nov**, el commit de `#846`, con el kit nuevo de Eduardo, el ESP32-P4X-Function-EV; Eduardo: *«la ESP32-P4X es la corrección de un bug de Expressif. Con el tiempo la versión 1.x desaparece así que esta imagen es necesaria. Lo de si va ahora en V8 o en V9, yo creo que es razonable meterla ya y no esperar a la V9»*)
 
