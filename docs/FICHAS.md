@@ -1557,7 +1557,7 @@ aviso «[bpvm] pila: …» se colaba en mitad de la línea «marcas a/b/c = …�
 con los valores bien—; arreglada (la salida, sola; los avisos, a un fichero que se enseña si falla) y pasada 20 de 20.
 **En la Pico 2, con el próximo lote** (esperado: `fib(26)` con dos runs, los 3 178 ms de uno).
 
-#### 🧬 `#663` — `Gui.__guiInvokeByName` no encuentra nada desde el enlace tardío: el handler se ignora en silencio (abierta el 6-oct, al probar LVGL con dos runs; SUELTA · **CANDIDATA A ELIMINAR, aparcada**: Eduardo, 7-oct, *«Déjalo de momento. Si quieres la puedes marcar como candidata para eliminar, pero esperamos un poco a ver cómo evolucionan las cosas (1 o 2 versiones como mucho para decidir)»*: se decide en V8 o V9 · **a V9 el 14-nov, como obsoleta**)
+#### ✅ `#663` — `Gui.__guiInvokeByName` no encuentra nada desde el enlace tardío: el handler se ignora en silencio (abierta el 6-oct, al probar LVGL con dos runs; SUELTA · **CANDIDATA A ELIMINAR, aparcada**: Eduardo, 7-oct, *«Déjalo de momento. Si quieres la puedes marcar como candidata para eliminar, pero esperamos un poco a ver cómo evolucionan las cosas (1 o 2 versiones como mucho para decidir)»*: se decide en V8 o V9 · **a V9 el 14-nov, como obsoleta** · **CERRADA el 22-nov: quitada de `Gui.bp`; el 206, reservado en `Core.bp`**)
 
 **Visto el 6-oct** (al escribir `test-cola` 19): `bpvm_resolve_handler` (`src/builtins.c`) busca el módulo del anfitrión
 por la dirección de su clase DENTRO de los datos de cada módulo, y desde el enlace tardío (`#523`) las clases las
@@ -1571,6 +1571,19 @@ de las anidadas, `correAnidado`, es uno para las tres—.)
   momento a V9»*): se queda como está, con la marca de candidata a eliminar, y se decide en V9. Nadie la llama (`Gui.bp`
   y `Core.bp` sólo la declaran); el comentario de `Gui.bp` que dice que la usa el dispatch de `Gui.Window` ya no es
   verdad.
+- **22-nov, decidido** (la primera tanda de V9; Eduardo: *«Quitarla»*, de `Gui.bp` y de `Core.bp`, con el 206
+  reservado) **y hecho**: quitada de `Gui.bp`, la pública, con su comentario, que ya no era verdad. La de `Core.bp` se
+  queda, y no por gusto: las tablas de builtins de las dos VMs se GENERAN de `Core.bp` (`scripts/gen_builtins.py`, el
+  `check-builtins` de la red), que exige los ids 0..N-1 sin huecos —el enum de la VM-Java usa el ordinal—; sin ella, la
+  red salió ROJA por eso («faltan [206]»). No es pública, así que ningún programa la puede llamar; y es la que guarda el
+  206: reservado, como se quería. Quitarla también de ahí sería renombrar el 206 en las tablas y en las dos VMs.
+- **Lo medido antes** (la stdlib como proyecto, en dos copias, como en `#831`): cambian sólo `Gui.mod` (su interfaz
+  pública pierde la función) y `Stdlib.mod`; `Core.mod` no (la declaración no pública que nadie llamaba ni llegaba al
+  bytecode). Los packs de la GUI no llevan `Gui.mod` (`#623`) ni importan `Gui`, y ninguna imagen embebe `Gui`: ni
+  placas que regrabar por esto ni packs de la GUI que rehacer. Hecho: `Gui.mod`, `Gui.dbg`, `Stdlib.mod` y
+  `packs/Stdlib.pack` (35 módulos, byte a byte); `check-builtins`, verde; y la red, verde en lo demás (paridad 217,
+  MOD8 209 con los 8 SKIP de siempre, dos workers 217, hacia atrás 59). Un programa compilado con V8 contra `Gui`
+  tendrá que recompilarse con V9 (otra interfaz en la misma generación), como en cada versión.
 
 #### ✅ `#664` — en la VM-Java, `Gui.__guiInvokeBySlot` no invoca el método (la VM-C sí): paridad (abierta el 6-oct, al probar LVGL con dos runs; SUELTA · **CERRADA el 7-oct**, `95390da5`)
 
@@ -9084,6 +9097,11 @@ ve sin analizar:
   que se instale en ella se pierde al cerrar. La VM-Java, por mirar cómo lleva los packs.
 - **Cuándo** (*«la 2) lo puedes hacer mas adelante»*): no hace falta para H2.
 - **14-nov, a V9** (Eduardo: *«a V9»*).
+- **22-nov, decidido** (la primera tanda de V9; Eduardo, a «¿y la biblioteca que el IDE graba en cada arranque?»:
+  *«Sólo la 1ª vez»*): la zona de packs del micro simulado, en un fichero junto a `micro.flash`, que se carga al
+  arrancar y se escribe al cambiar; y la biblioteca de packs del IDE se graba cuando la zona está virgen (el primer
+  arranque, o tras borrar la carpeta del simulado), como en una placa: lo instalado se queda, y se cambia desde el
+  panel de Packs. La VM-C de consola, como está (las pruebas quieren la zona limpia).
 
 #### ✅ `#808` — la VM del PC, con su flash: una carpeta que no se borra (abierta el 8-nov, en H2 · **CERRADA el 13-nov**, el commit de `#808`; Eduardo: *«La b»*)
 

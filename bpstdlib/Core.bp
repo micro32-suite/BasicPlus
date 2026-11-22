@@ -1491,7 +1491,7 @@ module Core
   function __machineBootCount(): integer   // Machine.bootCount
     inline CALL_BUILTIN 205
   end __machineBootCount
-  function __guiInvokeByName(host: Object, name: string, sender: Object)   // Gui.__guiInvokeByName
+  function __guiInvokeByName(host: Object, name: string, sender: Object)   // V9 #663: Gui ya no la da; el 206, reservado
     inline CALL_BUILTIN 206
   end __guiInvokeByName
   function __guiInvokeBySlot(win: Object, slot: integer, sender: Object)   // Gui.__guiInvokeBySlot

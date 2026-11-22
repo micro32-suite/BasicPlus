@@ -730,13 +730,8 @@ import Core          // V6/G2: OwnerList extends Core.List — el import no es t
   public function __guiKeyTarget(self: Component)
     inline CALL_BUILTIN 339
   end __guiKeyTarget
-  // H13 — Forms: call-by-name del handler. Resuelve `name` como función PÚBLICA
-  // del módulo al que pertenece `host` (la ventana) y la invoca con `sender`
-  // (el widget que disparó) como arg0. La usa el dispatch de eventos de Gui.Window.
-  // (Param `host`, no `owner`: `owner` es palabra clave del lenguaje — RAII.)
-  public function __guiInvokeByName(host: Object, name: string, sender: Object)
-    inline CALL_BUILTIN 206
-  end __guiInvokeByName
+  // V9 #663 — `__guiInvokeByName` (el builtin 206), quitada: desde el enlace tardío no encontraba nada y
+  // nadie la usaba (los formularios van por ranura, abajo). El 206 queda reservado.
   // H13.1 — Forms Camino A: dispatch del handler por SLOT de vtable. `win` es la
   // ventana, `slot` el índice de vtable del método handler (lo hornea el IDE en el
   // .win, resuelto vía .bpi/slotOf), `sender` el widget que disparó. Handler =
