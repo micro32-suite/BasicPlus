@@ -7952,12 +7952,21 @@ documentación de JC. En el IDE las 2 opciones de traducción nuevas también ha
   README, `PUBLICAR` (la receta, su `merge-bin` y contar diez ficheros), las notas de v8.0 y la nota del ZIP
   (`montar-zip.sh`).
 
-#### 🔵 `#845` — los mensajes del compilador de JC: los errores de sintaxis acaban en «(punto N)», el número del cuaderno de diseño, y `(Perro) g` entre clases sin parentesco da antes un error que no viene a cuento (abierta el 18-nov, en el `D1`, del volumen de JC; cosmético; V8 o V9, por decidir)
+#### ✅ `#845` — los mensajes del compilador de JC: los errores de sintaxis acaban en «(punto N)», el número del cuaderno de diseño, y `(Perro) g` entre clases sin parentesco da antes un error que no viene a cuento (abierta el 18-nov, en el `D1`, del volumen de JC; cosmético; V8 o V9, por decidir · **CERRADA el 22-nov, en V9**: `d921952`, en `toolchain`)
 
 - **Lo medido** (el editor del volumen de JC, y a mano): `do i++; while (i < 3);` da «en JC, ++ y -- van detrás: v++;
   (punto 12)»; el «(punto 12)» es el de `V8_IDEAS` §E2, que el usuario no tiene. Y un `(Perro) g` entre dos clases sin
   parentesco da primero «no define constructor» y después el error bueno. El volumen cita los mensajes sin el «(punto
   N)».
+- **Hecho (22-nov, la primera tanda de V9; `d921952`, en `toolchain`):** los 19 mensajes de `JcParser` y `EscritorJc`
+  que acababan en «(punto N)», sin él (el número, en un comentario al final de la línea, para quien lea el código). Y
+  la causa del otro: en JC, `(T) x` nunca construye (`#797`), y la conversión que no valía caía al camino del
+  constructor, como el `Perro(g)` de BP; ahora sale sólo el error de `revisaJc` (y nada más si lo que falla es la `x`).
+  BP no pasa por ahí. `CompilaJcTest` (`errores`, con un `++i`; `conversionFueraDeLaFamilia`, también sin constructor y
+  con un solo error), que con los dos fallos devueltos a mano cae; la suite, 404/404. El corpus con el jar de antes y
+  el nuevo (766 fuentes, con `samplesJC`): los 764 `.mod`, iguales; de los 54 que no compilan, lo mismo dicho.
+  `doc_frags`, 0 FALLO (los 80 módulos de JC, bien). El lote de Mono, sin pasar (no cambia un veredicto: sólo
+  mensajes de lo que ya no compilaba); se pasará, con el OK de Eduardo, al acabar los cambios del compilador.
 
 #### ✅ `#844` — traducir JC → BP (`--escribir-bp`, «Traducir a BP») escribe sin avisar un nombre que en BP es reservado (`step`, `Next`…), y el BP que sale no compila; al revés, BP → JC, sí avisa (abierta el 18-nov, en el `D1`, del volumen de JC; **CERRADA el 19-nov**, el commit de `#842`–`#844`)
 
