@@ -374,6 +374,15 @@ vez**.
       en placa · `ChartDemo` en el emulador · `FontLoadDemo` en el emulador ·
       `Bench` en placa **y** en el emulador. En V7, el IDE del ZIP, a mano, por
       Eduardo (el paso 5 del `F1`).
+- [ ] **Una IA sin contexto prueba el ZIP** (desde V9; Eduardo, 22-nov, tras la primera prueba: *«Me parece muy
+      bien»*): una sesión nueva de Claude Code, abierta en una carpeta fuera del proyecto —sin su `CLAUDE.md`, sin
+      las notas y sin el árbol de desarrollo; sólo el ZIP recién montado, en una carpeta limpia—, escribe, compila,
+      ejecuta y comprueba unos programas con lo que el ZIP trae: uno de consola, una GUI con su captura y uno en JC;
+      y llega al micro simulado. Lo que la hace tropezar es lo que vería quien llega de fuera, y desde el árbol de
+      desarrollo no se ve: el 22-nov, los comandos que la documentación enseñaba y el ZIP no traía (`#853`). El
+      modelo, aquella prueba (`C:\lenguajes\bp-analisis\temas\ia-herramientas\`, el H1 de V9); y cada vez, alguna
+      cosa más (Eduardo: *«Según vayamos avanzando probaremos más cosas»*). Lo que encuentre, a FICHAS antes de
+      publicar; un fallo, como cualquier otro: no se publica con un bug conocido.
 
 ## 2 · Repositorio
 

@@ -13802,6 +13802,11 @@ un día se pide.
 dejó pendiente: un proyecto de varios módulos con `.bpbuild` y `.win`, hilos, `native` y hardware simulado— sin tropezar
 con nada de lo de abajo, y llegue al micro simulado sin escribirse nada.
 
+**Y en cada publicación** (Eduardo, 22-nov, a la propuesta: *«Me parece muy bien»*): la prueba, un paso fijo del
+pre-flight de `PUBLICAR.md` (§1, «Una IA sin contexto prueba el ZIP»). Y de esta, la primera: *«Esta prueba es un primer
+intento. Se han quedado muchas cosas sin probar, pero he preferido no recargar la prueba. Según vayamos avanzando
+probaremos más cosas.»*
+
 **Por decidir** (Eduardo), cada cosa al llegar a su ficha: el nombre de los lanzadores (`#853`); que el clic llegue
 (`#852`); la forma de las pruebas y la API pública de la GUI (`#859`); y si compensa que el lector de JC siga tras un
 error (`#860`).
