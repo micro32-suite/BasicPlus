@@ -14094,7 +14094,7 @@ panel de la placa; 48 diálogos modales en `FrmMain`, que pasan a ser resultados
 | apartado | qué | estado |
 |---|---|---|
 | **H2.1** | el análisis: el inventario de las acciones, el comando y sus reglas, y por dónde entra la IA (`#728` estaba «por analizar» desde el 24-oct) | ✅ 22-nov (`notas/V9_H2_comandos.md`) |
-| **H2.2** | **los comandos**: la capa, y las acciones de `FrmMain` y del panel de la placa pasadas a comandos con su `Action`, sin cambiar nada de lo que se ve (lo prueba Eduardo en el IDE); por tandas: ficheros, compilar, ejecutar y parar primero | ⏳ la primera tanda (nuevo, abrir, guardar, compilar, ejecutar en el PC y parar), hecha el 22-nov (`1eb638e` en `toolchain`; `ComandosSmoke`, 15/15) y probada por Eduardo en el IDE (*«OK, el IDE funciona»*); la segunda, el resto de `FrmMain` salvo el depurador (el proyecto, construir, añadir a recursos, en la placa y con ventana, los DAO, traducir, la consola y la edición; y los que son su diálogo —las propiedades, el endpoint, el AOT, la gestión y el entorno de la placa, la ayuda y salir—, «sólo desde la ventana»), hecha el 22-nov (`8198d2b` en `toolchain`; `ComandosSmoke`, 19/19; y los 28 comandos llamados por su nombre con la ventana sin enseñar: compilar da los errores con fichero, línea y columna, y ejecutar, el código de salida y la salida del programa), a falta de probarla Eduardo en el IDE; de paso, el botón «DAO build» vuelve a nacer deshabilitado sin proyecto (`#395`: se miraba antes de crear el botón) y un error de compilación llega a la tabla a tiempo para el resultado; la tercera, el depurador; la cuarta, el panel de la placa |
+| **H2.2** | **los comandos**: la capa, y las acciones de `FrmMain` y del panel de la placa pasadas a comandos con su `Action`, sin cambiar nada de lo que se ve (lo prueba Eduardo en el IDE); por tandas: ficheros, compilar, ejecutar y parar primero | ⏳ la primera tanda (nuevo, abrir, guardar, compilar, ejecutar en el PC y parar), hecha el 22-nov (`1eb638e` en `toolchain`; `ComandosSmoke`, 15/15) y probada por Eduardo en el IDE (*«OK, el IDE funciona»*); la segunda, el resto de `FrmMain` salvo el depurador (el proyecto, construir, añadir a recursos, en la placa y con ventana, los DAO, traducir, la consola y la edición; y los que son su diálogo —las propiedades, el endpoint, el AOT, la gestión y el entorno de la placa, la ayuda y salir—, «sólo desde la ventana»), hecha el 22-nov (`8198d2b` en `toolchain`; `ComandosSmoke`, 19/19; y los 28 comandos llamados por su nombre con la ventana sin enseñar: compilar da los errores con fichero, línea y columna, y ejecutar, el código de salida y la salida del programa) y probada por Eduardo en el IDE (*«OK, funciona»*); de paso, el botón «DAO build» vuelve a nacer deshabilitado sin proyecto (`#395`: se miraba antes de crear el botón) y un error de compilación llega a la tabla a tiempo para el resultado; la tercera, el depurador (depurar en el PC y en la placa, continuar, los tres pasos, parar y el punto de parada, con sus atajos de siempre; las órdenes acaban en la próxima parada —dónde, con sus locales por nombre y la salida del programa desde la orden— o en el fin del programa, con su código), hecha el 22-nov (`a1ae7cb` en `toolchain`; por su nombre, con la ventana sin enseñar, en el PC y con el micro simulado como placa), a falta de probarla Eduardo en el IDE; de paso, `#862` (tras depurar en la placa, el IDE no dejaba ejecutar nada más), en el PC el Debug va al primer punto de parada como en la placa (Eduardo: *«Como en la placa»*; antes, sólo el primer Debug tras abrir el IDE) y la consola sale en orden; la cuarta, el panel de la placa |
 | **H2.3** | **la IA llama a los comandos** (MCP por HTTP dentro del IDE, en `127.0.0.1`, apagado por defecto): compilar y ejecutar —en el PC, en el micro simulado y en la placa— con la consola y su código de salida | ⬜ |
 | **H2.4** | **el depurador, por la IA**: los puntos de parada, el paso a paso y las variables | ⬜ |
 
@@ -14104,6 +14104,19 @@ línea de órdenes, `#857`) no hace falta para empezar: los comandos usan el `Bp
 **Se da por hecho** cuando una IA, por el adaptador, carga un fuente en el IDE, lo compila, lo ejecuta en el PC, en el
 micro simulado y en una placa, y lee la consola con su código de salida; y después, depura: para en un punto, lee las
 variables y sigue.
+
+#### ✅ `#862` — tras depurar en la placa, el IDE no dejaba ejecutar nada más: nadie soltaba la sesión al acabar el programa (abierta y **CERRADA el 22-nov**, `a1ae7cb` en `toolchain`; salió al pasar el depurador a comandos, H2.2)
+
+- **Lo que pasaba:** al depurar en la placa, la sesión de depuración se engancha al cliente del explorador, y al acabar
+  el programa nadie la soltaba (`debug.detach()` sólo se llamaba si la placa no arrancaba el programa). Desde `#822`
+  (14-nov), una sesión enganchada es «un programa en marcha»: el Run, el Debug, el Run on Device y el `run` de la línea
+  de comandos decían «Ya hay un programa en marcha» hasta cerrar el IDE. **Está en lo publicado** (V8.0 y V8.1).
+- **Medido** con el micro simulado del explorador (la VM-C, rol device, en el PC), la ventana del IDE construida sin
+  enseñar y los comandos por su nombre: depurar en la placa hasta el fin, y 3 s después, el Run on Device: «Ya hay un
+  programa en marcha».
+- **Hecho:** al llegar el fin del programa depurado en la placa, se suelta la sesión. Con la VM local ya la soltaba
+  `runOnVmRemote` al volver; el fin, a quien lo espera, cuando ya está suelta.
+- **Probado:** lo mismo, y el Run on Device de después, exit 0, con la salida del programa.
 
 ## 📦 CERRADAS EN V6 (con su commit, para no volver a darlas por abiertas) — V6 publicada el 12-sep-2026
 
