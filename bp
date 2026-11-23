@@ -1,0 +1,7 @@
+#!/bin/sh
+# bp: las herramientas de BasicPlus por línea de órdenes («bp help»), en el REPOSITORIO. V9 #853 y #854.
+# El del ZIP va sobre el jar del IDE; éste, sobre el del compilador, que lleva bp, el compilador y la VM Java (hay que
+# haberlo construido: mvn -f toolchain/lexer-java/pom.xml install). La VM-C de «bp run --c», la de bpgenvm-c/build
+# (make; con ventana, make LVGL=1). La salida, en UTF-8: los mensajes llevan acentos.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec java -Dfile.encoding=UTF-8 -cp "$DIR/toolchain/lexer-java/target/basicplus-frontend.jar" basicplus.bp.Bp "$@"

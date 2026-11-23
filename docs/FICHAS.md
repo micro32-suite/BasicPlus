@@ -14015,9 +14015,13 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   ruta de la instalación y sin marcas por poner; con un `CLAUDE.md` propio, sólo `AGENTS.md`; otra vez, nada; las
   instrucciones, con la guía. La batería del IDE, igual.
 - **Falta:** la prueba de verdad: una IA sin contexto, en la carpeta del ZIP de prueba o en un proyecto nuevo, escribe un
-  programa: ¿lee la guía y no cae en las trampas? Y una cosa que decidir (Eduardo): en el repositorio, la raíz de la
-  «instalación» es `C:\lenguajes\pm`, sin `bp.bat` (sólo lo trae el ZIP), así que la guía de un proyecto hecho con el IDE
-  del repositorio nombra un `bp` que no está.
+  programa: ¿lee la guía y no cae en las trampas? (Fuera de `C:\lenguajes\pm`: dentro, Claude Code carga también el
+  `CLAUDE.md` del repositorio, y la prueba ya no es «sin contexto».)
+- **Decidido y hecho (Eduardo, 23-nov): `bp` también en la raíz del repositorio** (*«Sí, en la raíz del
+  repositorio»*): en el repositorio, la raíz de la «instalación» es `C:\lenguajes\pm`, y la guía de un proyecto hecho
+  con su IDE nombraba un `bp.bat` que no estaba. `bp.bat` y `bp`, como los del ZIP pero sobre el jar del compilador
+  (`toolchain/lexer-java/target/basicplus-frontend.jar`, de nombre fijo); en `.gitattributes`, sus finales de línea
+  (el `.bat` CRLF, el de bash LF); y en `CLAUDE.md`, una línea. Probados los dos (y la consola vuelve a 850).
 
 #### 🧬 `#855` — H1.4: las VMs, para que las conduzca un programa: sin ventana, la salida del programa sola, la traza con su línea y `--help` (abierta el 22-nov · F-2, F-5, M-7 y M-8 del análisis)
 

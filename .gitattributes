@@ -11,6 +11,11 @@ dist/**/SHA256SUMS.txt text eol=lf
 # V8.1 (#802): toolchain/ y bpgenvm-c/ llevan su propio .gitattributes (con la suite son submódulos y éste
 # no les llega); el del catálogo UTF-8 de Kuhn (#730) está en el de bpgenvm-c/.
 
+# V9 #853 y #854 — los lanzadores de bp (en la raiz y sus plantillas del ZIP, en scripts/zip/): el .bat con CRLF, que
+# cmd los quiere asi, y el de bash con LF, que con CRLF no arranca.
+bp.bat text eol=crlf
+bp text eol=lf
+
 # Los artefactos binarios de BasicPlus, digan lo que digan las heuristicas: sin conversion de finales de linea nunca.
 *.mod binary
 *.mdn binary
