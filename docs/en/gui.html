@@ -1177,9 +1177,11 @@ Gui.<span class="fn">join</span>()</code></pre>
 <p>
   On the board the file lands in the file system (path as is, like <code>writeFile</code>) and is
   downloaded with the <code>get</code> command of the IDE console —since V7, also while the program is running:
-  the board sends it in chunks, between its output—. On the PC, <code>bp png</code> turns it into a PNG:
+  the board sends it in chunks, between its output— or, without the IDE, with <code>bp placa</code> (V9, §16 of the
+  reference). On the PC, <code>bp png</code> turns it into a PNG:
 </p>
-<pre><code>bp png MyApp.shot        (leaves MyApp.png next to it)</code></pre>
+<pre><code>bp placa COM22 get MyApp.shot   (downloads it from the board at COM22)
+bp png MyApp.shot               (leaves MyApp.png next to it)</code></pre>
 <p>
   Measured sizes: C6 ~3&nbsp;KB, DK2 ~7&nbsp;KB, P4 ~9&nbsp;KB. The image is the proof for the eye; the
   automatic oracle is still the tree (<code>toJson()</code>, §24.2). Demo: <code>samples/GuiShot.bp</code>.

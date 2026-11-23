@@ -13862,7 +13862,7 @@ el IDE, que es el H2 (abajo).
 | **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ✅ 23-nov: `AGENTS.md` (*«Sólo inglés»*) con su `CLAUDE.md`, en el ZIP, en cada proyecto nuevo y en la carpeta de la IA; probada por una IA sin contexto (tres programas a la primera) |
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | 🧬 hecho el 23-nov (Eduardo: la salida estándar de las VMs, *«tal cual»*; la traza, *«Un traductor, en Java»*); la red, VERDE, también sin su filtro; a falta de verlo Eduardo |
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | 🧬 hecho el 23-nov (Eduardo: *«El fichero delante, siempre»*; *«Sólo los errores, y bp lo usa»*); y un fallo de paso: los errores de un módulo importado no salían; a falta de verlo Eduardo |
-| **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ⬜ |
+| **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | 🧬 hecho el 23-nov (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; sin `pack` (escribe la flash: aparte, con su OK); a falta de verlo Eduardo |
 | **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | ⬜ |
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | ⬜ |
 | **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | ⬜ |
@@ -14148,7 +14148,7 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   VERDE** (20:55), con las cuentas de la anterior (paridad 219, MOD8 210 + 9 SKIP declarados, dos workers 219, las pruebas
   de C, la norma 9/9, el sim 16/16, la sombra 15/15…). La batería del IDE, bien.
 
-#### 🧬 `#857` — H1.6: el cable, por línea de órdenes, contra la placa y el micro simulado (abierta el 22-nov · M-14 y M-15 del análisis)
+#### 🧬 `#857` — H1.6: el cable, por línea de órdenes, contra la placa y el micro simulado (abierta el 22-nov · M-14 y M-15 del análisis · hecha el 23-nov, con lo de «Hecho cuando» cumplido, sin `pack`; a falta de verla Eduardo)
 
 Subir y ejecutar un `.mod` recogiendo su salida y su código de salida, listar, bajar un fichero (una captura), parar y
 grabar un pack; contra la placa (serie o red) y contra el micro simulado, al que arranca y para él solo, como `SimRunner`
@@ -14159,6 +14159,60 @@ en el IDE. Hoy el único cliente que va en el ZIP es el IDE (`BpvmClient`); en e
 analizarla. Es el suelo del H2 (`#728`).
 - **Hecho cuando:** un comando ejecuta un `.mod` en el micro simulado sin lanzar nada antes, imprime su salida y devuelve
   su código; otro baja un fichero; y lo mismo, contra una placa.
+- **El análisis** (23-nov, `notas/V9_H1_ia.md`, «H1.6»): en el IDE, el cable (`BpvmClient`, `Backend`), la subida antes
+  de ejecutar (`PicoExplorer.uploadAndRun`, unas 350 líneas atadas a la ventana; la regla de `#624`, ya en el compilador)
+  y `SimRunner`; `wire_serie.py`, un cliente de diagnóstico en Python, sin la subida y fuera del ZIP.
+- **Decidido (Eduardo, 23-nov):** *«Java, en bp, sobre lo del IDE»* (`bp run --placa=COM22 X.bp`, `bp run --sim X.bp`,
+  `bp placa <puerto|ip|sim> ls|get|stop|pack`); la subida, *«Sacarla a una clase común»* (la misma lógica, sin cambiar lo
+  que hace, para el IDE y `bp`: un sitio, la lección de `#463`); el micro simulado, *«El mismo del IDE»* (su
+  configuración y su carpeta; si el IDE lo tiene en marcha, ése; si no, `bp` lo arranca y lo para al acabar).
+- **Hecho** (23-nov; `675f11e` en `toolchain`):
+  - **La subida, en una clase común** (`Despliegue`): lo que hacía `PicoExplorer.uploadAndRun` antes de ejecutar —el
+    LIST, cada dependencia con su STAT por nombre y la regla de `#466` y `#624`, sus `.mdn`, los recursos, el principal y
+    su `.mdn`, los huérfanos de un proyecto—, tal cual y sin la ventana: sus mensajes, a quien la llama. Con ella, lo que
+    preparaba `FrmMain` (las dependencias, cuáles son de la stdlib, la carpeta del proyecto en la placa y sus recursos).
+    El código movido, comparado con el de antes: sólo cambia a dónde van los mensajes. El IDE la usa como antes; `bp`, la
+    misma.
+  - **`bp run --placa=<COMx|IP> X` y `bp run --sim X`:** compila, sube lo que haga falta, ejecuta y sale con el código
+    del programa. Por la salida estándar, sólo lo que imprime el programa (`#855`); por la de errores, lo demás: lo que
+    sube, el micro simulado, y con una excepción la traza con sus nombres y la línea del fin. Un proyecto, con su
+    carpeta en la placa y sus recursos; uno con `"out": "pack"`, su `.pack`. El argumento, detrás del programa. `--sim`
+    es el micro simulado del IDE (`SimRunner`, con sus preferencias y su carpeta): si está en marcha, ése; si no, lo
+    arranca y lo para al acabar.
+  - **`bp placa <COMx|IP|sim> ls [ruta] | get <ruta> [fichero] | stop | info`.**
+  - `bp` lo hace por reflexión sobre `PlacaCli`, del IDE (su jar no ve las clases del IDE). En el ZIP, `bp` va sobre el
+    jar del IDE; en el repositorio, `bp.bat` y `bp` llevan los dos jars, y si falta el del IDE, `bp` lo dice y cómo
+    construirlo.
+  - **Los mensajes, para quien los lee** (cada uno, medido al probar): un puerto ocupado decía «open COM15: errno() ==
+    16», y uno que no existe, «open COM99: null» (los da `BpvmClient`: también en el IDE); el micro simulado ocupado por
+    otro cliente mandaba a pulsar «Arrancar» en el panel; en el bash de Git, `bp placa COM15 ls /app` no listaba nada,
+    sin decir por qué (el bash cambia «/app» por «C:/Program Files/Git/app» antes de que llegue a `java`): ahora lo
+    dice, con el remedio (`//app`, que vale también en cmd y PowerShell); el NOT_FOUND de un `get`, con su ruta; y del
+    `info` salen las dos claves del cable (`type`, `id`).
+  - La guía para IA (una sección nueva: la placa y el micro simulado sin el IDE), la referencia §16 y la guía gráfica
+    §23.5 en las dos lenguas, la chuleta y `CLAUDE.md`.
+- **Probado** (23-nov), con las cuatro placas conectadas —COM22, la Pico 2 (rp2350a); COM15, la P4; COM6, la C5; COM12,
+  la DK2— y con el micro simulado, en el puerto 5199 y con otra carpeta de usuario:
+  - `bp run --sim hello.bp`: rc=0 en un segundo, la salida idéntica a la del PC; el simulado arranca y se para solo.
+    `Rompe`, con una excepción: rc=1, la traza «en Rompe.bp:8 (Main)» y la línea del fin con ella.
+  - En las cuatro placas, `hello.bp`: rc=0, la salida idéntica a la del PC; Core, en su `pack:Stdlib`, no se sube.
+    `Rompe` en la P4 y la DK2: rc=1 y su traza. El argumento, en la DK2: «hola mundo», y sin él, el valor por defecto.
+  - `bp placa`: `info` en las cuatro; `ls` y `get` (lo bajado, igual a lo local); y `GuiShot` en la P4, ejecutado con
+    `bp run --placa=COM15`, su captura bajada con `get` (8243 bytes) y pasada a PNG con `bp png`: la pantalla que es.
+  - Un proyecto (`samples/sampleproject`, copiado): `bp run --sim App.bpbuild`, con su dependencia en `/app/proy` y su
+    recurso.
+  - El IDE, con la ventana sin enseñar, contra el micro simulado: «ejecutar_placa» de un fichero con una dependencia
+    suya y otra de la stdlib (sube la suya; Core, idéntico, no); otra vez (no sube nada); un proyecto con su recurso (a
+    `/app/proy`); otra vez (nada); y sin el recurso: el huérfano, borrado. Las pruebas del IDE `ComandosSmoke`,
+    `TrazaVmLocalSmoke`, `BpvmBackendSmoke`, `StatModuleSmoke` y `SubidaSmoke` (con su segundo intento), bien.
+  - Dos a la vez: con un `bp` ejecutando en una placa, o en el simulado, otro no puede usarla, y lo dice, sin estorbar
+    al primero.
+  - `doc_frags` de los documentos tocados, 0 FALLO. La red, no: no pasa ni por `bp` ni por el IDE, y del compilador y
+    de las VMs no cambió nada.
+- **De lo decidido, sin hacer: `bp placa … pack`** (grabar un pack). Escribe la flash de la placa, y su lógica está en
+  el panel de Packs (podar y sellar para la placa, el pack que pide otro, los avisos de la stdlib): sacarla como la
+  subida, aparte y con el OK de Eduardo.
+- **Visto de paso:** en la consola del IDE, una línea en blanco tras cada línea del micro simulado (`#874`; ya pasaba).
 
 #### 🧬 `#858` — H1.7: lo que una IA lee: la interfaz de un módulo en texto, la documentación en Markdown, `llms.txt`, la chuleta de JC y ejemplos en JC (abierta el 22-nov · M-3, M-10, M-11, M-18 y M-19 del análisis)
 
@@ -14332,6 +14386,12 @@ variables y sigue.
 - **Hecho cuando:** un Run on Device contra la VM Java del panel ejecuta un programa con imports de la stdlib, y otro
   detrás sin reiniciarla; el árbol del panel enseña su FS como el de una placa; y la red, igual (cambia la VM de
   referencia).
+
+#### 🧬 `#874` — la consola del IDE, con una línea en blanco tras cada línea del micro simulado (abierta el 23-nov · vista al probar `#857`)
+
+- **Lo que pasa:** `SimRunner` acaba sus líneas en «\n» (`say`) y la consola del panel de la placa (el `outputSink` de
+  `FrmMain`) les pone otro: tras cada `[sim] …`, una en blanco. Ya pasaba antes de `#857`, que no lo tocó.
+- **El arreglo:** que `SimRunner` no lo ponga. Lo leen dos: la consola del IDE, que pone el suyo, y `bp`, que lo quita.
 
 #### 🧬 `#873` — el servidor de la IA sólo se enciende desde la ventana (abierta el 23-nov · la prueba de la IA del H1.3, su punto 3 · decidida y hecha el mismo día, a falta de probarla Eduardo)
 

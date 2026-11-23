@@ -1159,9 +1159,11 @@ Gui.<span class="fn">join</span>()</code></pre>
 <p>
   En la placa el fichero queda en el sistema de archivos (ruta tal cual, como <code>writeFile</code>) y se baja
   con el <code>get</code> de la consola del IDE —desde V7, también con el programa en marcha: la placa lo manda a
-  trozos, entre su salida—. En el PC se pasa a PNG con <code>bp png</code>:
+  trozos, entre su salida— o, sin el IDE, con <code>bp placa</code> (V9, §16 de la referencia). En el PC se pasa a
+  PNG con <code>bp png</code>:
 </p>
-<pre><code>bp png MiApp.shot        (deja MiApp.png al lado)</code></pre>
+<pre><code>bp placa COM22 get MiApp.shot   (la baja de la placa del COM22)
+bp png MiApp.shot               (deja MiApp.png al lado)</code></pre>
 <p>
   Tamaños medidos: C6 ~3&nbsp;KB, DK2 ~7&nbsp;KB, P4 ~9&nbsp;KB. La imagen es la prueba para el ojo; el oráculo
   automático sigue siendo el árbol (<code>toJson()</code>, §24.2). Demo: <code>samples/GuiShot.bp</code>.

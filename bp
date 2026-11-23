@@ -3,5 +3,13 @@
 # El del ZIP va sobre el jar del IDE; éste, sobre el del compilador, que lleva bp, el compilador y la VM Java (hay que
 # haberlo construido: mvn -f toolchain/lexer-java/pom.xml install). La VM-C de «bp run --c», la de bpgenvm-c/build
 # (make; con ventana, make LVGL=1). La salida, en UTF-8: los mensajes llevan acentos.
+# V9 #857: detrás, el jar del IDE, para «bp run --placa/--sim» y «bp placa» (el cable lo lleva el IDE); su versión, la
+# del pom (al subirla, aquí también). En Windows (Git Bash), java es de Windows: rutas de Windows y «;».
 DIR="$(cd "$(dirname "$0")" && pwd)"
-exec java -Dfile.encoding=UTF-8 -cp "$DIR/toolchain/lexer-java/target/basicplus-frontend.jar" basicplus.bp.Bp "$@"
+FE="$DIR/toolchain/lexer-java/target/basicplus-frontend.jar"
+IDE="$DIR/toolchain/BpIde/target/BpIde-8.1.jar"
+case "$(uname -s)" in
+    MINGW*|MSYS*|CYGWIN*) CP="$(cygpath -w "$FE");$(cygpath -w "$IDE")" ;;
+    *) CP="$FE:$IDE" ;;
+esac
+exec java -Dfile.encoding=UTF-8 -cp "$CP" basicplus.bp.Bp "$@"

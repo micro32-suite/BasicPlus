@@ -318,6 +318,10 @@ bp build Hello.bp
 <span class="c"># compile and run it on the PC (with --c, on the C VM)</span>
 bp run Hello.bp
 
+<span class="c"># on the simulated micro, or on a board (it uploads what is needed)</span>
+bp run --sim Hello.bp
+bp run --placa=COM22 Hello.bp
+
 <span class="c"># a project: bp build App.bpbuild / bp run App.bpbuild</span>
 { <span class="s">"sourceDir"</span>: <span class="s">"src"</span>, <span class="s">"outDir"</span>: <span class="s">"out"</span>,
   <span class="s">"main"</span>: <span class="s">"App"</span>, <span class="s">"dependencies"</span>: [] }</pre>

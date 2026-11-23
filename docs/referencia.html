@@ -3329,6 +3329,26 @@ ra.onWheel := pant::rueda
 bp run samples/blink.bp            (compila y ejecuta)
 bp run --c samples/out/Blink.mod   (con la VM-C)</code></pre>
 
+<p>
+  <strong>En una placa o en el micro simulado</strong> (V9), sin abrir el IDE: <code>bp run --placa=COM22</code>
+  (o la IP de una placa en la red) y <code>bp run --sim</code> compilan, suben lo que haga falta —lo mismo que el
+  <em>Run on Device</em> del IDE: sólo lo que la placa no tiene igual— y ejecutan; la salida y el código, como con las
+  VMs del PC, y el argumento, detrás del programa. El micro simulado es el del IDE, con su configuración y su carpeta:
+  si no está en marcha, <code>bp</code> lo arranca y lo para al acabar. <code>bp placa</code> hace lo demás:
+  <code>ls</code> (sus ficheros), <code>get</code> (bajar uno), <code>stop</code> (parar lo que corre) e
+  <code>info</code> (qué placa es). Una placa, o el simulado, atiende a uno a la vez: con el IDE conectado a ella,
+  <code>bp</code> no puede, y lo dice.
+</p>
+<pre><code>bp run --sim samples/blink.bp          (en el micro simulado)
+bp run --placa=COM22 samples/blink.bp  (en la placa del COM22)
+bp placa COM22 ls                      (sus ficheros: /app/Blink.mod…)
+bp placa COM22 get MiApp.shot          (una captura de Gui.shot; después, bp png MiApp.shot)</code></pre>
+<p>
+  Las rutas de la placa empiezan por <code>/</code> (<code>/app/Blink.mod</code>). En el bash de Git, con dos
+  (<code>//app/Blink.mod</code>): el bash cambia <code>/app</code> por una ruta de Windows antes de que llegue a
+  <code>bp</code>, y <code>bp</code> lo dice si pasa.
+</p>
+
 <h3 id="cli-frontend">16.1 Frontend</h3>
 <pre><code>bp frontend &lt;archivo.bp&gt; [opciones]</code></pre>
 <table>

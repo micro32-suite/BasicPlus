@@ -133,8 +133,10 @@ java -jar toolchain/lexer-java/target/basicplus-frontend.jar samples/blink.bp --
 java -jar toolchain/miVM/target/bpgenvm-1.0.jar samples/Blink.mod      # VM-Java
 bpgenvm-c/build/bpgenvm-c --libdir=bpstdlib samples/Blink.mod         # VM-C (--libdir: la stdlib; sin él, falla)
 
-# Lo mismo con `bp` (V9 #853; en la raíz, sobre el jar del compilador; `bp help`): compila en samples/out/
+# Lo mismo con `bp` (V9 #853; en la raíz, sobre el jar del compilador y el del IDE; `bp help`): compila en samples/out/
 ./bp run samples/blink.bp           # VM-Java;  ./bp run --c samples/blink.bp, VM-C
+./bp run --sim samples/blink.bp     # en el micro simulado del IDE (#857); --placa=COM22, en una placa
+./bp placa COM22 ls                 # y get <ruta> [fichero], stop, info (en el bash de Git, las rutas con //)
 # El ZIP lleva sus propios bp.bat y bp (sobre el jar del IDE), y en su raíz la guía para IA de quien USA BasicPlus
 # (AGENTS.md, plantilla en scripts/zip/): ésta, CLAUDE.md, es la de quien lo DESARROLLA.
 
