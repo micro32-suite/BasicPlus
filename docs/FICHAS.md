@@ -13860,9 +13860,9 @@ el IDE, que es el H2 (abajo).
 | **H1.1** | el clic inyectado tras `Gui.start()` se pierde sin ventana | `#852` | F-1 | ✅ 22-nov, `333c8f0d` |
 | **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ✅ 23-nov, `1ae25d98`: `bp` (*«Uno: `bp`, con órdenes»*), el ZIP con la VM-C y la documentación; probado por Eduardo (*«todo OK»*) |
 | **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ✅ 23-nov: `AGENTS.md` (*«Sólo inglés»*) con su `CLAUDE.md`, en el ZIP, en cada proyecto nuevo y en la carpeta de la IA; probada por una IA sin contexto (tres programas a la primera) |
-| **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | 🧬 hecho el 23-nov (Eduardo: la salida estándar de las VMs, *«tal cual»*; la traza, *«Un traductor, en Java»*); la red, VERDE, también sin su filtro; a falta de verlo Eduardo |
-| **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | 🧬 hecho el 23-nov (Eduardo: *«El fichero delante, siempre»*; *«Sólo los errores, y bp lo usa»*); y un fallo de paso: los errores de un módulo importado no salían; a falta de verlo Eduardo |
-| **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | 🧬 hecho el 23-nov (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; sin `pack`, para más adelante (`#875`); a falta de verlo Eduardo |
+| **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | 🧬 hecho el 23-nov (Eduardo: la salida estándar de las VMs, *«tal cual»*; la traza, *«Un traductor, en Java»*); la red, VERDE, también sin su filtro; visto por Eduardo en el IDE: la traza salía dos veces, arreglado (`bf659ec`); por decidir, lo de `ERROR DE LINK` |
+| **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ✅ 23-nov, `be0311be` (Eduardo: *«El fichero delante, siempre»*; *«Sólo los errores, y bp lo usa»*); y un fallo de paso: los errores de un módulo importado no salían; probado por Eduardo en el IDE (*«la primera parte salió bien»*) |
+| **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ✅ 23-nov, `b79c4a13` (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; la subida del IDE, la misma, probada por Eduardo con la P4; sin `pack`, para más adelante (`#875`) |
 | **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | ⬜ |
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | ⬜ |
 | **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | ⬜ |
@@ -14029,7 +14029,7 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   (`toolchain/lexer-java/target/basicplus-frontend.jar`, de nombre fijo); en `.gitattributes`, sus finales de línea
   (el `.bat` CRLF, el de bash LF); y en `CLAUDE.md`, una línea. Probados los dos (y la consola vuelve a 850).
 
-#### 🧬 `#855` — H1.4: las VMs, para que las conduzca un programa: sin ventana, la salida del programa sola, la traza con su línea y `--help` (abierta el 22-nov · F-2, F-5, M-7 y M-8 del análisis · hecha el 23-nov, con lo de «Hecho cuando» cumplido; a falta de verla Eduardo y de decidir lo de `ERROR DE LINK`)
+#### 🧬 `#855` — H1.4: las VMs, para que las conduzca un programa: sin ventana, la salida del programa sola, la traza con su línea y `--help` (abierta el 22-nov · F-2, F-5, M-7 y M-8 del análisis · hecha el 23-nov, con lo de «Hecho cuando» cumplido; vista por Eduardo el mismo día —la traza, dos veces en el IDE: arreglado, `bf659ec` en `toolchain`—; por decidir, lo de `ERROR DE LINK`)
 
 - **(a) miVM sin ventana, `--no-screen`**, el nombre de la VM-C y del micro simulado: hoy, sólo
   `-Djava.awt.headless=true`; con escritorio, abre su ventana y `Gui.run()` espera a que la cierren, y un proceso
@@ -14098,8 +14098,14 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   batería del IDE (`ComandosSmoke`, `TrazaVmLocalSmoke`, `VmJavaRunnerSmoke`), bien.
 - **Se queda en la salida estándar, por decidir (Eduardo):** `=== ERROR DE LINK: … ===` (y los rechazos de versión),
   cuando el programa no llega a arrancar: la red los lee de ahí (`compat.sh`, `norma_caso`; `mezcla.py`, `clasificar`).
+- **Visto por Eduardo** (23-nov, en el IDE, con un programa que falla en un módulo importado): la traza, con su
+  función, salía **dos veces** en la consola: la traducía la VM Java, desde (c), y el IDE también, con la que le llega
+  en el EXITED (`TrazaDeLaVmLocal`); la de la VM, con `[vm]` delante. **Arreglo** (`bf659ec` en `toolchain`): la VM la
+  traduce sólo sin nadie conectado (`bp run`, o lanzada a mano); con un cliente (el IDE), la traduce él, como antes de
+  `#855`. Probado: en el IDE, una vez; con `bp run`, una vez; `TrazaVmLocalSmoke`, bien. Esa prueba no lo veía: mira
+  la traza que pone el IDE, no la salida de errores de la VM.
 
-#### 🧬 `#856` — H1.5: los diagnósticos del compilador, para que los lea una máquina (abierta el 22-nov · M-4, M-5 y M-6 del análisis · hecha el 23-nov, con lo de «Hecho cuando» cumplido; a falta de verla Eduardo)
+#### ✅ `#856` — H1.5: los diagnósticos del compilador, para que los lea una máquina (abierta el 22-nov · M-4, M-5 y M-6 del análisis · **CERRADA el 23-nov**, `88041db` en `toolchain` y `be0311be`; probada por Eduardo en el IDE: el error de un módulo importado con su fichero delante, y el doble clic que lo abre, *«la primera parte salió bien»*)
 
 - **(a) `fichero:línea:col: error: mensaje`:** hoy `[45:24] error semántico: …`, y el fichero sólo en la cabecera
   (`=== Procesando`).
@@ -14148,7 +14154,7 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   VERDE** (20:55), con las cuentas de la anterior (paridad 219, MOD8 210 + 9 SKIP declarados, dos workers 219, las pruebas
   de C, la norma 9/9, el sim 16/16, la sombra 15/15…). La batería del IDE, bien.
 
-#### 🧬 `#857` — H1.6: el cable, por línea de órdenes, contra la placa y el micro simulado (abierta el 22-nov · M-14 y M-15 del análisis · hecha el 23-nov, con lo de «Hecho cuando» cumplido, sin `pack`; a falta de verla Eduardo)
+#### ✅ `#857` — H1.6: el cable, por línea de órdenes, contra la placa y el micro simulado (abierta el 22-nov · M-14 y M-15 del análisis · **CERRADA el 23-nov**, `675f11e` en `toolchain` y `b79c4a13`, sin `pack` —`#875`—; la subida del IDE, ya en la clase común, probada por Eduardo con la P4: la primera vez, el programa y su dependencia; la segunda, nada)
 
 Subir y ejecutar un `.mod` recogiendo su salida y su código de salida, listar, bajar un fichero (una captura), parar y
 grabar un pack; contra la placa (serie o red) y contra el micro simulado, al que arranca y para él solo, como `SimRunner`
@@ -14392,6 +14398,35 @@ variables y sigue.
   detrás sin reiniciarla; el árbol del panel enseña su FS como el de una placa; y la red, igual (cambia la VM de
   referencia).
 
+#### 🧬 `#878` — lo que el IDE dice que es el dispositivo al conectarse: «bpvm-java v1» para el micro simulado, y «bpvm-pico wire-v1» para cualquier placa por serie, también una ESP32 (abierta el 23-nov · vista al probar el H1 con Eduardo · pendiente)
+
+- **Lo que pasa:** al conectarse, cada transporte devuelve una etiqueta fija (`helloLabel`): `BpvmBackend` (por TCP:
+  la VM Java y el micro simulado), «bpvm-java v1 @ …»; `SerialBackend`, «bpvm-pico wire-v1 @ …»; `RedBackend`, «bpvm
+  wire-v1 por la red @ …». La persona la ve en la barra del panel, y la IA en lo que devuelven `micro_simulado` y
+  `placa_conectar` («hola»), al lado del nombre bueno («backend»: «Micro simulado (VM-C)»). Una IA puede creerse que
+  el micro simulado es la VM Java, o que la P4 es una Pico.
+- **El arreglo, por decidir:** la etiqueta, con el nombre del backend (ya distingue la VM Java del micro simulado), o
+  con lo que dice la placa de sí misma (su `boardName`, en el INFO).
+- **Hecho cuando:** conectado al micro simulado, a la P4 por serie y a la VM Java, lo que se dice de cada uno es lo que
+  es.
+
+#### 🧬 `#877` — un programa que se llama como un módulo de la stdlib no se sube al ejecutarlo en el PC: con `App`, «falta el modulo 'App'» (abierta el 23-nov · vista por Eduardo al probar el H1 · hecha el mismo día, a falta de verla Eduardo)
+
+- **Lo que pasaba:** al ejecutar en el PC, el IDE sube a la carpeta del programa lo que hay en su `out/`, menos lo que
+  se llama como un módulo de la stdlib (`uploadAppArtifacts`, con `stdlibBasenames`): eso lo resuelve la VM con su
+  `--stdlibDir`, y el filtro es para las copias viejas de la stdlib en `out/`. En la stdlib hay un `App` (el de
+  `App.projectPath()`, desde junio, H19): un programa que se llama `App` no se subía, y la VM no lo encontraba. Lo vio
+  Eduardo con el programa de la prueba (`App.bp`; el nombre lo puse yo). Por el código, igual el proyecto de ejemplo,
+  `samples/sampleproject`, cuyo principal se llama `App`. A la placa sí sube (`Despliegue` sube siempre el principal),
+  y con `bp run`, que no sube nada, va.
+- **Hecho** (`bf659ec` en `toolchain`): el principal sube siempre.
+- **Probado:** `App.bp` (con su `Lib`) y una copia de `samples/sampleproject`, en el PC, con la ventana sin enseñar:
+  suben y corren.
+- **Queda, por decidir (Eduardo):** un módulo del usuario que no es el principal y se llama como uno de la stdlib
+  (`Log`, `Json`…): en el PC sigue sin subirse, y a la placa se toma por el de la stdlib (`Despliegue.deLaStdlib`
+  también decide por el nombre), así que se usaría el de la stdlib. ¿Un aviso del compilador, o un error, cuando un
+  módulo se llama como uno de la stdlib?
+
 #### 🧬 `#876` — las variables de entorno de la placa, como comandos; y al instalar el pack de la GUI o el de la BD, también las suyas (abierta el 23-nov · Eduardo, al cerrar el H1.6 · pendiente, para más adelante)
 
 - **Lo que hay:** el ENV se ve y se cambia en el diálogo «Variables de entorno…» (`entorno_placa`, `EnvDialog`; sólo
@@ -14433,13 +14468,17 @@ variables y sigue.
 - **Hecho cuando:** desde el botón, como hoy; la IA graba un pack en una placa y en el micro simulado, y lo ve en la
   lista; y `bp placa COM22 pack X.pack`, lo mismo.
 
-#### 🧬 `#874` — la consola del IDE, con una línea en blanco tras cada línea del micro simulado (abierta el 23-nov · vista al probar `#857`)
+#### 🧬 `#874` — la consola del IDE, con una línea en blanco tras cada línea del micro simulado (abierta el 23-nov · vista al probar `#857` · hecha el mismo día, a falta de verla Eduardo)
 
 - **Lo que pasa:** `SimRunner` acaba sus líneas en «\n» (`say`) y la consola del panel de la placa (el `outputSink` de
   `FrmMain`) les pone otro: tras cada `[sim] …`, una en blanco. Ya pasaba antes de `#857`, que no lo tocó.
 - **El arreglo:** que `SimRunner` no lo ponga. Lo leen dos: la consola del IDE, que pone el suyo, y `bp`, que lo quita.
+- **Hecho** (Eduardo, 23-nov, tras verlas en todas sus pruebas: *«Puedes hacer las líneas en blanco»*; `bf659ec` en
+  `toolchain`): las líneas de `SimRunner`, sin su «\n»; y otras tres del panel que también lo llevaban (`[sim ERROR]`,
+  `[vm-java ERROR]` y la de aplicar la configuración). Probado: con el micro simulado arrancado, vaciado y con un
+  programa, ninguna de sus 8 líneas seguida de una en blanco.
 
-#### 🧬 `#873` — el servidor de la IA sólo se enciende desde la ventana (abierta el 23-nov · la prueba de la IA del H1.3, su punto 3 · decidida y hecha el mismo día, a falta de probarla Eduardo)
+#### ✅ `#873` — el servidor de la IA sólo se enciende desde la ventana (abierta el 23-nov · la prueba de la IA del H1.3, su punto 3 · decidida y hecha el mismo día · **CERRADA el 23-nov**, `6e3807d`, `7554040` y `4a91387` en `toolchain`, `8cf65b28`, `1494257c` y `046cdd0f`; probada por Eduardo: la IA abrió el IDE con su carpeta, la pregunta salió en la pantalla, y con su sí la IA lo manejó, *«Todo OK»*)
 
 - **Lo visto:** la IA puede lanzar `bpide.bat`, pero tiene que pedirle a la persona que encienda el servidor (menú IA) y
   elija la carpeta; mientras, su cliente MCP da `ECONNREFUSED`.
@@ -14475,7 +14514,7 @@ variables y sigue.
   comillas de `cmd /c`); con sólo uno de los dos, o desde PowerShell, sí. Con el ZIP descomprimido en una carpeta con
   espacios, una IA que lo lance desde bash tropezaría: la guía lo dice.
 
-#### 🧬 `#872` — el INFO de las ESP32: «Pila VM: 25 KB sin usar de 16 KB» (abierta el 23-nov · la prueba de la IA del H1.3, su punto 5 · hecha a falta de verla en una placa)
+#### ✅ `#872` — el INFO de las ESP32: «Pila VM: 25 KB sin usar de 16 KB» (abierta el 23-nov · la prueba de la IA del H1.3, su punto 5 · **CERRADA el 23-nov**, `54ae845` en `toolchain` y `56c5624a`; vista en la P4, en las pruebas de Eduardo: «Pila VM : 23 KB sin usar (marca de agua)»)
 
 - **Lo que pasa:** el IDE escribía «sin usar de 16 KB» con el 16 a mano: el tamaño de `vm_task` en la Pico. En las ESP32,
   `vmTaskStackFreeBytes` es la marca de la pila de la tarea del REPL (en la P4, `wire_uart`), de otro tamaño
@@ -14483,7 +14522,7 @@ variables y sigue.
 - **Hecho** (`54ae845` en `toolchain`, con `#871`): sin el total, «Pila VM: 25 KB sin usar (marca de agua)». Si hiciera falta el
   total, que lo mande cada placa en su INFO.
 
-#### 🧬 `#871` — el micro simulado arrastra lo de antes (su FS, su flash y su zona de packs persisten): un parámetro para vaciarlo y que arranque como la primera vez (abierta el 23-nov · la prueba de la IA del H1.3, sus puntos 1 y 2 · hecha a falta de verla Eduardo)
+#### 🧬 `#871` — el micro simulado arrastra lo de antes (su FS, su flash y su zona de packs persisten): un parámetro para vaciarlo y que arranque como la primera vez (abierta el 23-nov · la prueba de la IA del H1.3, sus puntos 1 y 2 · hecha el mismo día; vista por Eduardo, que vio que borraba de más —su configuración—: arreglado, `bf659ec` en `toolchain`, a falta de verlo Eduardo)
 
 - **Lo visto** (el informe de la IA, `C:\tmp\prueba_Ia\v81\INFORME-prueba-IA-8.1.md`): `NombresGui.bp`, con
   `Gui.__guiClick`, va en el PC, en la VM-C y en la P4, y falla en la Pico 2 y en el micro simulado: «lib 'Gui' presente
@@ -14508,6 +14547,23 @@ variables y sigue.
 - **Probado** (la ventana sin enseñar, en el puerto 5199 y con su `user.home`): con tres ficheros viejos en `/app`,
   `de_cero` lo deja vacío; y en el simulado recién vaciado, `Trampas.bp` encuentra `Collections`, `Core` y `Str` en
   `pack:Stdlib`, idénticos a los de la instalación, y acaba bien.
+- **Visto por Eduardo** (23-nov, con su micro simulado, que tenía en `/app` un `Core` viejo, «la placa carga esa OTRA
+  copia», y su zona de packs vacía): vaciado, `Core` sale del pack de la librería de esta instalación. Pero:
+  - **Borraba de más:** con su flash (`micro.flash`, el ENV: las particiones, `part.fs.size`), arrancaba sin
+    configurar, en el estado 0, y el IDE pedía la gestión de placa (Eduardo: *«Me parece que hemos borrado demasiado,
+    quizás destruir la partición no entraba»*). Mi prueba no lo vio: con la ventana sin enseñar, apago la pregunta que
+    hace el IDE al conectarse a una placa (su diálogo saldría en la pantalla), y era justo lo que lo enseñaba. Después,
+    su flash volvía a tener sus particiones (el FS de 7,5 MB de antes: la gestión de placa).
+  - **Sus textos:** *«En vez de "Se borran su FS..." pon "Se borra todos los archivos, ..." FS la gente no tiene porque
+    saber lo que es»*; y el botón, en gris con el simulado en marcha, sin decir por qué más que en el tooltip:
+    *«Está como desactivado»*.
+- **Arreglado** (`bf659ec` en `toolchain`): se vacían sus archivos y su zona de packs; su flash, su configuración, se
+  queda. «Se borran todos sus archivos y su zona de packs (…); su configuración, las particiones, se queda»; el aviso
+  del final, sin la cuenta de los ficheros del PC (decía «Vaciado: 3 fichero(s)»: los suyos, no los de la placa); y
+  junto al botón en gris, «Páralo antes de vaciarlo». El comando (`de_cero`), la guía para IA y la guía del IDE (§6.1,
+  en las dos lenguas: no lo contaba), igual. **Probado:** el simulado con la flash de Eduardo (estado 3) y un programa
+  en `/app`, con `de_cero`: sigue en el estado 3, su flash idéntica, `/app` vacío y `Core` del pack de la librería;
+  esta vez, con la pregunta del IDE al conectarse en su sitio (el estado, leído sin el diálogo).
 - **En la guía para IA** (`#854`): qué hacer con «… no exporta …» (en una placa, grabar los packs de la instalación; en el
   simulado, `de_cero`).
 - **Para publicar V9:** con la regla que se queda, una placa con los packs de V8 y un programa que use lo que cambió de

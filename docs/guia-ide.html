@@ -697,6 +697,14 @@
   estándar embebida en el firmware—, así que el IDE le graba la <em>biblioteca de
   packs</em> que acompaña a la instalación (§10).
 </p>
+<p>
+  Lo que persiste puede tapar a lo nuevo: una librería vieja en <code>/app</code>, o la
+  de otra instalación en su zona de packs, y el programa falla con
+  «<code>… no exporta …</code>». Para volver a empezar, con el micro simulado parado,
+  <em>Vaciarlo (como la primera vez)…</em>, en el engranaje: borra todos sus archivos y
+  su zona de packs, y al arrancar el IDE le graba la biblioteca de packs de esta
+  instalación. Su configuración —las particiones— se queda.
+</p>
 <p class="note">
   El micro simulado <strong>no tiene pines</strong>. Los builtins de hardware
   —<code>Gpio</code>, <code>I2c</code>, <code>Spi</code>…— existen y se
