@@ -14279,8 +14279,14 @@ variables y sigue.
   una imposible); tras un no, apagado y sin guía; tras un sí, en marcha con esa carpeta, la guía en ella, la carpeta
   recordada, `initialize` por HTTP la nombra, 43 herramientas; un puerto ocupado, su aviso y apagado; y la línea, con
   acentos, en la salida estándar. **Falta:** la pregunta en la pantalla, y una IA de verdad que abra el IDE.
-- **Por decidir (Eduardo):** en el repositorio no hay `bpide.bat`, y la guía que deja el IDE del repositorio nombra
-  `C:/lenguajes/pm/bpide.bat`. Con `bp` se decidió ponerlo en la raíz (`#854`); en el ZIP, `bpide.bat` sí está.
+- **`bpide.bat` en el repositorio** (Eduardo, a ponerlo en la raíz como `bp`: *«si»*): ya estaba; se dijo que no sin
+  haberlo mirado. Es el lanzador del IDE del repositorio desde V6 (`#467`), con `cd /d C:\lenguajes\pm` para que el IDE
+  vea el `BpVM.cfg`, los packs y la VM-C del repositorio (los busca en su carpeta de trabajo: `VmConfig.loadDefault`,
+  `IdePrefs`, `AotBuild`). Lo que no hacía era pasarle los argumentos al IDE: ahora sí (`%*`). Por ese `cd`, una carpeta
+  relativa sería desde la raíz del repositorio: la guía para IA pide la ruta absoluta.
+- **Visto al probarlo:** desde Git Bash, un `.bat` con espacios en su ruta y un argumento con espacios no arranca (las
+  comillas de `cmd /c`); con sólo uno de los dos, o desde PowerShell, sí. Con el ZIP descomprimido en una carpeta con
+  espacios, una IA que lo lance desde bash tropezaría: la guía lo dice.
 
 #### 🧬 `#872` — el INFO de las ESP32: «Pila VM: 25 KB sin usar de 16 KB» (abierta el 23-nov · la prueba de la IA del H1.3, su punto 5 · hecha a falta de verla en una placa)
 
