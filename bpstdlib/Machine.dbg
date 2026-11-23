@@ -64,17 +64,38 @@ lines
 648 295
 662 0
 vars
+func __init 0
+func __startup 24
 func variant 35
 m 8 8 0 string
+func MAX_CPU_MHZ 119
+func MIN_CPU_MHZ 143
 func setCpuFreqMHz 167
 mhz -16 4 0 integer
 clamped 4 4 0 integer
+func uarts 240
+func i2cs 260
+func spis 280
+func pins 300
+func analogPins 320
+func pwmPins 340
+func pulsePins 364
+func openDrainPins 388
 func hasPin 412
 pin -16 4 0 integer
 func isAnalog 433
 pin -16 4 0 integer
 func isInputOnly 456
 pin -16 4 0 integer
+func pwmUnit 483
+func manufacturer 503
+func package 523
+func adcUnits 543
+func hasBreadcrumb 561
+func I2C_BUSES 585
+func SPI_BUSES 605
+func UART_BUSES 625
+func GPIO_COUNT 645
 func __strequals 662
 a -28 8 0 ?
 b -20 8 0 ?

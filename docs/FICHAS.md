@@ -13860,7 +13860,7 @@ el IDE, que es el H2 (abajo).
 | **H1.1** | el clic inyectado tras `Gui.start()` se pierde sin ventana | `#852` | F-1 | ✅ 22-nov, `333c8f0d` |
 | **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ✅ 23-nov, `1ae25d98`: `bp` (*«Uno: `bp`, con órdenes»*), el ZIP con la VM-C y la documentación; probado por Eduardo (*«todo OK»*) |
 | **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ✅ 23-nov: `AGENTS.md` (*«Sólo inglés»*) con su `CLAUDE.md`, en el ZIP, en cada proyecto nuevo y en la carpeta de la IA; probada por una IA sin contexto (tres programas a la primera) |
-| **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | ⬜ |
+| **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | 🧬 hecho el 23-nov (Eduardo: la salida estándar de las VMs, *«tal cual»*; la traza, *«Un traductor, en Java»*); la red, VERDE, también sin su filtro; a falta de verlo Eduardo |
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ⬜ |
 | **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ⬜ |
 | **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | ⬜ |
@@ -14029,7 +14029,7 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   (`toolchain/lexer-java/target/basicplus-frontend.jar`, de nombre fijo); en `.gitattributes`, sus finales de línea
   (el `.bat` CRLF, el de bash LF); y en `CLAUDE.md`, una línea. Probados los dos (y la consola vuelve a 850).
 
-#### 🧬 `#855` — H1.4: las VMs, para que las conduzca un programa: sin ventana, la salida del programa sola, la traza con su línea y `--help` (abierta el 22-nov · F-2, F-5, M-7 y M-8 del análisis)
+#### 🧬 `#855` — H1.4: las VMs, para que las conduzca un programa: sin ventana, la salida del programa sola, la traza con su línea y `--help` (abierta el 22-nov · F-2, F-5, M-7 y M-8 del análisis · hecha el 23-nov, con lo de «Hecho cuando» cumplido; a falta de verla Eduardo y de decidir lo de `ERROR DE LINK`)
 
 - **(a) miVM sin ventana, `--no-screen`**, el nombre de la VM-C y del micro simulado: hoy, sólo
   `-Djava.awt.headless=true`; con escritorio, abre su ventana y `Gui.run()` espera a que la cierren, y un proceso
@@ -14052,6 +14052,52 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   La lista tiene 4 nombres: … 16384  4. Pedro / B»; y ayer, «[bpvmBlink terminado … ] hilos: …»), aunque `diag_stderr`
   la escribe en una sola llamada (`fprintf(stderr, "%s\n", …)`): hay que mirar quién la escribe a trozos. Con los dos
   flujos separados, salen limpias. Y la traza de la VM Java por línea de órdenes sale en crudo (`ThrowSinAtrapar+91`).
+- **El análisis** (23-nov, `notas/V9_H1_ia.md`, «H1.4»): lo medido en las dos VMs, los lectores de sus líneas propias
+  (siete filtros que las tiran; sólo `VmTestSupport`, las pruebas de miVM, las usa de marcas; nadie saca el estado de la
+  del FIN) y la causa de la línea partida, medida (abajo).
+- **Decidido (Eduardo, 23-nov):** (b) *«En las VM la salida estándar tal cual, y la salida de error también, sin
+  cambios. Es el IDE el que puede añadir los mensajes de compilación, el Inicio y Fin de ejecución y la salida del
+  programa. De esta forma la IA puede leer la salida del programa tal cual, sin mensajes adicionales.»* Precisado con
+  él: las VMs dejan de escribir `=== INICIANDO…`, `=== FIN…`, `config:` y `heapStart=` en la salida estándar (sólo lo
+  que imprime el programa); la de errores, *«Como hoy»* (sus diagnósticos, y el error sin atrapar con su traza; `config:`
+  pasa ahí, como un diagnóstico más); el inicio y el fin, el IDE en su consola; `bp run` no añade nada. (c) *«Un
+  traductor, en Java»*: uno, en la VM Java, con el fichero, la línea y la función; lo usan miVM (tiene el `.dbg`), `bp`
+  (la de la VM-C, que sigue sin `.dbg`, como en la placa) y el IDE.
+- **La línea partida, medida:** un programa de prueba con dos hilos como la VM-C de host (stdout y stderr sin búfer),
+  a la misma tubería: 2600-2800 líneas partidas de 6000; con una sola escritura por línea en los dos lados, o con búfer
+  y un `fflush` por línea, 0. Sin búfer, la C de Windows escribe un `fprintf` o un `fwrite` a trozos cuando la salida
+  es una tubería (`bp`, el IDE, una IA), y la salida del programa la escribe otro hilo (`io`).
+- **Hecho** (23-nov; `a3f9e8d` en `toolchain`, `8a57ccf` en `runtime`, y los `.dbg` de la stdlib):
+  - (a) La VM Java, `--no-screen` (el modo sin pantalla de Java, puesto antes de cargar nada de AWT).
+  - (b) Las dos VMs dejan de escribir en su salida estándar `=== INICIANDO …`, `=== FIN …`, `config:` y `heapStart=`;
+    `config:` y `heapStart=` pasan a la de errores (`[miVM] …`), y también, en la VM-C, `GC DESACTIVADO`, `[packs] …` y
+    el aviso de SMP; en la VM Java, `project:`. Las demos de la VM Java (`Main*`) ponen ellas las marcas de inicio y fin
+    alrededor de `vm.run()` (`Demos.corre`): `VmTestSupport`, que las usa, no cambia. El inicio y el fin, el IDE: ya los
+    pone en todos los caminos (`== ejecutando X ==` … `== fin ==`, `== ventana: X ==` … `== ventana cerrada (exit N) ==`).
+  - (c) El traductor, `edu.bpgenvm.vm.debug.Traza` (de `TrazaError`, con la función): la VM Java lo usa al escribir su
+    traza; `bp run --c` pasa por él la salida de errores de la VM-C (byte a byte; debajo de la traza, sus líneas); el
+    IDE (`TrazaError`), por dentro. **Y un fallo de paso:** el `.dbg` sólo listaba las funciones con parámetros o
+    locales (`ModWriter`: `if (!vars.isEmpty())`), y en una sin ninguna la búsqueda daba la ANTERIOR («IdeFalla.bp:11
+    (paso)» en `Main`; y el depurador, parado en ella, habría enseñado las locales de la otra). Ahora las lista todas.
+    Los `.mod`, iguales byte a byte (la stdlib rehecha: 35 de 35); sus 35 `.dbg`, al día (191 funciones más y 5
+    cabeceras `vars`; nada quitado).
+  - (d) `--help` (y `-h`) en la VM-C de host, el micro simulado y el compilador: a la salida estándar, con 0. Los usos,
+    con las opciones de verdad (el del compilador no nombraba `--compile` ni `--backend`; el de la VM-C, 5 de sus 17).
+  - La línea partida: la VM-C de host, con búfer y un `fflush` por línea (`bpvm_io.c`, en el camino del PC).
+  - La guía para IA, el manual (la traza), la referencia §16 y el gesto de paridad de `CLAUDE.md` (sólo el stdout),
+    al día.
+- **Probado:** `hello`, `Rompe`, un método que lanza por una referencia de la base y un error dentro de la stdlib: la
+  salida estándar de las dos VMs, idéntica byte a byte sin filtrar; la traza, «en Lanza.bp:20 (Perro.habla)»,
+  «llamado desde Lanza.bp:25 (cuenta)»… y «en Core.bp:692 (List.fuera)», igual por `bp run` y `bp run --c`. La VM-C, 20
+  vueltas de 2000 líneas a una tubería: antes 18 946 líneas partidas, ahora 0. `--help`, las cuatro con 0. La VM Java
+  con `--no-screen`: `GuiShot` acaba solo (1 s), sin ventana. Las suites: miVM 69, el compilador 408; y
+  `TrazaVmLocalSmoke`, con la función. **La red, VERDE** (20:43): paridad 219, MOD8 210 + los 9 SKIP declarados, dos
+  workers 219, las pruebas de C 117/117, la cápsula, la norma 9/9, el sim 16/16, la sombra 15/15, el estrés, `packs-abi`
+  y la stdlib embebida; las cuentas, las de la red anterior. **Y sin su filtro** (una copia de `compat.sh` que no quita
+  las líneas de las VMs): la paridad, 219 de 219: las dos salidas estándar, iguales sin filtrar en todo el corpus. La
+  batería del IDE (`ComandosSmoke`, `TrazaVmLocalSmoke`, `VmJavaRunnerSmoke`), bien.
+- **Se queda en la salida estándar, por decidir (Eduardo):** `=== ERROR DE LINK: … ===` (y los rechazos de versión),
+  cuando el programa no llega a arrancar: la red los lee de ahí (`compat.sh`, `norma_caso`; `mezcla.py`, `clasificar`).
 
 #### 🧬 `#856` — H1.5: los diagnósticos del compilador, para que los lea una máquina (abierta el 22-nov · M-4, M-5 y M-6 del análisis)
 

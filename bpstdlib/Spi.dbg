@@ -207,6 +207,8 @@ lines
 3077 0
 3162 0
 vars
+func __init 0
+func __startup 29
 func Bus.getId 40
 this -20 8 0 ?
 func Bus.setId 55
@@ -350,6 +352,7 @@ op -28 8 0 string
 cual -20 8 0 string
 func Transaction.__init 1902
 this -20 8 0 ?
+func __cls_new_Transaction() 1915
 func __cls_init_Transaction() 1945
 this -20 8 0 ?
 func __cls_m_Transaction#read([ii)V 1959
@@ -482,6 +485,16 @@ rx -24 8 0 ref
 count -16 4 0 integer
 func release 2898
 bus -16 4 0 integer
+func BUS0 2911
+func BUS1 2926
+func MODE0 2941
+func MODE1 2956
+func MODE2 2971
+func MODE3 2986
+func KHZ_500 3001
+func MHZ_1 3020
+func MHZ_4 3039
+func MHZ_10 3058
 func __strconcat4 3077
 s0 -44 8 0 ?
 s1 -36 8 0 ?

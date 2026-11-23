@@ -58,6 +58,8 @@ lines
 761 0
 764 209
 vars
+func __init 0
+func __startup 24
 func Keyboard.hasKey 35
 this -20 8 0 ?
 func Keyboard.readKey 52
@@ -79,6 +81,7 @@ cp -16 4 0 integer
 sb 8 8 0 ?
 func Keyboard.__init 306
 this -20 8 0 ?
+func __cls_new_Keyboard() 336
 func __cls_init_Keyboard() 366
 this -20 8 0 ?
 func __cls_m_Keyboard#hasKey()z 380

@@ -312,6 +312,8 @@ lines
 4645 517
 4653 519
 vars
+func __init 0
+func __startup 24
 func Accumulator.add 35
 this -28 8 0 ?
 x -20 8 0 double
@@ -331,6 +333,7 @@ func Accumulator.max 472
 this -20 8 0 ?
 func Accumulator.__init 529
 this -20 8 0 ?
+func __cls_new_Accumulator() 602
 func __cls_init_Accumulator() 632
 this -20 8 0 ?
 func __cls_m_Accumulator#add(d)V 646
@@ -396,6 +399,7 @@ this -28 8 0 ?
 x -20 8 0 double
 func LinReg.__init 2094
 this -20 8 0 ?
+func __cls_new_LinReg() 2182
 func __cls_init_LinReg() 2212
 this -20 8 0 ?
 func __cls_m_LinReg#subPoint(dd)V 2226

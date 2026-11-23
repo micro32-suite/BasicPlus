@@ -177,6 +177,8 @@ lines
 2563 366
 2599 0
 vars
+func __init 0
+func __startup 24
 func hexDigitCode 35
 d -16 4 0 integer
 func longToString 90

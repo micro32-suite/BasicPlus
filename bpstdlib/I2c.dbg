@@ -173,6 +173,8 @@ lines
 2400 0
 2485 0
 vars
+func __init 0
+func __startup 24
 func Op.getKind 35
 this -20 8 0 ?
 func Op.setKind 50
@@ -226,6 +228,7 @@ count -24 4 0 integer
 op -20 8 0 string
 func Transaction.__init 1197
 this -20 8 0 ?
+func __cls_new_Transaction() 1210
 func __cls_init_Transaction() 1240
 this -20 8 0 ?
 func __cls_m_Transaction#read([ii)V 1254
@@ -365,6 +368,10 @@ found 32 4 0 integer
 addr 36 4 0 integer
 rc 40 4 0 integer
 result 44 8 0 ?
+func BUS0 2275
+func BUS1 2290
+func STANDARD 2305
+func FAST 2324
 func __strconcat 2343
 a -28 8 0 ?
 b -20 8 0 ?

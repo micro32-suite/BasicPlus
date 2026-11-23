@@ -53,11 +53,33 @@ lines
 445 0
 448 112
 vars
+func __init 0
+func __startup 29
+func uniqueId 40
+func getMicro 59
+func getBoard 78
+func boardName 97
+func tempC 116
+func cpuFreqHz 133
+func uptimeMs 150
+func gpioCount 167
+func resetCause 184
 func setMark 203
 code -16 4 0 integer
+func markCount 216
 func markAt 233
 i -16 4 0 integer
+func bootCount 252
+func variant 269
+func MAX_CPU_MHZ 288
+func MIN_CPU_MHZ 305
 func setCpuFreqMHz 322
 mhz -16 4 0 integer
 func setCpuFreqMHzRaw 341
 mhz -16 4 0 integer
+func I2C_BUSES 360
+func SPI_BUSES 377
+func UART_BUSES 394
+func GPIO_COUNT 411
+func ADC_CHANNELS 428
+func PWM_SLICES 445

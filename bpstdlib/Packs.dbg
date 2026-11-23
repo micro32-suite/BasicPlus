@@ -31,6 +31,8 @@ lines
 291 89
 325 0
 vars
+func __init 0
+func __startup 29
 func list 40
 l 8 8 0 ?
 c 16 4 0 integer

@@ -89,6 +89,8 @@ lines
 1050 132
 1066 0
 vars
+func __init 0
+func __startup 24
 func Port.getId 35
 this -20 8 0 ?
 func Port.setId 50
@@ -194,6 +196,19 @@ count -20 4 0 integer
 timeoutMs -16 4 0 integer
 func available 820
 bus -16 4 0 integer
+func BUS0 839
+func BUS1 854
+func PARITY_NONE 869
+func PARITY_ODD 884
+func PARITY_EVEN 899
+func BAUD_9600 914
+func BAUD_19200 933
+func BAUD_38400 952
+func BAUD_57600 971
+func BAUD_115200 990
+func BAUD_230400 1009
+func BAUD_460800 1028
+func BAUD_921600 1047
 func __strconcat3 1066
 s0 -36 8 0 ?
 s1 -28 8 0 ?

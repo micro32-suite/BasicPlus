@@ -3336,6 +3336,7 @@ bp run --c samples/out/Blink.mod   (on the C VM)</code></pre>
   <tr><td><code>--stdlibDir=&lt;dir&gt;</code></td><td>The standard library to compile against (V7). It overrides the <code>stdlibDir</code> of the <a href="#cli-vmcfg">BpVM.cfg</a> the compiler finds by itself.</td></tr>
   <tr><td><code>--formato=9|8</code></td><td>The <code>.mod</code> format (V7): <code>9</code>, V7's and the default; <code>8</code>, the previous one, as an emergency exit (§17.1). What needs v9's class table is not in <code>8</code>: for instance, a string stored in an <code>Object</code> cannot be printed (V8).</td></tr>
   <tr><td><code>--backend=jvm|mivm</code></td><td>Backend (mivm is the default).</td></tr>
+  <tr><td><code>-h</code>, <code>--help</code></td><td>The options (V9).</td></tr>
 </table>
 <p>
   With <code>--compile</code>, the driver is recursive: it finds the
@@ -3365,7 +3366,19 @@ bp run --c samples/out/Blink.mod   (on the C VM)</code></pre>
       (<a href="#cli-vmcfg">BpVM.cfg</a>) from the given path.</li>
   <li><code>--no-config</code> ignores any auto-discovered BpVM.cfg
       and starts with defaults.</li>
+  <li><code>--no-screen</code>: no window. The GUI runs without a screen and <code>Gui.run()</code>
+      returns as soon as it has nothing to do; the same name as in the C VM. <em>V9.</em></li>
+  <li><code>-h</code>, <code>--help</code>: the options (also in the C VM and in the simulated
+      micro).</li>
 </ul>
+<p>
+  <strong>The two outputs</strong> (V9): on standard output, only what the program prints, the
+  same in both VMs, so <code>bp run X.bp &gt; a</code> and <code>bp run --c X.bp &gt; b</code> give
+  the same file. What belongs to the VM goes to standard error: its diagnostics
+  (<code>[miVM] …</code>, <code>[bpvm] …</code>) and, if the program dies, the error and its
+  trace, with the file, the line and the function (<code>  en Prueba.bp:5 (calcula)</code>). The
+  exit code says how it ended.
+</p>
 
 <h4 id="cli-vmcfg">BpVM.cfg — VM configuration</h4>
 <pre><code>{

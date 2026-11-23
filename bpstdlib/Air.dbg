@@ -181,6 +181,8 @@ lines
 2331 0
 2398 0
 vars
+func __init 0
+func __startup 34
 func Wifi.isAvailable 45
 this -20 8 0 ?
 func Wifi.turnOn 62
@@ -194,6 +196,7 @@ func Wifi.isConnected 245
 this -20 8 0 ?
 func Wifi.__init 262
 this -20 8 0 ?
+func __cls_new_Wifi() 268
 func __cls_init_Wifi() 298
 this -20 8 0 ?
 func __cls_m_Wifi#isAvailable()z 312
@@ -312,6 +315,7 @@ this -28 8 0 ?
 raiz -20 8 0 ref
 func Bluetooth.__init 2072
 this -20 8 0 ?
+func __cls_new_Bluetooth() 2078
 func __cls_init_Bluetooth() 2108
 this -20 8 0 ?
 func __cls_m_Bluetooth#isAvailable()z 2122

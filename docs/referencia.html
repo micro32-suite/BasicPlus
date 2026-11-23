@@ -3342,6 +3342,7 @@ bp run --c samples/out/Blink.mod   (con la VM-C)</code></pre>
   <tr><td><code>--stdlibDir=&lt;dir&gt;</code></td><td>La biblioteca estándar contra la que se compila (V7). Manda sobre el <code>stdlibDir</code> del <a href="#cli-vmcfg">BpVM.cfg</a> que el compilador encuentra solo.</td></tr>
   <tr><td><code>--formato=9|8</code></td><td>El formato del <code>.mod</code> (V7): <code>9</code>, el de V7 y el predeterminado; <code>8</code>, el anterior, como salida de emergencia (§17.1). Lo que necesita la tabla de clases de v9 no está en <code>8</code>: por ejemplo, una cadena guardada en un <code>Object</code> no se imprime (V8).</td></tr>
   <tr><td><code>--backend=jvm|mivm</code></td><td>Backend (mivm es el predeterminado).</td></tr>
+  <tr><td><code>-h</code>, <code>--help</code></td><td>Las opciones (V9).</td></tr>
 </table>
 <p>
   Con <code>--compile</code>, el driver es recursivo: encuentra los
@@ -3372,7 +3373,18 @@ bp run --c samples/out/Blink.mod   (con la VM-C)</code></pre>
       (<a href="#cli-vmcfg">BpVM.cfg</a>) desde la ruta indicada.</li>
   <li><code>--no-config</code> ignora cualquier BpVM.cfg auto-descubierto
       y arranca con defaults.</li>
+  <li><code>--no-screen</code>: sin ventana. La GUI corre sin pantalla y <code>Gui.run()</code> vuelve
+      en cuanto no tiene nada que hacer; el mismo nombre que en la VM-C. <em>V9.</em></li>
+  <li><code>-h</code>, <code>--help</code>: las opciones (también en la VM-C y en el micro
+      simulado).</li>
 </ul>
+<p>
+  <strong>Las dos salidas</strong> (V9): en la estándar, sólo lo que imprime el programa, igual en
+  las dos VMs, así que <code>bp run X.bp &gt; a</code> y <code>bp run --c X.bp &gt; b</code> dan el
+  mismo fichero. Lo de la VM va a la de errores: sus diagnósticos (<code>[miVM] …</code>,
+  <code>[bpvm] …</code>) y, si el programa muere, el error y su traza, con el fichero, la línea
+  y la función (<code>  en Prueba.bp:5 (calcula)</code>). El código de salida dice cómo acabó.
+</p>
 
 <h4 id="cli-vmcfg">BpVM.cfg — configuración de la VM</h4>
 <pre><code>{

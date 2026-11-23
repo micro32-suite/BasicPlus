@@ -46,6 +46,8 @@ lines
 572 0
 575 52
 vars
+func __init 0
+func __startup 29
 func Meter.getPin 40
 this -20 8 0 ?
 func Meter.setPin 55
@@ -93,3 +95,6 @@ this -24 8 0 ?
 windowMs -16 4 0 integer
 func __cls_m_Meter#close()V 528
 this -20 8 0 ?
+func RISING 542
+func FALLING 557
+func BOTH 572

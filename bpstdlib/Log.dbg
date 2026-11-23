@@ -53,6 +53,9 @@ lines
 551 0
 636 0
 vars
+func __init 0
+func __startup 41
+func Log 52
 func setFile 64
 p -20 8 0 string
 func setLevel 97

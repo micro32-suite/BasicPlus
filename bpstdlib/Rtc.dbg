@@ -29,6 +29,8 @@ lines
 348 0
 415 0
 vars
+func __init 0
+func __startup 29
 func Clock.epochSec 40
 this -20 8 0 ?
 func Clock.setEpochSec 57
@@ -41,6 +43,7 @@ i 12 4 0 integer
 c 16 4 0 integer
 func Clock.__init 248
 this -20 8 0 ?
+func __cls_new_Clock() 254
 func __cls_init_Clock() 284
 this -20 8 0 ?
 func __cls_m_Clock#isSet()z 298

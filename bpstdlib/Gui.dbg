@@ -1012,6 +1012,8 @@ lines
 15397 0
 15482 0
 vars
+func __init 0
+func __startup 41
 func Color.getRgb 52
 this -20 8 0 ?
 func Color.setRgb 67
@@ -1024,6 +1026,8 @@ rgb -16 4 0 integer
 func __cls_init_Color(i) 130
 this -24 8 0 ?
 rgb -16 4 0 integer
+func __cls_new_Align() 146
+func __cls_new_ScrollDir() 166
 func Component.getLvglId 186
 this -20 8 0 ?
 func Component.setLvglId 201
@@ -1134,6 +1138,7 @@ func Component.__fireChange 1752
 this -20 8 0 ?
 func Component.__init 1782
 this -20 8 0 ?
+func __cls_new_Component() 1815
 func __cls_init_Component() 1845
 this -20 8 0 ?
 func __cls_m_Component#toJsonText()s 1859
@@ -1234,6 +1239,7 @@ this -20 8 0 ?
 i 0 4 0 integer
 func Container.__init 3046
 this -20 8 0 ?
+func __cls_new_Container() 3145
 func __cls_init_Container() 3175
 this -20 8 0 ?
 func __cls_m_Container#jsonChild(LGui/Component;)z 3189
@@ -1272,6 +1278,7 @@ cp -16 4 0 integer
 sb 8 8 0 ?
 func Screen.__init 3557
 this -20 8 0 ?
+func __cls_new_Screen() 3604
 func __cls_init_Screen() 3634
 this -20 8 0 ?
 func __cls_m_Screen#load()V 3648
@@ -1836,6 +1843,7 @@ func Image.height 9854
 this -20 8 0 ?
 func Image.__init 9878
 this -20 8 0 ?
+func __cls_new_Image() 9896
 func __cls_init_Image() 9926
 this -20 8 0 ?
 func __cls_m_Image#width()i 9940
@@ -1890,6 +1898,7 @@ this -20 8 0 ?
 func Window.__init 10520
 this -20 8 0 ?
 scr 4 4 0 integer
+func __cls_new_Window() 10594
 func __cls_init_Window() 10624
 this -20 8 0 ?
 func __cls_m_Window#load(s)LGui/Component; 10638
@@ -1899,6 +1908,7 @@ func __cls_m_Window#typeName()s 10660
 this -20 8 0 ?
 func __cls_m_Window#destroy()V 10679
 this -20 8 0 ?
+func __guiCerrojoArbol 10693
 func __guiClick 10712
 w -20 8 0 ref
 func __guiChange 10739
@@ -1911,9 +1921,13 @@ func __guiDispatchKey 10796
 self -28 8 0 ref
 k -20 4 0 integer
 cp -16 4 0 integer
+func start 10815
+func stop 10878
+func join 10909
 func exigirLazo 10945
 quien -28 8 0 string
 que -20 8 0 string
+func run 11005
 func loadFont 11025
 path -20 8 0 string
 func shot 11045
@@ -1994,6 +2008,7 @@ func alignName 14763
 a -16 4 0 integer
 func alignFromName 14998
 a -20 8 0 string
+func __globales 15261
 func __strconcat 15273
 a -28 8 0 ?
 b -20 8 0 ?

@@ -91,6 +91,8 @@ lines
 1045 86
 1057 0
 vars
+func __init 0
+func __startup 29
 func Pin.getNum 40
 this -20 8 0 ?
 func Pin.setNum 55
@@ -172,6 +174,13 @@ func __cls_m_AnPin#channel()i 918
 this -20 8 0 ?
 func __cls_m_AnPin#readVolts()f 935
 this -20 8 0 ?
+func INPUT 952
+func OUTPUT 967
+func LOW 982
+func HIGH 997
+func PULL_NONE 1012
+func PULL_UP 1027
+func PULL_DOWN 1042
 func __strconcat3 1057
 s0 -36 8 0 ?
 s1 -28 8 0 ?

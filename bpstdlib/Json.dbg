@@ -745,6 +745,8 @@ lines
 11422 0
 11543 0
 vars
+func __init 0
+func __startup 24
 func JsonValue.isNull 35
 this -20 8 0 ?
 func JsonValue.isBool 50
@@ -781,6 +783,7 @@ this -20 8 0 ?
 sb 8 8 0 ?
 func JsonValue.__init 343
 this -20 8 0 ?
+func __cls_new_JsonValue() 349
 func __cls_init_JsonValue() 379
 this -20 8 0 ?
 func __cls_m_JsonValue#isObject()z 393
@@ -823,6 +826,7 @@ this -28 8 0 ?
 sb -20 8 0 ref
 func JsonNull.__init 706
 this -20 8 0 ?
+func __cls_new_JsonNull() 722
 func __cls_init_JsonNull() 752
 this -20 8 0 ?
 func __cls_m_JsonNull#writeTo(LStringBuilder;)V 766
@@ -966,6 +970,7 @@ i 8 4 0 integer
 v 12 8 0 ?
 func JsonArray.__init 2039
 this -20 8 0 ?
+func __cls_new_JsonArray() 2067
 func __cls_init_JsonArray() 2097
 this -20 8 0 ?
 func __cls_m_JsonArray#add(LJson/JsonValue;)V 2111
@@ -1073,6 +1078,7 @@ kw 12 8 0 ?
 v 20 8 0 ?
 func JsonObject.__init 3499
 this -20 8 0 ?
+func __cls_new_JsonObject() 3539
 func __cls_init_JsonObject() 3569
 this -20 8 0 ?
 func __cls_m_JsonObject#keyAt(i)s 3583

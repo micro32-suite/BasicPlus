@@ -73,6 +73,8 @@ lines
 720 0
 739 0
 vars
+func __init 0
+func __startup 24
 func Overlay.limpiaError 35
 this -20 8 0 ?
 func Overlay.load 65
@@ -98,6 +100,7 @@ func Overlay.getTrace 507
 this -20 8 0 ?
 func Overlay.__init 529
 this -20 8 0 ?
+func __cls_new_Overlay() 589
 func __cls_init_Overlay() 619
 this -20 8 0 ?
 func __cls_m_Overlay#tryExe(s)z 633

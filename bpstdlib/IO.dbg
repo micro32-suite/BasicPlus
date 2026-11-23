@@ -138,6 +138,8 @@ lines
 1789 0
 1892 0
 vars
+func __init 0
+func __startup 24
 func File.leerLinea 35
 this -24 8 0 ?
 ignorarError -16 4 0 boolean

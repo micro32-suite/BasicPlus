@@ -145,12 +145,13 @@ java -jar toolchain/BpIde/target/BpIde-8.1.jar
 
 ### Cómo verificar la paridad dual-VM (el gesto más repetido)
 ```sh
-java -jar toolchain/miVM/target/bpgenvm-1.0.jar samples/X.mod > /tmp/java.out 2>&1
-bpgenvm-c/build/bpgenvm-c --libdir=bpstdlib   samples/X.mod > /tmp/c.out    2>&1
+java -jar toolchain/miVM/target/bpgenvm-1.0.jar samples/X.mod > /tmp/java.out 2> /tmp/java.err
+bpgenvm-c/build/bpgenvm-c --libdir=bpstdlib   samples/X.mod > /tmp/c.out    2> /tmp/c.err
 diff /tmp/java.out /tmp/c.out && echo "PARIDAD OK"
 ```
 Cualquier diferencia de `stdout` es un fallo del invariante, aunque el programa
-"funcione".
+"funcione". Desde V9 (`#855`), en el `stdout` de las dos VMs sólo va lo que imprime el
+programa (lo de cada VM, al `stderr`): se compara tal cual, sin filtrar.
 
 ## Dónde mirar antes de tocar el código (no reinventes)
 

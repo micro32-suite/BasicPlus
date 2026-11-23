@@ -37,6 +37,8 @@ lines
 508 0
 522 0
 vars
+func __init 0
+func __startup 24
 func Mouse.getX 35
 this -20 8 0 ?
 func Mouse.getY 52
@@ -59,6 +61,7 @@ this -24 8 0 ?
 b -16 4 0 integer
 func Mouse.__init 380
 this -20 8 0 ?
+func __cls_new_Mouse() 394
 func __cls_init_Mouse() 424
 this -20 8 0 ?
 func __cls_m_Mouse#isPressed(EMice/Button;)z 438

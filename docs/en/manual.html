@@ -2525,11 +2525,14 @@ in <code>samples/overlay</code>.</p>
       (<code>"División por cero"</code>), with neither the class nor the stack trace. Both also
       say <strong>where</strong>, in any of these cases: the call chain, up to 8 frames, as positions
       (<code>=== traza: Prueba+50 Prueba+72 ===</code> on stderr on the PC; in the <code>EXITED</code>
-      with a board), and the IDE translates it with the <code>.dbg</code>, with the board and with the
-      local VM: <code>en Prueba.bp:5</code>, <code>llamado desde Prueba.bp:9</code>. The frames inside
-      the standard library stay as positions (<code>Collections+1815</code>): the line that matters is
-      the one in your code, which does come out. If the error starts inside a <code>native</code>
-      function, the line is that of its caller.</li>
+      with a board), and with the <code>.dbg</code> it is translated to the file, the line and the
+      function: under the trace, <code>en Prueba.bp:5 (calcula)</code>,
+      <code>llamado desde Prueba.bp:9 (Main)</code>. The Java VM does it, so does <code>bp run</code>
+      (also with <code>--c</code>: the C VM, like a board, has no <code>.dbg</code>), and so does the
+      IDE, with the board and with the local VM. A frame without its <code>.dbg</code> stays as a
+      position (<code>Collections+1815</code>: the standard library in the ZIP does not carry its
+      own): the line that matters is the one in your code, which does come out. If the error starts
+      inside a <code>native</code> function, the line is that of its caller.</li>
 </ul>
 
 <!-- =========================================================== -->

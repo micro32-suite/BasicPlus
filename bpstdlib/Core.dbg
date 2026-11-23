@@ -490,6 +490,8 @@ lines
 6686 0
 6743 0
 vars
+func __init 0
+func __startup 19
 func Object.toString 30
 this -20 8 0 ?
 func Object.compareTo 59
@@ -497,6 +499,7 @@ this -28 8 0 ?
 other -20 8 0 ref
 func Object.__dtor 81
 this -20 8 0 ?
+func __cls_new_Object() 87
 func __cls_m_Object#__dtor()V 107
 this -20 8 0 ?
 func __cls_m_Object#toString()s 121
@@ -538,6 +541,7 @@ func Mutex.unlock 385
 this -20 8 0 ?
 func Mutex.__init 399
 this -20 8 0 ?
+func __cls_new_Mutex() 413
 func __cls_init_Mutex() 443
 this -20 8 0 ?
 func __cls_m_Mutex#unlock()V 457
@@ -570,6 +574,7 @@ n 4 4 0 integer
 i 8 4 0 integer
 func StringBuilder.__init 899
 this -20 8 0 ?
+func __cls_new_StringBuilder() 943
 func __cls_init_StringBuilder() 973
 this -20 8 0 ?
 func __cls_m_StringBuilder#appendChar(i)V 987
@@ -672,6 +677,7 @@ func Comparable.toBoolean 1838
 this -20 8 0 ?
 func Comparable.__init 1868
 this -20 8 0 ?
+func __cls_new_Comparable() 1874
 func __cls_init_Comparable() 1904
 this -20 8 0 ?
 func __cls_m_Comparable#toInteger()i 1918
@@ -951,6 +957,7 @@ func List.backing 5325
 this -20 8 0 ?
 func List.__init 5346
 this -20 8 0 ?
+func __cls_new_List() 5377
 func __cls_init_List() 5407
 this -20 8 0 ?
 func __cls_m_List#add(LObject;)V 5421

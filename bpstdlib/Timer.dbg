@@ -35,6 +35,8 @@ lines
 428 0
 445 0
 vars
+func __init 0
+func __startup 24
 func Alarm.getPeriodMs_ 35
 this -20 8 0 ?
 func Alarm.setPeriodMs_ 50

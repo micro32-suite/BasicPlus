@@ -103,6 +103,8 @@ lines
 1050 164
 1062 167
 vars
+func __init 0
+func __startup 24
 func decompress 35
 src -36 8 0 ref
 srcLen -28 4 0 integer

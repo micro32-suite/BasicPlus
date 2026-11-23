@@ -72,6 +72,8 @@ lines
 985 0
 999 0
 vars
+func __init 0
+func __startup 24
 func Tcp.getH 35
 this -20 8 0 ?
 func Tcp.setH 50
@@ -118,6 +120,7 @@ func Tcp.__dtor 752
 this -20 8 0 ?
 func Tcp.__init 775
 this -20 8 0 ?
+func __cls_new_Tcp() 799
 func __cls_init_Tcp() 829
 this -20 8 0 ?
 func __cls_m_Tcp#recvStr(iiz)s 843

@@ -4,3 +4,6 @@ source C:\lenguajes\pm\bpstdlib\Math.bp
 lines
 0 0
 24 0
+vars
+func __init 0
+func __startup 24
