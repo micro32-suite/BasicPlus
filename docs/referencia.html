@@ -3349,6 +3349,19 @@ bp placa COM22 get MiApp.shot          (una captura de Gui.shot; después, bp pn
   <code>bp</code>, y <code>bp</code> lo dice si pasa.
 </p>
 
+<p>
+  <strong>La API de un módulo</strong> (V9): <code>bp api Collections</code> la escribe en BP —sus declaraciones
+  públicas, como se escriben, sin los cuerpos—, sacada de su <code>.mod</code>, que la lleva dentro. Encuentra el módulo
+  como lo encontraría un <code>import</code> escrito en esa carpeta: la biblioteca estándar, las librerías del
+  <a href="#cli-vmcfg">BpVM.cfg</a> y los packs (también <code>SQLite</code> y <code>Orm</code>, que no traen fuente); o
+  un <code>.mod</code>, por su ruta. A secas, <code>bp api</code> lista los módulos que se pueden importar. Con
+  <code>--todo</code>, también lo que sólo ve quien hereda y lo del sistema (los nombres que empiezan por
+  <code>__</code>, <a href="manual.html#identificadores">§3.2 del manual</a>).
+</p>
+<pre><code>bp api                    (los módulos que se pueden importar)
+bp api Collections        (su API: Map, SyncList…)
+bp api out/MiLib.mod      (la de un módulo tuyo, compilado)</code></pre>
+
 <h3 id="cli-frontend">16.1 Frontend</h3>
 <pre><code>bp frontend &lt;archivo.bp&gt; [opciones]</code></pre>
 <table>

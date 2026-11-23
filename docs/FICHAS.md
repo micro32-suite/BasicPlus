@@ -13863,7 +13863,7 @@ el IDE, que es el H2 (abajo).
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | 🧬 hecho el 23-nov (Eduardo: la salida estándar de las VMs, *«tal cual»*; la traza, *«Un traductor, en Java»*); la red, VERDE, también sin su filtro; visto por Eduardo en el IDE: la traza salía dos veces, arreglado (`bf659ec`); por decidir, lo de `ERROR DE LINK` |
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ✅ 23-nov, `be0311be` (Eduardo: *«El fichero delante, siempre»*; *«Sólo los errores, y bp lo usa»*); y un fallo de paso: los errores de un módulo importado no salían; probado por Eduardo en el IDE (*«la primera parte salió bien»*) |
 | **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ✅ 23-nov, `b79c4a13` (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; la subida del IDE, la misma, probada por Eduardo con la P4; sin `pack`, para más adelante (`#875`) |
-| **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | ⬜ |
+| **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | 🧬 (a), hecha el 23-nov (`7cee427`; Eduardo: *«Si»*): `bp api`; (b), decidida (*«si»*); (c), (d) y (e), propuestas; y una idea de Eduardo, `#879` |
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | ⬜ |
 | **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | ⬜ |
 | **H1.10** | las placas, descritas para leer | `#861` | su pregunta abierta | ⬜ |
@@ -14221,18 +14221,37 @@ analizarla. Es el suelo del H2 (`#728`).
   con él, las variables de entorno que piden la GUI y la BD: `#876`.
 - **Visto de paso:** en la consola del IDE, una línea en blanco tras cada línea del micro simulado (`#874`; ya pasaba).
 
-#### 🧬 `#858` — H1.7: lo que una IA lee: la interfaz de un módulo en texto, la documentación en Markdown, `llms.txt`, la chuleta de JC y ejemplos en JC (abierta el 22-nov · M-3, M-10, M-11, M-18 y M-19 del análisis)
+#### 🧬 `#858` — H1.7: lo que una IA lee: la interfaz de un módulo en texto, la documentación en Markdown, `llms.txt`, la chuleta de JC y ejemplos en JC (abierta el 22-nov · M-3, M-10, M-11, M-18 y M-19 del análisis · el análisis, el 23-nov, en `notas/V9_H1_ia.md`; (a), hecha el mismo día, `7cee427` en `toolchain`)
 
 - **(a) La interfaz de un módulo, en texto:** el `.mod` la lleva dentro, y `--interface DIR` escribe los `.bpi`, que no
   son para leer; falta un volcado de sus clases, funciones y propiedades públicas: el índice de la API, sin leer los
   250 KB de la referencia.
-- **(b) La chuleta y la guía gráfica, también en Markdown**, en el ZIP (la chuleta, hoy sólo en español).
+  **Hecha** (23-nov, `7cee427`; Eduardo: *«Si»*): `bp api <Módulo>` la escribe en BP —el módulo sin los cuerpos, sus
+  declaraciones públicas como se escriben—, sacada de su `.mod`, y encuentra el módulo como lo encontraría `import`
+  (también `SQLite` y `Orm`, del pack, que no traen fuente en el ZIP); `bp api X.mod`, uno por su ruta; `bp api` a
+  secas, los módulos que se pueden importar. Sin lo del sistema (`__nombre`, manual §3.2: 91 de las funciones de
+  `Gui`); con `--todo`, también eso y lo protegido. La guía para IA la nombra delante de los fuentes; y la referencia
+  §16, en las dos lenguas, la chuleta y `CLAUDE.md`.
+  **De paso:** `bp` no tenía biblioteca de packs —el compilador sólo los busca en el BpVM.cfg de la carpeta de
+  trabajo—, y desde otra carpeta, `bp build` de un programa con `import SQLite` lo omitía («no se localizó .bp ni .bpi
+  para import 'SQLite'; se omitirá»). Ahora, la del IDE: la misma regla para los dos (`Instalacion.packsDir`).
+- **(b) La chuleta y la guía gráfica, también en Markdown**, en el ZIP (la chuleta está sólo en inglés: aquí decía
+  «sólo en español», mal). **Decidido** (Eduardo, 23-nov: *«si»*): un script saca el Markdown del HTML (un original:
+  dicen lo mismo por construcción; en el HTML el código va troceado por el coloreado y un `grep` no lo encuentra), con su
+  comprobación para la publicación; en `docs/` (la web lo sirve tal cual: `docs/.nojekyll`), con el nombre que propone
+  `llms.txt` (`X.html.md`); las páginas del usuario, en inglés; y la de la chuleta, también en el ZIP (el HTML sigue
+  sólo en la web, por el criterio del 6-ago).
 - **(c) Una chuleta de una página para JC**, hermana de `cheatsheet.html`: la §17 de `jc.html` es casi el contenido.
+  (No lo es: la §17 es lo que JC no tiene. Una hermana serían las secciones de la chuleta, en JC.) **Propuesto, por
+  ahora no** (23-nov, con el criterio de Eduardo de una documentación que se mantenga sola, `#879`): sería otra página
+  a mano, y la guía para IA ya trae la tabla de JC; con la guía, la sonda de JC salió a la primera.
 - **(d) `llms.txt` en la web**, que apunte a lo de (b): y es también lo que busca Eduardo, que lo encuentre quien lo
-  necesite (`#851`).
+  necesite (`#851`). **Propuesto:** que lo genere el script de (b), con la lista de páginas y sus descripciones de
+  `seo_paginas.py` (se mantiene solo). Sale a la web al cerrar V9.
 - **(e) Ejemplos en JC:** hoy uno (`samplesJC/JsonDemo.jc`) frente a unos 380 en BP. El traductor los da
   (`--escribir-jc`), sin los comentarios: generados al empaquetar, no en el repositorio, y compilados en la red. Si
-  compensa, al llegar.
+  compensa, al llegar. **Propuesto: no** (la red ya traduce los ~310 del corpus y comprueba que imprimen lo mismo,
+  `compat.sh check-jc`; en el ZIP saldrían sin comentarios, y el traductor ya va en él).
 - **Hecho cuando:** un comando imprime la API pública de `Collections.mod`; (b) y (c) existen y dicen lo mismo que su
   `.html`; (d), en `micro32-suite.github.io/BasicPlus/`; y (e), si se hace, `samplesJC/` con lo que se traduce,
   compilando en la red.
@@ -14397,6 +14416,26 @@ variables y sigue.
 - **Hecho cuando:** un Run on Device contra la VM Java del panel ejecuta un programa con imports de la stdlib, y otro
   detrás sin reiniciarla; el árbol del panel enseña su FS como el de una placa; y la red, igual (cambia la VM de
   referencia).
+
+#### 🧬 `#879` — los comentarios de documentación (`/** … */`, como Javadoc): la documentación de la API, sacada del código, que se mantiene sola (abierta el 23-nov · idea de Eduardo, al hablar del H1.7 · por analizar, al acabar (a) y (b) de `#858`)
+
+Eduardo, 23-nov, a la propuesta de la chuleta de JC, `llms.txt` y los ejemplos en JC (`#858`): *«En Java con /*** se
+puede comentar una función y con la herramienta adecuado se puede generar documentación de forma automática, que se
+mantiene sola.»*
+- **Lo que hay:** BP y JC ya aceptan `/* … */` (`Lexer`, `JcLexer`): un `/** … */` delante de una declaración compila
+  hoy; sería una convención, como en Java, sin sintaxis nueva. En la stdlib (con `sqlite/` y `bpdevices`), 1500
+  declaraciones públicas: 598 con un `//` justo encima, y 121 de ésos mezclan la explicación con las notas internas
+  (las fichas, los hitos, las fechas): `Map.put`, «Inserta o actualiza.» y debajo la historia de `#774`. Por eso la
+  marca explícita: lo de `/** */`, para quien usa la librería; los `//`, para nosotros.
+- **Quién lo leería:** `bp api` (`#858`, encima de cada declaración: del fuente, que va en el ZIP; los de `SQLite` y
+  `Orm`, que no van, tendrían que ir), el IDE (al pasar el ratón), una página de la API generada (la referencia
+  §13-§14 sigue: agrupa y explica; ésta sería el índice entero, como Javadoc frente al tutorial) y el traductor a JC
+  (hoy los comentarios no viajan; éstos podrían).
+- **Lo que cuesta:** que el compilador guarde el `/** */` de cada declaración pública (hoy el lector los salta), y
+  escribirlos, módulo a módulo, al ir mejorando las librerías (las de dispositivos de V9 nacerían con ellos).
+- **Por decidir (Eduardo):** el idioma (los comentarios de la stdlib, en español; la documentación, en los dos; la
+  guía para IA, en inglés); y si entra en V9.
+- **Hecho cuando:** por decidir, con su análisis.
 
 #### 🧬 `#878` — lo que el IDE dice que es el dispositivo al conectarse: «bpvm-java v1» para el micro simulado, y «bpvm-pico wire-v1» para cualquier placa por serie, también una ESP32 (abierta el 23-nov · vista al probar el H1 con Eduardo · pendiente)
 

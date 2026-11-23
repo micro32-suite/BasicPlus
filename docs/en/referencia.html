@@ -3344,6 +3344,19 @@ bp placa COM22 get MyApp.shot          (a capture from Gui.shot; then, bp png My
   and <code>bp</code> says so if that happens.
 </p>
 
+<p>
+  <strong>The API of a module</strong> (V9): <code>bp api Collections</code> writes it in BP —its public declarations,
+  as they are written, without the bodies—, taken from its <code>.mod</code>, which carries it. It finds the module the
+  way an <code>import</code> written in that folder would: the standard library, the libraries of the
+  <a href="#cli-vmcfg">BpVM.cfg</a> and the packs (also <code>SQLite</code> and <code>Orm</code>, which come without
+  source); or a <code>.mod</code>, by its path. On its own, <code>bp api</code> lists the modules that can be imported.
+  With <code>--todo</code>, also what only a subclass sees and what belongs to the system (the names that start with
+  <code>__</code>, <a href="manual.html#identificadores">§3.2 of the manual</a>).
+</p>
+<pre><code>bp api                    (the modules that can be imported)
+bp api Collections        (its API: Map, SyncList…)
+bp api out/MyLib.mod      (the API of one of yours, compiled)</code></pre>
+
 <h3 id="cli-frontend">16.1 Frontend</h3>
 <pre><code>bp frontend &lt;file.bp&gt; [options]</code></pre>
 <table>
