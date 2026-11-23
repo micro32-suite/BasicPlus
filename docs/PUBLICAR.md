@@ -259,6 +259,11 @@ vez**.
       `python -I -X utf8 scripts/seo_paginas.py --comprobar` → «por cambiar: 0». Una página
       nueva en `docs/` sale como «SIN FILA EN LA TABLA»: su título y su descripción, en la tabla
       del script, y después sin `--comprobar` (escribe su cabecera y `docs/sitemap.xml`).
+- [ ] **La documentación en Markdown y `llms.txt`, al día** (desde V9, `#858`):
+      `python -I -X utf8 scripts/docs_md.py --comprobar` → «N ficheros al día». Si no, sin
+      `--comprobar`: los saca otra vez de su HTML (las páginas en inglés y la chuleta, `X.html.md`
+      junto a cada una, y `docs/llms.txt`, con las descripciones de `seo_paginas.py`: después de
+      él). No se editan a mano. `montar-zip.sh` lo comprueba y no monta el ZIP si no lo están.
 - [ ] **`pruebas.html` con los números de ESTE pre-flight** (desde V8; idea de Eduardo,
       15-nov: *«que los usuarios vean que se está probando a fondo todo el sistema»*): las
       suites de Maven, la red (sus casos y sus pruebas de C), el barrido de samples, los

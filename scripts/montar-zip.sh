@@ -196,6 +196,16 @@ for f in $(grep -ho 'href="[^"]*\.md"' "$RAIZ/docs/en/"*.html | sed 's/href="//;
     esac
 done
 
+# V9 H1.7 (#858 b): la documentación en Markdown, sacada de su HTML por scripts/docs_md.py, para leerla con una
+# herramienta —una IA—: el código, sin el troceo del coloreado. La de las páginas en inglés y la de la chuleta (cuyo
+# HTML sigue sólo en la web). Antes, que esté al día: si no, el ZIP llevaría otra cosa que su HTML.
+if ! python -I -X utf8 "$RAIZ/scripts/docs_md.py" --comprobar; then
+    echo "ERROR: la documentación en Markdown no está al día: python -I -X utf8 scripts/docs_md.py" >&2
+    exit 1
+fi
+cp "$RAIZ/docs/cheatsheet.html.md" "$OUT/docs/"
+cp "$RAIZ/docs/en/"*.html.md "$OUT/docs/en/"
+
 # --- firmware: las imágenes SELLADAS, no las de los directorios de compilación
 cp "$RAIZ/dist/firmware/"*.uf2 "$RAIZ/dist/firmware/"*.bin \
    "$RAIZ/dist/firmware/SHA256SUMS.txt" "$OUT/firmware/"

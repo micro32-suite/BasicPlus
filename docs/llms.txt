@@ -1,0 +1,21 @@
+# BasicPlus
+
+> Language, graphical interface and database, together, for microcontrollers: debug on the PC and the same program runs on Raspberry Pi Pico 2, ESP32 and STM32.
+
+BasicPlus is a statically typed, object-oriented language with a modern BASIC syntax, for 32-bit microcontrollers (RP2350, ESP32, STM32), and JC is the same language with the syntax of Java and C#. One bytecode (`.mod`) runs the same on the PC, in two independent virtual machines (Java and C), and on the boards: what a program prints on the PC is what it prints on the board. It comes with a graphical interface (LVGL), SQLite with an ORM, an IDE with a debugger and a simulated micro. Part of Micro32 Suite; MIT licence. The download (Windows): https://github.com/micro32-suite/BasicPlus/releases/latest. The installation carries `AGENTS.md`, a guide for AI assistants, and `bp`, the command line (`bp build`, `bp run`, and `bp api <Module>`: the API of a library module, in BasicPlus).
+
+## Documentation
+
+- [One-page reference](https://micro32-suite.github.io/BasicPlus/cheatsheet.html.md): BasicPlus on one page: a small, statically typed language for microcontrollers; one bytecode runs on the PC and on RP2350, ESP32 and STM32 boards.
+- [Language manual](https://micro32-suite.github.io/BasicPlus/en/manual.html.md): Manual of BasicPlus, an object-oriented BASIC for microcontrollers: types, classes, interfaces and generics, exceptions, modules, threads and native functions.
+- [Reference](https://micro32-suite.github.io/BasicPlus/en/referencia.html.md): BasicPlus reference: the standard library — GPIO, I2C, SPI, UART, PWM, ADC, files, JSON, network, WiFi and Bluetooth —, the command line and the files it produces.
+- [Graphical interface](https://micro32-suite.github.io/BasicPlus/en/gui.html.md): Graphical interfaces on microcontrollers with BasicPlus: the Gui module over LVGL, widgets, screens designed in JSON and touch; the same program on the PC and on the board.
+- [JC](https://micro32-suite.github.io/BasicPlus/en/jc.html.md): JC, BasicPlus with the syntax of Java and C#, for microcontrollers: how each thing is written, what it is in BasicPlus and how a program is translated from one to the other.
+- [Databases](https://micro32-suite.github.io/BasicPlus/en/basedatos.html.md): SQLite and its ORM on microcontrollers with BasicPlus: the same engine, the same .db file and the same code on the PC, the Metro RP2350, the ESP32-P4 and the STM32 Discovery.
+- [IDE guide](https://micro32-suite.github.io/BasicPlus/en/guia-ide.html.md): BasicPlus IDE guide: compiling and running on the PC or on the board — by cable or over WiFi —, the board explorer, the console, the debugger and the simulated micro.
+- [How it is tested](https://micro32-suite.github.io/BasicPlus/en/pruebas.html.md): How BasicPlus is tested: the output, byte-identical on the Java VM and on the C VM; the tests on all eleven boards; and a 48-hour run without a single error or restart.
+
+## Optional
+
+- [Home page](https://micro32-suite.github.io/BasicPlus/en/index.html.md): Language, graphical interface and database, together, for microcontrollers: debug on the PC and the same program runs on Raspberry Pi Pico 2, ESP32 and STM32.
+- [Credits](https://micro32-suite.github.io/BasicPlus/en/creditos.html.md): BasicPlus credits and acknowledgements: the work of others it rests on — filesystems, graphics libraries, a real-time operating system, the manufacturers' SDKs and the tools.

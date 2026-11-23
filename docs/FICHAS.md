@@ -13863,7 +13863,7 @@ el IDE, que es el H2 (abajo).
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | 🧬 hecho el 23-nov (Eduardo: la salida estándar de las VMs, *«tal cual»*; la traza, *«Un traductor, en Java»*); la red, VERDE, también sin su filtro; visto por Eduardo en el IDE: la traza salía dos veces, arreglado (`bf659ec`); por decidir, lo de `ERROR DE LINK` |
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ✅ 23-nov, `be0311be` (Eduardo: *«El fichero delante, siempre»*; *«Sólo los errores, y bp lo usa»*); y un fallo de paso: los errores de un módulo importado no salían; probado por Eduardo en el IDE (*«la primera parte salió bien»*) |
 | **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ✅ 23-nov, `b79c4a13` (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; la subida del IDE, la misma, probada por Eduardo con la P4; sin `pack`, para más adelante (`#875`) |
-| **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | 🧬 (a), hecha el 23-nov (`7cee427`; Eduardo: *«Si»*): `bp api`; (b), decidida (*«si»*); (c), (d) y (e), propuestas; y una idea de Eduardo, `#879` |
+| **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | 🧬 hecho el 23-nov, a falta de verlo Eduardo: (a) `bp api` (`7cee427`; *«Si»*), (b) la documentación en Markdown y (d) `llms.txt`, sacados del HTML por `docs_md.py` (*«OK, sigue con b»*); (c) y (e), no; y una idea de Eduardo, `#879` |
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | ⬜ |
 | **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | ⬜ |
 | **H1.10** | las placas, descritas para leer | `#861` | su pregunta abierta | ⬜ |
@@ -14221,7 +14221,7 @@ analizarla. Es el suelo del H2 (`#728`).
   con él, las variables de entorno que piden la GUI y la BD: `#876`.
 - **Visto de paso:** en la consola del IDE, una línea en blanco tras cada línea del micro simulado (`#874`; ya pasaba).
 
-#### 🧬 `#858` — H1.7: lo que una IA lee: la interfaz de un módulo en texto, la documentación en Markdown, `llms.txt`, la chuleta de JC y ejemplos en JC (abierta el 22-nov · M-3, M-10, M-11, M-18 y M-19 del análisis · el análisis, el 23-nov, en `notas/V9_H1_ia.md`; (a), hecha el mismo día, `7cee427` en `toolchain`)
+#### 🧬 `#858` — H1.7: lo que una IA lee: la interfaz de un módulo en texto, la documentación en Markdown, `llms.txt`, la chuleta de JC y ejemplos en JC (abierta el 22-nov · M-3, M-10, M-11, M-18 y M-19 del análisis · el análisis, el 23-nov, en `notas/V9_H1_ia.md`; (a), (b) y (d), hechas el mismo día, `7cee427` en `toolchain` y lo de abajo; (c) y (e), no: Eduardo, *«OK»*; a falta de verlo Eduardo, y (d) en la web, al cerrar V9)
 
 - **(a) La interfaz de un módulo, en texto:** el `.mod` la lleva dentro, y `--interface DIR` escribe los `.bpi`, que no
   son para leer; falta un volcado de sus clases, funciones y propiedades públicas: el índice de la API, sin leer los
@@ -14241,17 +14241,24 @@ analizarla. Es el suelo del H2 (`#728`).
   comprobación para la publicación; en `docs/` (la web lo sirve tal cual: `docs/.nojekyll`), con el nombre que propone
   `llms.txt` (`X.html.md`); las páginas del usuario, en inglés; y la de la chuleta, también en el ZIP (el HTML sigue
   sólo en la web, por el criterio del 6-ago).
+  **Hecha** (23-nov; Eduardo: *«OK, sigue con b»*): `scripts/docs_md.py` saca de su HTML las nueve páginas de
+  `docs/en/` y la chuleta (`X.html.md`, junto a cada una; 541 KB, el 45-70 % del HTML), con los mismos títulos y las
+  mismas palabras que su HTML (sin el índice de la página); el código, sin el troceo del coloreado; las anclas de los
+  títulos y los enlaces a los `.md`. `--comprobar`, en el pre-flight de `PUBLICAR.md`, y `montar-zip.sh` no monta el
+  ZIP si no están al día; el ZIP los lleva (`docs/cheatsheet.html.md`, `docs/en/*.html.md`). La guía para IA manda a
+  ellos (la chuleta, ya en la instalación).
 - **(c) Una chuleta de una página para JC**, hermana de `cheatsheet.html`: la §17 de `jc.html` es casi el contenido.
-  (No lo es: la §17 es lo que JC no tiene. Una hermana serían las secciones de la chuleta, en JC.) **Propuesto, por
-  ahora no** (23-nov, con el criterio de Eduardo de una documentación que se mantenga sola, `#879`): sería otra página
+  (No lo es: la §17 es lo que JC no tiene. Una hermana serían las secciones de la chuleta, en JC.) **Por ahora no**
+  (Eduardo, 23-nov: *«OK»*; con su criterio de una documentación que se mantenga sola, `#879`): sería otra página
   a mano, y la guía para IA ya trae la tabla de JC; con la guía, la sonda de JC salió a la primera.
 - **(d) `llms.txt` en la web**, que apunte a lo de (b): y es también lo que busca Eduardo, que lo encuentre quien lo
-  necesite (`#851`). **Propuesto:** que lo genere el script de (b), con la lista de páginas y sus descripciones de
-  `seo_paginas.py` (se mantiene solo). Sale a la web al cerrar V9.
+  necesite (`#851`). **Hecha** (Eduardo: *«OK»*): `docs/llms.txt`, lo escribe el script de (b), con la lista de
+  páginas y sus descripciones de `seo_paginas.py` (se mantiene solo): qué es BasicPlus, la descarga, y las páginas en
+  Markdown, con su dirección en la web. Sale a la web al cerrar V9.
 - **(e) Ejemplos en JC:** hoy uno (`samplesJC/JsonDemo.jc`) frente a unos 380 en BP. El traductor los da
   (`--escribir-jc`), sin los comentarios: generados al empaquetar, no en el repositorio, y compilados en la red. Si
-  compensa, al llegar. **Propuesto: no** (la red ya traduce los ~310 del corpus y comprueba que imprimen lo mismo,
-  `compat.sh check-jc`; en el ZIP saldrían sin comentarios, y el traductor ya va en él).
+  compensa, al llegar. **No** (Eduardo: *«OK»*): la red ya traduce los ~310 del corpus y comprueba que imprimen lo
+  mismo (`compat.sh check-jc`); en el ZIP saldrían sin comentarios, y el traductor ya va en él.
 - **Hecho cuando:** un comando imprime la API pública de `Collections.mod`; (b) y (c) existen y dicen lo mismo que su
   `.html`; (d), en `micro32-suite.github.io/BasicPlus/`; y (e), si se hace, `samplesJC/` con lo que se traduce,
   compilando en la red.
