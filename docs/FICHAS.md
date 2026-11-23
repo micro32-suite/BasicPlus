@@ -13859,7 +13859,7 @@ el IDE, que es el H2 (abajo).
 |---|---|---|---|---|
 | **H1.1** | el clic inyectado tras `Gui.start()` se pierde sin ventana | `#852` | F-1 | ✅ 22-nov, `333c8f0d` |
 | **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ✅ 23-nov, `1ae25d98`: `bp` (*«Uno: `bp`, con órdenes»*), el ZIP con la VM-C y la documentación; probado por Eduardo (*«todo OK»*) |
-| **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ⬜ |
+| **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ⏳ 23-nov: `AGENTS.md` (*«Sólo inglés»*) con su `CLAUDE.md`, en el ZIP, en cada proyecto nuevo y en la carpeta de la IA; a falta de la prueba con una IA |
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | ⬜ |
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ⬜ |
 | **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ⬜ |
@@ -13995,6 +13995,29 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   servidor de la IA del IDE (H2.3) le dice que la documentación está «en la carpeta docs de la instalación», sin la
   ruta. Propuesto: cuando esta guía exista, que esas instrucciones la nombren, con su ruta.
 - **Hecho cuando:** está en la raíz del ZIP, y un proyecto creado con el IDE la lleva.
+- **Decidido (Eduardo, 23-nov):** la lengua, *«Sólo inglés»* (una copia: la lee una IA). Y el formato, por la
+  documentación de Claude Code («memory»): lee `AGENTS.md` sólo si no hay ningún `CLAUDE.md` en la carpeta de trabajo
+  ni por encima, así que junto a la guía va un `CLAUDE.md` de una línea, `@AGENTS.md` (un proyecto dentro de
+  `C:\lenguajes\pm` heredaría si no el `CLAUDE.md` del repositorio, la guía de quien DESARROLLA BasicPlus).
+- **El borrador, comprobado** (`notas/V9_H1_ia.md`): las órdenes, ya las de `bp`; la tabla de trampas de BP, ejecutada
+  en las dos VMs (también lo virtual: `a.habla()` por una referencia de la base llama al de la hija); la de JC, con el
+  mismo programa traducido por el compilador y un `@Override` que no compila; la GUI, con una captura. **Corregido:** el
+  `°` SÍ se pinta con la fuente por defecto (las tildes y la `ñ`, no); la chuleta va SÓLO en la web (criterio de
+  Eduardo, 6-ago), así que la guía la nombra por su URL; y `docs/BpBuild.example`, que la referencia nombra, no iba en
+  el ZIP (un resto de `#853`). Una fila que añadí sin comprobar (`catch (Exception e)` → `RuntimeError`), quitada:
+  `Exception` existe.
+- **Hecho** (`e250277` en `toolchain`; la plantilla y el ZIP, en BasicPlus): la guía, `scripts/zip/AGENTS.md`, con
+  `@INSTALACION@` donde va la ruta de la instalación; en la raíz del ZIP, con las rutas relativas, y su `CLAUDE.md`; en
+  cada proyecto nuevo y en la carpeta de la IA al encender su servidor (`GuiaIa`: la plantilla viaja en el jar, el pom
+  la copia como el manual; lo que falte, sin pisar nada); y las instrucciones del servidor la nombran («ANTES DE
+  ESCRIBIR BasicPlus, lee la guía para IA…»). Y `docs/BpBuild.example`, al ZIP.
+- **Probado:** el ZIP de prueba lleva `AGENTS.md` (rutas relativas) y `CLAUDE.md`; un proyecto nuevo, los dos, con la
+  ruta de la instalación y sin marcas por poner; con un `CLAUDE.md` propio, sólo `AGENTS.md`; otra vez, nada; las
+  instrucciones, con la guía. La batería del IDE, igual.
+- **Falta:** la prueba de verdad: una IA sin contexto, en la carpeta del ZIP de prueba o en un proyecto nuevo, escribe un
+  programa: ¿lee la guía y no cae en las trampas? Y una cosa que decidir (Eduardo): en el repositorio, la raíz de la
+  «instalación» es `C:\lenguajes\pm`, sin `bp.bat` (sólo lo trae el ZIP), así que la guía de un proyecto hecho con el IDE
+  del repositorio nombra un `bp` que no está.
 
 #### 🧬 `#855` — H1.4: las VMs, para que las conduzca un programa: sin ventana, la salida del programa sola, la traza con su línea y `--help` (abierta el 22-nov · F-2, F-5, M-7 y M-8 del análisis)
 

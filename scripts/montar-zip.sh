@@ -80,6 +80,15 @@ sed -e 's/\r$//' -e "s/@JAR@/BpIde-${VER}.jar/" -e 's/$/\r/' "$RAIZ/scripts/zip/
 sed -e 's/\r$//' -e "s/@JAR@/BpIde-${VER}.jar/" "$RAIZ/scripts/zip/bp" > "$OUT/bp"
 chmod +x "$OUT/bp"
 
+# --- la guía para IA (V9 H1.3, #854) ------------------------------------------
+# AGENTS.md, el nombre que buscan los agentes, y un CLAUDE.md de una línea que la incluye: Claude Code lee AGENTS.md sólo
+# si no hay ningún CLAUDE.md en la carpeta de trabajo ni por encima (su documentación, «memory»), y con el import la lee
+# siempre. La plantilla, en scripts/zip/ (la misma que el IDE deja en cada proyecto, con la ruta de la instalación); aquí,
+# en la raíz, las rutas relativas.
+sed -e 's/\r$//' -e 's#@INSTALACION@##g' "$RAIZ/scripts/zip/AGENTS.md" > "$OUT/AGENTS.md"
+printf '@AGENTS.md\n' > "$OUT/CLAUDE.md"
+if grep -q '@INSTALACION@' "$OUT/AGENTS.md"; then echo "AGENTS.md: quedan marcas @INSTALACION@ sin poner"; exit 1; fi
+
 # --- BpVM.cfg: cómo encuentra el compilador la stdlib -----------------------
 # SIN esto el paquete no compila NADA que importe la stdlib. El ZIP lleva los
 # .mod en bpstdlib/, pero `locateImportMod` sólo mira fromPath, outDir, el dir
@@ -169,6 +178,9 @@ for f in "$RAIZ/docs/"*.html; do
 done
 cp -r "$RAIZ/docs/img" "$OUT/docs/"
 mkdir -p "$OUT/docs/en" && cp "$RAIZ/docs/en/"*.html "$OUT/docs/en/"
+# V9 #854 — la plantilla anotada de un proyecto: la referencia (§16) la nombra, y no es un .md (no la saca el barrido
+# de abajo). Un resto de #853: la documentación la mandaba leer y el ZIP no la traía.
+cp "$RAIZ/docs/BpBuild.example" "$OUT/docs/"
 
 # Los anexos .md NO se eligen a mano: se sacan de lo que la ayuda enlaza. En docs/
 # hay 44 .md y la mayoría son notas internas de desarrollo; elegir a ojo cuáles se
