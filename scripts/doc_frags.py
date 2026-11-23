@@ -395,7 +395,8 @@ def preparar(f, slug, stdlib, anterior):
 
 # ── compilacion ──────────────────────────────────────────────────────────────
 
-RE_ERR = re.compile(r"^\[\d+:\d+\]\s+error|^-- Errores|^error:|^error de I/O|compilaci.n abortada|no se localiz.*se omitir")
+# V9 #856: cada error, con su fichero delante («App.bp:7:15: error semantico: ...», la forma de gcc); antes, «[7:15] error».
+RE_ERR = re.compile(r"^.+?:\d+:\d+:\s+error|^-- Errores|^error:|^error de I/O|compilaci.n abortada|no se localiz.*se omitir")
 
 # Los errores «de contexto» de un trozo suelto: un nombre SIN cualificar (sin
 # punto) que el trozo no declara. Capturan el nombre para el informe.
@@ -413,7 +414,7 @@ RE_CTX = [
     re.compile(r"no se localiz. \.bp ni \.bpi para import '([^']+)'"),
     re.compile(r"no se encuentra el pack '([^']+)'"),
 ]
-RE_POS = re.compile(r"\[(\d+):\d+\]")
+RE_POS = re.compile(r":(\d+):\d+:\s")   # V9 #856: «X.bp:12:5: error ...» (antes, «[12:5] error ...»)
 # Cascadas SIN nombre: solo se toleran si el trozo tiene ademas algun error de
 # contexto (una clase cuya base no se resolvio, un `::` sobre un objeto sin tipo).
 RE_CASCADA = [

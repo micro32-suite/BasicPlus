@@ -199,7 +199,7 @@ while IFS='|' read -r nombre esperado; do
     else
         printf '  CAMBIO   %-28s falta: %s\n' "$nombre" "$esperado"
         printf '           lo que dice ahora: %s\n' \
-               "$(printf '%s' "$salida" | grep -m1 -E '^\[[0-9]+:[0-9]+\] error' | cut -c1-72)"
+               "$(printf '%s' "$salida" | grep -m1 -E ':[0-9]+:[0-9]+: error' | cut -c1-72)"   # V9 #856: «X.bp:L:C: error …»
         mal=$((mal+1))
     fi
 done <<EOF

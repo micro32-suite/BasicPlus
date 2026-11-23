@@ -13861,7 +13861,7 @@ el IDE, que es el H2 (abajo).
 | **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ✅ 23-nov, `1ae25d98`: `bp` (*«Uno: `bp`, con órdenes»*), el ZIP con la VM-C y la documentación; probado por Eduardo (*«todo OK»*) |
 | **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ✅ 23-nov: `AGENTS.md` (*«Sólo inglés»*) con su `CLAUDE.md`, en el ZIP, en cada proyecto nuevo y en la carpeta de la IA; probada por una IA sin contexto (tres programas a la primera) |
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | 🧬 hecho el 23-nov (Eduardo: la salida estándar de las VMs, *«tal cual»*; la traza, *«Un traductor, en Java»*); la red, VERDE, también sin su filtro; a falta de verlo Eduardo |
-| **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ⬜ |
+| **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | 🧬 hecho el 23-nov (Eduardo: *«El fichero delante, siempre»*; *«Sólo los errores, y bp lo usa»*); y un fallo de paso: los errores de un módulo importado no salían; a falta de verlo Eduardo |
 | **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ⬜ |
 | **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | ⬜ |
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | ⬜ |
@@ -14099,7 +14099,7 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
 - **Se queda en la salida estándar, por decidir (Eduardo):** `=== ERROR DE LINK: … ===` (y los rechazos de versión),
   cuando el programa no llega a arrancar: la red los lee de ahí (`compat.sh`, `norma_caso`; `mezcla.py`, `clasificar`).
 
-#### 🧬 `#856` — H1.5: los diagnósticos del compilador, para que los lea una máquina (abierta el 22-nov · M-4, M-5 y M-6 del análisis)
+#### 🧬 `#856` — H1.5: los diagnósticos del compilador, para que los lea una máquina (abierta el 22-nov · M-4, M-5 y M-6 del análisis · hecha el 23-nov, con lo de «Hecho cuando» cumplido; a falta de verla Eduardo)
 
 - **(a) `fichero:línea:col: error: mensaje`:** hoy `[45:24] error semántico: …`, y el fichero sólo en la cabecera
   (`=== Procesando`).
@@ -14112,6 +14112,41 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   antes: la lección de `#542`).
 - **Hecho cuando:** en un proyecto de dos módulos, cada error dice su fichero; sin errores, `--quiet` no imprime nada; y
   los acentos se leen bien en una consola UTF-8, sin opciones de Java.
+- **El análisis** (23-nov, `notas/V9_H1_ia.md`, «H1.5»), medido con dos módulos (`App` importa `Lib`). **Un fallo:** los
+  errores SEMÁNTICOS de un módulo importado no se escriben: con el error en `Lib`, compilando `App` (fichero, proyecto,
+  `bp build` o `bp run`) sólo sale «compilación abortada por errores semánticos en Lib.bp», sin el error
+  (`printSemantics`, sólo para el módulo raíz). Los lectores del formato, contados: el IDE (`ERROR_RE`, que además pone
+  cada error en el fichero de la pestaña activa), `doc_frags.py` y `samples_sweep.py`; no les afecta a `h13-errores.sh`
+  ni a las pruebas del compilador. `--quiet` no lo usa nadie. La salida, en cp1252.
+- **Decidido (Eduardo, 23-nov):** (a) *«El fichero delante, siempre»* (`App.bp:7:15: error semántico: …`, la forma de
+  gcc; sus lectores, a la vez); (b) *«Sólo los errores, y bp lo usa»* (con `--quiet`, los errores y avisos y la línea
+  «compilación abortada…»; si compila, nada; `bp build`, bien, sólo «compilado: out/X.mod»). El fallo y (c), sin
+  decisión: los errores de todos los módulos, y la salida en UTF-8.
+- **Hecho** (23-nov; `88041db` en `toolchain`):
+  - **El fallo:** los diagnósticos semánticos de un módulo importado salen cuando no compila (sus errores, y con ellos
+    sus avisos); si compila, no (sus avisos no se veían, y el de «no define main» lo da toda librería: con él, cada
+    compilación correcta lo repetiría y `--quiet` no callaría nunca).
+  - **(a)** Cada error y cada aviso (léxico, sintáctico o semántico), con su fichero delante: `App.bp:7:15: error
+    semántico: …`; la ruta, desde donde se compila si está dentro, y si no entera. El texto de los diagnósticos (su
+    `toString`) no cambia. Sus lectores, a la vez: el IDE (`ERROR_RE`; cada error en SU fichero —`CompileError` lleva su
+    ruta—, el doble clic abre ese fichero, y la IA recibe la `ruta` en «compilar»), `doc_frags.py` (su `RE_ERR` y su
+    `RE_POS`, la línea de cada error: sin ella, 10 FALLO), `samples_sweep.py` y lo que enseña `h13-errores.sh`. Y cuatro
+    pruebas del compilador que capturaban su salida y buscaban `[L:C]` (en el recuento del análisis se dieron por pruebas
+    de objetos: no lo eran).
+  - **(b)** `--quiet`: por la salida estándar, sólo los diagnósticos y los avisos (un canal propio, `Main.diag()`, por
+    el que van también los avisos que salían por la estándar: imports omitidos, la copia de un módulo de la stdlib, el
+    proyecto, los packs…); lo demás se calla (`callaLoDemas`). La de errores, como siempre. `bp build` y `bp run`
+    compilan así; `bp build`, si compila, sólo «compilado: out/X.mod».
+  - **(c)** El compilador escribe en UTF-8 (`Main.main`, como la VM Java).
+  - Su uso (`--help`), la guía para IA, la referencia §16 y la guía del IDE §4, en las dos lenguas.
+- **Probado:** con dos módulos (fichero y proyecto): el error de `Lib`, que no salía, «src\Lib.bp:5:16: error semántico:
+  identificador no resuelto: 'dos'»; el de `App`, «App.bp:7:15: …»; uno de sintaxis, «Sint.bp:4:3: error sintáctico:
+  …». `--quiet`: con todo bien, 0 líneas en las dos salidas; con el error, el error, su aviso y «compilación abortada…».
+  `bp build` y `bp run`, igual. Los bytes, UTF-8 («semántico», `c3 a1`). El IDE, con la ventana sin enseñar: «compilar»
+  da el error de `Lib.bp` con su fichero, su ruta y su línea, y el de `App.bp` con el suyo. Las pruebas del compilador,
+  408/408; `h13-errores`, 151/151; `doc_frags`, 0 FALLO (377 de BP y 80 de JC); `samples_sweep`, 416/416. **La red,
+  VERDE** (20:55), con las cuentas de la anterior (paridad 219, MOD8 210 + 9 SKIP declarados, dos workers 219, las pruebas
+  de C, la norma 9/9, el sim 16/16, la sombra 15/15…). La batería del IDE, bien.
 
 #### 🧬 `#857` — H1.6: el cable, por línea de órdenes, contra la placa y el micro simulado (abierta el 22-nov · M-14 y M-15 del análisis)
 

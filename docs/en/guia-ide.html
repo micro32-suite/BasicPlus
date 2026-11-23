@@ -292,8 +292,9 @@
   <strong>Run → Compile</strong> compiles the file or the project;
   diagnostics show up in the <strong>Errores</strong> tab with their file,
   line, column, kind (lexical / syntactic / semantic) and message,
-  separating errors from warnings. Double-clicking a row jumps to that
-  position in the editor.
+  separating errors from warnings. Each error, with the file it is in: one
+  in an imported module, with its own. Double-clicking a row opens its file
+  (if it is not the tab's) and jumps to that position.
 </p>
 <p><img src="../img/ide-errores.png" alt="Errors tab with several diagnostics"></p>
 <p>

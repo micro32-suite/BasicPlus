@@ -3311,7 +3311,9 @@ imported exactly like one living in <code>/lib</code>.</p>
 <p>
   From the command line, everything goes through <code>bp</code> (at the root of the installation:
   <code>bp.bat</code>, and <code>bp</code> for bash). <code>bp build</code> compiles a source or a
-  project (the <code>.mod</code> goes to <code>out/</code> next to the source); <code>bp run</code>
+  project (the <code>.mod</code> goes to <code>out/</code> next to the source) and only says where it
+  went, or the errors, each one with its file (<code>App.bp:7:15: error semántico: …</code>, V9);
+  <code>bp run</code>
   compiles if needed and runs on the Java VM (with <code>--c</code>, on the C VM), and exits with the
   program's code; <code>bp png</code> turns a capture into a PNG (§23.5 of the graphics guide); and
   <code>bp help</code> tells it all. The standard library is the one in <a href="#cli-vmcfg">BpVM.cfg</a>
@@ -3328,7 +3330,7 @@ bp run --c samples/out/Blink.mod   (on the C VM)</code></pre>
   <tr><th>Option</th><th>Effect</th></tr>
   <tr><td><code>--tokens</code></td><td>Dump of the lexer's tokens.</td></tr>
   <tr><td><code>--ast</code></td><td>Dump of the AST.</td></tr>
-  <tr><td><code>--quiet</code></td><td>Diagnostics only.</td></tr>
+  <tr><td><code>--quiet</code></td><td>Only the errors and warnings; if it compiles, nothing (V9).</td></tr>
   <tr><td><code>--compile &lt;dir&gt;</code></td><td>Compiles to <code>.mod</code> (the interface goes inside).</td></tr>
   <tr><td><code>--interface &lt;dir&gt;</code></td><td>Only parses and builds the interface — no code, no output file.</td></tr>
   <tr><td><code>--project &lt;file.bpbuild&gt;</code></td><td>Compiles the whole project (<a href="#cli-bpbuild">.bpbuild</a>); with <code>"out": "pack"</code>, it assembles the pack (§15.3).</td></tr>

@@ -68,7 +68,8 @@ EXCLUIDAS = {          # carpeta de samples/ -> por que no se compila aqui
 PENDIENTES = "pendientes"      # se compilan, se informan aparte, no cuentan como fallo
 DIRS_BUILD = {"out", "target"}
 
-RE_ERR = re.compile(r"^\[\d+:\d+\]\s+error|^-- Errores|^error:|^error de I/O|compilaci.n abortada")
+# V9 #856: cada error, con su fichero delante («App.bp:7:15: error semantico: ...», la forma de gcc); antes, «[7:15] error».
+RE_ERR = re.compile(r"^.+?:\d+:\d+:\s+error|^-- Errores|^error:|^error de I/O|compilaci.n abortada")
 RE_AVISO = re.compile(r"no se localiz.*se omitir")      # import que el frontend omite en silencio
 
 
