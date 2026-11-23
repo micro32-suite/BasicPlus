@@ -14265,12 +14265,13 @@ variables y sigue.
 - **Decidido (Eduardo, 23-nov):** *«añadir un parámetro al ejecutar el IDE que indique al IDE que lo primero que ha de
   hacer es preguntar al usuario si autoriza a la IA manejar el IDE. La carpeta de trabajo se la puede pasar la IA.»* Lo
   del H2.3 se queda: apagado por defecto, y lo enciende la persona desde la ventana; la IA sólo lo pide.
-- **Hecho** (`6e3807d` en `toolchain`): `bpide.bat --ia=<carpeta>`, o `--ia` a secas (la carpeta, la elige la persona,
+- **Hecho** (`6e3807d` y `7554040` en `toolchain`): `bpide.bat --ia=<carpeta>`, o `--ia` a secas (la carpeta, la elige la persona,
   como en el menú). Con la ventana ya a la vista, la pregunta: lo que podrá hacer la IA y la carpeta (si es demasiado
   amplia, lo avisa); por defecto, «No». Con un sí, el servidor se enciende como desde el menú IA (la guía en la carpeta,
   la consola, la carpeta recordada); con un no, el IDE sigue sin él; una carpeta que no existe, un aviso, y sigue
-  apagado. Cómo acabó, en una línea `[ia] …` en la salida estándar del IDE, en UTF-8: la lee la IA que lo lanzó, que
-  si no sólo vería que el servidor no contesta. Lo que no entiende, a la salida de errores. La guía para IA dice cómo
+  apagado. Cómo acabó, en una línea `[ia] …` en la salida estándar del IDE (en UTF-8, por las rutas; su texto, en
+  ASCII: una consola de Windows que no esté en UTF-8 lo desfiguraría): la lee la IA que lo lanzó, que si no sólo vería
+  que el servidor no contesta. Lo que no entiende, a la salida de errores. La guía para IA dice cómo
   conectarse y qué hacer si el servidor no contesta; y la guía del IDE, en un §13 nuevo, el menú IA (el H2.3 se cerró
   sin documentarlo) y el parámetro, en las dos lenguas.
 - **Probado** con la ventana sin enseñar, otra carpeta de usuario y el puerto 7399, sin la pregunta (un diálogo saldría
