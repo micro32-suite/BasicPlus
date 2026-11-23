@@ -13862,7 +13862,7 @@ el IDE, que es el H2 (abajo).
 | **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ✅ 23-nov: `AGENTS.md` (*«Sólo inglés»*) con su `CLAUDE.md`, en el ZIP, en cada proyecto nuevo y en la carpeta de la IA; probada por una IA sin contexto (tres programas a la primera) |
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | 🧬 hecho el 23-nov (Eduardo: la salida estándar de las VMs, *«tal cual»*; la traza, *«Un traductor, en Java»*); la red, VERDE, también sin su filtro; a falta de verlo Eduardo |
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | 🧬 hecho el 23-nov (Eduardo: *«El fichero delante, siempre»*; *«Sólo los errores, y bp lo usa»*); y un fallo de paso: los errores de un módulo importado no salían; a falta de verlo Eduardo |
-| **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | 🧬 hecho el 23-nov (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; sin `pack` (escribe la flash: aparte, con su OK); a falta de verlo Eduardo |
+| **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | 🧬 hecho el 23-nov (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; sin `pack`, para más adelante (`#875`); a falta de verlo Eduardo |
 | **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | ⬜ |
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | ⬜ |
 | **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | ⬜ |
@@ -14210,8 +14210,9 @@ analizarla. Es el suelo del H2 (`#728`).
   - `doc_frags` de los documentos tocados, 0 FALLO. La red, no: no pasa ni por `bp` ni por el IDE, y del compilador y
     de las VMs no cambió nada.
 - **De lo decidido, sin hacer: `bp placa … pack`** (grabar un pack). Escribe la flash de la placa, y su lógica está en
-  el panel de Packs (podar y sellar para la placa, el pack que pide otro, los avisos de la stdlib): sacarla como la
-  subida, aparte y con el OK de Eduardo.
+  el panel de Packs (podar y sellar para la placa, el pack que pide otro, los avisos de la stdlib). Eduardo, 23-nov:
+  *«Sí que hará falta pero lo podemos dejar para más adelante»*, como comandos, desde el botón y por la IA: `#875`; y
+  con él, las variables de entorno que piden la GUI y la BD: `#876`.
 - **Visto de paso:** en la consola del IDE, una línea en blanco tras cada línea del micro simulado (`#874`; ya pasaba).
 
 #### 🧬 `#858` — H1.7: lo que una IA lee: la interfaz de un módulo en texto, la documentación en Markdown, `llms.txt`, la chuleta de JC y ejemplos en JC (abierta el 22-nov · M-3, M-10, M-11, M-18 y M-19 del análisis)
@@ -14302,6 +14303,10 @@ panel de la placa; 48 diálogos modales en `FrmMain`, que pasan a ser resultados
 | **H2.3** | **la IA llama a los comandos** (MCP por HTTP dentro del IDE, en `127.0.0.1`, apagado por defecto): compilar y ejecutar —en el PC, en el micro simulado y en la placa— con la consola y su código de salida | ✅ **cerrado el 22-nov** (Eduardo: *«Cierra el H2.3; #869 después»*), con la IA de verdad en la Pico 2 y en la VM-C. Empezado el 22-nov (Eduardo: *«H2.3. #865 se puede arreglar más adelante. Las pruebas las hacemos con las placas y con la VM-C»*). El análisis, en `notas/V9_H2_comandos.md`; decidido (Eduardo): la carpeta de la IA, *«La que elijo al encenderlo»*; la trampa de la pestaña abierta, *«Sí, dentro del H2.3»*; el interruptor, *«Un menú IA»*. Por tandas: (a) **las pestañas** —saben si tienen cambios («*»), guardar sólo lo modificado, lo que cambia fuera se relee y no se pisa, la «×» y salir preguntan (`#866`)—, hecha (`0038e24` en `toolchain`; por su nombre, con la ventana sin enseñar) y probada por Eduardo en el IDE (*«OK, todo funciona»*); (b) los tipos de los parámetros y las explicaciones para la IA, y (c) **el servidor MCP** (`ServidorIa`: 127.0.0.1, `/mcp`, JSON-RPC por POST; 43 herramientas, sin las «sólo desde la ventana»; sólo los parámetros documentados, las rutas dentro de la carpeta, «[ia] …» en la consola y un plazo de 300 s) con **el menú IA** (encenderlo eligiendo la carpeta; cómo conectar Claude Code), hechas (`8943239` en `toolchain`; por HTTP desde fuera, con la ventana sin enseñar: el PC y el micro simulado, y los rechazos). **La prueba de verdad, bien** (22-nov): Eduardo le pidió a Claude Code, en otra sesión, *«un pequeño programa en BasicPlus que imprima Hola y ejecutarlo en la Pico2 que está conectada»*; lo escribió, y por el servidor del IDE lo abrió en el editor, conectó el IDE a la Pico 2 por COM22 y lo lanzó con Run on Device: compilado, subido como `/app/Hola.mod` y ejecutado, «Hola» y `exit 0 (OK)`, con sus «[ia] …» en la consola. Lo que se vio: antes de usar el servidor, probó a hablar con la placa por COM22 directamente («no responde a comandos directos»); y en la consola del IDE, «no se localizó … 'Core'»: `#867`, cerrada (`0651fc0` en `toolchain`). Y de la batería de después, `#868` (refrescar justo tras un run chocaba con el refresco del IDE, y todo BUSY se contaba como un programa en marcha), cerrada (`f1a42b8`). **La segunda prueba de verdad, bien** (22-nov, con el IDE rehecho a las 16:54): *«haz un programa que añada varios nombres en una lista (3 o 4) y después los imprima»*; la IA lo escribió (`List`, sacado de `samples/ListGets.bp`, y `length()`, probado a ciegas: las trampas de `#854`), vio que el IDE ya no estaba conectado a la placa (se había reabierto), la conectó por COM22 y lo ejecutó en la Pico 2: los cuatro nombres y `exit 0`. **La tercera, bien, en la VM-C** (*«Ahora si lo puedes probar en la VM-C en vez de en la Pico2»*): arrancó el micro simulado, desconectó la Pico 2 y conectó el IDE al simulado; la misma salida. Lo que vio: el simulado se presenta como «bpvm-java v1» (`#869`), y en su `/app` hay un `Core.mod` viejo que tapa al de su stdlib (el IDE lo avisa: «⚠ OJO … la placa carga esa OTRA copia»; un resto del simulado de Eduardo, no un fallo). Con la placa y la VM-C, las del plan de Eduardo (*«las pruebas las hacemos con las placas y con la VM-C»*), probado por una IA de verdad; el PC (la VM Java), por HTTP |
 | **H2.4** | **el depurador, por la IA**: los puntos de parada, el paso a paso y las variables | ⬜ **aplazado a una segunda fase** (Eduardo, 23-nov: *«el debug lo podemos aplazar para una segunda fase. Podemos avanzar en H1 y con lo que tengamos podemos probar que tal va y ver lo que necesitamos realmente»*). Analizado (`notas/V9_H2_comandos.md`, «H2.4, el análisis»): lo que le falta a una IA, del IDE solo —la pila con nombres y sus locales, «pausar», ver y quitar todos los puntos de parada, las globales en el resultado— a lo que toca las dos VMs, el protocolo y el compilador —un objeto por dentro (hoy `@12345`), parar en una excepción—; y el §6.4 del protocolo, que promete `EVAL` e `INSPECT`. Decidido: `EVAL`, *«No»*; la entrada del programa, *«Contesta quien lo lanzó»* (`#870`) |
 
+**Para más adelante** (Eduardo, 23-nov, al cerrar el H1.6): los packs de la placa y sus variables de entorno, como los
+otros comandos, desde su botón y por la IA: `#875` (grabar, borrar y formatear, y `bp placa … pack`) y `#876` (el ENV;
+y al instalar el pack de la GUI o el de la BD, también sus variables).
+
 **El orden:** el de los apartados; el H2 va antes que el H1 (Eduardo, 22-nov). Lo que el H1 pensaba darle (el cable por
 línea de órdenes, `#857`) no hace falta para empezar: los comandos usan el `BpvmClient` del IDE.
 
@@ -14386,6 +14391,47 @@ variables y sigue.
 - **Hecho cuando:** un Run on Device contra la VM Java del panel ejecuta un programa con imports de la stdlib, y otro
   detrás sin reiniciarla; el árbol del panel enseña su FS como el de una placa; y la red, igual (cambia la VM de
   referencia).
+
+#### 🧬 `#876` — las variables de entorno de la placa, como comandos; y al instalar el pack de la GUI o el de la BD, también las suyas (abierta el 23-nov · Eduardo, al cerrar el H1.6 · pendiente, para más adelante)
+
+- **Lo que hay:** el ENV se ve y se cambia en el diálogo «Variables de entorno…» (`entorno_placa`, `EnvDialog`; sólo
+  desde la ventana: la IA no lo ve), con `ENV_LS`, `ENV_SET` y `ENV_DEL`. Y quien graba el pack de la GUI o el de la BD
+  tiene que escribir antes, a mano, sus variables (`INSTALAR_FIRMWARE.md`, «Cómo se graban», el paso 1): el bloque de
+  RAM de los motores (`packRam=<KB>` o `SQLite=<MB>`: la C5, 512; la C6, 136; la DK2, 768; la P4, `SQLite=4`); en la
+  C5 y la C6, las líneas del panel (`spi2=`, `lcd=`, `touch=`…); en la P4 de Waveshare, `display=st7701`; y después,
+  `reset`, porque el ENV se lee al arrancar. Si falta alguna, se sabe al ejecutar («GUI: el pack de la GUI esta, pero
+  su motor no cargo: falta packRam= en el ENV»).
+- **Decidido (Eduardo, 23-nov):** *«Lo mismo pasa con las variables de entorno. Cuando se instala el pack de LVGL o el
+  de BD además hay que crear las variables de entorno correspondientes»*. (a) El ENV, como los otros: sus acciones
+  (listar, poner, borrar), comandos que se llaman desde el botón y por la IA. (b) Instalar el pack de la GUI
+  (`Gui.pack` o `GuiMini.pack`, y `DriverSpi.pack`) o el de la BD (`SQLite.pack`) crea también sus variables. Para más
+  adelante, con `#875`.
+- **Por decidir, al hacerla:** de dónde salen los valores de cada placa (una tabla en el IDE, la de
+  `INSTALAR_FIRMWARE`, o el propio pack, que ya declara los packs que necesita con `requires-pack=`); y qué se hace con
+  una variable que ya está (son de la placa: se escriben una vez y sobreviven al reflasheo).
+- **Cuidado:** lo que se da al bloque se le quita a la VM (la C3 y la C6 van justas, `MEMORIA.md`), y en la P4 un ENV
+  que dejaba a la VM sin sus 2 MB la reiniciaba en bucle (`#686`): los valores, los probados.
+- **Hecho cuando:** desde el botón, como hoy, y por la IA, se listan, se ponen y se borran variables del ENV de una
+  placa; e instalar la GUI en la C5 (o la BD en la P4) deja la placa lista para `GuiDemo` (o `SqlDemo`) sin escribir
+  nada a mano.
+
+#### 🧬 `#875` — los packs de la placa, como comandos (grabar, borrar, formatear la zona), y `bp placa … pack` (abierta el 23-nov · lo que quedó de `#857` · pendiente, para más adelante)
+
+- **Lo que hay:** el panel de Packs, dentro de «Gestión de placa» (`gestion_placa`, sólo desde la ventana): Refrescar,
+  «Copiar pack a la placa…», Borrar y «Formatear zona…», cada uno con su diálogo. Al grabar, el IDE prepara el pack
+  para esa placa (`PackBurn.podar` se queda con el motor de su familia y `PackBurn.sellar` lo sella para el sitio que
+  ella le da) y avisa si declara un pack que la placa no tiene (`requires-pack=`) o si usa módulos de la stdlib que ni
+  lleva ni tiene la placa (`#623`); si la placa se reinicia para cargar los de ahora, la reconecta (`#671`). Nada de
+  eso es un comando: ni la IA ni `bp` pueden grabar un pack.
+- **Decidido (Eduardo, 23-nov):** *«Sí que hará falta pero lo podemos dejar para más adelante»*; y la forma, *«Yo lo
+  haría como los otros, crear las acciones y que se puedan llamar tanto desde un botón como por la IA»*. Cada acción
+  del panel, un comando (como las del H2.2), con su lógica fuera de la ventana, como la subida (`Despliegue`, `#857`),
+  para que la use también `bp placa <destino> pack …` (decidido en `#857`).
+- **Cuidado:** escribe la flash de la placa, y formatear borra la zona entera. El comando acaba cuando la placa ha
+  vuelto y el IDE la ha reconectado (como en `#868`). Si la IA graba o formatea con la confirmación de quien usa el IDE
+  (`#873`: la IA pide, la persona autoriza): por decidir, al hacerla.
+- **Hecho cuando:** desde el botón, como hoy; la IA graba un pack en una placa y en el micro simulado, y lo ve en la
+  lista; y `bp placa COM22 pack X.pack`, lo mismo.
 
 #### 🧬 `#874` — la consola del IDE, con una línea en blanco tras cada línea del micro simulado (abierta el 23-nov · vista al probar `#857`)
 
