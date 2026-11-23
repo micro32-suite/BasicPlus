@@ -13858,7 +13858,7 @@ el IDE, que es el H2 (abajo).
 | apartado | qué | ficha | del análisis | estado |
 |---|---|---|---|---|
 | **H1.1** | el clic inyectado tras `Gui.start()` se pierde sin ventana | `#852` | F-1 | ✅ 22-nov, `333c8f0d` |
-| **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ⏳ 23-nov: `bp` (*«Uno: `bp`, con órdenes»*), el ZIP con la VM-C y la documentación, hechos; a falta de verlo Eduardo |
+| **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ✅ 23-nov, `1ae25d98`: `bp` (*«Uno: `bp`, con órdenes»*), el ZIP con la VM-C y la documentación; probado por Eduardo (*«todo OK»*) |
 | **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ⬜ |
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | ⬜ |
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ⬜ |
@@ -13937,7 +13937,7 @@ placa, no. Y se pierde sin decir nada. El mecanismo, sin mirar (acotar antes de 
 - **En placa (22-nov, con `#781`):** la P4 lleva ya el `Stdlib.pack` nuevo, con este `Gui.mod`; su tanda, con la GUI
   (`GuiWinJson` IDÉNTICO, `GuiShot` sin petar), bien (`compat/informes/tanda_v9_22nov.md`).
 
-#### 🧬 `#853` — H1.2: lo que la documentación de la 8.1 manda teclear no está en su ZIP (abierta el 22-nov · F-3, F-4, M-1 y H-002 del análisis)
+#### ✅ `#853` — H1.2: lo que la documentación de la 8.1 manda teclear no está en su ZIP (abierta el 22-nov · F-3, F-4, M-1 y H-002 del análisis · **CERRADA el 23-nov**, `25bf267` y `6fa06ba` en `toolchain`, `1ae25d98`; probado por Eduardo con el IDE del ZIP de prueba: *«OK, probado el IDE con la VM-Java, la VM-C y con una placa, todo OK»*)
 
 - **Los comandos:** nueve páginas de `docs/` (la chuleta, el manual, la referencia, JC y la base de datos; la chuleta,
   sólo en español) enseñan `java -jar basicplus-frontend.jar …` (19 veces) y `java -jar bpgenvm.jar …` (11); el ZIP trae
@@ -13975,7 +13975,8 @@ placa, no. Y se pierde sin decir nada. El mecanismo, sin mirar (acotar antes de 
   (también `-d` y `--escribir-jc`); `GuiShot` con `bp run --c --no-screen` y `bp png` (el PNG, idéntico al de
   `shot2png.py`, y mirado); 17 capturas de las placas, idénticas byte a byte; y «Run Window» por su comando, con la
   ventana sin enseñar: la VM-C de `bin/`, la stdlib de la instalación, código 0. La batería del IDE, igual.
-- **Falta:** que Eduardo lo vea: «Run Window» con una GUI desde el ZIP de prueba (su `bpide.bat`) y `bp` en su consola.
+- **Visto por Eduardo** (23-nov), con el IDE del ZIP de prueba: Run con la VM Java, Run Window con la VM-C y Run on
+  Device con una placa, *«todo OK»*. `bp`, por `bp.bat` en PowerShell y en `cmd`, y por `bp` en bash (arriba).
 - **Visto de paso, para `#855`:** cada VM añade a la salida sus propias líneas (`config: …`, `[miVM] …`, `[bpvm-c]
   dep …`), así que la de las dos no coincide aunque el programa imprima lo mismo; y la traza de la VM Java, por línea
   de órdenes, sale en crudo (`ThrowSinAtrapar+91`), sin la línea del fuente.
