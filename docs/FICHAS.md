@@ -14259,6 +14259,9 @@ variables y sigue.
 - **Propuesto por la IA:** `bpide.bat --ia[=puerto] --ia-carpeta=<ruta>` (siempre en `127.0.0.1`), o recordar en las
   preferencias «encender el servidor de la IA al arrancar». Va contra lo decidido en el H2.3 —*apagado por defecto; se
   enciende desde la ventana*—, así que **lo decide Eduardo**.
+- **Eduardo, pensándolo** (23-nov): *«El problema no es solo el permiso, también está la carpeta de trabajo.»* La carpeta
+  es lo que decide qué puede tocar la IA (lo de fuera se rechaza) y dónde se deja su guía (`#854`); al encenderlo desde la
+  ventana se elige cada vez, y la última no tiene por qué ser la buena para el trabajo siguiente.
 
 #### 🧬 `#872` — el INFO de las ESP32: «Pila VM: 25 KB sin usar de 16 KB» (abierta el 23-nov · la prueba de la IA del H1.3, su punto 5 · hecha a falta de verla en una placa)
 
