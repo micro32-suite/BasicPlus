@@ -192,6 +192,7 @@
     <li><a href="#packs">10. Packs</a></li>
     <li><a href="#debug">11. Depurar</a></li>
     <li><a href="#autorun">12. Dispositivo autónomo</a></li>
+    <li><a href="#ia">13. La IA maneja el IDE</a></li>
   </ul>
   <h2>Volúmenes</h2>
   <ul>
@@ -1285,6 +1286,38 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   que el log de todas apunta también al arrancar («boot: causa del reset = …»), y el
   programa se arranca a mano desde el IDE. El perro guardián del módulo <code>Wdt</code> no es
   un fallo fatal: tras él, el autorun se lanza.
+</p>
+
+<h2 id="ia">13. La IA maneja el IDE</h2>
+<p>
+  Una IA (Claude Code, por ejemplo) puede manejar el IDE: abrir un fuente, compilarlo y
+  ejecutarlo en el PC, en el micro simulado o en una placa, con su salida y su código de
+  salida. Lo hace por un servidor del propio IDE (MCP), que escucha <strong>sólo en este
+  PC</strong> (<code>127.0.0.1</code>, puerto 7340) y está <strong>apagado</strong> hasta
+  que lo enciendes tú: <strong>IA → Servidor para la IA (MCP)</strong>.
+</p>
+<ul>
+  <li>Al encenderlo eliges <strong>la carpeta de la IA</strong>: sólo dentro de ella puede
+      abrir, guardar, subir y bajar ficheros. Mejor una sólo para el trabajo con la IA. El
+      IDE deja en ella la guía para la IA (<code>AGENTS.md</code>, en inglés, y un
+      <code>CLAUDE.md</code> que la nombra), si no las tiene ya.</li>
+  <li>Cada comando del IDE es una herramienta para la IA: lo mismo que los menús y los
+      botones. Lo que hace sale en la consola, con <code>[ia]</code>.</li>
+  <li><strong>IA → Cómo conectar…</strong> dice dónde escucha y la orden para conectar
+      Claude Code, una vez:
+      <code>claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp</code>.</li>
+</ul>
+<p>
+  <strong>Si es la IA la que abre el IDE</strong>, lo abre con <code>--ia</code> y la carpeta
+  en la que trabaja:
+</p>
+<pre><code>bpide.bat --ia=C:\trabajo\con-la-ia</code></pre>
+<p>
+  Y lo primero que hace el IDE es preguntarte si la autorizas, con la carpeta a la vista (si es
+  demasiado amplia —la raíz de un disco, tu carpeta de usuario, Documentos o el Escritorio—, lo
+  avisa). Con tu sí, el servidor se enciende como desde el menú; con un no, el IDE se queda
+  abierto sin él. Sin carpeta (<code>--ia</code> a secas), la eliges tú. Y cómo acabó se lo dice
+  a la IA en una línea de su salida (<code>[ia] servidor para la IA en …</code>, o por qué no).
 </p>
 
 <hr>

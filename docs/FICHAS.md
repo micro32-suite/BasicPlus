@@ -14252,7 +14252,7 @@ variables y sigue.
   detrás sin reiniciarla; el árbol del panel enseña su FS como el de una placa; y la red, igual (cambia la VM de
   referencia).
 
-#### 🧬 `#873` — el servidor de la IA sólo se enciende desde la ventana (abierta el 23-nov · la prueba de la IA del H1.3, su punto 3)
+#### 🧬 `#873` — el servidor de la IA sólo se enciende desde la ventana (abierta el 23-nov · la prueba de la IA del H1.3, su punto 3 · decidida y hecha el mismo día, a falta de probarla Eduardo)
 
 - **Lo visto:** la IA puede lanzar `bpide.bat`, pero tiene que pedirle a la persona que encienda el servidor (menú IA) y
   elija la carpeta; mientras, su cliente MCP da `ECONNREFUSED`.
@@ -14262,6 +14262,24 @@ variables y sigue.
 - **Eduardo, pensándolo** (23-nov): *«El problema no es solo el permiso, también está la carpeta de trabajo.»* La carpeta
   es lo que decide qué puede tocar la IA (lo de fuera se rechaza) y dónde se deja su guía (`#854`); al encenderlo desde la
   ventana se elige cada vez, y la última no tiene por qué ser la buena para el trabajo siguiente.
+- **Decidido (Eduardo, 23-nov):** *«añadir un parámetro al ejecutar el IDE que indique al IDE que lo primero que ha de
+  hacer es preguntar al usuario si autoriza a la IA manejar el IDE. La carpeta de trabajo se la puede pasar la IA.»* Lo
+  del H2.3 se queda: apagado por defecto, y lo enciende la persona desde la ventana; la IA sólo lo pide.
+- **Hecho** (`6e3807d` en `toolchain`): `bpide.bat --ia=<carpeta>`, o `--ia` a secas (la carpeta, la elige la persona,
+  como en el menú). Con la ventana ya a la vista, la pregunta: lo que podrá hacer la IA y la carpeta (si es demasiado
+  amplia, lo avisa); por defecto, «No». Con un sí, el servidor se enciende como desde el menú IA (la guía en la carpeta,
+  la consola, la carpeta recordada); con un no, el IDE sigue sin él; una carpeta que no existe, un aviso, y sigue
+  apagado. Cómo acabó, en una línea `[ia] …` en la salida estándar del IDE, en UTF-8: la lee la IA que lo lanzó, que
+  si no sólo vería que el servidor no contesta. Lo que no entiende, a la salida de errores. La guía para IA dice cómo
+  conectarse y qué hacer si el servidor no contesta; y la guía del IDE, en un §13 nuevo, el menú IA (el H2.3 se cerró
+  sin documentarlo) y el parámetro, en las dos lenguas.
+- **Probado** con la ventana sin enseñar, otra carpeta de usuario y el puerto 7399, sin la pregunta (un diálogo saldría
+  en la pantalla): los argumentos; la carpeta (la que existe, una relativa, una con «..», la que no existe, un fichero,
+  una imposible); tras un no, apagado y sin guía; tras un sí, en marcha con esa carpeta, la guía en ella, la carpeta
+  recordada, `initialize` por HTTP la nombra, 43 herramientas; un puerto ocupado, su aviso y apagado; y la línea, con
+  acentos, en la salida estándar. **Falta:** la pregunta en la pantalla, y una IA de verdad que abra el IDE.
+- **Por decidir (Eduardo):** en el repositorio no hay `bpide.bat`, y la guía que deja el IDE del repositorio nombra
+  `C:/lenguajes/pm/bpide.bat`. Con `bp` se decidió ponerlo en la raíz (`#854`); en el ZIP, `bpide.bat` sí está.
 
 #### 🧬 `#872` — el INFO de las ESP32: «Pila VM: 25 KB sin usar de 16 KB» (abierta el 23-nov · la prueba de la IA del H1.3, su punto 5 · hecha a falta de verla en una placa)
 

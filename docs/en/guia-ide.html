@@ -192,6 +192,7 @@
     <li><a href="#packs">10. Packs</a></li>
     <li><a href="#debug">11. Debugging</a></li>
     <li><a href="#autorun">12. Standalone device</a></li>
+    <li><a href="#ia">13. An AI drives the IDE</a></li>
   </ul>
   <h2>Volumes</h2>
   <ul>
@@ -1293,6 +1294,38 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   records at boot («boot: causa del reset = …», cause of the reset), and the program is
   started by hand from the IDE. The watchdog of the <code>Wdt</code> module is not a
   fatal failure: after it, the autorun is launched.
+</p>
+
+<h2 id="ia">13. An AI drives the IDE</h2>
+<p>
+  An AI assistant (Claude Code, for instance) can drive the IDE: open a source, compile it
+  and run it on the PC, on the simulated micro or on a board, with its output and its exit
+  code. It does so through a server in the IDE itself (MCP), which listens <strong>only on
+  this PC</strong> (<code>127.0.0.1</code>, port 7340) and is <strong>off</strong> until you
+  turn it on: <strong>IA → Servidor para la IA (MCP)</strong>.
+</p>
+<ul>
+  <li>When you turn it on, you choose <strong>the AI's folder</strong>: only inside it can the
+      AI open, save, upload and download files. Better a folder just for the work with the AI.
+      The IDE leaves the guide for AI assistants in it (<code>AGENTS.md</code>, and a
+      <code>CLAUDE.md</code> that points to it), unless they are already there.</li>
+  <li>Each IDE command is a tool for the AI: the same as the menus and the buttons. What it
+      does shows up in the console, with <code>[ia]</code>.</li>
+  <li><strong>IA → Cómo conectar…</strong> tells where it listens and the command to connect
+      Claude Code, once:
+      <code>claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp</code>.</li>
+</ul>
+<p>
+  <strong>If it is the AI that opens the IDE</strong>, it opens it with <code>--ia</code> and
+  the folder it works in:
+</p>
+<pre><code>bpide.bat --ia=C:\work\with-the-ai</code></pre>
+<p>
+  The first thing the IDE does is ask you whether you allow it, with the folder in view (if it
+  is too broad —the root of a disk, your user folder, Documents or the Desktop—, it warns you).
+  With your yes, the server is turned on as from the menu; with a no, the IDE stays open
+  without it. With no folder (a bare <code>--ia</code>), you choose it. And it tells the AI how
+  it went in a line of its output (<code>[ia] servidor para la IA en …</code>, or why not).
 </p>
 
 <hr>
