@@ -3,7 +3,7 @@ module Stdlib
 source C:\lenguajes\pm\bpstdlib\Stdlib.bp
 lines
 0 0
-164 0
+169 0
 vars
 func __init 0
-func __startup 164
+func __startup 169

@@ -575,6 +575,32 @@ Heap.compact()
 sleep(60000)          // and the next shift, with new threads
 ```
 
+<a id="stdlib-assert"></a>
+### 13.20 `Assert` (the checks of a test)
+
+The checks of a test (`import Assert`, V9): each one that fails throws `Assert.Failure` —a `RuntimeError`— with a short message, and the test ends with 1 and its trace says the line. The tests of a program or of a project are run by `bp test` ([§16](#cli)), on both PC VMs. It is not embedded in the firmwares: on a board, the IDE uploads it when a program uses it.
+
+| Function | Description |
+|---|---|
+| `Assert.equals(expected, actual)` | That they are equal: `integer`, `long`, `double` (exact), `string` (the text; also `null`) or `boolean`. If not: «se esperaba 4, y es 5» (expected 4, it is 5). |
+| `Assert.equals(expected, actual, what)` | The same, with what is being checked in front of the failure: «la suma: se esperaba 4, y es 5». |
+| `Assert.isTrue(cond, what)` · `Assert.isFalse(cond, what)` | That it holds, or that it does not. A `double` with a margin: `Assert.isTrue(a - b < e and b - a < e, "…")`. |
+| `Assert.fail(what)` | Always fails: what should not be reached. |
+
+```
+import Assert
+
+function Main()
+  var l: List := List()
+  l.add(3)
+  Assert.equals(1, l.length(), "one element")
+  Assert.equals(3, l.getInteger(0))
+  Assert.isTrue(l.length() > 0, "not empty")
+end Main
+```
+
+An expected error is tested too: catch it, and check its message (`samples/pruebas/tests/PruebaPila.bp`).
+
 <a id="dispositivos"></a>
 ## 14. Device libraries
 
@@ -1792,6 +1818,13 @@ The board's paths start with `/` (`/app/Blink.mod`). In Git Bash, with two (`//a
 bp api                    (the modules that can be imported)
 bp api Collections        (its API: Map, SyncList…)
 bp api out/MyLib.mod      (the API of one of yours, compiled)
+```
+
+**Tests** (V9): `bp test` runs the programs of the `tests/` folder (or the ones it is given) on both PC VMs, each in its own process, with no screen and with a time limit (`--tiempo=N`, 60 s if not given: a test that does not end does not hang the others). A test passes if it compiles, ends with 0 on both, prints the same on both and, if it has its `X.out` beside it, prints that; `bp test --guarda` writes each one's `X.out` with what it prints now (look at it before taking it as good). The checks, with the [`Assert`](#stdlib-assert) module. In a project (its `.bpbuild` in the folder, or named), the project is compiled first, and each test into its output folder: that way it finds its modules. One line per test, a failing one with its reason; it exits with 0 if they all pass. A GUI is tested the same way: [§24.4 of the graphics guide](gui.html.md#ref-pruebas). An example, a project with its tests: `samples/pruebas`.
+
+```
+bp test                   (those of tests/: «bien   tests/PruebaPila.bp» · «2 pruebas: 2 bien, 0 mal»)
+bp test --guarda tests/PruebaGui.bp   (writes tests/PruebaGui.out)
 ```
 
 <a id="cli-frontend"></a>

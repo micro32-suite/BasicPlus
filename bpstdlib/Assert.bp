@@ -1,0 +1,94 @@
+// ============================================================
+// Assert.bp — V9 H1.8 (#859 a): las comprobaciones de una prueba (Eduardo, 23-nov: «si»).
+//
+// Una prueba es un programa que acaba con 0 si todo va bien: cada comprobación que falla lanza Assert.Failure (un
+// RuntimeError), y el programa acaba con 1 y su traza dice la línea. La ejecuta `bp test` (en las dos VMs del PC), o
+// `bp run`, en el PC o en una placa.
+//
+//   import Assert
+//   Assert.equals(3, p.pop())                       // esperado, obtenido
+//   Assert.equals("abc", s, "el nombre")            // con lo que se comprueba, delante del fallo
+//   Assert.isTrue(p.isEmpty(), "vacía tras sacar")
+//
+// Cada comprobación lanza el fallo ella misma (no una función común): así, en la traza, encima de la línea de la
+// prueba sólo hay una de este módulo. Los mensajes, cortos A PROPÓSITO: de una excepción no atrapada, la placa da 90
+// bytes (exceptions.c, %.90s). Un double se compara exacto: con margen, Assert.isTrue(a - b < e and b - a < e, "…").
+// Stdlib no esencial: no va embebida en los firmwares; en la placa, la sube el IDE cuando se usa, y va en el pack.
+// ============================================================
+module Assert
+
+  // Lo que lanza una comprobación que falla.
+  public class Failure extends RuntimeError
+    public function Failure(m: string)
+      super(m)
+    end Failure
+  end Failure
+
+  // El mensaje, con lo que se comprueba delante si lo hay.
+  function con(que: string, detalle: string): string
+    if strlen(que) > 0 then return que + ": " + detalle
+    return detalle
+  end con
+
+  // Un texto en el mensaje: entre comillas, o null.
+  function cita(s: string): string
+    if s == null then return "null"
+    return "\"" + s + "\""
+  end cita
+
+  function iguales(a: string, b: string): boolean
+    if a == null then return b == null
+    if b == null then return false
+    return a == b
+  end iguales
+
+  public function equals(expected: integer, actual: integer)
+    if expected != actual then throw Failure("se esperaba " + expected + ", y es " + actual)
+  end equals
+  public function equals(expected: integer, actual: integer, que: string)
+    if expected != actual then throw Failure(con(que, "se esperaba " + expected + ", y es " + actual))
+  end equals
+
+  public function equals(expected: long, actual: long)
+    if expected != actual then throw Failure("se esperaba " + expected + ", y es " + actual)
+  end equals
+  public function equals(expected: long, actual: long, que: string)
+    if expected != actual then throw Failure(con(que, "se esperaba " + expected + ", y es " + actual))
+  end equals
+
+  public function equals(expected: double, actual: double)
+    if expected != actual then throw Failure("se esperaba " + expected + ", y es " + actual)
+  end equals
+  public function equals(expected: double, actual: double, que: string)
+    if expected != actual then throw Failure(con(que, "se esperaba " + expected + ", y es " + actual))
+  end equals
+
+  public function equals(expected: string, actual: string)
+    if not iguales(expected, actual) then throw Failure("se esperaba " + cita(expected) + ", y es " + cita(actual))
+  end equals
+  public function equals(expected: string, actual: string, que: string)
+    if not iguales(expected, actual) then
+      throw Failure(con(que, "se esperaba " + cita(expected) + ", y es " + cita(actual)))
+    endif
+  end equals
+
+  public function equals(expected: boolean, actual: boolean)
+    if expected != actual then throw Failure("se esperaba " + expected + ", y es " + actual)
+  end equals
+  public function equals(expected: boolean, actual: boolean, que: string)
+    if expected != actual then throw Failure(con(que, "se esperaba " + expected + ", y es " + actual))
+  end equals
+
+  public function isTrue(cond: boolean, que: string)
+    if not cond then throw Failure(con(que, "no se cumple"))
+  end isTrue
+
+  public function isFalse(cond: boolean, que: string)
+    if cond then throw Failure(con(que, "se cumple, y no debía"))
+  end isFalse
+
+  public function fail(que: string)
+    throw Failure(con(que, "falla"))
+  end fail
+
+end Assert

@@ -230,7 +230,10 @@ vez**.
       receta que `compat.sh`); salta `errores/` (fallan a propósito: los vigila
       `scripts/h13-errores.sh`, córrelo también: `N comprobaciones OK · 0 mal`) y
       `holes/`, e informa aparte `pendientes/`. Un `AVISO:` de import omitido no es
-      fallo pero léelo.
+      fallo pero léelo. Desde V9 (`#859`), las pruebas de un proyecto (la carpeta
+      `tests/` junto a un `.bpbuild`) no se compilan sueltas: al final, `bp test`
+      sobre el proyecto las compila y las pasa en las dos VMs, y su línea `PRUEBAS:`
+      tiene que decir «todas bien» (hoy, `samples/pruebas`).
       ⚠️ No sustituye a `scripts/h13-lista.sh`: aquél además EJECUTA su lista.
 - [ ] **Ningún fragmento de la documentación falla**:
       `python scripts/doc_frags.py` → código de salida **0** y `0 FALLO`.

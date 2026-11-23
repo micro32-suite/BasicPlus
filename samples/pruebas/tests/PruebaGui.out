@@ -1,0 +1,5 @@
+screen [480x320 align=0 +0,0]
+  label "PULSADO" [-1x-1 align=1 +0,10]
+  button [-1x-1 align=4 +0,0]
+    label "Pulsa" [-1x-1 align=0 +0,0]
+

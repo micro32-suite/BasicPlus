@@ -1,0 +1,36 @@
+// PruebaGui.bp — una GUI que se prueba sola, sin nadie delante (V9 H1.8, #859): un clic con Gui.click, y lo que
+// cambia, comprobado con Assert y en el árbol de la pantalla (Gui.dumpTree()), que es lo que imprime: `bp test` lo
+// compara con PruebaGui.out (lo escribió `bp test --guarda`, mirado antes de darlo por bueno).
+// Sin pantalla (bp test ejecuta las dos VMs con --no-screen), el clic va ANTES de Gui.run(), que lo atiende y vuelve.
+module PruebaGui
+  import Gui
+  import Assert
+
+  class Pantalla
+    public property etiqueta: Gui.Label
+    public property clics: integer := 0
+
+    function event boton_onClick(quien: Gui.Component)
+      this.clics += 1
+      this.etiqueta.setText("PULSADO")
+    end boton_onClick
+  end Pantalla
+
+  function Main()
+    var scr: Gui.Screen := Gui.Screen()
+    var p: Pantalla := Pantalla()
+    p.etiqueta := Gui.Label(scr, "esperando")
+    p.etiqueta.align(Gui.Align.TOP_MID, 0, 10)
+    var boton: Gui.Button := Gui.Button(scr, "Pulsa")
+    boton.align(Gui.Align.CENTER, 0, 0)
+    boton.onClick := p::boton_onClick
+
+    Gui.click(boton)
+    Gui.run()
+
+    Assert.equals(1, p.clics, "el clic llega a su manejador")
+    Assert.isTrue(contains(Gui.dumpTree(), "\"PULSADO\""), "la etiqueta, tras el clic")
+    print Gui.dumpTree()
+  end Main
+
+end PruebaGui

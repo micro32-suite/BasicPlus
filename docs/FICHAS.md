@@ -13864,7 +13864,7 @@ el IDE, que es el H2 (abajo).
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ✅ 23-nov, `be0311be` (Eduardo: *«El fichero delante, siempre»*; *«Sólo los errores, y bp lo usa»*); y un fallo de paso: los errores de un módulo importado no salían; probado por Eduardo en el IDE (*«la primera parte salió bien»*) |
 | **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ✅ 23-nov, `b79c4a13` (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; la subida del IDE, la misma, probada por Eduardo con la P4; sin `pack`, para más adelante (`#875`) |
 | **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | 🧬 hecho el 23-nov, a falta de verlo Eduardo: (a) `bp api` (`7cee427`; *«Si»*), (b) la documentación en Markdown y (d) `llms.txt`, sacados del HTML por `docs_md.py` (*«OK, sigue con b»*); (c) y (e), no; y una idea de Eduardo, `#879` |
-| **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | ⬜ |
+| **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | 🧬 (a) y (b), hechas el 23-nov, a falta de verlas Eduardo (*«1 y 2 si»*): `bp test`, `Assert` y `Gui.click`/`change`/`dumpTree`; (c), (d) y (e), aplazadas (*«3 lo aplazamos»*): `#880` |
 | **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | ⬜ |
 | **H1.10** | las placas, descritas para leer | `#861` | su pregunta abierta | ⬜ |
 
@@ -14263,22 +14263,31 @@ analizarla. Es el suelo del H2 (`#728`).
   `.html`; (d), en `micro32-suite.github.io/BasicPlus/`; y (e), si se hace, `samplesJC/` con lo que se traduce,
   compilando en la red.
 
-#### 🧬 `#859` — H1.8: probar un programa sin nadie delante, también una GUI (abierta el 22-nov · M-12, M-13, H-011 y H-012 del análisis)
+#### 🧬 `#859` — H1.8: probar un programa sin nadie delante, también una GUI (abierta el 22-nov · M-12, M-13, H-011 y H-012 del análisis · el análisis, el 23-nov, en `notas/V9_H1_ia.md`; (a) y (b), hechas el mismo día, `e527b00` en `toolchain` y su commit en BasicPlus, con la red VERDE, a falta de verlas Eduardo; (c), (d) y (e), aplazadas: `#880`)
 
 - **(a) Una forma estándar de probar un programa:** la salida esperada (el programa imprime; se compara con un fichero)
   y el código de salida, en las dos VMs —la paridad de `compat/`, para el usuario—, y un módulo de aserciones mínimo, que
   la stdlib no tiene. Su forma: decide Eduardo.
+  **Hecha** (23-nov; Eduardo: *«si»*): **`bp test`** —los programas de `tests/` (o los que se le den), en las dos VMs del
+  PC, cada una en su proceso, sin pantalla y con un tiempo máximo (`--tiempo=N`, 60 s); bien si compila, acaba con 0 en
+  las dos, imprime lo mismo en las dos y, con su `X.out` al lado, imprime eso (`--guarda` lo escribe); en un proyecto,
+  lo compila antes, y cada prueba, en su carpeta de salida (así encuentra sus módulos); una línea por prueba, la que falla
+  con su porqué; sale con 0 o 1— y el módulo **`Assert`** (stdlib no esencial, en el pack): `equals` (integer, long,
+  double, string, boolean; con lo que se comprueba, por sobrecarga), `isTrue`, `isFalse`, `fail`; un fallo lanza
+  `Assert.Failure` (un `RuntimeError`), y la traza dice la línea de la prueba. El ejemplo, `samples/pruebas` (un proyecto
+  con dos pruebas, una de GUI); el barrido de ejemplos pasa `bp test` sobre él. La referencia (§13.20 y §16, en las dos
+  lenguas), la guía para IA, la chuleta y `CLAUDE.md`.
 - **(b) La GUI:** `Gui.__guiClick` y `Gui.__guiDumpTree`, hoy internos y fuera de `gui.html`, con nombre público y
   documentados, con lo que hacen frente a `start()` y `run()` (`#852`). Va con la inyección de eventos en la placa, de V9
   desde el 14-nov (un verbo del cable que pulse en la GUI de la placa).
-- **(c) La captura de miVM** (`Gui.shot`: el fondo negro, sin `Chart` ni `Led`, el texto del botón sin color ni
-  alineación): arreglarla, o decir en `gui.html` (§23.5 o §25) que la que vale es la de LVGL.
-- **(d) Un `Button` con `setBounds` no centra su texto:** si es un fallo de `Gui.bp`, arreglarlo; si es a propósito,
-  una línea en §20.1.
-- **(e) `Gui.shot("X.shot")`, con una ruta relativa,** cae en `/` en el micro simulado, no en `/app` junto al `.mod`:
-  coherente con «la ruta, tal cual», pero decirlo (con `#823`: recomendar `/data`).
+  **Hecha** (23-nov; Eduardo: *«si»*): `Gui.click(w)`, `Gui.change(w)` (levanta el `onChange`; el valor, el que ponga el
+  programa) y `Gui.dumpTree()`; los `__gui…` siguen. En la guía gráfica, la §24.1 y una §24.4, «Probar una GUI sin nadie
+  delante», con la regla de `#852` y el ejemplo. La inyección desde fuera (un verbo del cable), no: es del simulador con
+  disfraces. Una placa con la `Gui` de antes no conoce los nombres nuevos hasta grabarle el `Stdlib.pack`.
+- **(c), (d) y (e)** —la captura de miVM, el `Button` con `setBounds` y la ruta relativa de `Gui.shot`—: **aplazadas**
+  (Eduardo, 23-nov: *«3 lo aplazamos»*), con su análisis, en `#880`.
 - **Hecho cuando:** un comando ejecuta las pruebas de un proyecto y sale con 0 o 1; la §24 de `gui.html` lista la API
-  de prueba de la GUI y un ejemplo de GUI se prueba solo; y (c), (d) y (e), hechos o dichos.
+  de prueba de la GUI y un ejemplo de GUI se prueba solo. (Lo de (c), (d) y (e), en `#880`.)
 
 #### 🧬 `#860` — H1.9: los mensajes que enseñan: el arreglo en los de BP, y en JC las costumbres de Java (abierta el 22-nov · M-9, M-16 y M-17 del análisis)
 
@@ -14423,6 +14432,24 @@ variables y sigue.
 - **Hecho cuando:** un Run on Device contra la VM Java del panel ejecuta un programa con imports de la stdlib, y otro
   detrás sin reiniciarla; el árbol del panel enseña su FS como el de una placa; y la red, igual (cambia la VM de
   referencia).
+
+#### 🧬 `#880` — lo aplazado del H1.8: la captura de la VM Java, el botón con tamaño puesto a mano y la ruta relativa de `Gui.shot` (abierta el 23-nov · Eduardo, al decidir `#859`: *«3 lo aplazamos»* · pendiente)
+
+El análisis, el del 23-nov (`notas/V9_H1_ia.md`, «H1.8»):
+- **(c) La captura de la VM Java** (`Gui.shot` en miVM), frente a la de LVGL (las de la sonda del análisis): el fondo,
+  negro (la de LVGL, claro); el `Chart`, un rectángulo vacío; el `Led`, sin pintar; el botón sin su color; los textos
+  de los botones, a la izquierda. El fondo es un fallo pequeño del código de la captura (`GuiBackend.shot` rellena de
+  negro y pinta encima); lo demás es la vista previa de Swing, «una aproximación» (§25), que no lo dice. Propuesto: el
+  fondo, arreglarlo; y decir en la §23.5 y la §25 qué no pinta, y que la captura que vale es la de LVGL.
+- **(d) Un `Button` con `setBounds` no centra su texto:** un fallo; `Button(parent, text)` crea su `Label` sin alinearlo
+  (con el tamaño del propio botón no se nota). Propuesto: centrarlo en el constructor, una línea en `Gui.bp`. Cambia el
+  volcado del árbol de los ejemplos con botones con texto (su etiqueta, `align=4`; en las dos VMs igual), y con él el
+  `tests/PruebaGui.out` de `samples/pruebas` (`bp test --guarda`); en una placa, con su pack nuevo.
+- **(e) `Gui.shot("X.shot")`, con una ruta relativa,** en la placa y en el micro simulado cae en la raíz, no junto al
+  `.mod`: lo decidido en `#823` (se queda; se recomienda `/data`). Propuesto: decirlo en la §23.5.
+- **Visto de paso, al hacer `#859`:** un `Label` no tiene cómo leer su texto (sólo `setText`): una prueba de GUI
+  compara el árbol (`Gui.dumpTree()`) o lo que hicieron los manejadores.
+- **Hecho cuando:** (c), (d) y (e), hechos o dichos, como decida Eduardo.
 
 #### 🧬 `#879` — los comentarios de documentación (`/** … */`, como Javadoc): la documentación de la API, sacada del código, que se mantiene sola (abierta el 23-nov · idea de Eduardo, al hablar del H1.7 · por analizar, al acabar (a) y (b) de `#858`)
 

@@ -1,0 +1,15 @@
+// Pilas.bp — el programa del proyecto (V9 H1.8, #859): usa la pila. Sus pruebas, en tests/, con `bp test`.
+module Pilas
+  import Pila
+
+  function Main()
+    var p: Pila.Pila := Pila.Pila()
+    for i := 1 to 3 do
+      p.push(i * 10)
+    next i
+    while not p.isEmpty() do
+      print p.pop()
+    endwh
+  end Main
+
+end Pilas

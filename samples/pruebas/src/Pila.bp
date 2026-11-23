@@ -1,0 +1,29 @@
+// Pila.bp — lo que se prueba en tests/: una pila de enteros (V9 H1.8, #859).
+module Pila
+
+  public class Pila
+    var datos: List
+
+    public function Pila()
+      this.datos := List()
+    end Pila
+
+    public function push(n: integer)
+      this.datos.add(n)
+    end push
+
+    // Saca el último que entró. Vacía, un error que lo dice.
+    public function pop(): integer
+      if this.datos.length() == 0 then throw RuntimeError("Pila.pop: la pila está vacía")
+      var ultimo: integer := this.datos.length() - 1
+      var n: integer := this.datos.getInteger(ultimo)
+      this.datos.remove(ultimo)
+      return n
+    end pop
+
+    public function isEmpty(): boolean
+      return this.datos.length() == 0
+    end isEmpty
+  end Pila
+
+end Pila

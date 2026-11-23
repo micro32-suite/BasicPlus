@@ -730,6 +730,22 @@ import Core          // V6/G2: OwnerList extends Core.List — el import no es t
     exigirLazo("Gui.__guiChange", "el cambio")
     cambioSintetico(w)
   end __guiChange
+  // V9 H1.8 (#859 b) — la API para probar una GUI sin nadie delante, con nombre público (Eduardo: «si»): un clic, un
+  // cambio de valor (levanta su onChange; el valor no lo toca: es el que ponga el programa, cb.checked := true) y el
+  // árbol de la pantalla como texto. Los __gui… de siempre siguen (los usan los ejemplos). Sin pantalla, el clic y el
+  // cambio van antes de Gui.run(), que los atiende y vuelve; con el lazo de start() acabado, un error que lo dice (#852).
+  public function click(w: Component)
+    exigirLazo("Gui.click", "el clic")
+    clicSintetico(w)
+  end click
+  public function change(w: Component)
+    exigirLazo("Gui.change", "el cambio")
+    cambioSintetico(w)
+  end change
+  // Como __guiDumpTree, en línea: quien la llama no necesita que la Gui de la placa la exporte.
+  public function dumpTree(): string
+    inline CALL_BUILTIN 150
+  end dumpTree
   function clicSintetico(w: Component)
     inline CALL_BUILTIN 152
   end clicSintetico

@@ -1,0 +1,8 @@
+// Pilas.bpbuild — V9 H1.8 (#859): un proyecto con sus pruebas. `bp test`, en esta carpeta, compila el proyecto y
+// pasa las pruebas de tests/ en las dos VMs del PC (docs/referencia.html §16).
+{
+  "sourceDir":    "src",
+  "outDir":       "out",
+  "main":         "Pilas",
+  "dependencies": []
+}

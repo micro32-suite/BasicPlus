@@ -28,7 +28,13 @@ QUE HACE
                                  contar como fallo: el dia que compilen, el bug
                                  esta arreglado y vuelven a samples/;
          - samples/holes/     -> repros internos de agujeros del compilador
-                                 (cascadas de errores): no son ejemplos.
+                                 (cascadas de errores): no son ejemplos;
+         - las pruebas de un proyecto (V9, #859: la carpeta tests/ junto a un
+                                 .bpbuild): importan los modulos de su proyecto
+                                 y sueltas no compilan. Al final, `bp test` sobre
+                                 el proyecto las compila Y las ejecuta en las dos
+                                 VMs (samples/pruebas); un proyecto en rojo es un
+                                 fallo mas.
        Las carpetas se explican en el LEEME de cada una; aqui solo se leen.
     2. Un work dir con bpstdlib/*.mod y packs/*.pack copiados antes: la misma
        receta que compat.sh, tanda.py y doc_frags.py. Cada .bp se compila EN SU
@@ -102,10 +108,14 @@ def asc(s):
 
 
 def corpus():
-    """(ruta relativa, categoria) para cada .bp bajo samples/."""
+    """(ruta relativa, categoria) para cada .bp bajo samples/. V9 #859: las de la carpeta tests/ de un proyecto (junto a
+    un .bpbuild), PRUEBA: no se compilan sueltas (las pasa `bp test`, ver proyectos_con_pruebas)."""
     lista = []
+    de_pruebas = set()
     for raiz, dirs, fichs in os.walk(SAMPLES):
         dirs[:] = sorted(d for d in dirs if d not in DIRS_BUILD)
+        if "tests" in dirs and any(f.endswith(".bpbuild") for f in fichs):
+            de_pruebas.add(os.path.join(raiz, "tests"))
         rel = os.path.relpath(raiz, SAMPLES).replace("\\", "/")
         top = rel.split("/")[0] if rel != "." else ""
         for f in sorted(fichs):
@@ -116,10 +126,38 @@ def corpus():
                 cat = "EXCLUIDO"
             elif top == PENDIENTES:
                 cat = "PENDIENTE"
+            elif raiz in de_pruebas:
+                cat = "PRUEBA"
             else:
                 cat = "SAMPLE"
             lista.append((ruta, cat))
     return lista
+
+
+def proyectos_con_pruebas(lista):
+    """V9 #859 — los .bpbuild cuyas pruebas (tests/) se apartaron del barrido: los de encima de cada PRUEBA."""
+    proyectos = set()
+    for ruta, cat in lista:
+        if cat != "PRUEBA":
+            continue
+        dir_proyecto = os.path.dirname(os.path.dirname(os.path.join(RAIZ, ruta)))
+        for f in sorted(os.listdir(dir_proyecto)):
+            if f.endswith(".bpbuild"):
+                proyectos.add(os.path.join(dir_proyecto, f))
+                break
+    return sorted(proyectos)
+
+
+def bp_test(bpbuild):
+    """`bp test` sobre un proyecto (el jar del compilador lleva bp y la VM Java; la VM-C, la de bpgenvm-c/build).
+    Devuelve (ok, salida)."""
+    try:
+        r = subprocess.run(["java", "-Dfile.encoding=UTF-8", "-cp", JAR, "basicplus.bp.Bp", "test", bpbuild],
+                           cwd=os.path.dirname(bpbuild), capture_output=True, timeout=900)
+        salida = decodificar(r.stdout) + decodificar(r.stderr)
+        return r.returncode == 0, salida
+    except subprocess.TimeoutExpired:
+        return False, "TIMEOUT: bp test no acabo en 15 min"
 
 
 def nombre_modulo(ruta):
@@ -195,7 +233,8 @@ def main():
         lista = corpus()
 
     excluidos = [(r, c) for r, c in lista if c == "EXCLUIDO"]
-    a_compilar = [(r, c) for r, c in lista if c != "EXCLUIDO"]
+    pruebas = [(r, c) for r, c in lista if c == "PRUEBA"]
+    a_compilar = [(r, c) for r, c in lista if c not in ("EXCLUIDO", "PRUEBA")]
 
     tmp = None
     if a.work:
@@ -214,8 +253,8 @@ def main():
         os.path.relpath(STDLIB, RAIZ), len([f for f in os.listdir(STDLIB) if f.endswith(".mod")]),
         ", ".join(sorted(f for f in os.listdir(PACKS) if f.endswith(".pack"))) if os.path.isdir(PACKS) else "-"))
     print("work     : %s (%d en paralelo)" % (base, jobs))
-    print("corpus   : %d .bp bajo samples/ - %d a compilar, %d excluidos" % (
-        len(lista), len(a_compilar), len(excluidos)))
+    print("corpus   : %d .bp bajo samples/ - %d a compilar, %d excluidos, %d pruebas de un proyecto (con bp test)" % (
+        len(lista), len(a_compilar), len(excluidos), len(pruebas)))
     for d, motivo in sorted(EXCLUIDAS.items()):
         n = sum(1 for r, _c in excluidos if r.startswith("samples/" + d + "/"))
         if n:
@@ -257,11 +296,28 @@ def main():
     fallos = [r for r in res if r["estado"] == "FALLO"]
     pend = [r for r in res if r["cat"] == "PENDIENTE"]
     okn = sum(1 for r in res if r["estado"] == "OK")
+
+    # V9 #859 — las pruebas de cada proyecto, con bp test (compila el proyecto y las pasa en las dos VMs)
+    proyectos_rojos = []
+    for bpbuild in ([] if a.solo else proyectos_con_pruebas(lista)):
+        ok, salida = bp_test(bpbuild)
+        rel = os.path.relpath(bpbuild, RAIZ).replace("\\", "/")
+        if not ok:
+            proyectos_rojos.append(rel)
+        if not ok or a.verbose:
+            print(asc("  %-12s %s" % ("BP-TEST" if ok else "BP-TEST MAL", rel)))
+            for l in salida.splitlines():
+                if l.strip() and (not ok or a.verbose):
+                    print(asc("      " + l[:200]))
     print()
     print("=" * 72)
     print("TOTAL: %d samples compilados: %d OK, %d FALLO; pendientes/: %d (%d ya compilan); excluidos: %d" % (
         len(res) - len(pend), okn, len(fallos), len(pend),
         sum(1 for r in pend if r["ok"]), len(excluidos)))
+    if not a.solo:
+        n_proy = len(proyectos_con_pruebas(lista))
+        print("PRUEBAS: %d de %d proyecto(s), con bp test: %s" % (
+            len(pruebas), n_proy, "en ROJO: " + ", ".join(proyectos_rojos) if proyectos_rojos else "todas bien"))
     if fallos:
         print("FALLAN: " + ", ".join(r["ruta"] for r in fallos))
     con_aviso = [r for r in res if r["avisos"]]
@@ -276,7 +332,7 @@ def main():
         shutil.rmtree(tmp, ignore_errors=True)
     elif tmp:
         print("los .mod quedan en " + tmp + " (se conservan porque hubo fallos)")
-    return 1 if fallos else 0
+    return 1 if fallos or proyectos_rojos else 0
 
 
 if __name__ == "__main__":

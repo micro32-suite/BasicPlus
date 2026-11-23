@@ -195,6 +195,7 @@
     <li class="sub"><a href="#stdlib-json">13.17 Json</a></li>
     <li class="sub"><a href="#stdlib-app">13.18 App</a></li>
     <li class="sub"><a href="#stdlib-heap">13.19 Heap</a></li>
+    <li class="sub"><a href="#stdlib-assert">13.20 Assert</a></li>
     <li class="group"><a href="#dispositivos">14. Librerías de dispositivos</a></li>
     <li class="sub"><a href="#stdlib-hw-policy">14.1 Política HW = clase OO</a></li>
     <li class="sub"><a href="#stdlib-gpio">14.2 Gpio</a></li>
@@ -1178,6 +1179,35 @@ b.join()
 f.close()
 Heap.compact()
 sleep(<span class="num">60000</span>)          <span class="comment">// y la jornada siguiente, con hilos nuevos</span></code></pre>
+
+<h3 id="stdlib-assert">13.20 <code>Assert</code> (las comprobaciones de una prueba)</h3>
+<p>
+  Las comprobaciones de una prueba (<code>import Assert</code>, V9): cada una que falla lanza
+  <code>Assert.Failure</code> —un <code>RuntimeError</code>— con un mensaje corto, y la prueba acaba con 1 y su traza
+  dice la línea. Las pruebas de un programa o de un proyecto las pasa <code>bp test</code>
+  (<a href="#cli">§16</a>), en las dos VMs del PC. No va embebida en los firmwares: en la placa, el IDE la sube cuando un
+  programa la usa.
+</p>
+<table>
+  <tr><th>Función</th><th>Descripción</th></tr>
+  <tr><td><code>Assert.equals(esperado, obtenido)</code></td><td>Que sean iguales: <code>integer</code>, <code>long</code>, <code>double</code> (exacto), <code>string</code> (el texto; también <code>null</code>) o <code>boolean</code>. Si no: «se esperaba 4, y es 5».</td></tr>
+  <tr><td><code>Assert.equals(esperado, obtenido, que)</code></td><td>Lo mismo, con lo que se comprueba delante del fallo: «la suma: se esperaba 4, y es 5».</td></tr>
+  <tr><td><code>Assert.isTrue(cond, que)</code> · <code>Assert.isFalse(cond, que)</code></td><td>Que se cumpla, o que no. Un <code>double</code> con margen: <code>Assert.isTrue(a - b &lt; e and b - a &lt; e, "…")</code>.</td></tr>
+  <tr><td><code>Assert.fail(que)</code></td><td>Falla siempre: lo que no debía alcanzarse.</td></tr>
+</table>
+<pre><code><span class="kw">import</span> Assert
+
+<span class="kw">function</span> <span class="fn">Main</span>()
+  <span class="kw">var</span> l: <span class="type">List</span> := <span class="type">List</span>()
+  l.add(<span class="num">3</span>)
+  Assert.equals(<span class="num">1</span>, l.length(), <span class="str">"un elemento"</span>)
+  Assert.equals(<span class="num">3</span>, l.getInteger(<span class="num">0</span>))
+  Assert.isTrue(l.length() &gt; <span class="num">0</span>, <span class="str">"no vacía"</span>)
+<span class="kw">end</span> Main</code></pre>
+<p>
+  Un error que se espera también se prueba: se atrapa, y se comprueba su mensaje
+  (<code>samples/pruebas/tests/PruebaPila.bp</code>).
+</p>
 
 
 <!-- =========================================================== -->
@@ -3361,6 +3391,21 @@ bp placa COM22 get MiApp.shot          (una captura de Gui.shot; después, bp pn
 <pre><code>bp api                    (los módulos que se pueden importar)
 bp api Collections        (su API: Map, SyncList…)
 bp api out/MiLib.mod      (la de un módulo tuyo, compilado)</code></pre>
+
+<p>
+  <strong>Las pruebas</strong> (V9): <code>bp test</code> pasa los programas de la carpeta <code>tests/</code> (o los
+  que se le den) en las dos VMs del PC, cada una en su proceso, sin pantalla y con un tiempo máximo
+  (<code>--tiempo=N</code>, 60 s si no se dice: una prueba que no acaba no cuelga las demás). Una prueba está bien si
+  compila, acaba con 0 en las dos, imprime lo mismo en las dos y, si tiene al lado su <code>X.out</code>, imprime eso;
+  <code>bp test --guarda</code> escribe el <code>X.out</code> de cada una con lo que imprime ahora (se mira antes de
+  darlo por bueno). Las comprobaciones, con el módulo <a href="#stdlib-assert"><code>Assert</code></a>. En un proyecto
+  (su <code>.bpbuild</code> en la carpeta, o nombrado), primero se compila el proyecto, y cada prueba, en su carpeta de
+  salida: así encuentra sus módulos. Una línea por prueba, la que falla con su porqué; sale con 0 si todas están bien.
+  Una GUI se prueba igual: <a href="gui.html#ref-pruebas">§24.4 de la guía gráfica</a>. Ejemplo, con un proyecto y sus
+  pruebas: <code>samples/pruebas</code>.
+</p>
+<pre><code>bp test                   (las de tests/: «bien   tests/PruebaPila.bp» · «2 pruebas: 2 bien, 0 mal»)
+bp test --guarda tests/PruebaGui.bp   (escribe tests/PruebaGui.out)</code></pre>
 
 <h3 id="cli-frontend">16.1 Frontend</h3>
 <pre><code>bp frontend &lt;archivo.bp&gt; [opciones]</code></pre>

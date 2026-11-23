@@ -238,6 +238,9 @@ bp run --placa=COM22 Hello.bp
 # the API of a library module, in BasicPlus (bp api alone: the modules)
 bp api Collections
 
+# the tests in tests/, on both VMs (the checks: import Assert)
+bp test
+
 # a project: bp build App.bpbuild / bp run App.bpbuild
 { "sourceDir": "src", "outDir": "out",
   "main": "App", "dependencies": [] }

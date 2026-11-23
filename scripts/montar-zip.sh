@@ -274,7 +274,9 @@ done
 #    pinta nada en una publicacion (reproducciones minimas, diagnostico de GC).
 #    Hace falta ELEGIR. Lo que no puede ser es que olvidarse sea SILENCIOSO —
 #    por eso, debajo, el guardian.
-PUBLICAR_DIRS="benchmarks errores external formdemo imageproject overlay packlib plugins sampleproject"
+PUBLICAR_DIRS="benchmarks errores external formdemo imageproject overlay packlib plugins pruebas sampleproject"
+#    pruebas/ entra en V9 (23-nov, #859): un proyecto con sus pruebas (bp test, Assert y una GUI que se prueba
+#    sola), que citan la referencia §16 y la guía gráfica §24.4, en los dos idiomas.
 #    overlay/ entra en V8 (20-nov): el ejemplo de los overlays (H9, #786), que el
 #    manual cita en los dos idiomas («Un ejemplo completo, en samples/overlay»).
 #    packlib/ entra en V5 (decidido el 20-ago): es el caso MINIMO de un pack

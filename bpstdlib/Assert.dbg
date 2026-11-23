@@ -1,0 +1,144 @@
+dbg 3
+module Assert
+source C:\lenguajes\pm\bpstdlib\Assert.bp
+lines
+0 0
+24 0
+35 0
+38 23
+52 0
+85 0
+102 0
+105 29
+118 29
+144 30
+160 0
+163 35
+178 35
+193 36
+218 0
+221 40
+236 40
+258 41
+273 41
+286 42
+308 0
+311 46
+321 46
+368 0
+371 49
+381 49
+436 0
+439 53
+451 53
+500 0
+503 56
+515 56
+572 0
+575 60
+587 60
+636 0
+639 63
+651 63
+708 0
+711 67
+728 67
+781 0
+784 70
+801 71
+862 0
+865 76
+875 76
+922 0
+925 79
+935 79
+990 0
+993 83
+1001 83
+1039 0
+1042 87
+1049 87
+1087 0
+1090 91
+1123 0
+1190 0
+1275 0
+vars
+func __init 0
+func __startup 24
+func Failure.__init 35
+this -28 8 0 ?
+m -20 8 0 string
+func __cls_new_Failure(s) 52
+m -20 8 0 string
+func __cls_init_Failure(s) 85
+this -28 8 0 ?
+m -20 8 0 string
+func con 102
+que -28 8 0 string
+detalle -20 8 0 string
+func cita 160
+s -20 8 0 string
+func iguales 218
+a -28 8 0 string
+b -20 8 0 string
+func equals 308
+expected -20 4 0 integer
+actual -16 4 0 integer
+func equals$iis 368
+expected -28 4 0 integer
+actual -24 4 0 integer
+que -20 8 0 string
+func equals$jj 436
+expected -28 8 0 long
+actual -20 8 0 long
+func equals$jjs 500
+expected -36 8 0 long
+actual -28 8 0 long
+que -20 8 0 string
+func equals$dd 572
+expected -28 8 0 double
+actual -20 8 0 double
+func equals$dds 636
+expected -36 8 0 double
+actual -28 8 0 double
+que -20 8 0 string
+func equals$ss 708
+expected -28 8 0 string
+actual -20 8 0 string
+func equals$sss 781
+expected -36 8 0 string
+actual -28 8 0 string
+que -20 8 0 string
+func equals$zz 862
+expected -20 4 0 boolean
+actual -16 4 0 boolean
+func equals$zzs 922
+expected -28 4 0 boolean
+actual -24 4 0 boolean
+que -20 8 0 string
+func isTrue 990
+cond -24 4 0 boolean
+que -20 8 0 string
+func isFalse 1039
+cond -24 4 0 boolean
+que -20 8 0 string
+func fail 1087
+que -20 8 0 string
+func __strconcat3 1123
+s0 -36 8 0 ?
+s1 -28 8 0 ?
+s2 -20 8 0 ?
+out 0 8 0 ?
+d 8 4 0 ?
+func __strconcat4 1190
+s0 -44 8 0 ?
+s1 -36 8 0 ?
+s2 -28 8 0 ?
+s3 -20 8 0 ?
+out 0 8 0 ?
+d 8 4 0 ?
+func __strequals 1275
+a -28 8 0 ?
+b -20 8 0 ?
+la 0 4 0 ?

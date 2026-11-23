@@ -1,0 +1,30 @@
+// PruebaPila.bp — una prueba del proyecto (V9 H1.8, #859): importa un módulo suyo (Pila) y lo comprueba con Assert.
+// La pasa `bp test` en las dos VMs del PC: está bien si acaba con 0 e imprime lo mismo en las dos. Una comprobación
+// que falla lanza Assert.Failure, y la prueba acaba con 1 y su traza dice la línea.
+module PruebaPila
+  import Assert
+  import Pila
+
+  function Main()
+    var p: Pila.Pila := Pila.Pila()
+    Assert.isTrue(p.isEmpty(), "nueva, vacía")
+
+    p.push(3)
+    p.push(4)
+    Assert.equals(4, p.pop(), "el último en entrar sale el primero")
+    Assert.equals(3, p.pop())
+    Assert.isTrue(p.isEmpty(), "vacía tras sacarlo todo")
+
+    // Lo que falla a propósito, también se prueba: una pila vacía no se deja sacar.
+    var error: string := ""
+    try
+      p.pop()
+    catch e: RuntimeError
+      error := e.msg
+    endtry
+    Assert.equals("Pila.pop: la pila está vacía", error, "pop de una pila vacía")
+
+    print "PruebaPila: bien"
+  end Main
+
+end PruebaPila

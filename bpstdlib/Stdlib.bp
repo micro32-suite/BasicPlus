@@ -19,6 +19,7 @@ module Stdlib
   import Core             // el núcleo: List, los envoltorios y las excepciones
   // --- núcleo del lenguaje y utilidades ---
   import App              // proyecto en ejecución (projectPath, mainModule)
+  import Assert           // V9 H1.8 (#859) — las comprobaciones de una prueba (bp test)
   import Collections      // List, Map, SyncList, ...
   import Compress         // compresión/descompresión
   import Heap             // V7 (28-sep) — el diagnóstico del heap desde un programa (números de cada VM)

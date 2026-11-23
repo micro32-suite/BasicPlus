@@ -195,6 +195,7 @@
     <li class="sub"><a href="#stdlib-json">13.17 Json</a></li>
     <li class="sub"><a href="#stdlib-app">13.18 App</a></li>
     <li class="sub"><a href="#stdlib-heap">13.19 Heap</a></li>
+    <li class="sub"><a href="#stdlib-assert">13.20 Assert</a></li>
     <li class="group"><a href="#dispositivos">14. Device libraries</a></li>
     <li class="sub"><a href="#stdlib-hw-policy">14.1 HW policy = OO class</a></li>
     <li class="sub"><a href="#stdlib-gpio">14.2 Gpio</a></li>
@@ -1181,6 +1182,34 @@ b.join()
 f.close()
 Heap.compact()
 sleep(<span class="num">60000</span>)          <span class="comment">// and the next shift, with new threads</span></code></pre>
+
+<h3 id="stdlib-assert">13.20 <code>Assert</code> (the checks of a test)</h3>
+<p>
+  The checks of a test (<code>import Assert</code>, V9): each one that fails throws <code>Assert.Failure</code> —a
+  <code>RuntimeError</code>— with a short message, and the test ends with 1 and its trace says the line. The tests of a
+  program or of a project are run by <code>bp test</code> (<a href="#cli">§16</a>), on both PC VMs. It is not embedded
+  in the firmwares: on a board, the IDE uploads it when a program uses it.
+</p>
+<table>
+  <tr><th>Function</th><th>Description</th></tr>
+  <tr><td><code>Assert.equals(expected, actual)</code></td><td>That they are equal: <code>integer</code>, <code>long</code>, <code>double</code> (exact), <code>string</code> (the text; also <code>null</code>) or <code>boolean</code>. If not: «se esperaba 4, y es 5» (expected 4, it is 5).</td></tr>
+  <tr><td><code>Assert.equals(expected, actual, what)</code></td><td>The same, with what is being checked in front of the failure: «la suma: se esperaba 4, y es 5».</td></tr>
+  <tr><td><code>Assert.isTrue(cond, what)</code> · <code>Assert.isFalse(cond, what)</code></td><td>That it holds, or that it does not. A <code>double</code> with a margin: <code>Assert.isTrue(a - b &lt; e and b - a &lt; e, "…")</code>.</td></tr>
+  <tr><td><code>Assert.fail(what)</code></td><td>Always fails: what should not be reached.</td></tr>
+</table>
+<pre><code><span class="kw">import</span> Assert
+
+<span class="kw">function</span> <span class="fn">Main</span>()
+  <span class="kw">var</span> l: <span class="type">List</span> := <span class="type">List</span>()
+  l.add(<span class="num">3</span>)
+  Assert.equals(<span class="num">1</span>, l.length(), <span class="str">"one element"</span>)
+  Assert.equals(<span class="num">3</span>, l.getInteger(<span class="num">0</span>))
+  Assert.isTrue(l.length() &gt; <span class="num">0</span>, <span class="str">"not empty"</span>)
+<span class="kw">end</span> Main</code></pre>
+<p>
+  An expected error is tested too: catch it, and check its message
+  (<code>samples/pruebas/tests/PruebaPila.bp</code>).
+</p>
 
 
 <!-- =========================================================== -->
@@ -3356,6 +3385,21 @@ bp placa COM22 get MyApp.shot          (a capture from Gui.shot; then, bp png My
 <pre><code>bp api                    (the modules that can be imported)
 bp api Collections        (its API: Map, SyncList…)
 bp api out/MyLib.mod      (the API of one of yours, compiled)</code></pre>
+
+<p>
+  <strong>Tests</strong> (V9): <code>bp test</code> runs the programs of the <code>tests/</code> folder (or the ones it
+  is given) on both PC VMs, each in its own process, with no screen and with a time limit (<code>--tiempo=N</code>, 60 s
+  if not given: a test that does not end does not hang the others). A test passes if it compiles, ends with 0 on both,
+  prints the same on both and, if it has its <code>X.out</code> beside it, prints that; <code>bp test --guarda</code>
+  writes each one's <code>X.out</code> with what it prints now (look at it before taking it as good). The checks, with
+  the <a href="#stdlib-assert"><code>Assert</code></a> module. In a project (its <code>.bpbuild</code> in the folder, or
+  named), the project is compiled first, and each test into its output folder: that way it finds its modules. One line
+  per test, a failing one with its reason; it exits with 0 if they all pass. A GUI is tested the same way:
+  <a href="gui.html#ref-pruebas">§24.4 of the graphics guide</a>. An example, a project with its tests:
+  <code>samples/pruebas</code>.
+</p>
+<pre><code>bp test                   (those of tests/: «bien   tests/PruebaPila.bp» · «2 pruebas: 2 bien, 0 mal»)
+bp test --guarda tests/PruebaGui.bp   (writes tests/PruebaGui.out)</code></pre>
 
 <h3 id="cli-frontend">16.1 Frontend</h3>
 <pre><code>bp frontend &lt;file.bp&gt; [options]</code></pre>

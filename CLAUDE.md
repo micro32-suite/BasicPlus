@@ -138,6 +138,7 @@ bpgenvm-c/build/bpgenvm-c --libdir=bpstdlib samples/Blink.mod         # VM-C (--
 ./bp run --sim samples/blink.bp     # en el micro simulado del IDE (#857); --placa=COM22, en una placa
 ./bp placa COM22 ls                 # y get <ruta> [fichero], stop, info (en el bash de Git, las rutas con //)
 ./bp api Collections                # su API, en BP, del .mod (#858); a secas, los módulos; --todo, también lo protegido y __
+./bp test                           # las pruebas de tests/ en las dos VMs, con Assert (#859); en samples/pruebas, un proyecto
 # El ZIP lleva sus propios bp.bat y bp (sobre el jar del IDE), y en su raíz la guía para IA de quien USA BasicPlus
 # (AGENTS.md, plantilla en scripts/zip/): ésta, CLAUDE.md, es la de quien lo DESARROLLA.
 

@@ -26,7 +26,7 @@ The widget tree (the *model*) is portable and lives in the core; what changes is
 
 All three execute the **same bytecode** and build the **same widget model**; the only difference is the paint backend. That is why a GUI written and tested on the PC goes to the board without touching the code (only, if anything, the pins or the screen size).
 
-> The model can be dumped as text with `Gui.__guiDumpTree()`, or as JSON with `toJsonText()` on any widget (§24.2): it is the source of truth shared by the three VMs and the basis of the parity checks. Throughout this volume we use the dump to show the structure of each example without relying on a screenshot. When you do need to see the pixels, that is `Gui.shot` (§23.5).
+> The model can be dumped as text with `Gui.dumpTree()`, or as JSON with `toJsonText()` on any widget (§24.2): it is the source of truth shared by the three VMs and the basis of the parity checks. Throughout this volume we use the dump to show the structure of each example without relying on a screenshot. When you do need to see the pixels, that is `Gui.shot` (§23.5).
 
 <a id="intro-run"></a>
 ### 18.2 How it runs
@@ -65,7 +65,7 @@ Once the tree is built, somebody has to *pump* the GUI: serve the display, the t
 |  | `Gui.run()` | `Gui.start()` |
 |---|---|---|
 | What it does | Starts the loop **and waits for it**: it is `start()` + `join()`. | Starts the loop **and returns**. |
-| When it returns | When the GUI ends. On the PC, when the window is closed; **on a board there is no window to close**: it only returns if a handler calls `Gui.stop()` or the IDE kills the program. In practice, whatever follows `run()` runs "when the application ends". **Without a screen** —in tests: the C VM with `--no-screen` or without LVGL, or miVM without a window (`-Djava.awt.headless=true`)—, as soon as there is nothing left to handle: it handles whatever is queued and returns, so a GUI program ends by itself. | Right away. The program stays alive while the loop runs, even if `Main` ends. Without a screen, the loop ends as soon as it has no work left, and nothing injected afterwards gets handled: a test click (`Gui.__guiClick`) goes before `Gui.run()`, which handles it and returns; afterwards, it raises an error that says so. |
+| When it returns | When the GUI ends. On the PC, when the window is closed; **on a board there is no window to close**: it only returns if a handler calls `Gui.stop()` or the IDE kills the program. In practice, whatever follows `run()` runs "when the application ends". **Without a screen** —in tests: the C VM with `--no-screen` or without LVGL, or miVM without a window (`-Djava.awt.headless=true`)—, as soon as there is nothing left to handle: it handles whatever is queued and returns, so a GUI program ends by itself. | Right away. The program stays alive while the loop runs, even if `Main` ends. Without a screen, the loop ends as soon as it has no work left, and nothing injected afterwards gets handled: a test click (`Gui.click`, §24.4) goes before `Gui.run()`, which handles it and returns; afterwards, it raises an error that says so. |
 | The main thread | Stays **parked** in the `join()`: it does nothing else until the GUI ends. | **Keeps running alongside** the GUI: it can read sensors, wait, write into widgets… |
 | Where handlers run | In both cases, **on the GUI thread** (a BP thread of its own, 8 KB stack), never on the main one. Between iterations the loop sleeps for as long as LVGL asks, with a BP `sleep`, so it does not starve the other threads. |  |
 | To finish | From a handler, `Gui.stop()`. | `Gui.stop()` asks the loop to end (does not wait; another thread or a handler may call it) and `Gui.join()` waits for it. A second `start()` does not start another loop. |
@@ -135,7 +135,7 @@ module Hello
 end Hello
 ```
 
-The resulting model (`Gui.__guiDumpTree()`):
+The resulting model (`Gui.dumpTree()`):
 
 ```
 screen [480x320 align=0 +0,0]
@@ -824,6 +824,9 @@ Summary of the public surface of the `Gui` module. The detailed semantics are in
 | `Gui.stop()` | Asks the loop to end; does not wait. Can be called from another thread or from a handler. |
 | `Gui.join()` | Waits for the loop to end. |
 | `Gui.shot(path): integer` | Captures the screen to a `.shot` and returns the bytes written; `RuntimeError` on failure (§23.5). |
+| `Gui.click(w)` | A click on widget `w`, like the user's: raises its `onClick` (V9). To test a GUI with nobody in front of it (§24.4). |
+| `Gui.change(w)` | Raises `w`'s `onChange`, as if the user changed its value; it does not touch the value: it is whatever the program sets (`cb.checked := true`) (V9, §24.4). |
+| `Gui.dumpTree(): string` | The screen's tree, as text: what a test compares (V9, §24.4). |
 | `Gui.loadFont(path): integer` | Loads a `.bin` font (LVGL binfont) and returns its id (§21.2). |
 | `Gui.setRotation(deg)` | Screen orientation: 0, 90, 180, 270 (§23.4). |
 | `Gui.Color(rgb): Color` | `0xRRGGBB` color for `setBgColor`/`setTextColor` (§21.1). |
@@ -900,6 +903,58 @@ In every constructor `parent` is a `Container` (§24.2). The classes marked *(Co
 | `Image` | `Image()` | `loadFile(path): boolean`, `width(): integer`, `height(): integer`. (Asset, not a widget: it has no parent.) |
 | `ImageView` | `ImageView(parent)` | `setImage(img)`, `refresh()`. |
 | `Window` *(Container)* | `Window()` | `load(path): Component` — builds a `.win` and binds handlers (§22); `destroy()` (= `delete()`). |
+
+<a id="ref-pruebas"></a>
+### 24.4 Testing a GUI with nobody in front of it
+
+A GUI is tested like any program (V9): a test in `tests/`, which `bp test` runs on both PC VMs, with no screen ([§16 of the reference](referencia.html.md#cli)). What the user would do, the test does: `Gui.click(w)`, a click, and `Gui.change(w)`, a change of value (the value, whatever the program set before). And what is checked: what the handlers did, with [`Assert`](referencia.html.md#stdlib-assert), and the screen's tree, `Gui.dumpTree()`, which the test prints and `bp test` compares with its `.out`.
+
+**The click, before `Gui.run()`.** With no screen, `Gui.run()` handles whatever is in the queue and returns; whatever were injected afterwards nobody would handle, and `Gui.click` says so with an error («el lazo de la GUI acabó; sin pantalla, el clic va antes de Gui.run()»: the GUI loop ended; with no screen, the click goes before Gui.run(), §18.4). With `Gui.start()`, the same: with no screen, the loop ends as soon as it has no work left.
+
+```
+module PruebaGui
+  import Gui
+  import Assert
+
+  class Pantalla
+    public property etiqueta: Gui.Label
+    public property clics: integer := 0
+
+    function event boton_onClick(quien: Gui.Component)
+      this.clics += 1
+      this.etiqueta.setText("PULSADO")
+    end boton_onClick
+  end Pantalla
+
+  function Main()
+    var scr: Gui.Screen := Gui.Screen()
+    var p: Pantalla := Pantalla()
+    p.etiqueta := Gui.Label(scr, "esperando")
+    p.etiqueta.align(Gui.Align.TOP_MID, 0, 10)
+    var boton: Gui.Button := Gui.Button(scr, "Pulsa")
+    boton.align(Gui.Align.CENTER, 0, 0)
+    boton.onClick := p::boton_onClick
+
+    Gui.click(boton)
+    Gui.run()
+
+    Assert.equals(1, p.clics, "el clic llega a su manejador")
+    Assert.isTrue(contains(Gui.dumpTree(), "\"PULSADO\""), "la etiqueta, tras el clic")
+    print Gui.dumpTree()
+  end Main
+end PruebaGui
+```
+
+What it prints, the tree after the click, is its `tests/PruebaGui.out` (written by `bp test --guarda`):
+
+```text
+screen [480x320 align=0 +0,0]
+  label "PULSADO" [-1x-1 align=1 +0,10]
+  button [-1x-1 align=4 +0,0]
+    label "Pulsa" [-1x-1 align=0 +0,0]
+```
+
+The whole project, with another test: `samples/pruebas`. The old names (`Gui.__guiClick`, `Gui.__guiChange`, `Gui.__guiDumpTree`) still work; on a board with the library from before V9, only those: the new ones come with its `Stdlib.pack`.
 
 <a id="matices"></a>
 ## 25. Fine print and limitations
