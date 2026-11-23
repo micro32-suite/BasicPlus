@@ -13859,7 +13859,7 @@ el IDE, que es el H2 (abajo).
 |---|---|---|---|---|
 | **H1.1** | el clic inyectado tras `Gui.start()` se pierde sin ventana | `#852` | F-1 | ✅ 22-nov, `333c8f0d` |
 | **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ✅ 23-nov, `1ae25d98`: `bp` (*«Uno: `bp`, con órdenes»*), el ZIP con la VM-C y la documentación; probado por Eduardo (*«todo OK»*) |
-| **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ⏳ 23-nov: `AGENTS.md` (*«Sólo inglés»*) con su `CLAUDE.md`, en el ZIP, en cada proyecto nuevo y en la carpeta de la IA; a falta de la prueba con una IA |
+| **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ✅ 23-nov: `AGENTS.md` (*«Sólo inglés»*) con su `CLAUDE.md`, en el ZIP, en cada proyecto nuevo y en la carpeta de la IA; probada por una IA sin contexto (tres programas a la primera) |
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | ⬜ |
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ⬜ |
 | **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ⬜ |
@@ -13981,7 +13981,7 @@ placa, no. Y se pierde sin decir nada. El mecanismo, sin mirar (acotar antes de 
   dep …`), así que la de las dos no coincide aunque el programa imprima lo mismo; y la traza de la VM Java, por línea
   de órdenes, sale en crudo (`ThrowSinAtrapar+91`), sin la línea del fuente.
 
-#### 🧬 `#854` — H1.3: una guía para IA (`AGENTS.md`) en el ZIP y en cada proyecto nuevo (abierta el 22-nov · M-2 del análisis)
+#### ✅ `#854` — H1.3: una guía para IA (`AGENTS.md`) en el ZIP y en cada proyecto nuevo (abierta el 22-nov · M-2 del análisis · **CERRADA el 23-nov**, `e250277` en `toolchain` y `97c683fa`, con la prueba de verdad de Eduardo: una IA sin contexto, tres programas que compilaron a la primera)
 
 La chuleta en Markdown, los comandos de compilar y ejecutar (los de `#853`), dónde está la API (`bpstdlib/*.bp`) y los
 ejemplos (`samples/`), y **las trampas** de quien viene de Java o de C# —las cuatro de la sonda 1: `length()` y no
@@ -14014,9 +14014,15 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
 - **Probado:** el ZIP de prueba lleva `AGENTS.md` (rutas relativas) y `CLAUDE.md`; un proyecto nuevo, los dos, con la
   ruta de la instalación y sin marcas por poner; con un `CLAUDE.md` propio, sólo `AGENTS.md`; otra vez, nada; las
   instrucciones, con la guía. La batería del IDE, igual.
-- **Falta:** la prueba de verdad: una IA sin contexto, en la carpeta del ZIP de prueba o en un proyecto nuevo, escribe un
-  programa: ¿lee la guía y no cae en las trampas? (Fuera de `C:\lenguajes\pm`: dentro, Claude Code carga también el
-  `CLAUDE.md` del repositorio, y la prueba ya no es «sin contexto».)
+- **La prueba de verdad, bien** (23-nov; el informe, `C:\tmp\prueba_Ia\v81\INFORME-prueba-IA-8.1.md`): Claude Code, sin
+  conocer BasicPlus, con el ZIP de prueba, `bp` y el servidor del IDE, escribió tres programas (`Hola`, una lista de
+  nombres y la misma en una GUI que se prueba sola: el árbol, un clic, la captura) que **compilaron a la primera**, sin
+  leer el código del toolchain (el día antes, sin la guía, tuvo que leer `ServidorIa.java`); en la VM Java, la VM-C, la
+  ventana de la VM-C, la Pico 2, el micro simulado y la P4, con la misma salida byte a byte. De la guía: *«La tabla de
+  trampas … evitó errores»*, y la sección de la GUI basta para una prueba que se comprueba sola. Lo que echó en falta,
+  añadido: el tamaño de la pantalla según dónde corre, cómo bajar la captura de una placa, y qué hacer con una librería
+  de la placa anterior a la instalación (`#871`). Y sus otros hallazgos, en sus fichas: `#869`, `#871`, `#872`, `#873` y
+  `#855`.
 - **Decidido y hecho (Eduardo, 23-nov): `bp` también en la raíz del repositorio** (*«Sí, en la raíz del
   repositorio»*): en el repositorio, la raíz de la «instalación» es `C:\lenguajes\pm`, y la guía de un proyecto hecho
   con su IDE nombraba un `bp.bat` que no estaba. `bp.bat` y `bp`, como los del ZIP pero sobre el jar del compilador
@@ -14041,6 +14047,11 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
 - **Hecho cuando:** miVM con `--no-screen` no abre ventana en un escritorio; con (b), los dos ficheros, idénticos sin
   filtrar en el corpus de paridad; `Rompe.bp` da fichero, línea y función en las dos VMs del PC; y `--help` imprime las
   opciones y sale con 0 en las cuatro herramientas.
+- **Visto de paso** (23-nov, con `bp`, `#853`, y en la prueba de la IA del H1.3, su punto 6): la línea de la VM-C
+  «[bpvm] pila: el main llegó a N de M B» sale partida entre la salida del programa, en los números («…llegó a 128 de
+  La lista tiene 4 nombres: … 16384  4. Pedro / B»; y ayer, «[bpvmBlink terminado … ] hilos: …»), aunque `diag_stderr`
+  la escribe en una sola llamada (`fprintf(stderr, "%s\n", …)`): hay que mirar quién la escribe a trozos. Con los dos
+  flujos separados, salen limpias. Y la traza de la VM Java por línea de órdenes sale en crudo (`ThrowSinAtrapar+91`).
 
 #### 🧬 `#856` — H1.5: los diagnósticos del compilador, para que los lea una máquina (abierta el 22-nov · M-4, M-5 y M-6 del análisis)
 
@@ -14241,6 +14252,52 @@ variables y sigue.
   detrás sin reiniciarla; el árbol del panel enseña su FS como el de una placa; y la red, igual (cambia la VM de
   referencia).
 
+#### 🧬 `#873` — el servidor de la IA sólo se enciende desde la ventana (abierta el 23-nov · la prueba de la IA del H1.3, su punto 3)
+
+- **Lo visto:** la IA puede lanzar `bpide.bat`, pero tiene que pedirle a la persona que encienda el servidor (menú IA) y
+  elija la carpeta; mientras, su cliente MCP da `ECONNREFUSED`.
+- **Propuesto por la IA:** `bpide.bat --ia[=puerto] --ia-carpeta=<ruta>` (siempre en `127.0.0.1`), o recordar en las
+  preferencias «encender el servidor de la IA al arrancar». Va contra lo decidido en el H2.3 —*apagado por defecto; se
+  enciende desde la ventana*—, así que **lo decide Eduardo**.
+
+#### 🧬 `#872` — el INFO de las ESP32: «Pila VM: 25 KB sin usar de 16 KB» (abierta el 23-nov · la prueba de la IA del H1.3, su punto 5 · hecha a falta de verla en una placa)
+
+- **Lo que pasa:** el IDE escribía «sin usar de 16 KB» con el 16 a mano: el tamaño de `vm_task` en la Pico. En las ESP32,
+  `vmTaskStackFreeBytes` es la marca de la pila de la tarea del REPL (en la P4, `wire_uart`), de otro tamaño
+  (`repl_esp32.c`), y en la P4 salía más sin usar que el total.
+- **Hecho** (`54ae845` en `toolchain`, con `#871`): sin el total, «Pila VM: 25 KB sin usar (marca de agua)». Si hiciera falta el
+  total, que lo mande cada placa en su INFO.
+
+#### 🧬 `#871` — el micro simulado arrastra lo de antes (su FS, su flash y su zona de packs persisten): un parámetro para vaciarlo y que arranque como la primera vez (abierta el 23-nov · la prueba de la IA del H1.3, sus puntos 1 y 2 · hecha a falta de verla Eduardo)
+
+- **Lo visto** (el informe de la IA, `C:\tmp\prueba_Ia\v81\INFORME-prueba-IA-8.1.md`): `NombresGui.bp`, con
+  `Gui.__guiClick`, va en el PC, en la VM-C y en la P4, y falla en la Pico 2 y en el micro simulado: «lib 'Gui' presente
+  pero no exporta 'Gui.__guiClick(LGui/Component;)V' (…; version vieja?)». El IDE no subió `Gui.mod`: «versión 7 =
+  mínima 7, otra compilación (CRC distinto): vale».
+- **Lo que pasa, comprobado:** `#852` (22-nov) convirtió `__guiClick`, que era `inline CALL_BUILTIN 152` (no exporta
+  nada: se copia en quien la llama), en una función de verdad, exportada; la stdlib sigue en la versión 7. La regla de
+  subida (`#624`, la de Eduardo, «la de Java»: vale la versión mínima, y lo que falte lo dice el enlace con su nombre) da
+  por buena una `Gui` de la versión 7 sin esa exportación. La Pico 2 tiene el `Stdlib.pack` de antes (ESTADO, 22-nov: no
+  cabe sin formatear su zona); la P4, el nuevo. Y el micro simulado guarda su FS y su zona de packs entre arranques (como
+  una placa: `#809`, la librería sólo la primera vez): en su `/app` había `Core`, `Gui`, `Json`… de una versión anterior
+  que tapaban a los de la librería. La placa sí manda la huella de la interfaz (`ifaceCrc`) en su `STAT`, y la regla no
+  la mira.
+- **Decidido (Eduardo, 23-nov):** la regla se queda (*«Yo mantendría lo que tenemos, para los usuarios es útil no tener
+  que subir librerías cada vez»*); y *«Lo que se puede es añadir un parámetro para vaciar la VM y que arranque como si
+  fuese la primera vez»*.
+- **Hecho** (`54ae845` en `toolchain`): `micro_simulado` con `de_cero: true` —para el simulado si estaba en marcha, borra su
+  flash, su FS y su zona de packs (nada más de su carpeta) y lo arranca: zona virgen, la librería de esta instalación—;
+  en la ventana, «Vaciarlo (como la primera vez)…» en el diálogo del engranaje, con su confirmación y sólo con el
+  simulado parado (`SimRunner.vacia`). Y `SimRunner.stop` espera a que el proceso acabe de verdad: sin eso, vaciarlo
+  justo después fallaba en Windows («el proceso no tiene acceso al archivo»).
+- **Probado** (la ventana sin enseñar, en el puerto 5199 y con su `user.home`): con tres ficheros viejos en `/app`,
+  `de_cero` lo deja vacío; y en el simulado recién vaciado, `Trampas.bp` encuentra `Collections`, `Core` y `Str` en
+  `pack:Stdlib`, idénticos a los de la instalación, y acaba bien.
+- **En la guía para IA** (`#854`): qué hacer con «… no exporta …» (en una placa, grabar los packs de la instalación; en el
+  simulado, `de_cero`).
+- **Para publicar V9:** con la regla que se queda, una placa con los packs de V8 y un programa que use lo que cambió de
+  interfaz en V9 (como `__guiClick`) falla así; lo que lo evita es grabar los packs de V9 (`INSTALAR_FIRMWARE`).
+
 #### 🧬 `#870` — la entrada del programa (`IO.prompt`): en el PC, un diálogo en la pantalla de Eduardo aunque lo lance la IA; en la placa, vacío y sin preguntar a nadie (abierta el 23-nov · el análisis del H2.4)
 
 - **Lo que pasa:** con la VM del PC, el IDE contesta cada `PROMPT_REQUEST` con un diálogo (`PromptDialog`, en
@@ -14272,6 +14329,8 @@ variables y sigue.
 - **Hecho cuando:** conectado al micro simulado, el IDE dice «bpvm-sim»; a la P4 por serie, «bpvm-esp32p4»; y el Log y
   el Clr Log del micro simulado funcionan (con la VM Java, el error que dé ella).
 - **Decidido (Eduardo, 22-nov): después** (*«Cierra el H2.3; #869 después»*).
+- **Visto otra vez** (23-nov, la prueba de la IA del H1.3, su punto 4): «conectado a 127.0.0.1:5099 — bpvm-java v1», y la
+  IA tuvo que mirar qué proceso escuchaba en el 5099 para saber que era la VM-C.
 
 #### ✅ `#868` — refrescar la placa justo después de un Run on Device: «la placa está ocupada ejecutando un programa (… parar)», y no lo está (abierta el 22-nov · salió en la batería de después de `#867`: una vez de cuatro, en la prueba del servidor MCP · **CERRADA el mismo día**, `f1a42b8` en `toolchain`)
 
