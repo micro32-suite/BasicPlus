@@ -958,13 +958,13 @@ scr.onKey := screen::key
 <h3 id="ej-host">23.2 Real render on the PC (VM-C + LVGL/SDL)</h3>
 <p>
   The host C VM built with LVGL opens an SDL window and paints <strong>exactly like the board</strong>
-  (same library, same fonts). It is launched from the command line, from a folder containing the program
-  and its dependencies (the project's <code>out/</code> folder works — the compiler leaves the program
-  and the stdlib <code>.mod</code> it uses there; also copy the <code>.win</code>/images if the program
-  loads them). From the IDE it is the <em>Run Window</em> button, which prepares that folder and launches
-  the C VM for you:
+  (same library, same fonts). It comes with the installation (<code>bin/bpgenvm-c.exe</code>). From the
+  command line, <code>bp run --c</code>: it compiles if needed and tells the C VM where the standard library
+  is; the options below go before the program (<code>bp run --c --screen=240x240 MyApp.bp</code>), and the
+  program's relative paths (<code>.win</code>, images) start at the folder it is launched from. From the IDE
+  it is the <em>Run Window</em> button, which prepares it and launches it for you:
 </p>
-<pre><code>bpgenvm-c MyApp.mod</code></pre>
+<pre><code>bp run --c MyApp.bp</code></pre>
 <p>Useful options:</p>
 <table>
   <tr><th>Option</th><th>What for</th></tr>
@@ -1177,10 +1177,9 @@ Gui.<span class="fn">join</span>()</code></pre>
 <p>
   On the board the file lands in the file system (path as is, like <code>writeFile</code>) and is
   downloaded with the <code>get</code> command of the IDE console —since V7, also while the program is running:
-  the board sends it in chunks, between its output—. The PC turns it into a PNG with a script that only
-  needs Python:
+  the board sends it in chunks, between its output—. On the PC, <code>bp png</code> turns it into a PNG:
 </p>
-<pre><code>python bpgenvm-c/tools/shot2png.py MyApp.shot        (leaves MyApp.png next to it)</code></pre>
+<pre><code>bp png MyApp.shot        (leaves MyApp.png next to it)</code></pre>
 <p>
   Measured sizes: C6 ~3&nbsp;KB, DK2 ~7&nbsp;KB, P4 ~9&nbsp;KB. The image is the proof for the eye; the
   automatic oracle is still the tree (<code>toJson()</code>, §24.2). Demo: <code>samples/GuiShot.bp</code>.

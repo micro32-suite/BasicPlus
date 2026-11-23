@@ -11,6 +11,8 @@
 # La ESTRUCTURA no es un gusto mío: sale de lo que el código busca.
 #   packs/       IdePrefs.installSubdir("packs")      → biblioteca de packs
 #   bin/         SimRunner.locateExe                  → micro simulado + SDL2
+#                FrmMain (Run Window), Bp.laVmC        → la VM-C con ventana (V9 #853)
+#   bp, bp.bat   (la documentación: `bp build`, `bp run`) → la línea de órdenes (V9 #853)
 #   bpgenvm-c/   AotBuild.autodetectBpgenvm           → include/ + src/ del AOT
 #   docs/        IdePrefs.docsDir()                   → la ayuda (F1)
 #   firmware/    (no lo busca nadie: es para el usuario)
@@ -23,11 +25,22 @@ set -euo pipefail
 
 RAIZ="$(cd "$(dirname "$0")/.." && pwd)"
 VER="$(sed -n "s@.*<version>\(.*\)</version>.*@\1@p" "$RAIZ/toolchain/BpIde/pom.xml" | head -1)"
-NOMBRE="Micro32-Suite-${VER}-win"     # V8.1 (#802): el nombre de la suite (hasta V8.0, BasicPlus-X-win)
+# V9 #853 — la etiqueta del ZIP: la versión, o la de MONTAR_ETIQUETA para uno de prueba (el jar sigue siendo el de VER).
+ETIQUETA="${MONTAR_ETIQUETA:-$VER}"
+NOMBRE="Micro32-Suite-${ETIQUETA}-win"     # V8.1 (#802): el nombre de la suite (hasta V8.0, BasicPlus-X-win)
 OUT="$RAIZ/dist/$NOMBRE"
 JAR="$RAIZ/toolchain/BpIde/target/BpIde-${VER}.jar"
 
-echo "== Micro32 Suite $VER =="
+echo "== Micro32 Suite $ETIQUETA =="
+
+# V9 #853 — UN ZIP PUBLICADO NO SE PISA: es lo que se bajó la gente y el oráculo de «¿lo he roto yo hoy?», y esto
+# empieza con un `rm -rf` de su carpeta. Publicado = su .sha256 está en git (se sube al publicar). Con la versión de
+# uno publicado en el pom (entre dos versiones, el pom sigue en la última), un ZIP de prueba lleva otra etiqueta.
+if git -C "$RAIZ" ls-files --error-unmatch "dist/$NOMBRE.zip.sha256" >/dev/null 2>&1; then
+    echo "dist/$NOMBRE.zip está PUBLICADO (su .sha256 está en git): no se pisa."
+    echo "Para un ZIP de prueba:  MONTAR_ETIQUETA=${VER}-prueba bash scripts/montar-zip.sh"
+    exit 1
+fi
 
 # El jar manda: si no está, no hay nada que empaquetar (y la versión sale del pom,
 # así que un jar viejo con otro nombre se detecta aquí y no en la release).
@@ -57,6 +70,15 @@ rm -rf "$OUT"; mkdir -p "$OUT"/{bin,packs,docs,firmware,bpstdlib,bpdevices,sampl
 # --- el IDE -----------------------------------------------------------------
 cp "$JAR" "$OUT/"
 printf '@echo off\r\njava -jar "%%~dp0BpIde-%s.jar" %%*\r\n' "$VER" > "$OUT/bpide.bat"
+
+# --- bp: la línea de órdenes (V9 #853) ----------------------------------------
+# La documentación manda teclear `bp build` y `bp run`; hasta V9 mandaba `java -jar basicplus-frontend.jar` y
+# `java -jar bpgenvm.jar`, que no van en el ZIP. Los dos lanzadores, sobre el jar del IDE (lleva el compilador y la VM
+# Java): bp.bat para cmd y PowerShell, y bp para bash. Las plantillas, en scripts/zip/: aquí se les pone el nombre del
+# jar, y al .bat los finales de línea de Windows (cmd los quiere así; la plantilla puede salir del disco con LF).
+sed -e 's/\r$//' -e "s/@JAR@/BpIde-${VER}.jar/" -e 's/$/\r/' "$RAIZ/scripts/zip/bp.bat" > "$OUT/bp.bat"
+sed -e 's/\r$//' -e "s/@JAR@/BpIde-${VER}.jar/" "$RAIZ/scripts/zip/bp" > "$OUT/bp"
+chmod +x "$OUT/bp"
 
 # --- BpVM.cfg: cómo encuentra el compilador la stdlib -----------------------
 # SIN esto el paquete no compila NADA que importe la stdlib. El ZIP lleva los
@@ -100,6 +122,18 @@ if ! strings "$RAIZ/bpgenvm-c/build/bpvm-sim.exe" 2>/dev/null | grep -qx "SDL2.d
 fi
 cp "$RAIZ/bpgenvm-c/build/bpvm-sim.exe" "$OUT/bin/"
 cp "$RAIZ/bpgenvm-c/build/SDL2.dll"     "$OUT/bin/"
+
+# --- la VM-C, con su ventana: la de «Run Window» y `bp run --c` (V9 #853) ------
+# Hasta V9 no iba en el ZIP, y Run Window la buscaba en bpgenvm-c/build subiendo desde el .bp: con el ZIP, nunca.
+# Como el simulado, CON LVGL y comprobado: sin él ejecuta igual, pero una GUI no abre ventana. Va junto a SDL2.dll.
+#    Se construye con:   make LVGL=1
+if ! strings "$RAIZ/bpgenvm-c/build/bpgenvm-c.exe" 2>/dev/null | grep -qx "SDL2.dll"; then
+    echo "ERROR: bpgenvm-c.exe esta construido SIN LVGL (no importa SDL2.dll)." >&2
+    echo "       Run Window no abriria ventana." >&2
+    echo "       Reconstruyelo con:  cd bpgenvm-c && make LVGL=1" >&2
+    exit 1
+fi
+cp "$RAIZ/bpgenvm-c/build/bpgenvm-c.exe" "$OUT/bin/"
 
 # --- AOT: sólo include/ + src/, que es lo que comprueba looksLikeBpgenvm ------
 mkdir -p "$OUT/bpgenvm-c"
@@ -458,6 +492,20 @@ if ! ( cd / && java -cp "$PRUEBA/$NOMBRE/BpIde-$VER.jar" basicplus.frontend.Main
     grep -E '^\[[0-9]+:|no se localiz|sin interfaz' "$PRUEBA/log" | head -5 | sed 's/^/    /'
     rm -rf "$PRUEBA" "$NOMBRE.zip"; exit 1
 fi
+
+# --- y `bp` (V9 #853): lo que manda teclear la documentación, desde FUERA de la instalación --------------------------
+# Un fuente en una carpeta sin BpVM.cfg (la de quien usa el ZIP, o la de una IA): `bp run` con las dos VMs tiene que
+# compilarlo con la stdlib de la instalación y ejecutarlo; con --c, la VM-C de bin/ (y su SDL2.dll).
+echo "-- comprobando bp run, con las dos VMs, desde una carpeta sin BpVM.cfg --"
+mkdir -p "$PRUEBA/fuera" && cp "$PRUEBA/$NOMBRE/samples/blink.bp" "$PRUEBA/fuera/"
+for VM in "" "--c"; do
+    if ! ( cd "$PRUEBA/fuera" && sh "$PRUEBA/$NOMBRE/bp" run $VM blink.bp > "$PRUEBA/log_bp" 2>&1 ) \
+       || ! grep -q "Blink terminado" "$PRUEBA/log_bp"; then
+        echo "  bp run $VM NO EJECUTA samples/blink.bp desde fuera de la instalación:"
+        tail -5 "$PRUEBA/log_bp" | sed 's/^/    /'
+        rm -rf "$PRUEBA" "$NOMBRE.zip"; exit 1
+    fi
+done
 
 # ------------------------------------------------------------------
 # GUARDIAN de los ficheros de PROYECTO (hallazgo 42, 6-ago-2026).

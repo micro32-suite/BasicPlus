@@ -2411,7 +2411,7 @@ tira.show()</code></pre>
   <code>parent: Container</code>, <code>Keyboard.attach</code> pasa a
   <code>setTextarea</code>, cualquier widget se serializa con <code>toJson()</code>,
   <code>Gui.shot(ruta)</code> captura la pantalla a un <code>.shot</code>
-  (<code>bpgenvm-c/tools/shot2png.py</code> lo pasa a PNG) y el screen mide lo que mide el
+  (<code>bp png</code> lo pasa a PNG) y el screen mide lo que mide el
   panel de la placa (en el host, 480×320 salvo <code>--screen=WxH</code>).
 </p>
 <p>
@@ -3080,8 +3080,7 @@ ra.onWheel := pant::rueda
 
 <p>Y se construye como cualquier otro proyecto:</p>
 
-<pre><code>java -jar toolchain/lexer-java/target/basicplus-frontend.jar \
-     --project mi/proyecto.bpbuild --backend=mivm</code></pre>
+<pre><code>bp build mi/proyecto.bpbuild</code></pre>
 
 <p>
   Desde el IDE, <em>Project → Build Project</em>. El resultado es un <code>.pack</code> en
@@ -3315,8 +3314,22 @@ ra.onWheel := pant::rueda
 <!-- =========================================================== -->
 <h2 id="cli">16. Compilación &amp; ejecución</h2>
 
+<p>
+  Desde la línea de órdenes, todo pasa por <code>bp</code> (en la raíz de la instalación:
+  <code>bp.bat</code>, y <code>bp</code> para bash). <code>bp build</code> compila un fuente o un
+  proyecto (el <code>.mod</code>, en <code>out/</code> junto al fuente); <code>bp run</code> compila si
+  hace falta y ejecuta con la VM Java (con <code>--c</code>, con la VM-C), y sale con el código del
+  programa; <code>bp png</code> pasa una captura a PNG (§23.5 de la guía gráfica); y
+  <code>bp help</code> lo cuenta. La biblioteca estándar, la del <a href="#cli-vmcfg">BpVM.cfg</a> y,
+  sin ninguno a la vista, la de la instalación. Lo de abajo son el compilador y la VM Java con todas
+  sus opciones: <code>bp frontend</code> y <code>bp vm</code>.
+</p>
+<pre><code>bp build samples/blink.bp          (deja samples/out/Blink.mod)
+bp run samples/blink.bp            (compila y ejecuta)
+bp run --c samples/out/Blink.mod   (con la VM-C)</code></pre>
+
 <h3 id="cli-frontend">16.1 Frontend</h3>
-<pre><code>java -jar basicplus-frontend.jar &lt;archivo.bp&gt; [opciones]</code></pre>
+<pre><code>bp frontend &lt;archivo.bp&gt; [opciones]</code></pre>
 <table>
   <tr><th>Opción</th><th>Efecto</th></tr>
   <tr><td><code>--tokens</code></td><td>Volcado de tokens del lexer.</td></tr>
@@ -3339,7 +3352,7 @@ ra.onWheel := pant::rueda
 </p>
 
 <h3 id="cli-vm">16.2 VM (bpgenvm)</h3>
-<pre><code>java -jar bpgenvm.jar [opciones] &lt;archivo.mod&gt;</code></pre>
+<pre><code>bp vm [opciones] &lt;archivo.mod&gt;</code></pre>
 <ul>
   <li>Por defecto carga y ejecuta el <code>.mod</code> raíz. La VM resuelve
       transitivamente los imports leyendo cada <code>.mod</code> referenciado.</li>
@@ -3350,9 +3363,9 @@ ra.onWheel := pant::rueda
       <a href="manual.html#concurrencia">§14</a>.</li>
   <li>Un <strong>segundo argumento posicional</strong> es el argumento de
       ejecución que recibe <code>Main(arg)</code>
-      (<code>bpgenvm App.mod medidas.db</code>); sin él, Main recibe el valor
+      (<code>bp vm App.mod medidas.db</code>); sin él, Main recibe el valor
       por defecto que declare el fuente. Igual en la VM-C de host
-      (<code>bpgenvm-c App.mod medidas.db</code>) y en el IDE
+      (<code>bp run --c App.mod medidas.db</code>) y en el IDE
       (<code>run App medidas.db</code>). <em>V6.</em></li>
   <li><code>-d</code> hace dump del bytecode (disassembler integrado).</li>
   <li><code>--config &lt;archivo&gt;</code> carga config JSON
@@ -3471,7 +3484,7 @@ ra.onWheel := pant::rueda
 <p>
   Uso desde la CLI:
 </p>
-<pre><code>lexer-java --project app.bpbuild</code></pre>
+<pre><code>bp build app.bpbuild</code></pre>
 <p>
   Campos:
 </p>
@@ -3529,7 +3542,7 @@ ra.onWheel := pant::rueda
 </p>
 
 <h3 id="cli-disasm">16.3 Disasm</h3>
-<pre><code>java -cp bpgenvm.jar edu.bpgenvm.tools.Disasm &lt;archivo.mod&gt;</code></pre>
+<pre><code>bp vm -d &lt;archivo.mod&gt;</code></pre>
 <p>
   Muestra el header, imports, exports, data block y código desensamblado
   con anotaciones (nombre de función, sección, jumps con destino).
@@ -3894,8 +3907,8 @@ vars ...         <span class="comment">// nombre de variable → slot del frame 
 <span class="comment">// App.bpproject — entrada de la VM para ejecutar:</span>
 { "main": "out/App.mod", "modulePaths": ["out"] }</pre>
 <p>
-  <code>lexer-java --project App.bpbuild</code> compila el árbol completo;
-  <code>bpgenvm App.bpproject</code> lo ejecuta. El IDE usa el
+  <code>bp build App.bpbuild</code> compila el árbol completo;
+  <code>bp vm App.bpproject</code> lo ejecuta (las dos cosas: <code>bp run App.bpbuild</code>). El IDE usa el
   <code>.bpbuild</code> como definición de proyecto (árbol Sources /
   Resources / Output / Dependencies).
 </p>

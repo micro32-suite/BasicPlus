@@ -1,0 +1,5 @@
+#!/bin/sh
+# bp: las herramientas de BasicPlus por línea de órdenes («bp help»). V9 #853.
+# Plantilla: scripts/montar-zip.sh pone el nombre del jar (@JAR@). La salida, en UTF-8: los mensajes llevan acentos.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec java -Dfile.encoding=UTF-8 -cp "$DIR/@JAR@" basicplus.bp.Bp "$@"

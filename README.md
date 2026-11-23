@@ -80,6 +80,8 @@ one syntax to the other.
 3. Run **`bpide.bat`**. Open `samples/blink.bp`, press **Compile** and then
    **Run**: the output shows up in the console. For the graphical interface, do
    the same with `samples/GuiColorDemo.bp`, using **Run Window**.
+4. Or from the command line, in the same folder: **`bp run samples/blink.bp`**
+   compiles and runs, and `bp help` tells the rest.
 
 No board is needed to start. When you have one, the ZIP also carries the nine
 firmware images and the packs: **[Installing the

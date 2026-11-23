@@ -947,12 +947,13 @@ scr.onKey := pant::tecla
 <h3 id="ej-host">23.2 Render real en el PC (VM-C + LVGL/SDL)</h3>
 <p>
   La VM-C de host compilada con LVGL abre una ventana SDL y pinta <strong>exactamente igual que la placa</strong>
-  (misma librería, mismas fuentes). Se lanza por línea de comandos, desde una carpeta que contenga el programa
-  y sus dependencias (la carpeta <code>out/</code> del proyecto vale — el compilador deja ahí el programa y
-  los <code>.mod</code> de la stdlib que usa; copia también los <code>.win</code>/imágenes si el programa los carga).
-  Desde el IDE es el botón <em>Run Window</em>, que prepara esa carpeta y lanza la VM-C por ti:
+  (misma librería, mismas fuentes). Va en la instalación (<code>bin/bpgenvm-c.exe</code>). Por línea de
+  órdenes, <code>bp run --c</code>: compila si hace falta y le dice a la VM-C dónde está la biblioteca estándar;
+  las opciones de abajo van delante del programa (<code>bp run --c --screen=240x240 MiApp.bp</code>), y las rutas
+  relativas del programa (<code>.win</code>, imágenes) son desde la carpeta en que se lanza. Desde el IDE es el
+  botón <em>Run Window</em>, que lo prepara y la lanza por ti:
 </p>
-<pre><code>bpgenvm-c MiApp.mod</code></pre>
+<pre><code>bp run --c MiApp.bp</code></pre>
 <p>Opciones útiles:</p>
 <table>
   <tr><th>Opción</th><th>Para qué</th></tr>
@@ -1158,9 +1159,9 @@ Gui.<span class="fn">join</span>()</code></pre>
 <p>
   En la placa el fichero queda en el sistema de archivos (ruta tal cual, como <code>writeFile</code>) y se baja
   con el <code>get</code> de la consola del IDE —desde V7, también con el programa en marcha: la placa lo manda a
-  trozos, entre su salida—. El PC lo pasa a PNG con un script que sólo necesita Python:
+  trozos, entre su salida—. En el PC se pasa a PNG con <code>bp png</code>:
 </p>
-<pre><code>python bpgenvm-c/tools/shot2png.py MiApp.shot        (deja MiApp.png al lado)</code></pre>
+<pre><code>bp png MiApp.shot        (deja MiApp.png al lado)</code></pre>
 <p>
   Tamaños medidos: C6 ~3&nbsp;KB, DK2 ~7&nbsp;KB, P4 ~9&nbsp;KB. La imagen es la prueba para el ojo; el oráculo
   automático sigue siendo el árbol (<code>toJson()</code>, §24.2). Demo: <code>samples/GuiShot.bp</code>.

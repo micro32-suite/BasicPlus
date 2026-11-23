@@ -358,9 +358,9 @@
 
 <h3 id="ejecutar">2.2 Compilar y ejecutar</h3>
 <p>Las mismas órdenes que para un <code>.bp</code> (<a href="referencia.html#cli">referencia §16</a>):</p>
-<pre><code>java -jar basicplus-frontend.jar Hola.jc --compile out --backend=mivm
-java -jar bpgenvm.jar out/Hola.mod
-bpgenvm-c out/Hola.mod "a todos"</code></pre>
+<pre><code>bp build Hola.jc
+bp run out/Hola.mod
+bp run --c out/Hola.mod "a todos"</code></pre>
 <pre class="salida" data-bp="skip"><code>hola, mundo
 hola, a todos</code></pre>
 <p>
@@ -681,7 +681,7 @@ total = total
 <pre class="salida" data-bp="skip"><code>[init] cargado
 main con 'defecto', veces = 1</code></pre>
 <p>
-  Con <code>bpgenvm-c Arranque.mod hola</code>, la segunda línea dice <code>main con 'hola'</code>. Lo demás del
+  Con <code>bp run --c Arranque.mod hola</code>, la segunda línea dice <code>main con 'hola'</code>. Lo demás del
   argumento —su tope de 127 bytes, el <em>autorun</em>, la consola del IDE— es lo de BP
   (<a href="manual.html#main">manual §10.2</a>).
 </p>
@@ -742,9 +742,9 @@ main con 'defecto', veces = 1</code></pre>
       <span class="kw">println</span>(Viejo.doble(<span class="num">21</span>));
    }
 }</code></pre>
-<pre><code>java -jar basicplus-frontend.jar Utiles.jc --compile out --backend=mivm
-java -jar basicplus-frontend.jar Programa.jc --compile out --backend=mivm
-java -jar bpgenvm.jar out/Programa.mod</code></pre>
+<pre><code>bp build Utiles.jc
+bp build Programa.jc
+bp run out/Programa.mod</code></pre>
 <pre class="salida" data-bp="skip"><code>jajaja
 42</code></pre>
 <p>
@@ -2570,7 +2570,7 @@ suma hasta 10 = 55</code></pre>
   Como un <code>.bp</code>: el compilador elige el lector por la extensión, y lo demás es común. Las opciones son las de
   siempre (<a href="referencia.html#cli-frontend">referencia §16.1</a>):
 </p>
-<pre><code>java -jar basicplus-frontend.jar Programa.jc --compile out --backend=mivm</code></pre>
+<pre><code>bp build Programa.jc</code></pre>
 <ul>
   <li><strong>El <code>.mod</code></strong> es el mismo que daría el programa escrito en BP, y el <code>.dbg</code>
       apunta al <code>.jc</code> y a sus líneas: el depurador para en los <code>.jc</code> sin hacer nada más.</li>
@@ -2593,7 +2593,7 @@ suma hasta 10 = 55</code></pre>
   "main":      "Programa",
   "sources":   ["src/Utiles.jc", "src/Programa.jc"]
 }</code></pre>
-<pre><code>java -jar basicplus-frontend.jar --project app.bpbuild</code></pre>
+<pre><code>bp build app.bpbuild</code></pre>
 <p>
   Con los ficheros de §5.4 en <code>src</code>, compila <code>Utiles</code>, después <code>Programa</code> y, porque
   <code>Programa</code> lo importa, <code>Viejo.bp</code>.
@@ -2622,8 +2622,8 @@ suma hasta 10 = 55</code></pre>
     <span class="kw">next</span>
   <span class="kw">end</span> main
 <span class="kw">end</span> Saludo</code></pre>
-<pre><code>java -jar basicplus-frontend.jar Saludo.bp --escribir-jc &gt; Saludo.jc
-java -jar basicplus-frontend.jar Saludo.bp --comprobar-jc</code></pre>
+<pre><code>bp frontend Saludo.bp --escribir-jc &gt; Saludo.jc
+bp frontend Saludo.bp --comprobar-jc</code></pre>
 <p>La segunda orden hace la ida y vuelta, y el árbol que vuelve es el mismo:</p>
 <pre class="salida" data-bp="skip"><code>Saludo.bp: EQUIVALENTE</code></pre>
 <p>

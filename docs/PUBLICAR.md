@@ -340,6 +340,10 @@ vez**.
       (`gui1-lvgl0`). El orden: la red → `make sim LVGL=1 SQLITE=1` → montar el ZIP
       → `make` y `make sim`, que devuelven el host y el simulado al sabor de la red.
       Si se monta sin rehacerlo, el empaquetador para (13-oct).
+- [ ] **La VM-C con ventana** (V9 `#853`: va en `bin/`, para «Run Window» y `bp run --c`):
+      `cd bpgenvm-c && make LVGL=1`, junto con la del simulado y antes de montar el ZIP
+      (los dos `make` comparten el sabor: el segundo no recompila). El empaquetador
+      para si `build/bpgenvm-c.exe` no importa `SDL2.dll`, como con el simulado.
 - [ ] **Las placas con `tanda.py`** — la prueba de que la imagen que se publica
       CORRE, no solo que compila: con la placa conectada,
       `python bpgenvm-c/tools/tanda.py --lista bpgenvm-c/tools/tanda_v7.json
@@ -353,6 +357,11 @@ vez**.
       prueba de fuego de T1 (11-sep): la Metro tenía firmware del 9-sep — el sello lo
       dijo, el ojo no.
 - [ ] **Montar el paquete**: `bash scripts/montar-zip.sh`.
+      🛡️ **Un ZIP publicado no se pisa** (V9 `#853`): si el `.sha256` del ZIP que va a
+      escribir está en git, el empaquetador para. Entre dos versiones el pom sigue en
+      la última publicada: un ZIP de prueba lleva otra etiqueta,
+      `MONTAR_ETIQUETA=8.1-prueba bash scripts/montar-zip.sh` (el jar es el mismo).
+      Y comprueba `bp run` con las dos VMs desde una carpeta sin `BpVM.cfg`.
       ⚠️ **Con su carpeta libre**: el script empieza borrando `dist/BasicPlus-<v>-win`,
       y si un proceso la tiene de carpeta de trabajo (el IDE lanzado desde allí, o la
       ventana `cmd` que lo lanzó), se lleva el contenido y no puede quitar la carpeta

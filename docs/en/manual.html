@@ -292,12 +292,14 @@
   deterministic "ownership" for immediate release of resources.
 </p>
 <p>The overall pipeline is:</p>
-<pre><code><span class="comment">// 1) Compilation: each module → a .mod (binary, with its interface inside)</span>
-java -jar basicplus-frontend.jar samples/hola.bp --compile out --backend=mivm
+<pre><code><span class="comment">// 1) Compilation: each module → a .mod (binary, with its interface inside), in samples/out/</span>
+bp build samples/hola.bp
 
 <span class="comment">// 2) Execution: the VM loads the root .mod; the .mod files of its imports are
 //    looked up by name, &lt;library&gt;.&lt;Module&gt;.mod (§10.3)</span>
-java -jar bpgenvm.jar out/Hola.mod</code></pre>
+bp run samples/out/Hola.mod
+
+<span class="comment">// or both at once (with --c, on the C VM): bp run samples/hola.bp</span></code></pre>
 
 <!-- =========================================================== -->
 <!-- =========================================================== -->
@@ -2195,8 +2197,8 @@ e.etiqueta := <span class="str">"cuadrado de 2"</span>              <span class=
       for standalone testing.</li>
   <li><strong>The argument</strong> is passed from the IDE console with
       <code>run MiApp hello</code> (quotes optional if it has spaces) and on the
-      two PC VMs as a second positional (<code>java -jar bpgenvm.jar MiApp.mod hello</code>,
-      <code>bpgenvm-c MiApp.mod hello</code>). If nothing is passed, <code>arg</code>
+      two PC VMs after the program (<code>bp run MiApp.mod hello</code>,
+      <code>bp run --c MiApp.mod hello</code>). If nothing is passed, <code>arg</code>
       takes the <strong>default value</strong> declared in the signature (<code>:= "default"</code>,
       like any <a href="#defaults">parameter with a default</a>) or the empty string if
       there is none. The board's <em>autorun</em> deliberately passes no argument: the

@@ -5,7 +5,8 @@
 > desde el host (VM-C con SDL, también `--no-screen`) y desde las placas con pantalla (la C5, la
 > C6, las P4 y la DK2), por el **mismo camino** (el gancho del flush de LVGL), y se baja con el
 > `GET` de siempre. Desde V7 (H6) ese camino viaja con LVGL en el pack de la GUI, no en la imagen.
-> El PC lo convierte a PNG con `bpgenvm-c/tools/shot2png.py`.
+> El PC lo convierte a PNG con `bp png` (la orden de la instalación, V9 #853: `basicplus.bp.CapturaPng`) o, en el
+> repositorio, con `bpgenvm-c/tools/shot2png.py`: los dos escriben el mismo PNG, byte a byte.
 >
 > **Qué NO es.** No es el oráculo automático de la GUI (eso es el árbol: `toJson()` / `dumpTree`,
 > con paridad byte a byte entre las dos VMs). La imagen es **la prueba para el ojo** — y para

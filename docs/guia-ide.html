@@ -221,6 +221,10 @@
 <p>o, si lo prefieres a mano:</p>
 <pre><code>java -jar BpIde-8.1.jar</code></pre>
 <p>
+  Y para la línea de órdenes, en la misma carpeta, <code>bp</code>: <code>bp run samples/blink.bp</code>
+  compila y ejecuta, y <code>bp help</code> cuenta lo demás (<a href="referencia.html#cli">referencia §16</a>).
+</p>
+<p>
   Junto al <code>.jar</code> viajan las carpetas de las que el IDE tira solo,
   <strong>sin configurar nada</strong>: la biblioteca de packs
   (<code>packs/</code>, §10), el micro simulado (<code>bin/</code>, §6.1), la
@@ -748,7 +752,7 @@ hola, Eduardo
 <p>
   El autorun (§12) no pasa argumento a propósito: el defecto que declara el
   fuente <em>es</em> la configuración de despliegue. Desde la línea de comandos
-  del PC es el segundo posicional: <code>bpgenvm-c Saludo.mod Eduardo</code>. El
+  del PC va detrás del programa: <code>bp run --c Saludo.mod Eduardo</code>. El
   argumento cabe en 127 bytes; uno más largo no se corta: es un error («el
   argumento no cabe: 128 bytes (el tope es 127)»), y con el defecto del fuente, ya
   al compilar.

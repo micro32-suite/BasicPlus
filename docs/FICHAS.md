@@ -13858,7 +13858,7 @@ el IDE, que es el H2 (abajo).
 | apartado | qué | ficha | del análisis | estado |
 |---|---|---|---|---|
 | **H1.1** | el clic inyectado tras `Gui.start()` se pierde sin ventana | `#852` | F-1 | ✅ 22-nov, `333c8f0d` |
-| **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ⬜ |
+| **H1.2** | lo que la documentación manda teclear, en el ZIP | `#853` | F-3, F-4, M-1, H-002 | ⏳ 23-nov: `bp` (*«Uno: `bp`, con órdenes»*), el ZIP con la VM-C y la documentación, hechos; a falta de verlo Eduardo |
 | **H1.3** | la guía para IA, en el ZIP y en cada proyecto nuevo | `#854` | M-2 | ⬜ |
 | **H1.4** | las VMs, conducidas por un programa | `#855` | F-2, F-5, M-7, M-8 | ⬜ |
 | **H1.5** | los diagnósticos del compilador, para una máquina | `#856` | M-4, M-5, M-6 | ⬜ |
@@ -13953,6 +13953,32 @@ placa, no. Y se pierde sin decir nada. El mecanismo, sin mirar (acotar antes de 
 - Es un fallo de lo publicado: entra en la próxima publicación (un parche antes, sólo si Eduardo lo pide).
 - **Hecho cuando:** desde el ZIP recién descomprimido, los comandos de la chuleta compilan y ejecutan `samples/blink.bp`;
   «Run Window» ejecuta una GUI; y una captura pasa a PNG, por línea de órdenes, como dice la guía.
+- **Decidido (Eduardo, 23-nov):** los nombres, *«Uno: `bp`, con órdenes»*; y lo de todas las opciones, *«`bp frontend …`
+  y `bp vm …`»*.
+- **Hecho** (`25bf267` y `6fa06ba` en `toolchain`; el ZIP y la documentación, en BasicPlus):
+  - **`bp`** (`basicplus.bp.Bp`, en el jar del compilador y en el del IDE): `bp build`; `bp run [--c] [opciones de la
+    VM]` (compila si hace falta, con la salida del compilador sólo si falla; sale con el código del programa, y con 2
+    si no compila); `bp png` (`shot2png.py` en Java, `CapturaPng`); `bp frontend` y `bp vm` (el compilador y la VM Java
+    con todas sus opciones); `bp help`. La stdlib, la del `BpVM.cfg` y, sin ninguno, la de la instalación (el respaldo
+    de `#867`, ahora en `basicplus.bp.Instalacion`, para el IDE y para `bp`).
+  - **El ZIP:** `bp.bat` (en UTF-8 mientras dura, y la página de la consola, como estaba) y `bp` para bash, de
+    plantillas en `scripts/zip/`; en `bin/`, la VM-C con ventana (`make LVGL=1`, con el guardián del simulado); «Run
+    Window», con ella y con la stdlib del cfg que manda para el fuente; y el empaquetador comprueba `bp run` con las dos
+    VMs desde una carpeta sin cfg. Y una red de seguridad que no estaba: **un ZIP publicado no se pisa** (su `.sha256`
+    en git); uno de prueba, con `MONTAR_ETIQUETA`.
+  - **La documentación:** la chuleta, el manual, la referencia (§16, con `bp` delante y `bp frontend`/`bp vm`), JC, la
+    base de datos, la guía gráfica (§23.2 y §23.5) y la del IDE, en las dos lenguas; los README (un paso 4, `bp run`);
+    `SHOT_FORMAT.md` y `PUBLICAR.md` (la VM-C con ventana, y la etiqueta de prueba). `doc_frags`, 0 FALLO.
+- **Probado** (el ZIP de prueba, `dist/Micro32-Suite-8.1-prueba-win`, desde una carpeta sin cfg; el de la 8.1, intacto):
+  `bp build` y `bp run` de `blink` con las dos VMs, por `bp.bat` (PowerShell, y `cmd` en la página 850: vuelve a 850) y
+  por `bp` (bash); los códigos (un error sin atrapar, 1; uno de compilación, 2); un proyecto; `bp frontend` y `bp vm`
+  (también `-d` y `--escribir-jc`); `GuiShot` con `bp run --c --no-screen` y `bp png` (el PNG, idéntico al de
+  `shot2png.py`, y mirado); 17 capturas de las placas, idénticas byte a byte; y «Run Window» por su comando, con la
+  ventana sin enseñar: la VM-C de `bin/`, la stdlib de la instalación, código 0. La batería del IDE, igual.
+- **Falta:** que Eduardo lo vea: «Run Window» con una GUI desde el ZIP de prueba (su `bpide.bat`) y `bp` en su consola.
+- **Visto de paso, para `#855`:** cada VM añade a la salida sus propias líneas (`config: …`, `[miVM] …`, `[bpvm-c]
+  dep …`), así que la de las dos no coincide aunque el programa imprima lo mismo; y la traza de la VM Java, por línea
+  de órdenes, sale en crudo (`ThrowSinAtrapar+91`), sin la línea del fuente.
 
 #### 🧬 `#854` — H1.3: una guía para IA (`AGENTS.md`) en el ZIP y en cada proyecto nuevo (abierta el 22-nov · M-2 del análisis)
 

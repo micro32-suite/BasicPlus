@@ -80,6 +80,8 @@ programa de una sintaxis a la otra.
 3. Ejecuta **`bpide.bat`**. Abre `samples/blink.bp`, pulsa **Compile** y
    después **Run**: la salida aparece en la consola. Para la interfaz gráfica,
    lo mismo con `samples/GuiColorDemo.bp`, con **Run Window**.
+4. O desde la línea de órdenes, en la misma carpeta: **`bp run samples/blink.bp`**
+   compila y ejecuta, y `bp help` cuenta lo demás.
 
 Para empezar no hace falta placa. Cuando la tengas, el ZIP trae también las
 nueve imágenes de firmware y los packs: **[Instalar el

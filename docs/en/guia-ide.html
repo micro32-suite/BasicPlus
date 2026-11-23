@@ -221,6 +221,10 @@
 <p>or, by hand:</p>
 <pre><code>java -jar BpIde-8.1.jar</code></pre>
 <p>
+  And for the command line, in the same folder, <code>bp</code>: <code>bp run samples/blink.bp</code>
+  compiles and runs, and <code>bp help</code> tells the rest (<a href="referencia.html#cli">reference §16</a>).
+</p>
+<p>
   Next to the <code>.jar</code> travel the folders the IDE finds by itself,
   <strong>with nothing to configure</strong>: the pack library
   (<code>packs/</code>, §10), the simulated micro (<code>bin/</code>, §6.1), the
@@ -751,7 +755,7 @@ hola, Eduardo
 <p>
   Autorun (§12) deliberately passes no argument: the default declared in the
   source <em>is</em> the deployment configuration. From the PC command line it
-  is the second positional: <code>bpgenvm-c Saludo.mod Eduardo</code>. The
+  goes after the program: <code>bp run --c Saludo.mod Eduardo</code>. The
   argument fits in 127 bytes; a longer one is not cut: it is an error («el
   argumento no cabe: 128 bytes (el tope es 127)», the argument does not fit), and
   with the source's default, already when compiling.

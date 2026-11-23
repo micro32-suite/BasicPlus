@@ -312,13 +312,13 @@ l[<span class="t">0</span>] <span class="k">:=</span> Sensor(<span class="t">5</
 
 <section>
   <h2>Build &amp; run</h2>
-<pre><span class="c"># compile one file (writes Hello.mod here)</span>
-java -jar basicplus-frontend.jar Hello.bp --compile .
+<pre><span class="c"># compile one file (writes out/Hello.mod)</span>
+bp build Hello.bp
 
-<span class="c"># run it on the PC</span>
-java -jar bpgenvm.jar Hello.mod
+<span class="c"># compile and run it on the PC (with --c, on the C VM)</span>
+bp run Hello.bp
 
-<span class="c"># a project</span>
+<span class="c"># a project: bp build App.bpbuild / bp run App.bpbuild</span>
 { <span class="s">"sourceDir"</span>: <span class="s">"src"</span>, <span class="s">"outDir"</span>: <span class="s">"out"</span>,
   <span class="s">"main"</span>: <span class="s">"App"</span>, <span class="s">"dependencies"</span>: [] }</pre>
   <p class="note">From the IDE it is one menu: run on the PC, on the simulated micro

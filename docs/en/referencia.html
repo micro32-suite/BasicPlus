@@ -2422,7 +2422,7 @@ strip.show()</code></pre>
   <code>parent: Container</code>, <code>Keyboard.attach</code> becomes
   <code>setTextarea</code>, any widget serializes with <code>toJson()</code>,
   <code>Gui.shot(path)</code> captures the screen to a <code>.shot</code> file
-  (<code>bpgenvm-c/tools/shot2png.py</code> turns it into a PNG) and the screen is the
+  (<code>bp png</code> turns it into a PNG) and the screen is the
   size of the board's panel (on the host, 480×320 unless <code>--screen=WxH</code>).
 </p>
 <p>
@@ -3084,8 +3084,7 @@ mo.onWheel := screen::wheel
 
 <p>And it is built like any other project:</p>
 
-<pre><code>java -jar toolchain/lexer-java/target/basicplus-frontend.jar \
-     --project my/project.bpbuild --backend=mivm</code></pre>
+<pre><code>bp build my/project.bpbuild</code></pre>
 
 <p>
   From the IDE, <em>Project → Build Project</em>. The result is a <code>.pack</code> in the
@@ -3309,8 +3308,22 @@ imported exactly like one living in <code>/lib</code>.</p>
 <!-- =========================================================== -->
 <h2 id="cli">16. Compilation &amp; execution</h2>
 
+<p>
+  From the command line, everything goes through <code>bp</code> (at the root of the installation:
+  <code>bp.bat</code>, and <code>bp</code> for bash). <code>bp build</code> compiles a source or a
+  project (the <code>.mod</code> goes to <code>out/</code> next to the source); <code>bp run</code>
+  compiles if needed and runs on the Java VM (with <code>--c</code>, on the C VM), and exits with the
+  program's code; <code>bp png</code> turns a capture into a PNG (§23.5 of the graphics guide); and
+  <code>bp help</code> tells it all. The standard library is the one in <a href="#cli-vmcfg">BpVM.cfg</a>
+  and, with none in sight, the installation's. Below are the compiler and the Java VM with all their
+  options: <code>bp frontend</code> and <code>bp vm</code>.
+</p>
+<pre><code>bp build samples/blink.bp          (writes samples/out/Blink.mod)
+bp run samples/blink.bp            (compiles and runs)
+bp run --c samples/out/Blink.mod   (on the C VM)</code></pre>
+
 <h3 id="cli-frontend">16.1 Frontend</h3>
-<pre><code>java -jar basicplus-frontend.jar &lt;file.bp&gt; [options]</code></pre>
+<pre><code>bp frontend &lt;file.bp&gt; [options]</code></pre>
 <table>
   <tr><th>Option</th><th>Effect</th></tr>
   <tr><td><code>--tokens</code></td><td>Dump of the lexer's tokens.</td></tr>
@@ -3333,7 +3346,7 @@ imported exactly like one living in <code>/lib</code>.</p>
 </p>
 
 <h3 id="cli-vm">16.2 VM (bpgenvm)</h3>
-<pre><code>java -jar bpgenvm.jar [options] &lt;file.mod&gt;</code></pre>
+<pre><code>bp vm [options] &lt;file.mod&gt;</code></pre>
 <ul>
   <li>By default it loads and runs the root <code>.mod</code>. The VM resolves
       the imports transitively by reading each referenced <code>.mod</code>.</li>
@@ -3343,9 +3356,9 @@ imported exactly like one living in <code>/lib</code>.</p>
       opt-in and equivalent to "simulated physical cores"). See
       <a href="manual.html#concurrencia">§14</a>.</li>
   <li>A <strong>second positional argument</strong> is the run argument that
-      <code>Main(arg)</code> receives (<code>bpgenvm App.mod readings.db</code>);
+      <code>Main(arg)</code> receives (<code>bp vm App.mod readings.db</code>);
       without it, Main gets the default value the source declares. Same on the
-      host C VM (<code>bpgenvm-c App.mod readings.db</code>) and in the IDE
+      host C VM (<code>bp run --c App.mod readings.db</code>) and in the IDE
       (<code>run App readings.db</code>). <em>V6.</em></li>
   <li><code>-d</code> dumps the bytecode (integrated disassembler).</li>
   <li><code>--config &lt;file&gt;</code> loads a JSON config
@@ -3464,7 +3477,7 @@ imported exactly like one living in <code>/lib</code>.</p>
 <p>
   Use from the CLI:
 </p>
-<pre><code>lexer-java --project app.bpbuild</code></pre>
+<pre><code>bp build app.bpbuild</code></pre>
 <p>
   Fields:
 </p>
@@ -3522,7 +3535,7 @@ imported exactly like one living in <code>/lib</code>.</p>
 </p>
 
 <h3 id="cli-disasm">16.3 Disasm</h3>
-<pre><code>java -cp bpgenvm.jar edu.bpgenvm.tools.Disasm &lt;file.mod&gt;</code></pre>
+<pre><code>bp vm -d &lt;file.mod&gt;</code></pre>
 <p>
   Shows the header, imports, exports, data block and the disassembled code
   with annotations (function name, section, jumps with target).
@@ -3885,8 +3898,8 @@ vars ...         <span class="comment">// variable name → frame slot (per func
 <span class="comment">// App.bpproject — the VM's entry to run:</span>
 { "main": "out/App.mod", "modulePaths": ["out"] }</pre>
 <p>
-  <code>lexer-java --project App.bpbuild</code> compiles the whole tree;
-  <code>bpgenvm App.bpproject</code> runs it. The IDE uses the
+  <code>bp build App.bpbuild</code> compiles the whole tree;
+  <code>bp vm App.bpproject</code> runs it (both at once: <code>bp run App.bpbuild</code>). The IDE uses the
   <code>.bpbuild</code> as the project definition (the Sources /
   Resources / Output / Dependencies tree).
 </p>
