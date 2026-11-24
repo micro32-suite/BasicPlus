@@ -742,11 +742,11 @@ function main(arg: string)
 end main
 ```
 
-**A bus is an `I2c.I2C`** (V9), whichever it is: it is the base class, and what a device library asks for. `I2c.HardI2C(id, sda, scl, baudrate)` is a peripheral's, and `SoftI2c.SoftI2C(sda, scl)` a software one ([§14.3.1](#stdlib-softi2c)), for when there are no buses left or the pins do not match. **You go from one to the other by changing only the constructor**: methods, limits and errors are the same. And when it is opened, a device that was left halfway through a read — the board was reset in the middle — is taken out of there.
+**A bus is an `I2c.I2C`** (V9), whichever it is: it is the base class, and what a device library asks for. `I2c.HardI2C(id, sda, scl, baudrate)` is a peripheral's, and `modSoftI2C.SoftI2C(sda, scl)` a software one ([§14.3.1](#stdlib-softi2c)), for when there are no buses left or the pins do not match. **You go from one to the other by changing only the constructor**: methods, limits and errors are the same. And when it is opened, a device that was left halfway through a read — the board was reset in the middle — is taken out of there.
 
 ```
 import I2c
-import SoftI2c
+import modSoftI2C
 import Bmp280
 
 function leer(bus: I2c.I2C)                          // it does not know which one
@@ -759,7 +759,7 @@ end leer
 
 function main(arg: string)
   leer(I2c.HardI2C(1, 2, 3, I2c.FAST()))             // peripheral 1, on pins 2 and 3
-  leer(SoftI2c.SoftI2C(6, 7))                        // by software, on pins 6 and 7
+  leer(modSoftI2C.SoftI2C(6, 7))                        // by software, on pins 6 and 7
 end main
 ```
 
@@ -772,16 +772,16 @@ end main
 | `readReg(addr, reg): integer` | V9: the value of one register of the device (0..255), or `-1` if it does not answer. |
 | `readRegs(addr, reg, data, count): integer` | V9: `count` bytes from register `reg` on, in one transaction. |
 | `writeReg(addr, reg, value): integer` | V9: writes one register. `-1` if it does not answer. |
-| `scan(): integer[]` | The addresses from `0x08` to `0x77` that answer. |
-| `isPresent(addr): boolean` | V9: whether somebody answers at `addr`. |
+| `scan(): integer[]` | The addresses from `0x08` to `0x77` that answer. Each one is probed with a 0-byte write: some sensors do not answer a read unless they hold a finished measurement (up to V8 one byte was read, and they did not show up). |
+| `isPresent(addr): boolean` | V9: whether somebody answers at `addr` (the same probe). |
 | `release()` | Lets the bus go: if nobody else uses it and it is not the board's, it is closed and its pins become free. A second time does nothing; using it afterwards is a `RuntimeError` («`I2C 1: ya se soltó con release()`»). |
 
 `I2c.Bus` is `HardI2C` under the name it had up to V8: what is written with it does not change. And a class of your own can be an `I2c.I2C` too — a multiplexer, a simulated sensor for a test —: it extends it and provides its `write`, `read` and `writeRead`; the rest is done with them.
 
 <a id="stdlib-softi2c"></a>
-#### 14.3.1 `SoftI2c` — software I²C (V9)
+#### 14.3.1 `modSoftI2C` — software I²C (V9)
 
-`SoftI2c.SoftI2C(sda, scl)`, or `SoftI2C(sda, scl, baudrate)`: an I²C bus on any two pins that can drive open-drain (`Machine.openDrainPins()`). It lives in its own module so that only those who use it pay for it.
+`modSoftI2C.SoftI2C(sda, scl)`, or `SoftI2C(sda, scl, baudrate)`: an I²C bus on any two pins that can drive open-drain (`Machine.openDrainPins()`). It lives in its own module so that only those who use it pay for it.
 
 - **The resistors.** Like any I²C bus, it needs its pull-ups to the supply (1 to 10 kΩ; sensor modules usually carry them). On opening, both lines are checked to rise; if not, it is a named error: «`SoftI2C 4/5: el pin 5 (scl) no sube: sin resistencia, o alguien lo sujeta`».
 - **The speed.** The `baudrate` (100 kHz if not given) is the *maximum*: the interpreter makes the bits, and the real clock is around 20 kHz on the Nucleo and the Metro, and 10 on the S3. Plenty for a sensor; for a display or a memory, the peripheral. A device may hold the clock for up to some 50 ms.
@@ -799,7 +799,7 @@ The original form, for drivers already written: only with the peripherals' buses
 | `write(bus, addr, data, count): integer` | Sends `count` bytes to the slave `addr` in **one** transaction (START…STOP), at most 256. Returns bytes written, or `-1` on NAK/timeout. |
 | `read(bus, addr, data, count): integer` | Reads `count` bytes (at most 256) from the slave `addr`. Returns bytes read, or `-1` on error. |
 | `writeRead(bus, addr, tx, ntx, rx, nrx): integer` | Writes `ntx` bytes and reads `nrx` in **one** transaction, with a *repeated start* between them: a register's number and its value, with nobody talking in between (V7). Returns the bytes read, or `-1` if the device does not answer. |
-| `scan(bus): integer[]` | Scans addresses `0x08..0x77` and returns an array of those that ACKed. Implemented in BP on top of `read` — needs no dedicated opcode. |
+| `scan(bus): integer[]` | Scans addresses `0x08..0x77` and returns an array of those that ACKed. Each one is probed with a 0-byte write (up to V8, by reading one byte). |
 | `release(bus)` | Lets the bus go: if nobody else uses it and it is not the board's, it is closed and its pins become free (also `bus.release()` on the class). |
 
 **The bus is shared** (V7). Several peripherals use one bus at the same time — on the C5, the display and the microSD card share SPI 2 —; what is exclusive is each device's own: the CS on SPI, the address on I²C. The bus configuration (its pins; on I²C also its speed) is set **once**: the board declares it in its ENV (`i2c0=sda:0,scl:1,khz:400`) or, if not, whoever opens it first. Opening it later with the same pins — or with `-1`, "whatever it has" — attaches to it; with other pins it is a named error (`el I2C 0 es sda 0, scl 1 a 400 kHz (ENV i2c0): pides 100 kHz`). Its pins are reserved: a `Gpio.Pin` on them says `el pin N es del I2C 0`. `release()` lets it go — except the board's own, or one that someone else is using — and it is released automatically when the program ends. **The `count`.** It has to fit in the array: a negative `count`, one larger than the array's length, or a `null` array throw `RuntimeError` (catchable), with the same text on the PC and on the board. An I²C transaction is never split —the device would take the second piece for a new write—, so more than 256 bytes in one call is also `RuntimeError` («`i2c.write: count (300) supera el máximo de 256 bytes por transacción`»). `count` 0 is valid, both writing and reading: it moves no data, it probes the address (0 if someone answers, `-1` if not).

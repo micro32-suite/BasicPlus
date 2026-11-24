@@ -1477,14 +1477,14 @@ light.release()                                            <span class="comment"
 <p>
   <b>A bus is an <code>I2c.I2C</code></b> (V9), whichever it is: it is the base class, and what a device
   library asks for. <code>I2c.HardI2C(id, sda, scl, baudrate)</code> is a peripheral's, and
-  <code>SoftI2c.SoftI2C(sda, scl)</code> a software one (<a href="#stdlib-softi2c">§14.3.1</a>), for when
+  <code>modSoftI2C.SoftI2C(sda, scl)</code> a software one (<a href="#stdlib-softi2c">§14.3.1</a>), for when
   there are no buses left or the pins do not match. <strong>You go from one to the other by changing
   only the constructor</strong>: methods, limits and errors are the same. And when it is opened, a
   device that was left halfway through a read — the board was reset in the middle — is taken out of
   there.
 </p>
 <pre><code><span class="kw">import</span> I2c
-<span class="kw">import</span> SoftI2c
+<span class="kw">import</span> modSoftI2C
 <span class="kw">import</span> Bmp280
 
 <span class="kw">function</span> <span class="fn">leer</span>(bus: I2c.I2C)                          <span class="comment">// it does not know which one</span>
@@ -1497,7 +1497,7 @@ light.release()                                            <span class="comment"
 
 <span class="kw">function</span> <span class="fn">main</span>(arg: <span class="type">string</span>)
   leer(I2c.HardI2C(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, I2c.FAST()))             <span class="comment">// peripheral 1, on pins 2 and 3</span>
-  leer(SoftI2c.SoftI2C(<span class="num">6</span>, <span class="num">7</span>))                        <span class="comment">// by software, on pins 6 and 7</span>
+  leer(modSoftI2C.SoftI2C(<span class="num">6</span>, <span class="num">7</span>))                        <span class="comment">// by software, on pins 6 and 7</span>
 <span class="kw">end</span> main</code></pre>
 <table>
   <tr><th>Method of an <code>I2c.I2C</code></th><th>Description</th></tr>
@@ -1522,9 +1522,11 @@ light.release()                                            <span class="comment"
   <tr><td><code>writeReg(addr, reg, value): integer</code></td>
       <td>V9: writes one register. <code>-1</code> if it does not answer.</td></tr>
   <tr><td><code>scan(): integer[]</code></td>
-      <td>The addresses from <code>0x08</code> to <code>0x77</code> that answer.</td></tr>
+      <td>The addresses from <code>0x08</code> to <code>0x77</code> that answer. Each one is probed with a
+          0-byte write: some sensors do not answer a read unless they hold a finished measurement (up to
+          V8 one byte was read, and they did not show up).</td></tr>
   <tr><td><code>isPresent(addr): boolean</code></td>
-      <td>V9: whether somebody answers at <code>addr</code>.</td></tr>
+      <td>V9: whether somebody answers at <code>addr</code> (the same probe).</td></tr>
   <tr><td><code>release()</code></td>
       <td>Lets the bus go: if nobody else uses it and it is not the board's, it is closed and its pins
           become free. A second time does nothing; using it afterwards is a <code>RuntimeError</code>
@@ -1537,9 +1539,9 @@ light.release()                                            <span class="comment"
   <code>writeRead</code>; the rest is done with them.
 </p>
 
-<h4 id="stdlib-softi2c">14.3.1 <code>SoftI2c</code> — software I²C (V9)</h4>
+<h4 id="stdlib-softi2c">14.3.1 <code>modSoftI2C</code> — software I²C (V9)</h4>
 <p>
-  <code>SoftI2c.SoftI2C(sda, scl)</code>, or <code>SoftI2C(sda, scl, baudrate)</code>: an I²C bus on any
+  <code>modSoftI2C.SoftI2C(sda, scl)</code>, or <code>SoftI2C(sda, scl, baudrate)</code>: an I²C bus on any
   two pins that can drive open-drain (<code>Machine.openDrainPins()</code>). It lives in its own module
   so that only those who use it pay for it.
 </p>
@@ -1582,8 +1584,8 @@ light.release()                                            <span class="comment"
           if the device does not answer.</td></tr>
   <tr><td><code>scan(bus): integer[]</code></td>
       <td>Scans addresses <code>0x08..0x77</code> and returns an
-          array of those that ACKed. Implemented in BP
-          on top of <code>read</code> — needs no dedicated opcode.</td></tr>
+          array of those that ACKed. Each one is probed with a
+          0-byte write (up to V8, by reading one byte).</td></tr>
   <tr><td><code>release(bus)</code></td>
       <td>Lets the bus go: if nobody else uses it and it is not the board's, it is closed
           and its pins become free (also <code>bus.release()</code> on the class).</td></tr>

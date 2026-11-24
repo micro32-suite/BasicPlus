@@ -14453,7 +14453,10 @@ hace falta para decir qué recibe una librería.
 **Decidido** (Eduardo, 24-nov):
 - **Los nombres:** *«I2C para la clase base, HardI2C para la de hardware y SoftI2C para la de software.»*
 - **Los módulos:** *«Las dos clases de software pueden ir con su propio módulo, y así se ahorra memoria (normalmente
-  utilizarás las hardware y las de software solamente si no te queda otro remedio ).»*
+  utilizarás las hardware y las de software solamente si no te queda otro remedio ).»* Y sus nombres (la tarde del 24-nov):
+  *«Los nombres de los módulos y los de las clases que contienen es mejor que sean diferentes. En vez de softI2c puedes pone
+  modSoftI2C y lo mismo para modSoftSpi»*; *«Son módulos opcionales, no se cargan por defecto.»* (`modSoftI2C` se llamó
+  `SoftI2c` unas horas: los commits del día lo dicen así).
 - **El colector abierto en la RP2350, emulado** (*«3) OK»*): cambia lo de V7/H4, que lo dejó en un error con nombre.
 - **Otro hardware, si ayuda:** *«Aunque digamos software también se puede utilizar otro hardware a parte de los pines. Si
   es de ayuda se puede utilizar por ejemplo un Timer. En el caso de la Pico2 y la Metro podemos tener unas versiones
@@ -14473,13 +14476,13 @@ hace falta para decir qué recibe una librería.
 **Se da por hecho** cuando un programa con un sensor cambie de bus cambiando sólo el constructor, en las tres familias, y
 lo mismo con el SPI.
 
-#### ✅ `#881` — H3.1: el I2C: la base `I2C`, `HardI2C` (el periférico) y `SoftI2c.SoftI2C` (por software) (abierta y **CERRADA el 24-nov** · Eduardo · `43718c20`; lo de las placas, 4b745f6 del runtime)
+#### ✅ `#881` — H3.1: el I2C: la base `I2C`, `HardI2C` (el periférico) y `modSoftI2C.SoftI2C` (por software) (abierta y **CERRADA el 24-nov** · Eduardo · `43718c20`; lo de las placas, 4b745f6 del runtime)
 
 - **Lo que pone cada una:** `I2C`, como si fuera abstracta: `write`, `read` y `writeRead` los pone cada bus (en la base
   lanzan un error con su nombre), y, una vez para todos, `execute`, `release`, `scan`, `isPresent`, `readReg`, `readRegs` y
   `writeReg`. `HardI2C`, la `Bus` de antes; `Bus extends HardI2C` se queda, con su constructor y sus constantes: lo ya escrito
   no cambia, **ni recompilándolo**: siete programas compilados con la V8.1 publicada dan lo mismo byte a byte con el `I2c`
-  nuevo, en las dos VMs (el octavo, de tres hilos, las mismas líneas). `SoftI2C`, en `SoftI2c`: sus dos pines, sus reglas (las
+  nuevo, en las dos VMs (el octavo, de tres hilos, las mismas líneas). `SoftI2C`, en `modSoftI2C`: sus dos pines, sus reglas (las
   del C, con sus textos) y los bits, en BP.
 - **En BP y no en C ni en `native`:** nada en las imágenes; y la clase lo tapa: si un día hace falta más velocidad, se
   cambia por dentro y ningún programa se entera. Medido en la Nucleo: 19–22 kHz (el periférico, 100): 500 lecturas de un
@@ -14488,7 +14491,7 @@ lo mismo con el SPI.
 - **Lo que se iguala de paso en el periférico:** usarlo tras `release()` y una dirección de más de 7 bits eran −1 en
   silencio: error con nombre, en los dos; y soltarlo dos veces ya no es un error. Cuesta 13 µs por operación. Las funciones
   por número, como estaban.
-- **Cuesta:** `I2c.mod`, de 7,8 a 12,4 KB (va en las imágenes: a la C3 le quedan 346 KB); `SoftI2c.mod`, 8,3 KB, sólo para
+- **Cuesta:** `I2c.mod`, de 7,8 a 12,4 KB (va en las imágenes: a la C3 le quedan 346 KB); `modSoftI2C.mod`, 8,3 KB, sólo para
   quien lo usa. `Stdlib.pack`, 37 módulos.
 - **Probado:** `samples/I2cContrato.bp` (nuevo, en el corpus): la misma función, con los dos buses, y las dos actas
   comparadas línea a línea: en el PC, 32 iguales y ninguna distinta, en MOD9 y en MOD8; en la Nucleo, con el BME280, 39
@@ -14545,17 +14548,20 @@ lo mismo con el SPI.
 #### 🧬 `#884` — H3.4: el SPI por software: la base, la del periférico y la de software (abierta el 24-nov · analizada el mismo día, por decidir)
 
 - Para un sensor, no para una memoria ni una pantalla (Eduardo, arriba). El análisis, en `notas/V9_SPI_software.md`: con los
-  nombres del I2C, `SPI`, `HardSPI` (la `Bus` de hoy) y `SoftSPI` (en `SoftSpi`); y la diferencia: en el SPI, lo que de verdad
+  nombres del I2C, `SPI`, `HardSPI` (la `Bus` de hoy) y `SoftSPI` (en `modSoftSpi`); y la diferencia: en el SPI, lo que de verdad
   se cambia sin tocar una librería es `Spi.Device` (el bus, su CS, su velocidad y su modo), que hoy lleva el NÚMERO del bus:
   un constructor más, con un `Spi.SPI`. Nada nuevo en C. Se prueba con un sensor de verdad por SPI (sin ACK, no se sabe si
   llegó): hace falta uno conectado.
 
-#### 🧬 `#890` — `scan()` e `isPresent()` no ven un dispositivo I2C que no contesta a una lectura (abierta el 24-nov · vista al hacer `#888` · propuesta, por decidir)
+#### 🧬 `#890` — `scan()` e `isPresent()` no ven un dispositivo I2C que no contesta a una lectura (abierta el 24-nov · vista al hacer `#888` · Eduardo: *«1) si»* · hecha el mismo día)
 
 - Las dos leen un byte (lo que había en todas las familias), y hay sensores que no contestan a una lectura si no tienen una
   medida hecha (los de Sensirion —SHT3x, SCD4x…—, según sus hojas de datos; ninguno aquí para probarlo): quien comprueba su
-  cableado con `scan()` no lo encuentra. Con el sondeo de `#888`, igual ya en todas las familias, podrían usarlo, como
-  Arduino y MicroPython. En el PC cambian sus líneas (`write … bytes=[]` en vez de `read … count=1`).
+  cableado con `scan()` no lo encuentra.
+- **Hecho:** las dos, y `I2c.scan(bus)`, con el sondeo de `#888` —una escritura de 0 bytes, igual ya en todas las familias—,
+  como Arduino y MicroPython. Sólo cambia `I2c.mod`. En el PC cambian sus líneas (`write … bytes=[]` en vez de
+  `read … count=1`). El contrato del H3, en las dos VMs, igual; las referencias, al día. Por ver en las placas, al grabarlas
+  con lo del SPI.
 
 #### ✅ `#889` — un dispositivo I2C que se quedó a media lectura (la placa se reinició en medio) dejaba el bus del periférico sin contestar al abrirlo (abierta y **CERRADA el 24-nov** · vista en la Nucleo al repetir el contrato · 4b745f6 del runtime)
 

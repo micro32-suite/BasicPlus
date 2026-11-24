@@ -1,6 +1,6 @@
 // I2cContrato.bp — V9 H3.1 (#881): los dos buses I2C se INTERCAMBIAN. La misma función, que no
 // sabe cuál le dan, hace la misma secuencia con el del periférico (I2c.HardI2C) y con el de
-// software (SoftI2c.SoftI2C) —lo que va bien y lo que va mal—, y se comparan las dos actas línea
+// software (modSoftI2C.SoftI2C) —lo que va bien y lo que va mal—, y se comparan las dos actas línea
 // a línea: lo único distinto es el constructor, y el nombre del bus en los textos, que se quita
 // para comparar. Una línea no se compara: el tope de 20 ms de una transacción es del periférico
 // (su bus lo comparten el sistema y los packs); por software cabe.
@@ -11,7 +11,7 @@
 module I2cContrato
   import Core
   import I2c
-  import SoftI2c
+  import modSoftI2C
   import Machine
 
   var acta: string := ""
@@ -168,7 +168,7 @@ module I2cContrato
       scl := 21
     endif
     var h: string[] := split(secuencia(I2c.HardI2C(bus, sda, scl, I2c.I2C.STANDARD), conSensor), "|")
-    var s: string[] := split(secuencia(SoftI2c.SoftI2C(sda, scl), conSensor), "|")
+    var s: string[] := split(secuencia(modSoftI2C.SoftI2C(sda, scl), conSensor), "|")
     var nh: string := "I2C " + intToString(bus)
     var ns: string := "SoftI2C " + intToString(sda) + "/" + intToString(scl)
     var iguales:   integer := 0

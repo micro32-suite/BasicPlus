@@ -2,8 +2,8 @@
 // direcciones encontradas, e imprime cada una.
 //
 // La función `I2c.scan(bus)` está implementada en BP dentro del
-// módulo I2c. Hace `I2c.read(1)` a cada address 0x08..0x77 y
-// recolecta las que respondieron en un integer[].
+// módulo I2c. Sondea cada address 0x08..0x77 con una escritura de 0
+// bytes y recolecta las que respondieron en un integer[].
 //
 // Pinout: bus1 con SDA=GP2, SCL=GP3 (ajusta si tienes otro cableado).
 module I2cScan

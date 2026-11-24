@@ -1,15 +1,15 @@
 // ============================================================
-// SoftI2c.bp — un bus I2C por SOFTWARE (V9 H3.1): en dos pines cualesquiera, para cuando no
+// modSoftI2C.bp — un bus I2C por SOFTWARE (V9 H3.1): en dos pines cualesquiera, para cuando no
 // quedan buses del periférico o sus pines no son los del cableado.
 //
 //   import I2c
-//   import SoftI2c
-//   var bus: I2c.I2C := SoftI2c.SoftI2C(4, 5)            // sda 4, scl 5
+//   import modSoftI2C
+//   var bus: I2c.I2C := modSoftI2C.SoftI2C(4, 5)            // sda 4, scl 5
 //   var s: Bmp280.Sensor := Bmp280.Sensor(bus, 0x76)     // como con un I2c.HardI2C
 //
 // Es un I2c.I2C: los mismos métodos que el del periférico, con los mismos límites (3 mensajes
 // y 256 bytes por transacción) y los mismos errores; sólo cambia el constructor. Va en su
-// módulo para que no lo pague quien no lo usa.
+// módulo, opcional, para que no lo pague quien no lo usa.
 //
 // LOS PINES van en colector abierto, con sus RESISTENCIAS a la alimentación (de 1 a 10
 // kohmios: las de todo bus I2C; los módulos de sensores suelen traerlas). Al abrir se
@@ -18,14 +18,14 @@
 // reinició en medio—, se le dan hasta 9 relojes y un STOP.
 //
 // LA VELOCIDAD: el baudrate es el MÁXIMO (medio bit no dura nunca menos de lo que pide). Los
-// bits los hace el intérprete, y el reloj de verdad es más lento: unos 20 kHz en la Nucleo, a
-// 160 MHz. Para un sensor sobra; para una pantalla, el periférico. Un dispositivo puede
-// sujetar el reloj hasta unos 50 ms.
+// bits los hace el intérprete, y el reloj de verdad es más lento: unos 20 kHz en la Nucleo y en
+// la Metro, y 10 en la S3. Para un sensor sobra; para una pantalla, el periférico. Un
+// dispositivo puede sujetar el reloj hasta unos 50 ms.
 //
 // Cada operación va ENTERA: otro hilo que use el mismo objeto espera a que acabe. En el PC no
 // hay pines: cada operación escribe una línea y lo leído es cero, como con el periférico.
 // ============================================================
-module SoftI2c
+module modSoftI2C
 
   import Core
   import I2c
@@ -364,4 +364,4 @@ module SoftI2c
 
   end SoftI2C
 
-end SoftI2c
+end modSoftI2C

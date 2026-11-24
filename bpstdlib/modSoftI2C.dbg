@@ -1,6 +1,6 @@
 dbg 3
-module SoftI2c
-source C:\lenguajes\pm\bpstdlib\SoftI2c.bp
+module modSoftI2C
+source C:\lenguajes\pm\bpstdlib\modSoftI2C.bp
 lines
 0 0
 29 0

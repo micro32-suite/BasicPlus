@@ -7,12 +7,12 @@
 // ============================================================
 module Bmp280Demo
   import I2c
-  // import SoftI2c
+  // import modSoftI2C
   import Bmp280
 
   function Main()
     var bus: I2c.I2C := I2c.HardI2C(0, 20, 21, 100000)     // SDA=GP20, SCL=GP21
-    // var bus: I2c.I2C := SoftI2c.SoftI2C(20, 21)         // por software, en los mismos pines
+    // var bus: I2c.I2C := modSoftI2C.SoftI2C(20, 21)         // por software, en los mismos pines
 
     print "Escaneando bus I2C..."
     var devs: integer[] := bus.scan()

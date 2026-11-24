@@ -220,7 +220,7 @@ function Main()
 end Main
 ```
 
-> Every peripheral is a class: `Gpio.Pin`, `I2c.HardI2C` (or `SoftI2c.SoftI2C`, I²C on any two pins), `Spi.Bus`, `Spi.Device`, `Uart.Port`, `Pwm.Slice`, `Adc.Channel`, `Rtc.Clock`, `Wdt.Timer`, `Timer.Alarm`. One that takes something — its pins, its channel — gives it back with its `release()` or when it is destroyed (a bus, `I2c.HardI2C` or `Spi.Bus`, only with `release()`: it has no destructor, on purpose), and in any case when the program ends. **The same program runs on every family** — only the pin numbers change, as long as the board has what it uses: there is no `Wdt` on the STM32 boards, for instance (it throws a catchable `RuntimeError`), and the GUI needs a screen and its packs.
+> Every peripheral is a class: `Gpio.Pin`, `I2c.HardI2C` (or `modSoftI2C.SoftI2C`, I²C on any two pins), `Spi.Bus`, `Spi.Device`, `Uart.Port`, `Pwm.Slice`, `Adc.Channel`, `Rtc.Clock`, `Wdt.Timer`, `Timer.Alarm`. One that takes something — its pins, its channel — gives it back with its `release()` or when it is destroyed (a bus, `I2c.HardI2C` or `Spi.Bus`, only with `release()`: it has no destructor, on purpose), and in any case when the program ends. **The same program runs on every family** — only the pin numbers change, as long as the board has what it uses: there is no `Wdt` on the STM32 boards, for instance (it throws a catchable `RuntimeError`), and the GUI needs a screen and its packs.
 
 ## Build & run
 

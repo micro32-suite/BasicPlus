@@ -29,7 +29,7 @@
 //        bus.write(0x48, [0x00], 1)
 //
 //      I2C es la base: un bus, sea el del periférico (HardI2C) o uno por software
-//      (SoftI2c.SoftI2C, en su módulo: en dos pines cualesquiera, para cuando no quedan buses
+//      (modSoftI2C.SoftI2C, en su módulo: en dos pines cualesquiera, para cuando no quedan buses
 //      o los pines no coinciden). Es lo que pide la librería de un dispositivo, que no sabe
 //      cuál es: se cambia de uno a otro cambiando el constructor, y lo demás es igual. Bus es
 //      HardI2C con el nombre de siempre: lo ya escrito no cambia.
@@ -126,15 +126,15 @@ module I2c
 
   // Escanea el bus completo (direcciones I2C válidas 0x08..0x77) y
   // devuelve un array con las direcciones de los dispositivos que
-  // respondieron al ACK. Implementado puramente en BP llamando a
-  // readBus(1 byte) — no necesita opcode dedicado.
+  // respondieron al ACK. Cada una se sondea con una escritura de 0
+  // bytes (#890): hay sensores que no contestan a una lectura.
   public function scan(bus: integer): integer[]
-    var rxbuf: integer[] := [0]
+    var nada: integer[] := [0]
     var max: integer[] := newIntArray(112)        // pre-alloc 112 slots
     var found: integer := 0
     var addr: integer := 0x08
     while addr < 0x78 do
-      var rc: integer := readBus(bus, addr, rxbuf, 1)
+      var rc: integer := writeBus(bus, addr, nada, 0)
       if rc >= 0 then
         max[found] := addr
         found := found + 1
@@ -341,7 +341,7 @@ module I2c
   end __hex
 
   // ============================================================
-  // Clase I2C — un bus I2C: la base de HardI2C (el periférico) y de SoftI2c.SoftI2C (por
+  // Clase I2C — un bus I2C: la base de HardI2C (el periférico) y de modSoftI2C.SoftI2C (por
   // software). Como si fuera abstracta: los métodos que tocan el cable los pone cada bus, y
   // los demás se hacen con ellos, una vez. Una clase propia también puede ser un I2C (un
   // multiplexor, un sensor simulado para una prueba): hereda de ésta y pone los suyos.
@@ -410,14 +410,15 @@ module I2c
     end execute
 
     // Escanea el bus completo (0x08..0x77) y devuelve un array con las direcciones que
-    // respondieron.
+    // respondieron. Cada una se sondea con una escritura de 0 bytes (#890): hay sensores que
+    // no contestan a una lectura si no tienen una medida hecha.
     public function scan(): integer[]
-      var rxbuf: integer[] := [0]
+      var nada:  integer[] := [0]
       var max:   integer[] := newIntArray(112)
       var found: integer := 0
       var addr:  integer := 0x08
       while addr < 0x78 do
-        if this.read(addr, rxbuf, 1) >= 0 then
+        if this.write(addr, nada, 0) >= 0 then
           max[found] := addr
           found := found + 1
         endif
@@ -428,10 +429,10 @@ module I2c
       return result
     end scan
 
-    // ¿Contesta alguien en `addr`?
+    // ¿Contesta alguien en `addr`? El mismo sondeo.
     public function isPresent(addr: integer): boolean
-      var rxbuf: integer[] := [0]
-      return this.read(addr, rxbuf, 1) >= 0
+      var nada: integer[] := [0]
+      return this.write(addr, nada, 0) >= 0
     end isPresent
 
     // Los REGISTROS de un dispositivo: casi todos los sensores son eso, un número de registro

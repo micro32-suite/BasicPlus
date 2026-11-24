@@ -6,7 +6,7 @@
 // un índice IAQ aproximado, en bucle. Recordatorio: el BME688 NO
 // mide CO2; el IAQ es una heurística, no BSEC.
 //
-// El bus, el del periférico; por software (V9 H3), SoftI2c.SoftI2C(20, 21) y su import: lo
+// El bus, el del periférico; por software (V9 H3), modSoftI2C.SoftI2C(20, 21) y su import: lo
 // demás es igual.
 //
 // El bucle es infinito a propósito: prueba el Stop del IDE / kill.

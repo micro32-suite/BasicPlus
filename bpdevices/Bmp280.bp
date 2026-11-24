@@ -11,7 +11,7 @@
 // Uso, con un bus del periférico o por software (V9 H3):
 //   import I2c
 //   import Bmp280
-//   var bus: I2c.I2C := I2c.HardI2C(0, 20, 21, 100000)   // o SoftI2c.SoftI2C(20, 21)
+//   var bus: I2c.I2C := I2c.HardI2C(0, 20, 21, 100000)   // o modSoftI2C.SoftI2C(20, 21)
 //   var s: Bmp280.Sensor := Bmp280.Sensor(bus, 0x76)
 //   if s.begin() then
 //     s.measure()
