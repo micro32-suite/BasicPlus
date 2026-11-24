@@ -1474,7 +1474,8 @@ luz.release()                                          <span class="comment">// 
   de un dispositivo. <code>I2c.HardI2C(id, sda, scl, baudrate)</code> es el de un periférico, y
   <code>SoftI2c.SoftI2C(sda, scl)</code> uno por software (<a href="#stdlib-softi2c">§14.3.1</a>), para
   cuando no quedan buses o los pines no coinciden. <strong>Se cambia de uno a otro cambiando sólo el
-  constructor</strong>: los métodos, los límites y los errores son los mismos.
+  constructor</strong>: los métodos, los límites y los errores son los mismos. Y al abrirlo, un
+  dispositivo que se quedó a media lectura —la placa se reinició en medio— se saca de ahí.
 </p>
 <pre><code><span class="kw">import</span> I2c
 <span class="kw">import</span> SoftI2c
@@ -1539,11 +1540,10 @@ luz.release()                                          <span class="comment">// 
   <li><strong>Las resistencias.</strong> Como todo bus I²C, necesita las suyas a la alimentación (de 1
       a 10 kΩ; los módulos de sensores suelen traerlas). Al abrir se comprueba que las dos líneas
       suben y, si no, es un error con nombre: «<code>SoftI2C 4/5: el pin 5 (scl) no sube: sin
-      resistencia, o alguien lo sujeta</code>». Y si un dispositivo se quedó a media lectura —la placa
-      se reinició en medio—, se le saca de ahí.</li>
+      resistencia, o alguien lo sujeta</code>».</li>
   <li><strong>La velocidad.</strong> El <code>baudrate</code> (100 kHz si no se dice) es el
-      <em>máximo</em>: los bits los hace el intérprete, y el reloj de verdad ronda los 20 kHz (en la
-      Nucleo, a 160 MHz). Sobra para un sensor; para una pantalla o una memoria, el periférico. Un
+      <em>máximo</em>: los bits los hace el intérprete, y el reloj de verdad ronda los 20 kHz en la Nucleo
+      y en la Metro, y los 10 en la S3. Sobra para un sensor; para una pantalla o una memoria, el periférico. Un
       dispositivo puede sujetar el reloj hasta unos 50 ms.</li>
   <li><strong>Los hilos.</strong> Cada operación va entera: otro hilo que use el mismo bus espera a
       que acabe.</li>
@@ -1597,7 +1597,8 @@ luz.release()                                          <span class="comment">// 
   transacción I²C no se parte —el dispositivo tomaría el segundo trozo por una escritura
   nueva—, así que más de 256 bytes en una llamada también es <code>RuntimeError</code>
   («<code>i2c.write: count (300) supera el máximo de 256 bytes por transacción</code>»).
-  <code>count</code> 0 es válido: una transacción vacía, que sirve para sondear una dirección.
+  <code>count</code> 0 es válido, al escribir y al leer: no mueve datos, sondea la dirección (0 si
+  contestan, <code>-1</code> si no).
 </p>
 <p>
   Constantes:

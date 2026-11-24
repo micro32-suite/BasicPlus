@@ -84,7 +84,7 @@ en §ABIERTAS, en el bloque de V9:
 |---|---|---|
 | **H1** | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`) | ⬜ abierto el 22-nov |
 | **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA; cada acción del IDE, un comando, con la `Action` de Swing como su cara en la ventana y MCP como la de la IA (Eduardo, 22-nov). Va antes que el H1 | ⏳ abierto el 22-nov; H2.1, el análisis, H2.2, los comandos (53, probados por Eduardo), y H2.3, la IA por MCP (probado por una IA de verdad en la Pico 2 y en la VM-C), hechos; H2.4 (el depurador, por la IA), analizado y aplazado a una segunda fase (23-nov): lo que haga falta, lo dirá el uso, en el H1 |
-| **H3** | **el I2C y el SPI por software** (Eduardo, 24-nov): una clase base por bus, la del periférico y la de software, que se intercambian cambiando sólo el constructor; las de software, cada una en su módulo (`#881`–`#884`) | ⏳ abierto el 24-nov; el I2C, hecho y probado en el PC y en la Nucleo (falta verlo en las otras familias, que pide grabarlas); el SPI, analizado |
+| **H3** | **el I2C y el SPI por software** (Eduardo, 24-nov): una clase base por bus, la del periférico y la de software, que se intercambian cambiando sólo el constructor; las de software, cada una en su módulo (`#881`–`#884`) | ⏳ abierto el 24-nov; el I2C, hecho y visto en las tres familias con un sensor; el SPI, analizado |
 
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
@@ -14464,16 +14464,16 @@ hace falta para decir qué recibe una librería.
 
 | apartado | qué | ficha | estado |
 |---|---|---|---|
-| **H3.1** | el I2C: la base `I2C`, `HardI2C` y, en su módulo, `SoftI2C` | `#881` | 🧬 hecho el 24-nov: las dos VMs y la Nucleo; las otras placas, con `#882` |
-| **H3.2** | el colector abierto donde falta o falla: la RP2350, las ESP32 y el PC | `#882` | 🧬 hecho el 24-nov y compilado en las ocho imágenes; por ver en las placas |
-| **H3.3** | las librerías de los dispositivos I2C, con el bus como objeto | `#883` | 🧬 hecho el 24-nov; `Bmp280`, probada en la Nucleo |
+| **H3.1** | el I2C: la base `I2C`, `HardI2C` y, en su módulo, `SoftI2C` | `#881`, `#888`, `#889` | ✅ 24-nov: las dos VMs y, con un sensor, la Nucleo, la Metro y la S3 |
+| **H3.2** | el colector abierto donde falta o falla: la RP2350, las ESP32 y el PC | `#882` | ✅ 24-nov: visto en la Nucleo, la Metro y la S3 |
+| **H3.3** | las librerías de los dispositivos I2C, con el bus como objeto | `#883` | 🧬 hecho el 24-nov; `Bmp280`, probada en la Nucleo, la Metro y la S3; las otras tres, sin su chip |
 | **H3.4** | el SPI: el análisis, y la base, la del periférico y la de software | `#884` | ⬜ analizado (`notas/V9_SPI_software.md`), por decidir |
 | **H3.5** | la Pico 2 y la Metro, por la PIO | — | para más adelante (Eduardo) |
 
 **Se da por hecho** cuando un programa con un sensor cambie de bus cambiando sólo el constructor, en las tres familias, y
 lo mismo con el SPI.
 
-#### 🧬 `#881` — H3.1: el I2C: la base `I2C`, `HardI2C` (el periférico) y `SoftI2c.SoftI2C` (por software) (abierta el 24-nov · Eduardo · hecha el mismo día; por ver en las placas de `#882`)
+#### ✅ `#881` — H3.1: el I2C: la base `I2C`, `HardI2C` (el periférico) y `SoftI2c.SoftI2C` (por software) (abierta y **CERRADA el 24-nov** · Eduardo · `43718c20`; lo de las placas, 4b745f6 del runtime)
 
 - **Lo que pone cada una:** `I2C`, como si fuera abstracta: `write`, `read` y `writeRead` los pone cada bus (en la base
   lanzan un error con su nombre), y, una vez para todos, `execute`, `release`, `scan`, `isPresent`, `readReg`, `readRegs` y
@@ -14501,9 +14501,16 @@ lo mismo con el SPI.
 - **Lo que enseñó MOD8:** un método redefinido en OTRO módulo que recibe una clase (`execute(addr, t: I2c.Transaction)`) no
   se ve como redefinido (la firma dice `Transaction` en uno e `I2c.Transaction` en el otro): corría el de la base. En MOD9,
   bien. De ahí que `execute` esté en la base, sobre una operación interna con enteros y arrays.
+- **En las placas (24-nov, tarde; Eduardo: *«Graba la nucleo, tienes la Metro conectada»*, *«prueba el sensor en la Metro»*, y
+  la S3), con el BME280 en cada una y la `Stdlib.pack` nueva:** el contrato, con los casos de `#888`, 43 iguales y ninguna
+  distinta en las tres. `Bmp280` con `HardI2C`, `Bus`, el número y `SoftI2C`: la misma temperatura y la misma presión. Dos
+  hilos a la vez sobre `SoftI2C` —en la Metro y en la S3, con dos núcleos—, 400 lecturas y ninguna mal; soltarlo con tres
+  hilos usándolo, cinco veces; los errores con nombre. 500 lecturas de un registro, por software y con el periférico: la
+  Nucleo, 965 y 293 ms; la Metro, 1046 y 280; la S3, 2108 y 413 (unos 9 kHz). En la S3 los cables de SDA y SCL estaban
+  cambiados: se vio en el acto, abriendo el de software en el otro orden. Salieron dos cosas del periférico: `#888` y `#889`.
 - **Hecho cuando:** lo mismo que en la Nucleo, en una RP2350 y en una ESP32, con `#882`.
 
-#### 🧬 `#882` — H3.2: el colector abierto (`Gpio.Pin.OPEN_COLLECTOR`): emulado en la RP2350 y en el PC, y en las ESP32, que se lea (abierta el 24-nov · Eduardo: *«3) OK»* · hecha el mismo día; por ver en las placas)
+#### ✅ `#882` — H3.2: el colector abierto (`Gpio.Pin.OPEN_COLLECTOR`): emulado en la RP2350 y en el PC, y en las ESP32, que se lea (abierta el 24-nov · Eduardo: *«3) OK»* · **CERRADA el 24-nov**, `e619a20` del runtime)
 
 - **Para qué:** un bus por software —I2C hoy; 1-Wire o un DHT mañana— baja una línea o la suelta, y la LEE.
 - **Las ESP32 (las cinco), un fallo:** el pin se abre con `GPIO_MODE_OUTPUT_OD`, sólo salida, y `gpio_get_level` da siempre
@@ -14519,6 +14526,10 @@ lo mismo con el SPI.
   emulado (una máscara de 48 bits: `write` mueve la dirección); la STM32, con el latch a 1 antes de configurarlo; y el
   perfil del PC, en las dos VMs (`Machine.openDrainPins()`, los 30). Las ocho imágenes compilan (la RP2350, las cinco ESP32
   y las dos STM32); **sin grabar**. `PinMapa` (en el corpus) y la referencia, al día.
+- **Visto en las placas (24-nov, tarde), sin cables** —con las resistencias internas se distingue de una salida normal:
+  suelto y con pull-down se lee 0; una salida a 1, 1—: nace suelto, baja, se suelta y se lee; también tras dejarlo abajo,
+  y tras una salida a 0. La Nucleo, dos pines, 28 de 28; la Metro, tres (el 33 entre ellos: el segundo banco), 42 de 42;
+  la S3, dos, 28 de 28.
 - **Hecho cuando:** en las tres familias, un pin en colector abierto se suelta, se baja y se lee.
 
 #### 🧬 `#883` — H3.3: las librerías de los dispositivos I2C (`bpdevices`), con el bus como objeto (abierta el 24-nov · hecha el mismo día)
@@ -14539,11 +14550,51 @@ lo mismo con el SPI.
   un constructor más, con un `Spi.SPI`. Nada nuevo en C. Se prueba con un sensor de verdad por SPI (sin ACK, no se sabe si
   llegó): hace falta uno conectado.
 
-#### 🧬 `#887` — STM32: el error de una `I2c.Transaction` de más de 256 bytes salía torcido: «ld bytes supera el máximo de 300 bytes» (abierta el 24-nov · la cazó el contrato del H3 en la Nucleo; desde V7 · arreglada el mismo día; por ver en la Nucleo)
+#### 🧬 `#890` — `scan()` e `isPresent()` no ven un dispositivo I2C que no contesta a una lectura (abierta el 24-nov · vista al hacer `#888` · propuesta, por decidir)
+
+- Las dos leen un byte (lo que había en todas las familias), y hay sensores que no contestan a una lectura si no tienen una
+  medida hecha (los de Sensirion —SHT3x, SCD4x…—, según sus hojas de datos; ninguno aquí para probarlo): quien comprueba su
+  cableado con `scan()` no lo encuentra. Con el sondeo de `#888`, igual ya en todas las familias, podrían usarlo, como
+  Arduino y MicroPython. En el PC cambian sus líneas (`write … bytes=[]` en vez de `read … count=1`).
+
+#### ✅ `#889` — un dispositivo I2C que se quedó a media lectura (la placa se reinició en medio) dejaba el bus del periférico sin contestar al abrirlo (abierta y **CERRADA el 24-nov** · vista en la Nucleo al repetir el contrato · 4b745f6 del runtime)
+
+- **Qué pasaba:** el dispositivo sujeta los datos esperando sus relojes y el periférico no puede ni hacer su START. Medido en
+  la Nucleo, con el BME280 parado en cada bit de una lectura: −1 en las primeras operaciones (de 1 a 7, hasta 600 ms) —un
+  programa que mira si está el sensor dice que no—; y tras la lectura de 0 bytes de `#888`, en todas. `SoftI2C` lo sacaba
+  al abrir; el periférico, no: «se intercambian» tampoco en eso. Le pasa a cualquier placa que se reinicie en mitad de una
+  lectura: un watchdog, un pico de tensión.
+- **Hecho:** lo mismo que `SoftI2C`, en el común (`i2c.c`, al abrir la cintura), para las tres familias: con los dos pines en
+  colector abierto, y sólo si los datos están abajo, hasta 9 relojes (acaba su byte y no recibe su ACK) y un STOP; y después
+  se abre el periférico. Se dice en el log. Con los datos arriba no se mueve una línea. Cerrar y volver a abrir un bus
+  también lo saca.
+- **Probado:** `test_bus`, con un dispositivo de mentira (en rojo sin el arreglo); y en la Nucleo, la Metro y la S3, el sensor
+  parado en cada uno de los bits: la primera operación ya contesta, en los nueve casos de las tres.
+
+#### ✅ `#888` — I2C con 0 bytes, el sondeo de una dirección (`#534`): cada familia hacía una cosa, y LEER 0 bytes dejaba el bus inservible (abierta y **CERRADA el 24-nov** · la cazó el contrato del H3 en la Metro; desde V7 · 4b745f6 del runtime)
+
+- **Lo prometido** (la decisión de `#534`, y la referencia): «`count` 0 es válido: una transacción vacía, que sirve para
+  sondear una dirección». **Lo que había:** escribir 0 bytes, en la RP2350 siempre 0, haya alguien o no (su periférico no
+  sabe: el START y el STOP van pegados a un dato, y el SDK ni mira el bus); en las ESP32 siempre −1 (el IDF la rechaza;
+  del código); en la STM32, bien. Leer 0 bytes, en la STM32 dejaba el bus muerto —todo −1 hasta reabrirlo— y en `SoftI2C` lo
+  siguiente era basura (el id, 3 en vez de 96): al que contesta a una lectura le toca ya sacar su primer bit y, si es un 0,
+  sujeta los datos y no hay STOP que valga.
+- **Hecho:** 0 bytes, al escribir y al leer, es el sondeo: START, la dirección en ESCRITURA, su ACK y STOP. La regla, en el
+  común (`i2c.c`); la RP2350, en los dos pines del bus, en colector abierto (como MicroPython); las ESP32, con
+  `i2c_master_probe`; la STM32, su escritura de 0 bytes. `SoftI2C`, igual. Y una escritura en la que el dispositivo deja de
+  contestar a la mitad es −1 en todas (el SDK de la RP2350 devolvía los bytes que sí). En el PC, las líneas de siempre.
+- **Lo que enseñó la Metro con el sensor puesto:** la primera versión del sondeo dejaba el periférico de la RP2350 sin contestar
+  (todo −1 después), y sin un dispositivo que contestara no se veía. Era el ORDEN en que se le quitan y se le devuelven
+  los pines: el reloj, el primero las dos veces; al revés, toma la ida por un START y la vuelta no es un STOP, y da el bus
+  por ocupado. Cambiado sólo eso, bien.
+- **Probado:** `test_bus` (saboteado, en rojo); los casos nuevos de `samples/I2cContrato.bp`: en el PC, 34 iguales; en la
+  Nucleo, la Metro y la S3, con el sensor, 43 y ninguna distinta; y tras leer 0 bytes, en los dos buses, todo sigue bien.
+
+#### ✅ `#887` — STM32: el error de una `I2c.Transaction` de más de 256 bytes salía torcido: «ld bytes supera el máximo de 300 bytes» (abierta el 24-nov · la cazó el contrato del H3 en la Nucleo; desde V7 · **CERRADA el 24-nov**, `e619a20` del runtime)
 
 - El total se escribía con `PRId64`, y la `printf` de la newlib-nano de la STM32 no lleva los de 64 bits: pintaba «ld» y
   desplazaba el resto. Era el único que quedaba en el código de las placas (el resto va por `bpvm_format_i64`). Arreglado
-  (`builtins.c`); el texto, el de siempre. Se verá en la Nucleo al grabarla con lo de `#882`.
+  (`builtins.c`); el texto, el de siempre. Visto en la Nucleo, grabada el 24-nov: el contrato, ninguna distinta.
 
 #### 🧬 `#886` — un módulo que se llama `Main` con una `function Main()` se ejecuta DOS veces, sin un aviso (abierta el 24-nov · vista de paso, con un programa de prueba · pendiente)
 

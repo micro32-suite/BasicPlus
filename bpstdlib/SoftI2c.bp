@@ -211,6 +211,9 @@ module SoftI2c
     public function read(addr: integer, data: integer[], count: integer): integer
       this.check_(addr)
       I2c.__checkArray(data, count, "i2c.read", "el array", 256)
+      // 0 bytes, el sondeo de la dirección, en escritura (#888): al que contesta a una lectura
+      // le toca ya sacar su primer bit, y con un 0 sujeta los datos: no habría STOP.
+      if count == 0 then return this.move_(addr, [1, 0], 1, null, null)
       return this.move_(addr, [2, count], 1, null, data)
     end read
 
