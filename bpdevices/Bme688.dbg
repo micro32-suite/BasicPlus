@@ -2,206 +2,274 @@ dbg 3
 module Bme688
 source C:\lenguajes\pm\bpdevices\Bme688.bp
 lines
-43 96
-56 97
-76 99
-92 103
-105 104
-125 106
-141 111
-166 112
-193 116
-211 117
-232 118
-260 122
-277 123
-292 124
-311 132
-330 133
-340 134
-358 135
-375 136
-388 138
-406 139
-415 140
-424 141
-439 146
-450 147
-461 148
-483 149
-501 150
-512 151
-534 152
-556 153
-567 154
-585 155
-607 156
-625 163
-656 164
-686 165
-704 166
-731 167
-769 168
-791 169
-829 170
-867 171
-889 172
-911 173
-949 174
-987 175
-1002 176
-1035 177
-1064 178
-1086 179
-1108 180
-1130 181
-1145 182
-1167 183
-1189 184
-1227 185
-1249 186
-1271 187
-1300 191
-1315 192
-1334 193
-1353 194
-1369 195
-1388 196
-1413 202
-1432 203
-1442 204
-1445 205
-1459 206
-1493 207
-1503 208
-1517 209
-1525 211
-1536 212
-1558 213
-1587 214
-1628 215
-1655 216
-1684 217
-1701 218
-1724 219
-1747 220
-1772 227
-1787 228
-1812 229
-1827 230
-1844 231
-1863 236
-1905 237
-1939 238
-1967 239
-1980 240
-2012 244
-2041 245
-2069 246
-2097 247
-2131 248
-2181 249
-2215 250
-2231 251
-2242 252
-2276 253
-2304 254
-2328 255
-2344 256
-2376 257
-2427 259
-2439 261
-2458 265
-2477 266
-2523 267
-2605 268
-2625 269
-2645 270
-2671 271
-2689 272
-2706 274
-2724 275
-2741 277
-2760 283
-2770 284
-2780 285
-2786 286
-2796 287
-2805 288
-2827 290
-2860 295
-2864 296
-2877 297
-2889 299
-2919 300
-2959 301
-2979 302
-3003 303
-3017 304
-3109 305
-3131 312
-3140 313
-3152 314
-3194 315
-3211 317
-3229 318
-3260 320
-3296 323
-3322 324
-3340 325
-3357 327
-3375 328
-3392 330
-3414 335
-3436 338
-3458 341
-3480 344
-3502 347
-3522 350
-3542 353
-3562 356
-3582 359
-3602 362
-3617 89
-3625 90
-3633 91
+0 0
+29 0
+40 0
+43 100
+56 101
+76 103
+89 0
+92 107
+105 108
+125 110
+138 0
+141 117
+155 117
+180 118
+199 0
+202 122
+228 0
+231 126
+260 0
+263 130
+285 131
+300 132
+316 0
+319 140
+338 141
+348 142
+366 143
+383 144
+396 146
+414 147
+423 148
+432 149
+444 0
+447 154
+458 155
+469 156
+491 157
+509 158
+520 159
+542 160
+564 161
+575 162
+593 163
+615 164
+630 0
+633 171
+664 172
+694 173
+712 174
+739 175
+777 176
+799 177
+837 178
+875 179
+897 180
+919 181
+957 182
+995 183
+1010 184
+1043 185
+1072 186
+1094 187
+1116 188
+1138 189
+1153 190
+1175 191
+1197 192
+1235 193
+1257 194
+1279 195
+1305 0
+1308 199
+1323 200
+1342 201
+1361 202
+1377 203
+1396 204
+1418 0
+1421 210
+1440 211
+1450 212
+1453 213
+1467 214
+1501 215
+1511 216
+1525 217
+1533 219
+1544 220
+1566 221
+1595 222
+1636 223
+1663 224
+1692 225
+1709 226
+1732 227
+1755 228
+1777 0
+1780 235
+1795 236
+1820 237
+1835 238
+1852 239
+1868 0
+1871 244
+1913 245
+1947 246
+1975 247
+1988 248
+2017 0
+2020 252
+2049 253
+2077 254
+2105 255
+2139 256
+2189 257
+2223 258
+2239 259
+2250 260
+2284 261
+2312 262
+2336 263
+2352 264
+2384 265
+2435 267
+2447 269
+2463 0
+2466 273
+2485 274
+2531 275
+2613 276
+2633 277
+2653 278
+2679 279
+2697 280
+2714 282
+2732 283
+2749 285
+2765 0
+2768 291
+2778 292
+2788 293
+2794 294
+2804 295
+2813 296
+2835 298
+2865 0
+2868 303
+2872 304
+2885 305
+2897 307
+2927 308
+2967 309
+2987 310
+3011 311
+3025 312
+3117 313
+3136 0
+3139 320
+3148 321
+3160 322
+3202 323
+3219 325
+3237 326
+3268 328
+3304 331
+3330 332
+3348 333
+3365 335
+3383 336
+3400 338
+3419 0
+3422 343
+3441 0
+3444 346
+3463 0
+3466 349
+3485 0
+3488 352
+3507 0
+3510 355
+3527 0
+3530 358
+3547 0
+3550 361
+3567 0
+3570 364
+3587 0
+3590 367
+3607 0
+3610 370
+3622 0
+3625 87
+3634 88
+3642 89
+3660 0
+3663 93
+3671 94
+3679 95
+3697 0
+3732 0
+3766 0
+3785 0
+3803 0
+3817 0
+3836 0
+3860 0
+3879 0
+3900 0
+3917 0
+3936 0
+3950 0
+3967 0
+3988 0
+4005 0
+4022 0
+4040 0
+4063 0
+4084 0
+4103 0
+4122 0
+4141 0
+4162 0
+4183 0
+4200 0
+4217 0
+4231 0
+4248 0
+4265 0
+4284 0
 vars
+func __init 0
+func __startup 29
 func Sensor.s8 40
 this -24 8 0 ?
 v -16 4 0 integer
 func Sensor.s16 89
 this -24 8 0 ?
 v -16 4 0 integer
-func Sensor.writeReg 138
+func Sensor.bus_ 138
+this -20 8 0 ?
+func Sensor.writeReg 199
 this -28 8 0 ?
 reg -20 4 0 integer
 val -16 4 0 integer
-b 0 8 0 ?
-func Sensor.readRegs 190
+func Sensor.readRegs 228
 this -36 8 0 ?
 reg -28 4 0 integer
 buf -24 8 0 ref
 n -16 4 0 integer
-p 0 8 0 ?
-func Sensor.readReg 257
+func Sensor.readReg 260
 this -24 8 0 ?
 reg -16 4 0 integer
 buf 4 8 0 ?
-func Sensor.begin 308
+func Sensor.begin 316
 this -20 8 0 ?
-func Sensor.readCalibration 436
+func Sensor.readCalibration 444
 this -20 8 0 ?
 c 0 8 0 ?
 b1 8 8 0 ?
 b2 20 8 0 ?
 b3 28 8 0 ?
-func Sensor.injectCalibration 622
+func Sensor.injectCalibration 630
 this -28 8 0 ?
 c -20 8 0 ref
-func Sensor.configure 1297
+func Sensor.configure 1305
 this -20 8 0 ?
 rh 4 4 0 integer
-func Sensor.measure 1410
+func Sensor.measure 1418
 this -20 8 0 ?
 tries 4 4 0 integer
 status 8 4 0 integer
@@ -211,20 +279,20 @@ adcTemp 24 4 0 integer
 adcHum 28 4 0 integer
 adcGas 32 4 0 integer
 gasRange 36 4 0 integer
-func Sensor.computeFromRaw 1769
+func Sensor.computeFromRaw 1777
 this -40 8 0 ?
 rawT -32 4 0 integer
 rawP -28 4 0 integer
 rawH -24 4 0 integer
 rawGas -20 4 0 integer
 gasRange -16 4 0 integer
-func Sensor.compTemp 1860
+func Sensor.compTemp 1868
 this -24 8 0 ?
 adc -16 4 0 integer
 var1 8 8 0 double
 dd 16 8 0 double
 var2 24 8 0 double
-func Sensor.compPress 2009
+func Sensor.compPress 2017
 this -24 8 0 ?
 adc -16 4 0 integer
 var1 8 8 0 double
@@ -234,7 +302,7 @@ v3a 32 8 0 double
 v3b 40 8 0 double
 pp 48 8 0 double
 v3c 56 8 0 double
-func Sensor.compHum 2455
+func Sensor.compHum 2463
 this -24 8 0 ?
 adc -16 4 0 integer
 tc 8 8 0 double
@@ -243,13 +311,13 @@ var2 24 8 0 double
 var3 32 8 0 double
 var4 40 8 0 double
 h 48 8 0 double
-func Sensor.compGasHigh 2757
+func Sensor.compGasHigh 2765
 this -28 8 0 ?
 adc -20 4 0 integer
 gasRange -16 4 0 integer
 v1 8 4 0 integer
 v2 12 4 0 integer
-func Sensor.calcResHeat 2857
+func Sensor.calcResHeat 2865
 this -28 8 0 ?
 target -20 4 0 integer
 amb -16 4 0 integer
@@ -260,116 +328,127 @@ var3 24 8 0 double
 var4 32 8 0 double
 var5 40 8 0 double
 res 48 4 0 integer
-func Sensor.calcIaq 3128
+func Sensor.calcIaq 3136
 this -20 8 0 ?
 hum 4 8 0 double
 humScore 12 8 0 double
 gasScore 20 8 0 double
-func Sensor.temperature 3411
+func Sensor.temperature 3419
 this -20 8 0 ?
-func Sensor.pressure 3433
+func Sensor.pressure 3441
 this -20 8 0 ?
-func Sensor.humidity 3455
+func Sensor.humidity 3463
 this -20 8 0 ?
-func Sensor.gas 3477
+func Sensor.gas 3485
 this -20 8 0 ?
-func Sensor.airIndex 3499
+func Sensor.airIndex 3507
 this -20 8 0 ?
-func Sensor.chipID 3519
+func Sensor.chipID 3527
 this -20 8 0 ?
-func Sensor.variantID 3539
+func Sensor.variantID 3547
 this -20 8 0 ?
-func Sensor.gasIsValid 3559
+func Sensor.gasIsValid 3567
 this -20 8 0 ?
-func Sensor.heaterStable 3579
+func Sensor.heaterStable 3587
 this -20 8 0 ?
-func Sensor.setGasBaseline 3599
+func Sensor.setGasBaseline 3607
 this -28 8 0 ?
 b -20 8 0 double
-func Sensor.__init 3614
+func Sensor.__init 3622
+this -32 8 0 ?
+bus -24 8 0 ref
+addr -16 4 0 integer
+func Sensor.__init$ii 3660
 this -28 8 0 ?
 busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_new_Sensor(ii) 3651
+func __cls_new_Sensor(LI2c/I2C;i) 3697
+bus -24 8 0 ref
+addr -16 4 0 integer
+func __cls_new_Sensor(ii) 3732
 busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_init_Sensor(ii) 3685
+func __cls_init_Sensor(LI2c/I2C;i) 3766
+this -32 8 0 ?
+bus -24 8 0 ref
+addr -16 4 0 integer
+func __cls_init_Sensor(ii) 3785
 this -28 8 0 ?
 busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_m_Sensor#readCalibration()V 3703
+func __cls_m_Sensor#readCalibration()V 3803
 this -20 8 0 ?
-func __cls_m_Sensor#humidity()d 3717
+func __cls_m_Sensor#humidity()d 3817
 this -20 8 0 ?
-func __cls_m_Sensor#computeFromRaw(iiiii)V 3736
+func __cls_m_Sensor#computeFromRaw(iiiii)V 3836
 this -40 8 0 ?
 rawT -32 4 0 integer
 rawP -28 4 0 integer
 rawH -24 4 0 integer
 rawGas -20 4 0 integer
 gasRange -16 4 0 integer
-func __cls_m_Sensor#s8(i)i 3760
+func __cls_m_Sensor#s8(i)i 3860
 this -24 8 0 ?
 v -16 4 0 integer
-func __cls_m_Sensor#compPress(i)d 3779
+func __cls_m_Sensor#compPress(i)d 3879
 this -24 8 0 ?
 adc -16 4 0 integer
-func __cls_m_Sensor#airIndex()i 3800
+func __cls_m_Sensor#airIndex()i 3900
 this -20 8 0 ?
-func __cls_m_Sensor#pressure()d 3817
+func __cls_m_Sensor#pressure()d 3917
 this -20 8 0 ?
-func __cls_m_Sensor#measure()V 3836
+func __cls_m_Sensor#measure()V 3936
 this -20 8 0 ?
-func __cls_m_Sensor#gasIsValid()z 3850
+func __cls_m_Sensor#gasIsValid()z 3950
 this -20 8 0 ?
-func __cls_m_Sensor#compTemp(i)d 3867
+func __cls_m_Sensor#compTemp(i)d 3967
 this -24 8 0 ?
 adc -16 4 0 integer
-func __cls_m_Sensor#begin()z 3888
+func __cls_m_Sensor#begin()z 3988
 this -20 8 0 ?
-func __cls_m_Sensor#chipID()i 3905
+func __cls_m_Sensor#chipID()i 4005
 this -20 8 0 ?
-func __cls_m_Sensor#writeReg(ii)V 3922
+func __cls_m_Sensor#writeReg(ii)V 4022
 this -28 8 0 ?
 reg -20 4 0 integer
 val -16 4 0 integer
-func __cls_m_Sensor#compGasHigh(ii)d 3940
+func __cls_m_Sensor#compGasHigh(ii)d 4040
 this -28 8 0 ?
 adc -20 4 0 integer
 gasRange -16 4 0 integer
-func __cls_m_Sensor#compHum(i)d 3963
+func __cls_m_Sensor#compHum(i)d 4063
 this -24 8 0 ?
 adc -16 4 0 integer
-func __cls_m_Sensor#temperature()d 3984
+func __cls_m_Sensor#temperature()d 4084
 this -20 8 0 ?
-func __cls_m_Sensor#gas()d 4003
+func __cls_m_Sensor#gas()d 4103
 this -20 8 0 ?
-func __cls_m_Sensor#s16(i)i 4022
+func __cls_m_Sensor#s16(i)i 4122
 this -24 8 0 ?
 v -16 4 0 integer
-func __cls_m_Sensor#readRegs(i[ii)V 4041
+func __cls_m_Sensor#readRegs(i[ii)V 4141
 this -36 8 0 ?
 reg -28 4 0 integer
 buf -24 8 0 ref
 n -16 4 0 integer
-func __cls_m_Sensor#calcResHeat(ii)i 4062
+func __cls_m_Sensor#calcResHeat(ii)i 4162
 this -28 8 0 ?
 target -20 4 0 integer
 amb -16 4 0 integer
-func __cls_m_Sensor#injectCalibration([i)V 4083
+func __cls_m_Sensor#injectCalibration([i)V 4183
 this -28 8 0 ?
 c -20 8 0 ref
-func __cls_m_Sensor#setGasBaseline(d)V 4100
+func __cls_m_Sensor#setGasBaseline(d)V 4200
 this -28 8 0 ?
 b -20 8 0 double
-func __cls_m_Sensor#configure()V 4117
+func __cls_m_Sensor#configure()V 4217
 this -20 8 0 ?
-func __cls_m_Sensor#calcIaq()i 4131
+func __cls_m_Sensor#calcIaq()i 4231
 this -20 8 0 ?
-func __cls_m_Sensor#heaterStable()z 4148
+func __cls_m_Sensor#heaterStable()z 4248
 this -20 8 0 ?
-func __cls_m_Sensor#readReg(i)i 4165
+func __cls_m_Sensor#readReg(i)i 4265
 this -24 8 0 ?
 reg -16 4 0 integer
-func __cls_m_Sensor#variantID()i 4184
+func __cls_m_Sensor#variantID()i 4284
 this -20 8 0 ?

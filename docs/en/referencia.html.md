@@ -680,7 +680,7 @@ end main
 
 | Member | Description |
 |---|---|
-| `Pin(num, mode)` | Constructor. Configures the pin automatically. `mode`: `Pin.INPUT`, `Pin.OUTPUT` or, since V7, `Pin.OPEN_COLLECTOR` (open-drain output, only where the silicon has it: ESP32 and STM32; on RP2350 it is a `RuntimeError` "no puede salir en colector abierto"). **The common layer validates it against the micro's capability table** ([§Machine](#stdlib-machine-caps)) and the pin states, by name: "el pin 99 no existe en esp32c5", "el pin 26 está en uso analógico: primero release()". And on a board with the screen in the image (the P4, the DK2), its pins are the screen's from boot: "el pin 26 de esp32p4 es de la pantalla: no se puede usar" (`#669`). Its touch panel's I2C, instead, is a board bus and is shared: "el pin 7 es del I2C 0" (below, `I2c`). |
+| `Pin(num, mode)` | Constructor. Configures the pin automatically. `mode`: `Pin.INPUT`, `Pin.OUTPUT` or, since V7, `Pin.OPEN_COLLECTOR` (open-drain output: it starts released, `off()` pulls the line down and `on()` releases it — a resistor makes it high —, and `value()` reads the line; on RP2350, whose pad does not have it, emulated since V9). **The common layer validates it against the micro's capability table** ([§Machine](#stdlib-machine-caps)) and the pin states, by name: "el pin 99 no existe en esp32c5", "el pin 26 está en uso analógico: primero release()". And on a board with the screen in the image (the P4, the DK2), its pins are the screen's from boot: "el pin 26 de esp32p4 es de la pantalla: no se puede usar" (`#669`). Its touch panel's I2C, instead, is a board bus and is shared: "el pin 7 es del I2C 0" (below, `I2c`). |
 | `on()` | Drives the pin HIGH (only if it is `OUTPUT`). |
 | `off()` | Drives the pin LOW (only if it is `OUTPUT`). |
 | `toggle()` | Toggles HIGH↔LOW. Convenient for blinking. |
@@ -727,26 +727,78 @@ Functional constants (return literals): `INPUT()`, `OUTPUT()`, `LOW()`, `HIGH()`
 <a id="stdlib-i2c"></a>
 ### 14.3 `I2c`
 
-Multi-slave I²C master bus over 2 wires (SDA + SCL). On the Pico 2 there are 2 HW buses (`i2c0`, `i2c1`). Byte buffers are passed as `integer[]` where each slot carries one byte in the low 8 bits.
+Multi-slave I²C master bus over 2 wires (SDA + SCL): the one of a peripheral of the micro — on the Pico 2 there are 2 (`i2c0`, `i2c1`) — or, since V9, a software one. Byte buffers are passed as `integer[]` where each slot carries one byte in the low 8 bits.
 
 ```
 import I2c
 
 function main(arg: string)
-  I2c.init(I2c.BUS0(), 4, 5, I2c.STANDARD())     // SDA=GP4, SCL=GP5, 100kHz
-  var devs: integer[] := I2c.scan(I2c.BUS0())
+  var bus: I2c.I2C := I2c.HardI2C(0, 4, 5, I2c.STANDARD())     // peripheral 0: SDA=GP4, SCL=GP5, 100 kHz
+  var devs: integer[] := bus.scan()
   for d in devs do
     print "device at 0x", d
   next d
+  bus.release()
 end main
 ```
+
+**A bus is an `I2c.I2C`** (V9), whichever it is: it is the base class, and what a device library asks for. `I2c.HardI2C(id, sda, scl, baudrate)` is a peripheral's, and `SoftI2c.SoftI2C(sda, scl)` a software one ([§14.3.1](#stdlib-softi2c)), for when there are no buses left or the pins do not match. **You go from one to the other by changing only the constructor**: methods, limits and errors are the same.
+
+```
+import I2c
+import SoftI2c
+import Bmp280
+
+function leer(bus: I2c.I2C)                          // it does not know which one
+  var s: Bmp280.Sensor := Bmp280.Sensor(bus, 0x76)
+  if s.begin() then
+    s.measure()
+    print s.temperature()
+  endif
+end leer
+
+function main(arg: string)
+  leer(I2c.HardI2C(1, 2, 3, I2c.FAST()))             // peripheral 1, on pins 2 and 3
+  leer(SoftI2c.SoftI2C(6, 7))                        // by software, on pins 6 and 7
+end main
+```
+
+| Method of an `I2c.I2C` | Description |
+|---|---|
+| `write(addr, data, count): integer` | Sends `count` bytes to the device `addr` in **one** transaction (START…STOP), at most 256. Returns the bytes written, or `-1` if it does not answer. |
+| `read(addr, data, count): integer` | Reads `count` bytes (at most 256) into `data`. Returns the bytes read, or `-1` if it does not answer. |
+| `writeRead(addr, tx, ntx, rx, nrx): integer` | Writes and reads in **one** transaction, with a *repeated start* between them (V7). Returns the bytes read, or `-1`. |
+| `execute(addr, t): integer` | Runs an `I2c.Transaction` (below). Returns the bytes moved, or `-1`. |
+| `readReg(addr, reg): integer` | V9: the value of one register of the device (0..255), or `-1` if it does not answer. |
+| `readRegs(addr, reg, data, count): integer` | V9: `count` bytes from register `reg` on, in one transaction. |
+| `writeReg(addr, reg, value): integer` | V9: writes one register. `-1` if it does not answer. |
+| `scan(): integer[]` | The addresses from `0x08` to `0x77` that answer. |
+| `isPresent(addr): boolean` | V9: whether somebody answers at `addr`. |
+| `release()` | Lets the bus go: if nobody else uses it and it is not the board's, it is closed and its pins become free. A second time does nothing; using it afterwards is a `RuntimeError` («`I2C 1: ya se soltó con release()`»). |
+
+`I2c.Bus` is `HardI2C` under the name it had up to V8: what is written with it does not change. And a class of your own can be an `I2c.I2C` too — a multiplexer, a simulated sensor for a test —: it extends it and provides its `write`, `read` and `writeRead`; the rest is done with them.
+
+<a id="stdlib-softi2c"></a>
+#### 14.3.1 `SoftI2c` — software I²C (V9)
+
+`SoftI2c.SoftI2C(sda, scl)`, or `SoftI2C(sda, scl, baudrate)`: an I²C bus on any two pins that can drive open-drain (`Machine.openDrainPins()`). It lives in its own module so that only those who use it pay for it.
+
+- **The resistors.** Like any I²C bus, it needs its pull-ups to the supply (1 to 10 kΩ; sensor modules usually carry them). On opening, both lines are checked to rise; if not, it is a named error: «`SoftI2C 4/5: el pin 5 (scl) no sube: sin resistencia, o alguien lo sujeta`». And if a device was left halfway through a read — the board was reset in the middle —, it is taken out of there.
+- **The speed.** The `baudrate` (100 kHz if not given) is the *maximum*: the interpreter makes the bits, and the real clock is around 20 kHz (on the Nucleo, at 160 MHz). Plenty for a sensor; for a display or a memory, the peripheral. A device may hold the clock for up to some 50 ms.
+- **Threads.** Each operation is whole: another thread using the same bus waits for it to finish.
+- **The limits** are the peripheral's (256 bytes and 3 messages per transaction), except the bus time limit, which is its own.
+- **On the PC** there are no pins: each operation writes a line (`[i2c] sda=4 scl=5 addr=0x76 write=[D0] read=1 (sim → ceros)`) and what is read is zero, as with the peripheral.
+
+#### 14.3.2 The functions, by bus number
+
+The original form, for drivers already written: only with the peripherals' buses.
 
 | Function | Description |
 |---|---|
 | `init(bus, sda, scl, baudrate)` | Configures the bus. `bus`: 0 or 1. `baudrate` in Hz (typically 100 000 = standard, 400 000 = fast). |
 | `write(bus, addr, data, count): integer` | Sends `count` bytes to the slave `addr` in **one** transaction (START…STOP), at most 256. Returns bytes written, or `-1` on NAK/timeout. |
 | `read(bus, addr, data, count): integer` | Reads `count` bytes (at most 256) from the slave `addr`. Returns bytes read, or `-1` on error. |
-| `writeRead(bus, addr, tx, ntx, rx, nrx): integer` | Writes `ntx` bytes and reads `nrx` in **one** transaction, with a *repeated start* between them: a register's number and its value, with nobody talking in between (V7). Returns the bytes read, or `-1` if the device does not answer. Also `bus.writeRead(addr, …)`. |
+| `writeRead(bus, addr, tx, ntx, rx, nrx): integer` | Writes `ntx` bytes and reads `nrx` in **one** transaction, with a *repeated start* between them: a register's number and its value, with nobody talking in between (V7). Returns the bytes read, or `-1` if the device does not answer. |
 | `scan(bus): integer[]` | Scans addresses `0x08..0x77` and returns an array of those that ACKed. Implemented in BP on top of `read` — needs no dedicated opcode. |
 | `release(bus)` | Lets the bus go: if nobody else uses it and it is not the board's, it is closed and its pins become free (also `bus.release()` on the class). |
 
@@ -754,15 +806,7 @@ end main
 
 Constants: `BUS0()`, `BUS1()`, `STANDARD()` (100 kHz), `FAST()` (400 kHz).
 
-There is also an `I2c.Bus` class (recommended) that encapsulates the bus + pins + baudrate in one instance. See [§14.1](#stdlib-hw-policy) for the general pattern.
-
-```
-var bus: I2c.Bus := I2c.Bus(0, 4, 5, I2c.Bus.STANDARD)
-var devs: integer[] := bus.scan()
-bus.write(0x48, [0x00], 1)
-```
-
-**The transaction** (V7). Several messages in a row, with nobody in between: an `I2c.Transaction` is *prepared* — `write(data, count)` and `read(data, count)` are added, without touching the bus — and executed **at once** with `bus.execute(addr, t)`: START, each message with a *repeated start* between two, and STOP at the end. It can be reused: each execution sends what the write arrays hold at that moment and fills the read arrays (`clear()` empties it). Returns the bytes moved, or `-1` if the device does not answer.
+**The transaction** (V7). Several messages in a row, with nobody in between, on any bus: an `I2c.Transaction` is *prepared* — `write(data, count)` and `read(data, count)` are added, without touching the bus — and executed **at once** with `bus.execute(addr, t)`: START, each message with a *repeated start* between two, and STOP at the end. It can be reused: each execution sends what the write arrays hold at that moment and fills the read arrays (`clear()` empties it). Returns the bytes moved, or `-1` if the device does not answer.
 
 ```
 var t: I2c.Transaction := I2c.Transaction()

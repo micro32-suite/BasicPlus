@@ -1,0 +1,187 @@
+// I2cContrato.bp — V9 H3.1 (#881): los dos buses I2C se INTERCAMBIAN. La misma función, que no
+// sabe cuál le dan, hace la misma secuencia con el del periférico (I2c.HardI2C) y con el de
+// software (SoftI2c.SoftI2C) —lo que va bien y lo que va mal—, y se comparan las dos actas línea
+// a línea: lo único distinto es el constructor, y el nombre del bus en los textos, que se quita
+// para comparar. Una línea no se compara: el tope de 20 ms de una transacción es del periférico
+// (su bus lo comparten el sistema y los packs); por software cabe.
+//
+// En el PC, el bus 0 y los pines 4 y 5, sin nadie al otro lado. En la Nucleo, el I2C 2 y sus pines
+// (PF0 = 80 y PF1 = 81) con un BMP280 o un BME280 en 0x76: los mismos cables para los dos.
+module I2cContrato
+  import Core
+  import I2c
+  import SoftI2c
+  import Machine
+
+  var acta: string := ""
+
+  function apunta(que: string, valor: string)
+    acta := acta + que + " -> " + valor + "|"
+  end apunta
+
+  function bytes(d: integer[], n: integer): string
+    var s: string := ""
+    var i: integer := 0
+    while i < n do
+      s := s + " " + intToString(d[i])
+      i := i + 1
+    endwh
+    return s
+  end bytes
+
+  function escribe(b: I2c.I2C, addr: integer, d: integer[], n: integer): string
+    try
+      return intToString(b.write(addr, d, n))
+    catch e: RuntimeError
+      return "ERROR " + e.msg
+    endtry
+  end escribe
+
+  function lee(b: I2c.I2C, addr: integer, d: integer[], n: integer): string
+    try
+      var r: integer := b.read(addr, d, n)
+      if r < 0 then return intToString(r)
+      return intToString(r) + bytes(d, min(r, 6))
+    catch e: RuntimeError
+      return "ERROR " + e.msg
+    endtry
+  end lee
+
+  function escribeLee(b: I2c.I2C, addr: integer, tx: integer[], ntx: integer, rx: integer[], nrx: integer): string
+    try
+      var r: integer := b.writeRead(addr, tx, ntx, rx, nrx)
+      if r < 0 then return intToString(r)
+      return intToString(r) + bytes(rx, min(r, 6))
+    catch e: RuntimeError
+      return "ERROR " + e.msg
+    endtry
+  end escribeLee
+
+  function ejecuta(b: I2c.I2C, addr: integer, t: I2c.Transaction): string
+    try
+      return intToString(b.execute(addr, t))
+    catch e: RuntimeError
+      return "ERROR " + e.msg
+    endtry
+  end ejecuta
+
+  // La secuencia: `b` es un I2C, y nada más. Devuelve el acta.
+  function secuencia(b: I2c.I2C, conSensor: boolean): string
+    var nula: integer[] := null
+    var d:    integer[] := newIntArray(300)
+    acta := ""
+
+    // lo que va bien
+    apunta("write 1", escribe(b, 0x76, [0xD0], 1))
+    apunta("read 1", lee(b, 0x76, d, 1))
+    apunta("writeRead 1+1", escribeLee(b, 0x76, [0xD0], 1, d, 1))
+    apunta("writeRead 1+24", escribeLee(b, 0x76, [0x88], 1, d, 24))
+    apunta("writeReg", intToString(b.writeReg(0x76, 0xF5, 0x00)))
+    apunta("readReg", intToString(b.readReg(0x76, 0xF5)))
+    apunta("readRegs", intToString(b.readRegs(0x76, 0x88, d, 6)) + bytes(d, 6))
+    apunta("isPresent", boolToString(b.isPresent(0x76)))
+    apunta("0 bytes (sondeo)", escribe(b, 0x76, [1], 0))
+    apunta("read 256", lee(b, 0x76, d, 256))
+    var t:  I2c.Transaction := I2c.Transaction()
+    var id: integer[] := [0]
+    t.write([0xD0], 1)
+    t.read(id, 1)
+    apunta("Transaction w r", ejecuta(b, 0x76, t) + bytes(id, 1))
+    var c: integer[] := newIntArray(6)
+    t.clear()
+    t.write([0xF5, 0x00], 2)
+    t.write([0x88], 1)
+    t.read(c, 6)
+    apunta("Transaction w w r", ejecuta(b, 0x76, t) + bytes(c, 6))
+
+    // nadie contesta (en el PC contesta siempre alguien)
+    if conSensor then
+      var hay: integer[] := b.scan()
+      apunta("scan", intToString(len(hay)) + bytes(hay, len(hay)))
+      apunta("write a nadie", escribe(b, 0x10, [1], 1))
+      apunta("read a nadie", lee(b, 0x10, d, 1))
+      apunta("writeRead a nadie", escribeLee(b, 0x10, [1], 1, d, 1))
+      apunta("0 bytes a nadie", escribe(b, 0x10, [1], 0))
+      apunta("isPresent a nadie", boolToString(b.isPresent(0x10)))
+      apunta("readReg a nadie", intToString(b.readReg(0x10, 0)))
+      apunta("Transaction a nadie", ejecuta(b, 0x10, t))
+    endif
+
+    // lo que va mal
+    apunta("write null", escribe(b, 0x76, nula, 1))
+    apunta("read null", lee(b, 0x76, nula, 1))
+    apunta("write count -1", escribe(b, 0x76, [1], -1))
+    apunta("write 5 de 1", escribe(b, 0x76, [1], 5))
+    apunta("read 300", lee(b, 0x76, d, 300))
+    apunta("writeRead 1+256", escribeLee(b, 0x76, [0x88], 1, d, 256))
+    apunta("(el tope del periferico) writeRead 1+250", escribeLee(b, 0x76, [0x88], 1, d, 250))
+    apunta("writeRead 0+1", escribeLee(b, 0x76, [0xD0], 0, d, 1))
+    apunta("writeRead 1+0", escribeLee(b, 0x76, [0xD0], 1, d, 0))
+    apunta("writeRead rx null", escribeLee(b, 0x76, [0xD0], 1, nula, 1))
+    apunta("direccion 0x80", escribe(b, 0x80, [1], 1))
+    apunta("direccion -1", escribeLee(b, -1, [1], 1, d, 1))
+    t.clear()
+    apunta("Transaction vacia", ejecuta(b, 0x76, t))
+    t.read(c, 2)
+    t.read(c, 2)
+    t.read(c, 2)
+    apunta("Transaction r r r", ejecuta(b, 0x76, t))
+    t.clear()
+    t.write(d, 200)
+    t.write(d, 100)
+    apunta("Transaction 300 bytes", ejecuta(b, 0x76, t))
+    t.clear()
+    t.write([1], 1)
+    t.write([1], 0)
+    apunta("Transaction con un mensaje vacio", ejecuta(b, 0x76, t))
+    t.write([1], 1)
+    t.write([1], 1)
+    apunta("Transaction de 4", ejecuta(b, 0x76, t))
+    apunta("y sigue bien", escribeLee(b, 0x76, [0xD0], 1, d, 1))
+
+    // soltarlo, y usarlo después
+    b.release()
+    apunta("write tras release()", escribe(b, 0x76, [0xD0], 1))
+    apunta("execute tras release()", ejecuta(b, 0x76, t))
+    b.release()
+    apunta("release() otra vez", "bien")
+    return acta
+  end secuencia
+
+  function Main()
+    var conSensor: boolean := Machine.getMicro() != "host"
+    var bus: integer := 0
+    var sda: integer := 4
+    var scl: integer := 5
+    if conSensor then
+      bus := 2
+      sda := 80
+      scl := 81
+    endif
+    var h: string[] := split(secuencia(I2c.HardI2C(bus, sda, scl, I2c.I2C.STANDARD), conSensor), "|")
+    var s: string[] := split(secuencia(SoftI2c.SoftI2C(sda, scl), conSensor), "|")
+    var nh: string := "I2C " + intToString(bus)
+    var ns: string := "SoftI2C " + intToString(sda) + "/" + intToString(scl)
+    var iguales:   integer := 0
+    var distintas: integer := 0
+    var i: integer := 0
+    print "lineas:", len(h), len(s)
+    while i < len(h) and i < len(s) do
+      if h[i] == "" then
+        i := i + 1
+        continue
+      endif
+      if replace(h[i], nh, "BUS") == replace(s[i], ns, "BUS") then
+        iguales := iguales + 1
+        print "  = " + h[i]
+      else
+        if not startsWith(h[i], "(") then distintas := distintas + 1
+        print "  H " + h[i]
+        print "  S " + s[i]
+      endif
+      i := i + 1
+    endwh
+    print "iguales:", iguales, " distintas:", distintas
+  end Main
+
+end I2cContrato

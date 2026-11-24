@@ -14,42 +14,54 @@
 //
 // Operaciones I2C usadas:
 //   wreg(reg, value): write 2 bytes [reg, value]
-//   rreg(reg):        write [reg] + read 1 byte (set register pointer + read)
+//   rreg(reg):        write [reg] + read 1 byte, en UNA transacción
 //
-// Uso típico:
+// Uso típico, con un bus del periférico o por software (V9 H3):
 //
+//   import I2c
 //   import Pca9554
 //   ...
-//   var io: Pca9554.Expander := Pca9554.Expander(I2c.BUS1(), 0x3F)
+//   var bus: I2c.I2C := I2c.HardI2C(1, 2, 3, 100000)   // o SoftI2c.SoftI2C(2, 3)
+//   var io: Pca9554.Expander := Pca9554.Expander(bus, 0x3F)
 //   io.setDir(0x00)         // los 8 pines como output
 //   io.writeOut(0xAA)       // patrón 10101010
 //   var st: integer := io.readIn()
+// O con el número de un bus del periférico ya abierto (I2c.init): Pca9554.Expander(1, 0x3F).
 // ============================================================
 module Pca9554
   import I2c
 
   public class Expander
-    var bus:  integer
-    var addr: integer
+    var bus:   I2c.I2C
+    var busId: integer
+    var addr:  integer
 
-    public function Expander(bus: integer, addr: integer)
+    public function Expander(bus: I2c.I2C, addr: integer)
       this.bus  := bus
       this.addr := addr
     end Expander
 
+    public function Expander(busId: integer, addr: integer)
+      this.busId := busId
+      this.addr  := addr
+    end Expander
+
     // -------- I/O de bajo nivel a registros --------
 
+    // El bus con el que se construyó; o, con el número de uno del periférico, ése —ya abierto,
+    // o declarado en el ENV de la placa—, que se toma la primera vez que hace falta.
+    function bus_(): I2c.I2C
+      if this.bus == null then this.bus := I2c.HardI2C(this.busId, -1, -1, 0)
+      return this.bus
+    end bus_
+
     public function wreg(reg: integer, value: integer)
-      var buf: integer[] := [reg, value]
-      I2c.write(this.bus, this.addr, buf, 2)
+      this.bus_().writeReg(this.addr, reg, value)
     end wreg
 
     public function rreg(reg: integer): integer
-      // Set register pointer (write 1 byte) y luego read 1 byte.
-      var ptr: integer[] := [reg]
-      I2c.write(this.bus, this.addr, ptr, 1)
       var rx: integer[] := [0]
-      I2c.read(this.bus, this.addr, rx, 1)
+      this.bus_().readRegs(this.addr, reg, rx, 1)
       return rx[0]
     end rreg
 

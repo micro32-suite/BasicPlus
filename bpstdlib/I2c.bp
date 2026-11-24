@@ -22,22 +22,26 @@
 //
 // Hay DOS formas de usar este módulo:
 //
-//   A) Funciones top-level (forma original, compatible con
-//      drivers ya escritos):
+//   A) Las clases (V9 H3.1; lo normal, ver HW_CLASS_POLICY):
+//
+//        import I2c
+//        var bus: I2c.I2C := I2c.HardI2C(0, 6, 7, I2c.FAST())
+//        bus.write(0x48, [0x00], 1)
+//
+//      I2C es la base: un bus, sea el del periférico (HardI2C) o uno por software
+//      (SoftI2c.SoftI2C, en su módulo: en dos pines cualesquiera, para cuando no quedan buses
+//      o los pines no coinciden). Es lo que pide la librería de un dispositivo, que no sabe
+//      cuál es: se cambia de uno a otro cambiando el constructor, y lo demás es igual. Bus es
+//      HardI2C con el nombre de siempre: lo ya escrito no cambia.
+//
+//   B) Funciones top-level, con el número del bus (la forma original, para los drivers ya
+//      escritos):
 //
 //        import I2c
 //        I2c.init(0, 6, 7, I2c.FAST())
 //        I2c.write(0, 0x48, [0x00], 1)
 //
-//   B) Clase Bus (forma OO recomendada, ver HW_CLASS_POLICY):
-//
-//        import I2c
-//        var bus: I2c.Bus := I2c.Bus(0, 6, 7, I2c.FAST())
-//        bus.write(0x48, [0x00], 1)
-//
-// Las dos formas comparten el mismo backend nativo. Las top-level
-// existen para no romper código existente; la clase es la API
-// canónica para código nuevo.
+// Las dos formas comparten el mismo backend nativo.
 //
 // ESCRIBIR Y LEER EN UNA TRANSACCIÓN (V7/H6.c G4.a3). Leer un registro son dos
 // mensajes —su número y la lectura— con un REPEATED START entre ellos: nadie más
@@ -157,6 +161,22 @@ module I2c
     return 400000
   end FAST
 
+  // Lo que se mira de un array antes de usarlo, con los textos del C (#534). `max` 0 = sin tope.
+  public function __checkArray(data: integer[], count: integer, op: string, which: string, max: integer)
+    if data == null then
+      throw RuntimeError(op + ": " + which + " es null")
+    endif
+    if count < 0 then
+      throw RuntimeError(op + ": count negativo (" + intToString(count) + ")")
+    endif
+    if count > len(data) then
+      throw RuntimeError(op + ": count (" + intToString(count) + ") mayor que " + which + " (" + intToString(len(data)) + ")")
+    endif
+    if max > 0 and count > max then
+      throw RuntimeError(op + ": count (" + intToString(count) + ") supera el máximo de " + intToString(max) + " bytes por transacción")
+    endif
+  end __checkArray
+
   // Un mensaje de una transacción (interno).
   class Op
     public property kind:   integer     // 1 escribir · 2 leer
@@ -194,13 +214,13 @@ module I2c
 
     // Añade un mensaje: escribir `count` bytes de `data`.
     public function write(data: integer[], count: integer)
-      this.checkArray(data, count, "I2c.Transaction.write")
+      __checkArray(data, count, "I2c.Transaction.write", "el array", 0)
       this.add(Op(1, count, data))
     end write
 
     // Añade un mensaje: leer `count` bytes en `data`.
     public function read(data: integer[], count: integer)
-      this.checkArray(data, count, "I2c.Transaction.read")
+      __checkArray(data, count, "I2c.Transaction.read", "el array", 0)
       this.add(Op(2, count, data))
     end read
 
@@ -216,10 +236,18 @@ module I2c
       this.n     := 0
     end clear
 
-    // Ejecuta la transacción con el dispositivo `addr` del bus `bus`: lo que hace
-    // bus.execute(addr, t) (I2c.Bus va DESPUÉS: el formato MOD8 no admite una clase
-    // usada antes de declararse).
+    // Ejecuta la transacción con el dispositivo `addr` del bus del periférico `bus` (por su
+    // número); con un I2C, bus.execute(addr, t).
     public function executeOn(bus: integer, addr: integer): integer
+      this.__gather()
+      var r: integer := executeBus(bus, addr, this.ops, this.n, this.txAll, this.rxAll)
+      if r >= 0 then this.__scatter()
+      return r
+    end executeOn
+
+    // ---- para quien la ejecuta (I2C, más abajo): lo que se escribe, reunido —lo que tienen los
+    // arrays AHORA—; lo leído, a su sitio; y los tres arrays.
+    public function __gather()
       var sale:  integer := 0
       var entra: integer := 0
       var o: Op := this.first
@@ -244,7 +272,6 @@ module I2c
       if this.ops == null then
         this.ops := newIntArray(0)
       endif
-      // Lo que se escribe, seguido: lo que tienen los arrays AHORA.
       var p: integer := 0
       o := this.first
       while o != null do
@@ -254,21 +281,29 @@ module I2c
         endif
         o := o.nextOp
       endwh
-      var r: integer := executeBus(bus, addr, this.ops, this.n, this.txAll, this.rxAll)
-      // Y lo leído, a su sitio.
-      if r >= 0 then
-        p := 0
-        o := this.first
-        while o != null do
-          if o.kind == 2 then
-            move(this.rxAll, o.data, p, 0, o.count)
-            p := p + o.count
-          endif
-          o := o.nextOp
-        endwh
-      endif
-      return r
-    end executeOn
+    end __gather
+
+    public function __scatter()
+      var p: integer := 0
+      var o: Op := this.first
+      while o != null do
+        if o.kind == 2 then
+          move(this.rxAll, o.data, p, 0, o.count)
+          p := p + o.count
+        endif
+        o := o.nextOp
+      endwh
+    end __scatter
+
+    public function __ops(): integer[]
+      return this.ops
+    end __ops
+    public function __tx(): integer[]
+      return this.txAll
+    end __tx
+    public function __rx(): integer[]
+      return this.rxAll
+    end __rx
 
     function add(o: Op)
       if this.first == null then
@@ -290,106 +325,99 @@ module I2c
       this.n := this.n + 1
     end add
 
-    // Los mismos textos que los de un I2c.Bus (#534), antes de guardarlo.
-    function checkArray(data: integer[], count: integer, op: string)
-      if data == null then
-        throw RuntimeError(op + ": el array es null")
-      endif
-      if count < 0 then
-        throw RuntimeError(op + ": count negativo (" + intToString(count) + ")")
-      endif
-      if count > len(data) then
-        throw RuntimeError(op + ": count (" + intToString(count) + ") mayor que el array (" + intToString(len(data)) + ")")
-      endif
-    end checkArray
-
   end Transaction
 
+  // n en hexadecimal, con al menos `min` cifras: así dicen los textos de I2C una dirección.
+  public function __hex(n: integer, min: integer): string
+    var d: string := "0123456789ABCDEF"
+    var s: string := ""
+    var i: integer := 28
+    while i >= 0 do
+      var c: integer := (n shr i) & 15
+      if c != 0 or s != "" or i < 4 * min then s := s + charAt(d, c)
+      i := i - 4
+    endwh
+    return s
+  end __hex
+
   // ============================================================
-  // Clase Bus — wrapper OO sobre los intrínsecos de I2C.
-  //
-  // Una instancia representa un bus I2C físico configurado con sus
-  // pines SDA/SCL y baudrate. La gracia es que no arrastras el
-  // número de bus en cada operación.
+  // Clase I2C — un bus I2C: la base de HardI2C (el periférico) y de SoftI2c.SoftI2C (por
+  // software). Como si fuera abstracta: los métodos que tocan el cable los pone cada bus, y
+  // los demás se hacen con ellos, una vez. Una clase propia también puede ser un I2C (un
+  // multiplexor, un sensor simulado para una prueba): hereda de ésta y pone los suyos.
   //
   // Uso típico:
   //
   //   import I2c
-  //   var bus: I2c.Bus := I2c.Bus(0, 6, 7, I2c.FAST())
+  //   var bus: I2c.I2C := I2c.HardI2C(0, 6, 7, I2c.FAST())
   //   var devs: integer[] := bus.scan()
   //   for d in devs do
   //     print "device at 0x", d
   //   next d
-  //   var reg: integer[] := [0x00]
-  //   bus.write(0x48, reg, 1)
-  //   var temp: integer[] := newIntArray(2)
-  //   bus.read(0x48, temp, 2)
+  //   bus.writeReg(0x76, 0xF4, 0x27)
+  //   var temp: integer[] := newIntArray(3)
+  //   if bus.readRegs(0x76, 0xFA, temp, 3) < 0 then print "no contesta"
   // ============================================================
-  public class Bus
+  public class I2C
 
-    // Static consts para uso sin instanciar: I2c.Bus.STANDARD
-    public const Bus.STANDARD: integer := 100000
-    public const Bus.FAST:     integer := 400000
+    // Static consts para uso sin instanciar: I2c.I2C.STANDARD
+    public const I2C.STANDARD: integer := 100000
+    public const I2C.FAST:     integer := 400000
 
-    public property id:       integer    // 0 (i2c0) o 1 (i2c1)
-    public property sda:      integer
-    public property scl:      integer
-    public property baudrate: integer
+    var closed_: boolean       // ya se soltó con release()
 
-    // Constructor: inicializa el bus en HW. Si id no es 0/1 el
-    // backend logueará pero no abortará — para mantener la VM-host
-    // utilizable en desarrollo sin hardware real.
-    public function Bus(id: integer, sda: integer, scl: integer, baudrate: integer)
-      this.id       := id
-      this.sda      := sda
-      this.scl      := scl
-      this.baudrate := baudrate
-      initBus(id, sda, scl, baudrate)
-    end Bus
+    // ---- lo que pone cada bus
 
-    // Escribe `count` bytes al slave addr. Devuelve bytes escritos,
-    // -1 si NAK/timeout.
+    // Escribe `count` bytes al dispositivo `addr`. Devuelve los bytes escritos, o -1 si no
+    // contesta.
     public function write(addr: integer, data: integer[], count: integer): integer
-      return writeBus(this.id, addr, data, count)
+      throw RuntimeError("I2C.write: lo pone cada bus")
     end write
 
-    // Lee `count` bytes del slave addr a `data`. Devuelve bytes
-    // leídos, -1 en error.
+    // Lee `count` bytes del dispositivo `addr` en `data`. Devuelve los bytes leídos, o -1 si
+    // no contesta.
     public function read(addr: integer, data: integer[], count: integer): integer
-      return readBus(this.id, addr, data, count)
+      throw RuntimeError("I2C.read: lo pone cada bus")
     end read
 
     // Suelta el bus (V7/H6.c G4.a1): si nadie más lo usa y no es de la placa, se cierra y
-    // sus pines vuelven a libres. Sin destructor A PROPÓSITO (ver Spi.Bus.release).
+    // sus pines vuelven a libres. Soltarlo otra vez no hace nada; usarlo después es un error
+    // con nombre, como con un Gpio.Pin (V7 #667).
     public function release()
-      releaseBus(this.id)
+      if not this.closed_ then
+        this.closed_ := true
+        this.close_()
+      endif
     end release
 
     // Escribe `ntx` bytes y lee `nrx` en UNA transacción, con repeated start entre las
     // dos: el registro de un sensor sin nadie en medio (V7/H6.c G4.a3). Devuelve los
     // bytes leídos, o -1 si el dispositivo no contesta.
     public function writeRead(addr: integer, tx: integer[], ntx: integer, rx: integer[], nrx: integer): integer
-      return writeReadBus(this.id, addr, tx, ntx, rx, nrx)
+      throw RuntimeError("I2C.writeRead: lo pone cada bus")
     end writeRead
+
+    // ---- lo que se hace con ellos, igual en todos
 
     // Ejecuta una I2c.Transaction con el dispositivo `addr`: todos sus mensajes en UNA
     // transacción. Devuelve los bytes movidos, o -1 si el dispositivo no contesta.
     public function execute(addr: integer, t: Transaction): integer
-      return t.executeOn(this.id, addr)
+      this.check_(addr)
+      t.__gather()
+      var r: integer := this.run_(addr, t.__ops(), t.size(), t.__tx(), t.__rx())
+      if r >= 0 then t.__scatter()
+      return r
     end execute
 
-    // Escanea el bus completo (0x08..0x77) y devuelve un array con
-    // las direcciones que respondieron. Inlined manualmente porque
-    // el módulo no puede auto-referenciarse como `I2c.scan(...)`
-    // desde dentro, y `scan(...)` resolvería al propio método.
+    // Escanea el bus completo (0x08..0x77) y devuelve un array con las direcciones que
+    // respondieron.
     public function scan(): integer[]
       var rxbuf: integer[] := [0]
       var max:   integer[] := newIntArray(112)
       var found: integer := 0
       var addr:  integer := 0x08
       while addr < 0x78 do
-        var rc: integer := readBus(this.id, addr, rxbuf, 1)
-        if rc >= 0 then
+        if this.read(addr, rxbuf, 1) >= 0 then
           max[found] := addr
           found := found + 1
         endif
@@ -399,6 +427,113 @@ module I2c
       move(max, result, 0, 0, found)
       return result
     end scan
+
+    // ¿Contesta alguien en `addr`?
+    public function isPresent(addr: integer): boolean
+      var rxbuf: integer[] := [0]
+      return this.read(addr, rxbuf, 1) >= 0
+    end isPresent
+
+    // Los REGISTROS de un dispositivo: casi todos los sensores son eso, un número de registro
+    // y sus bytes. Escribe uno; devuelve -1 si no contesta.
+    public function writeReg(addr: integer, reg: integer, value: integer): integer
+      return this.write(addr, [reg, value], 2)
+    end writeReg
+
+    // Lee `count` bytes desde el registro `reg`, en UNA transacción. Devuelve los bytes
+    // leídos, o -1 si no contesta.
+    public function readRegs(addr: integer, reg: integer, data: integer[], count: integer): integer
+      return this.writeRead(addr, [reg], 1, data, count)
+    end readRegs
+
+    // El valor de un registro (0..255), o -1 si no contesta.
+    public function readReg(addr: integer, reg: integer): integer
+      var b: integer[] := [0]
+      if this.writeRead(addr, [reg], 1, b, 1) < 0 then return -1
+      return b[0] & 0xFF
+    end readReg
+
+    // ---- para los buses (internos): cómo se llama en los textos; soltarlo de verdad; los
+    // mensajes de una transacción —(1 escribir · 2 leer, bytes) por mensaje, en `ops`; lo que
+    // se escribe y lo que se lee, seguido—; y lo que se mira antes de cada operación.
+    function name_(): string
+      return "I2C"
+    end name_
+
+    function close_()
+    end close_
+
+    function run_(addr: integer, ops: integer[], nops: integer, tx: integer[], rx: integer[]): integer
+      throw RuntimeError("I2C.execute: lo pone cada bus")
+    end run_
+
+    function check_(addr: integer)
+      if this.closed_ then throw RuntimeError(this.name_() + ": ya se soltó con release()")
+      if addr < 0 or addr > 0x7F then throw RuntimeError(this.name_() + ": dirección no válida (0x" + __hex(addr, 1) + ")")
+    end check_
+
+  end I2C
+
+  // ============================================================
+  // Clase HardI2C — el bus de un periférico I2C del micro, con sus pines SDA/SCL y su
+  // velocidad. La gracia es que no arrastras el número de bus en cada operación.
+  // ============================================================
+  public class HardI2C extends I2C
+
+    public property id:       integer    // el número del periférico: 0 (i2c0), 1 (i2c1)…
+    public property sda:      integer
+    public property scl:      integer
+    public property baudrate: integer
+
+    // Constructor: abre el bus (ver la cabecera: -1 en los pines, «los que tenga»).
+    public function HardI2C(id: integer, sda: integer, scl: integer, baudrate: integer)
+      this.id       := id
+      this.sda      := sda
+      this.scl      := scl
+      this.baudrate := baudrate
+      initBus(id, sda, scl, baudrate)
+    end HardI2C
+
+    public function write(addr: integer, data: integer[], count: integer): integer
+      this.check_(addr)
+      return writeBus(this.id, addr, data, count)
+    end write
+
+    public function read(addr: integer, data: integer[], count: integer): integer
+      this.check_(addr)
+      return readBus(this.id, addr, data, count)
+    end read
+
+    public function writeRead(addr: integer, tx: integer[], ntx: integer, rx: integer[], nrx: integer): integer
+      this.check_(addr)
+      return writeReadBus(this.id, addr, tx, ntx, rx, nrx)
+    end writeRead
+
+    function run_(addr: integer, ops: integer[], nops: integer, tx: integer[], rx: integer[]): integer
+      return executeBus(this.id, addr, ops, nops, tx, rx)
+    end run_
+
+    // Sin destructor A PROPÓSITO (ver Spi.Bus.release): dos HardI2C con el mismo número son
+    // el MISMO bus.
+    function close_()
+      releaseBus(this.id)
+    end close_
+
+    function name_(): string
+      return "I2C " + intToString(this.id)
+    end name_
+
+  end HardI2C
+
+  // Bus — HardI2C, con el nombre de siempre: lo escrito hasta V8 no cambia.
+  public class Bus extends HardI2C
+
+    public const Bus.STANDARD: integer := 100000
+    public const Bus.FAST:     integer := 400000
+
+    public function Bus(id: integer, sda: integer, scl: integer, baudrate: integer)
+      super(id, sda, scl, baudrate)
+    end Bus
 
   end Bus
 

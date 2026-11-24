@@ -1,7 +1,7 @@
 // PinMapa.bp — V7/H4 (#479, 22-sep): el mapa de pines y el estado del pin en el común. Un pin es
 // analógico (AnPin) o digital (Pin), nunca las dos cosas: el común lo comprueba con la tabla de
 // capacidades del micro y lo dice con nombre — el mismo texto en las dos VMs. En el PC, el perfil
-// RP2350A: 30 pines, analógicos 26..29, sin colector abierto, buses 0 y 1.
+// RP2350A: 30 pines, analógicos 26..29, colector abierto en todos (V9 H3), buses 0 y 1.
 module PinMapa
   import Gpio
   import Adc
@@ -44,11 +44,11 @@ module PinMapa
     catch e: RuntimeError
       print "no existe: " + e.msg
     endtry
-    try
-      var od: Gpio.Pin := Gpio.Pin(5, Gpio.Pin.OPEN_COLLECTOR)
-    catch e: RuntimeError
-      print "colector abierto: " + e.msg
-    endtry
+    var od: Gpio.Pin := Gpio.Pin(5, Gpio.Pin.OPEN_COLLECTOR)     // V9 H3: en todas las familias
+    od.off()                                                     // baja la línea
+    od.on()                                                      // la suelta
+    print "colector abierto: pin", od.num, " mode", od.mode, " ", len(Machine.openDrainPins()) > 0
+    od.release()
     try
       var an: Gpio.AnPin := Gpio.AnPin(5)
     catch e: RuntimeError

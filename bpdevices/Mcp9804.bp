@@ -13,33 +13,46 @@
 // dividido entre 16 da los grados. Para negativos se aplica la
 // fórmula 256 - magnitud (sign-magnitude del datasheet).
 //
-// Uso:
+// Uso, con un bus del periférico o por software (V9 H3):
+//   import I2c
 //   import Mcp9804
-//   var s: Mcp9804.Sensor := Mcp9804.Sensor(I2c.BUS1(), 0x18)
+//   var bus: I2c.I2C := I2c.HardI2C(1, 2, 3, 100000)   // o SoftI2c.SoftI2C(2, 3)
+//   var s: Mcp9804.Sensor := Mcp9804.Sensor(bus, 0x18)
 //   var t: float := s.readTemp()
 //   print "T =", t
+// O con el número de un bus del periférico ya abierto (I2c.init): Mcp9804.Sensor(1, 0x18).
 // ============================================================
 module Mcp9804
   import I2c
 
   public class Sensor
-    var bus:  integer
-    var addr: integer
+    var bus:   I2c.I2C
+    var busId: integer
+    var addr:  integer
 
-    public function Sensor(bus: integer, addr: integer)
+    public function Sensor(bus: I2c.I2C, addr: integer)
       this.bus  := bus
       this.addr := addr
     end Sensor
 
+    public function Sensor(busId: integer, addr: integer)
+      this.busId := busId
+      this.addr  := addr
+    end Sensor
+
+    // El bus con el que se construyó; o, con el número de uno del periférico, ése —ya abierto,
+    // o declarado en el ENV de la placa—, que se toma la primera vez que hace falta.
+    function bus_(): I2c.I2C
+      if this.bus == null then this.bus := I2c.HardI2C(this.busId, -1, -1, 0)
+      return this.bus
+    end bus_
+
     // Lee la temperatura en grados Celsius. Devuelve magnitud según
     // el formato sign-magnitude del MCP9804.
     public function readTemp(): float
-      // Set register pointer al 0x05 (Ambient Temperature).
-      var ptr: integer[] := [0x05]
-      I2c.write(this.bus, this.addr, ptr, 1)
-      // Lee 2 bytes [MSB, LSB].
+      // Los 2 bytes del registro 0x05 (Ambient Temperature): [MSB, LSB].
       var data: integer[] := [0, 0]
-      I2c.read(this.bus, this.addr, data, 2)
+      this.bus_().readRegs(this.addr, 0x05, data, 2)
       var msb: integer := data[0]
       var lsb: integer := data[1]
       // Limpia los bits de flag (mantenemos bits 4..0).

@@ -2,39 +2,67 @@ dbg 3
 module Mcp9804
 source C:\lenguajes\pm\bpdevices\Mcp9804.bp
 lines
-43 38
-64 39
-85 41
-108 42
-129 43
-136 44
-143 46
-153 47
-160 48
-179 51
-189 52
-221 55
-242 57
-258 30
-266 31
+0 0
+29 0
+40 0
+43 46
+57 46
+82 47
+101 0
+104 54
+132 55
+160 56
+167 57
+174 59
+184 60
+191 61
+210 64
+220 65
+252 68
+273 70
+286 0
+289 34
+298 35
+309 0
+312 39
+320 40
+331 0
+366 0
+400 0
+419 0
+437 0
 vars
-func Sensor.readTemp 40
+func __init 0
+func __startup 29
+func Sensor.bus_ 40
 this -20 8 0 ?
-ptr 4 8 0 ?
-data 24 8 0 ?
-msb 40 4 0 integer
-lsb 44 4 0 integer
-temp 48 4 0 float
-func Sensor.__init 255
+func Sensor.readTemp 101
+this -20 8 0 ?
+data 4 8 0 ?
+msb 24 4 0 integer
+lsb 28 4 0 integer
+temp 32 4 0 float
+func Sensor.__init 286
+this -32 8 0 ?
+bus -24 8 0 ref
+addr -16 4 0 integer
+func Sensor.__init$ii 309
 this -28 8 0 ?
-bus -20 4 0 integer
+busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_new_Sensor(ii) 277
-bus -20 4 0 integer
+func __cls_new_Sensor(LI2c/I2C;i) 331
+bus -24 8 0 ref
 addr -16 4 0 integer
-func __cls_init_Sensor(ii) 311
+func __cls_new_Sensor(ii) 366
+busId -20 4 0 integer
+addr -16 4 0 integer
+func __cls_init_Sensor(LI2c/I2C;i) 400
+this -32 8 0 ?
+bus -24 8 0 ref
+addr -16 4 0 integer
+func __cls_init_Sensor(ii) 419
 this -28 8 0 ?
-bus -20 4 0 integer
+busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_m_Sensor#readTemp()f 329
+func __cls_m_Sensor#readTemp()f 437
 this -20 8 0 ?

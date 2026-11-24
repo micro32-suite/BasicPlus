@@ -45,6 +45,7 @@ module Stdlib
   import Freq
   import Gpio
   import I2c
+  import SoftI2c          // V9 H3 — el I2C por software
   import Neopixel
   import Pico             // identificación del micro, constantes de placa
   import Pulse

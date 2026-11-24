@@ -8,24 +8,23 @@
 // flotante) del datasheet oficial Bosch BMP280. Aquí en `double`
 // para máxima paridad byte-idéntica entre las dos VMs.
 //
-// Usa las FUNCIONES top-level I2c.* (no los métodos de I2c.Bus),
-// como Mcp9804 — el camino probado en placa.
-//
-// Uso:
+// Uso, con un bus del periférico o por software (V9 H3):
 //   import I2c
 //   import Bmp280
-//   I2c.init(0, 20, 21, 100000)
-//   var s: Bmp280.Sensor := Bmp280.Sensor(0, 0x76)
+//   var bus: I2c.I2C := I2c.HardI2C(0, 20, 21, 100000)   // o SoftI2c.SoftI2C(20, 21)
+//   var s: Bmp280.Sensor := Bmp280.Sensor(bus, 0x76)
 //   if s.begin() then
 //     s.measure()
 //     print "T=", s.temperature(), "C  P=", s.pressure(), "hPa"
 //   endif
+// O con el número de un bus del periférico ya abierto (I2c.init): Bmp280.Sensor(0, 0x76).
 // ============================================================
 module Bmp280
 
   import I2c
 
   public class Sensor
+    var bus:   I2c.I2C
     var busId: integer
     var addr:  integer
     var chip:  integer
@@ -48,6 +47,11 @@ module Bmp280
     var tempC:    double
     var pressHpa: double
 
+    public function Sensor(bus: I2c.I2C, addr: integer)
+      this.bus  := bus
+      this.addr := addr
+    end Sensor
+
     public function Sensor(busId: integer, addr: integer)
       this.busId := busId
       this.addr  := addr
@@ -61,16 +65,20 @@ module Bmp280
       return v
     end s16
 
-    // ---- acceso a registros (top-level I2c) ----
+    // ---- acceso a registros ----
+    // El bus con el que se construyó; o, con el número de uno del periférico, ése —ya abierto,
+    // o declarado en el ENV de la placa—, que se toma la primera vez que hace falta.
+    function bus_(): I2c.I2C
+      if this.bus == null then this.bus := I2c.HardI2C(this.busId, -1, -1, 0)
+      return this.bus
+    end bus_
+
     public function writeReg(reg: integer, val: integer)
-      var b: integer[] := [reg, val]
-      I2c.write(this.busId, this.addr, b, 2)
+      this.bus_().writeReg(this.addr, reg, val)
     end writeReg
 
     public function readRegs(reg: integer, buf: integer[], n: integer)
-      var p: integer[] := [reg]
-      I2c.write(this.busId, this.addr, p, 1)
-      I2c.read(this.busId, this.addr, buf, n)
+      this.bus_().readRegs(this.addr, reg, buf, n)
     end readRegs
 
     public function readReg(reg: integer): integer

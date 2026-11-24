@@ -1362,8 +1362,9 @@ sleep(<span class="num">60000</span>)          <span class="comment">// and the 
   <tr><td><code>Pin(num, mode)</code></td>
       <td>Constructor. Configures the pin automatically.
           <code>mode</code>: <code>Pin.INPUT</code>, <code>Pin.OUTPUT</code> or, since V7,
-          <code>Pin.OPEN_COLLECTOR</code> (open-drain output, only where the silicon has it: ESP32 and
-          STM32; on RP2350 it is a <code>RuntimeError</code> "no puede salir en colector abierto").
+          <code>Pin.OPEN_COLLECTOR</code> (open-drain output: it starts released, <code>off()</code> pulls the
+          line down and <code>on()</code> releases it — a resistor makes it high —, and <code>value()</code>
+          reads the line; on RP2350, whose pad does not have it, emulated since V9).
           <strong>The common layer validates it against the micro's capability table</strong>
           (<a href="#stdlib-machine-caps">§Machine</a>) and the pin states, by name:
           "el pin 99 no existe en esp32c5", "el pin 26 está en uso analógico: primero release()". And on a
@@ -1458,20 +1459,109 @@ light.release()                                            <span class="comment"
 
 <h3 id="stdlib-i2c">14.3 <code>I2c</code></h3>
 <p>
-  Multi-slave I²C master bus over 2 wires (SDA + SCL). On the Pico 2
-  there are 2 HW buses (<code>i2c0</code>, <code>i2c1</code>). Byte
+  Multi-slave I²C master bus over 2 wires (SDA + SCL): the one of a peripheral of the micro — on the
+  Pico 2 there are 2 (<code>i2c0</code>, <code>i2c1</code>) — or, since V9, a software one. Byte
   buffers are passed as <code>integer[]</code> where each slot
   carries one byte in the low 8 bits.
 </p>
 <pre><code><span class="kw">import</span> I2c
 
 <span class="kw">function</span> <span class="fn">main</span>(arg: <span class="type">string</span>)
-  I2c.init(I2c.BUS0(), <span class="num">4</span>, <span class="num">5</span>, I2c.STANDARD())     <span class="comment">// SDA=GP4, SCL=GP5, 100kHz</span>
-  <span class="kw">var</span> devs: <span class="type">integer</span>[] := I2c.scan(I2c.BUS0())
+  <span class="kw">var</span> bus: I2c.I2C := I2c.HardI2C(<span class="num">0</span>, <span class="num">4</span>, <span class="num">5</span>, I2c.STANDARD())     <span class="comment">// peripheral 0: SDA=GP4, SCL=GP5, 100 kHz</span>
+  <span class="kw">var</span> devs: <span class="type">integer</span>[] := bus.scan()
   <span class="kw">for</span> d <span class="kw">in</span> devs <span class="kw">do</span>
     <span class="kw">print</span> <span class="str">"device at 0x"</span>, d
   <span class="kw">next</span> d
+  bus.release()
 <span class="kw">end</span> main</code></pre>
+<p>
+  <b>A bus is an <code>I2c.I2C</code></b> (V9), whichever it is: it is the base class, and what a device
+  library asks for. <code>I2c.HardI2C(id, sda, scl, baudrate)</code> is a peripheral's, and
+  <code>SoftI2c.SoftI2C(sda, scl)</code> a software one (<a href="#stdlib-softi2c">§14.3.1</a>), for when
+  there are no buses left or the pins do not match. <strong>You go from one to the other by changing
+  only the constructor</strong>: methods, limits and errors are the same.
+</p>
+<pre><code><span class="kw">import</span> I2c
+<span class="kw">import</span> SoftI2c
+<span class="kw">import</span> Bmp280
+
+<span class="kw">function</span> <span class="fn">leer</span>(bus: I2c.I2C)                          <span class="comment">// it does not know which one</span>
+  <span class="kw">var</span> s: Bmp280.Sensor := Bmp280.Sensor(bus, <span class="num">0x76</span>)
+  <span class="kw">if</span> s.begin() <span class="kw">then</span>
+    s.measure()
+    <span class="kw">print</span> s.temperature()
+  <span class="kw">endif</span>
+<span class="kw">end</span> leer
+
+<span class="kw">function</span> <span class="fn">main</span>(arg: <span class="type">string</span>)
+  leer(I2c.HardI2C(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, I2c.FAST()))             <span class="comment">// peripheral 1, on pins 2 and 3</span>
+  leer(SoftI2c.SoftI2C(<span class="num">6</span>, <span class="num">7</span>))                        <span class="comment">// by software, on pins 6 and 7</span>
+<span class="kw">end</span> main</code></pre>
+<table>
+  <tr><th>Method of an <code>I2c.I2C</code></th><th>Description</th></tr>
+  <tr><td><code>write(addr, data, count): integer</code></td>
+      <td>Sends <code>count</code> bytes to the device <code>addr</code> in <strong>one</strong>
+          transaction (START…STOP), at most 256. Returns the bytes written, or <code>-1</code> if it
+          does not answer.</td></tr>
+  <tr><td><code>read(addr, data, count): integer</code></td>
+      <td>Reads <code>count</code> bytes (at most 256) into <code>data</code>. Returns the bytes read,
+          or <code>-1</code> if it does not answer.</td></tr>
+  <tr><td><code>writeRead(addr, tx, ntx, rx, nrx): integer</code></td>
+      <td>Writes and reads in <strong>one</strong> transaction, with a <em>repeated start</em> between
+          them (V7). Returns the bytes read, or <code>-1</code>.</td></tr>
+  <tr><td><code>execute(addr, t): integer</code></td>
+      <td>Runs an <code>I2c.Transaction</code> (below). Returns the bytes moved, or
+          <code>-1</code>.</td></tr>
+  <tr><td><code>readReg(addr, reg): integer</code></td>
+      <td>V9: the value of one register of the device (0..255), or <code>-1</code> if it does not
+          answer.</td></tr>
+  <tr><td><code>readRegs(addr, reg, data, count): integer</code></td>
+      <td>V9: <code>count</code> bytes from register <code>reg</code> on, in one transaction.</td></tr>
+  <tr><td><code>writeReg(addr, reg, value): integer</code></td>
+      <td>V9: writes one register. <code>-1</code> if it does not answer.</td></tr>
+  <tr><td><code>scan(): integer[]</code></td>
+      <td>The addresses from <code>0x08</code> to <code>0x77</code> that answer.</td></tr>
+  <tr><td><code>isPresent(addr): boolean</code></td>
+      <td>V9: whether somebody answers at <code>addr</code>.</td></tr>
+  <tr><td><code>release()</code></td>
+      <td>Lets the bus go: if nobody else uses it and it is not the board's, it is closed and its pins
+          become free. A second time does nothing; using it afterwards is a <code>RuntimeError</code>
+          («<code>I2C 1: ya se soltó con release()</code>»).</td></tr>
+</table>
+<p>
+  <code>I2c.Bus</code> is <code>HardI2C</code> under the name it had up to V8: what is written with it
+  does not change. And a class of your own can be an <code>I2c.I2C</code> too — a multiplexer, a
+  simulated sensor for a test —: it extends it and provides its <code>write</code>, <code>read</code> and
+  <code>writeRead</code>; the rest is done with them.
+</p>
+
+<h4 id="stdlib-softi2c">14.3.1 <code>SoftI2c</code> — software I²C (V9)</h4>
+<p>
+  <code>SoftI2c.SoftI2C(sda, scl)</code>, or <code>SoftI2C(sda, scl, baudrate)</code>: an I²C bus on any
+  two pins that can drive open-drain (<code>Machine.openDrainPins()</code>). It lives in its own module
+  so that only those who use it pay for it.
+</p>
+<ul>
+  <li><strong>The resistors.</strong> Like any I²C bus, it needs its pull-ups to the supply (1 to 10 kΩ;
+      sensor modules usually carry them). On opening, both lines are checked to rise; if not, it is a
+      named error: «<code>SoftI2C 4/5: el pin 5 (scl) no sube: sin resistencia, o alguien lo
+      sujeta</code>». And if a device was left halfway through a read — the board was reset in the
+      middle —, it is taken out of there.</li>
+  <li><strong>The speed.</strong> The <code>baudrate</code> (100 kHz if not given) is the
+      <em>maximum</em>: the interpreter makes the bits, and the real clock is around 20 kHz (on the
+      Nucleo, at 160 MHz). Plenty for a sensor; for a display or a memory, the peripheral. A device may
+      hold the clock for up to some 50 ms.</li>
+  <li><strong>Threads.</strong> Each operation is whole: another thread using the same bus waits for it
+      to finish.</li>
+  <li><strong>The limits</strong> are the peripheral's (256 bytes and 3 messages per transaction),
+      except the bus time limit, which is its own.</li>
+  <li><strong>On the PC</strong> there are no pins: each operation writes a line
+      (<code>[i2c] sda=4 scl=5 addr=0x76 write=[D0] read=1 (sim → ceros)</code>) and what is read is
+      zero, as with the peripheral.</li>
+</ul>
+
+<h4>14.3.2 The functions, by bus number</h4>
+<p>The original form, for drivers already written: only with the peripherals' buses.</p>
 <table>
   <tr><th>Function</th><th>Description</th></tr>
   <tr><td><code>init(bus, sda, scl, baudrate)</code></td>
@@ -1488,7 +1578,7 @@ light.release()                                            <span class="comment"
       <td>Writes <code>ntx</code> bytes and reads <code>nrx</code> in <strong>one</strong>
           transaction, with a <em>repeated start</em> between them: a register's number and its
           value, with nobody talking in between (V7). Returns the bytes read, or <code>-1</code>
-          if the device does not answer. Also <code>bus.writeRead(addr, …)</code>.</td></tr>
+          if the device does not answer.</td></tr>
   <tr><td><code>scan(bus): integer[]</code></td>
       <td>Scans addresses <code>0x08..0x77</code> and returns an
           array of those that ACKed. Implemented in BP
@@ -1521,15 +1611,7 @@ light.release()                                            <span class="comment"
   <code>STANDARD()</code> (100 kHz), <code>FAST()</code> (400 kHz).
 </p>
 <p>
-  There is also an <code>I2c.Bus</code> class (recommended) that
-  encapsulates the bus + pins + baudrate in one instance. See
-  <a href="#stdlib-hw-policy">§14.1</a> for the general pattern.
-</p>
-<pre><code><span class="kw">var</span> bus: I2c.Bus := I2c.Bus(<span class="num">0</span>, <span class="num">4</span>, <span class="num">5</span>, I2c.Bus.STANDARD)
-<span class="kw">var</span> devs: <span class="type">integer</span>[] := bus.scan()
-bus.write(<span class="num">0x48</span>, [<span class="num">0x00</span>], <span class="num">1</span>)</code></pre>
-<p>
-  <b>The transaction</b> (V7). Several messages in a row, with nobody in between: an
+  <b>The transaction</b> (V7). Several messages in a row, with nobody in between, on any bus: an
   <code>I2c.Transaction</code> is <em>prepared</em> — <code>write(data, count)</code> and
   <code>read(data, count)</code> are added, without touching the bus — and executed
   <strong>at once</strong> with <code>bus.execute(addr, t)</code>: START, each message with a

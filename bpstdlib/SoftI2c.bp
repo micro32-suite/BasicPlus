@@ -1,0 +1,364 @@
+// ============================================================
+// SoftI2c.bp — un bus I2C por SOFTWARE (V9 H3.1): en dos pines cualesquiera, para cuando no
+// quedan buses del periférico o sus pines no son los del cableado.
+//
+//   import I2c
+//   import SoftI2c
+//   var bus: I2c.I2C := SoftI2c.SoftI2C(4, 5)            // sda 4, scl 5
+//   var s: Bmp280.Sensor := Bmp280.Sensor(bus, 0x76)     // como con un I2c.HardI2C
+//
+// Es un I2c.I2C: los mismos métodos que el del periférico, con los mismos límites (3 mensajes
+// y 256 bytes por transacción) y los mismos errores; sólo cambia el constructor. Va en su
+// módulo para que no lo pague quien no lo usa.
+//
+// LOS PINES van en colector abierto, con sus RESISTENCIAS a la alimentación (de 1 a 10
+// kohmios: las de todo bus I2C; los módulos de sensores suelen traerlas). Al abrir se
+// comprueba: las dos líneas se bajan y se sueltan, y tienen que subir; si no, un error con
+// nombre. Y si un dispositivo se quedó a media lectura sujetando los datos —la placa se
+// reinició en medio—, se le dan hasta 9 relojes y un STOP.
+//
+// LA VELOCIDAD: el baudrate es el MÁXIMO (medio bit no dura nunca menos de lo que pide). Los
+// bits los hace el intérprete, y el reloj de verdad es más lento: unos 20 kHz en la Nucleo, a
+// 160 MHz. Para un sensor sobra; para una pantalla, el periférico. Un dispositivo puede
+// sujetar el reloj hasta unos 50 ms.
+//
+// Cada operación va ENTERA: otro hilo que use el mismo objeto espera a que acabe. En el PC no
+// hay pines: cada operación escribe una línea y lo leído es cero, como con el periférico.
+// ============================================================
+module SoftI2c
+
+  import Core
+  import I2c
+
+  // Los intrínsecos de un pin (los de Gpio) y el nombre del micro (Machine): importar esos
+  // dos módulos costaría su RAM.
+  public function __pinInit(pin: integer, mode: integer)
+    inline CALL_BUILTIN 78
+  end __pinInit
+  public function __pinWrite(pin: integer, value: integer)
+    inline CALL_BUILTIN 79
+  end __pinWrite
+  public function __pinRead(pin: integer): integer
+    inline CALL_BUILTIN 80
+  end __pinRead
+  public function __pinRelease(pin: integer)
+    inline CALL_BUILTIN 254
+  end __pinRelease
+  public function __micro(): string
+    inline CALL_BUILTIN 233
+  end __micro
+
+  // ---- los bits. `us` es medio bit. Funciones con los pines como parámetros y no métodos: el
+  // intérprete las lleva casi el doble de rápido (no hay campos que leer ni llamadas
+  // virtuales), y en un bus por software eso es la velocidad.
+
+  // El dispositivo sujeta el reloj: se le espera hasta unos 50 ms. 0 si no lo suelta.
+  public function __stretch(scl: integer): integer
+    var n: integer := 0
+    while __pinRead(scl) == 0 do
+      n := n + 1
+      if n > 5000 then return 0
+      sleepUs(10)
+    endwh
+    return 1
+  end __stretch
+
+  // El reloj, arriba. 0 si no sube.
+  public function __sclUp(scl: integer, us: integer): integer
+    __pinWrite(scl, 1)
+    sleepUs(us)
+    if __pinRead(scl) == 1 then return 1
+    return __stretch(scl)
+  end __sclUp
+
+  // START, y también el repeated START (con el reloj abajo). 0 si el reloj no sube.
+  public function __start(sda: integer, scl: integer, us: integer): integer
+    __pinWrite(sda, 1)
+    sleepUs(us)
+    if __sclUp(scl, us) == 0 then return 0
+    __pinWrite(sda, 0)
+    sleepUs(us)
+    __pinWrite(scl, 0)
+    return 1
+  end __start
+
+  // STOP (con el reloj abajo).
+  public function __stop(sda: integer, scl: integer, us: integer)
+    __pinWrite(sda, 0)
+    sleepUs(us)
+    __sclUp(scl, us)
+    __pinWrite(sda, 1)
+    sleepUs(us)
+  end __stop
+
+  // Un byte fuera. 1 si contestan (ACK).
+  public function __send(sda: integer, scl: integer, us: integer, b: integer): integer
+    var m: integer := 0x80
+    while m != 0 do
+      __pinWrite(sda, b & m)
+      sleepUs(us)
+      __pinWrite(scl, 1)
+      sleepUs(us)
+      if __pinRead(scl) == 0 then
+        if __stretch(scl) == 0 then return 0
+      endif
+      __pinWrite(scl, 0)
+      m := m shr 1
+    endwh
+    __pinWrite(sda, 1)
+    sleepUs(us)
+    if __sclUp(scl, us) == 0 then return 0
+    var r: integer := 1 - __pinRead(sda)
+    __pinWrite(scl, 0)
+    return r
+  end __send
+
+  // Un byte dentro, con su ACK; con last = 1, NACK: es el último. -1 si el reloj no sube.
+  public function __recv(sda: integer, scl: integer, us: integer, last: integer): integer
+    var b: integer := 0
+    var i: integer := 0
+    __pinWrite(sda, 1)
+    while i < 8 do
+      sleepUs(us)
+      __pinWrite(scl, 1)
+      sleepUs(us)
+      if __pinRead(scl) == 0 then
+        if __stretch(scl) == 0 then return -1
+      endif
+      b := (b shl 1) | __pinRead(sda)
+      __pinWrite(scl, 0)
+      i := i + 1
+    endwh
+    __pinWrite(sda, last)
+    sleepUs(us)
+    if __sclUp(scl, us) == 0 then return -1
+    __pinWrite(scl, 0)
+    __pinWrite(sda, 1)
+    return b
+  end __recv
+
+  // Un mensaje: START, `head` (la dirección y si se lee) y n bytes de d, desde p. 1 si
+  // contestan a todo.
+  public function __message(sda: integer, scl: integer, us: integer, head: integer, d: integer[], p: integer, n: integer): integer
+    if __start(sda, scl, us) == 0 then return 0
+    if __send(sda, scl, us, head) == 0 then return 0
+    var fin: integer := p + n
+    if (head & 1) == 0 then
+      while p < fin do
+        if __send(sda, scl, us, d[p]) == 0 then return 0
+        p := p + 1
+      endwh
+    else
+      var last: integer := 0
+      while p < fin do
+        if p == fin - 1 then last := 1
+        var b: integer := __recv(sda, scl, us, last)
+        if b < 0 then return 0
+        d[p] := b
+        p := p + 1
+      endwh
+    endif
+    return 1
+  end __message
+
+  // ============================================================
+  // Clase SoftI2C — ver la cabecera.
+  // ============================================================
+  public class SoftI2C extends I2c.I2C
+
+    public property sda:      integer
+    public property scl:      integer
+    public property baudrate: integer
+
+    var half_: integer       // medio bit, en microsegundos
+    var pins_: integer       // los pines que ha tomado: 0, 1 (sda) o 2
+    var lock_: Mutex         // una operación a la vez
+    var pc_:   boolean       // sin pines: una línea por operación
+
+    public function SoftI2C(sda: integer, scl: integer)
+      SoftI2C(sda, scl, 100000)
+    end SoftI2C
+
+    public function SoftI2C(sda: integer, scl: integer, baudrate: integer)
+      this.sda      := sda
+      this.scl      := scl
+      this.baudrate := baudrate
+      if sda == scl then throw RuntimeError(this.name_() + ": sda y scl no pueden ser el mismo pin")
+      if baudrate < 1 then throw RuntimeError(this.name_() + ": baudrate no válido (" + intToString(baudrate) + ")")
+      this.half_ := (500000 + baudrate - 1) / baudrate
+      this.lock_ := Mutex()
+      this.pc_   := __micro() == "host"
+      __pinInit(sda, 2)                // 2: colector abierto (Gpio.Pin.OPEN_COLLECTOR)
+      this.pins_ := 1
+      __pinInit(scl, 2)
+      this.pins_ := 2
+      if not this.pc_ then this.idle_()
+    end SoftI2C
+
+    // Lo que tomó es suyo: lo suelta también el destructor (V7 #667).
+    public function ~SoftI2C()
+      this.drop_()
+    end ~SoftI2C
+
+    // ---- los métodos de un I2c.I2C
+
+    public function write(addr: integer, data: integer[], count: integer): integer
+      this.check_(addr)
+      I2c.__checkArray(data, count, "i2c.write", "el array", 256)
+      return this.move_(addr, [1, count], 1, data, null)
+    end write
+
+    public function read(addr: integer, data: integer[], count: integer): integer
+      this.check_(addr)
+      I2c.__checkArray(data, count, "i2c.read", "el array", 256)
+      return this.move_(addr, [2, count], 1, null, data)
+    end read
+
+    public function writeRead(addr: integer, tx: integer[], ntx: integer, rx: integer[], nrx: integer): integer
+      this.check_(addr)
+      I2c.__checkArray(tx, ntx, "i2c.writeRead", "el array tx", 256)
+      I2c.__checkArray(rx, nrx, "i2c.writeRead", "el array rx", 256)
+      var ops: integer[] := [1, ntx, 2, nrx]
+      this.messages_(ops, 2, "i2c.writeRead")
+      if this.move_(addr, ops, 2, tx, rx) < 0 then return -1
+      return nrx
+    end writeRead
+
+    // ---- para la base
+
+    function run_(addr: integer, ops: integer[], nops: integer, tx: integer[], rx: integer[]): integer
+      this.messages_(ops, nops, "i2c.execute")
+      return this.move_(addr, ops, nops, tx, rx)
+    end run_
+
+    function name_(): string
+      return "SoftI2C " + intToString(this.sda) + "/" + intToString(this.scl)
+    end name_
+
+    function close_()
+      this.lock_.lock()                // la operación que haya en marcha, entera
+      this.drop_()
+      this.lock_.unlock()
+    end close_
+
+    function drop_()
+      if this.pins_ > 0 then __pinRelease(this.sda)
+      if this.pins_ > 1 then __pinRelease(this.scl)
+      this.pins_ := 0
+    end drop_
+
+    // ---- lo que cabe en una transacción: lo del periférico (I2c.bp), con sus textos
+    function messages_(ops: integer[], n: integer, op: string)
+      if n < 1 or n > 3 then throw RuntimeError(op + ": una transacción lleva de 1 a 3 mensajes (tiene " + intToString(n) + ")")
+      var total:   integer := 0
+      var ordenes: integer := 1        // el STOP
+      var vacio:   integer := 0
+      var i: integer := 0
+      while i < n do
+        var c: integer := ops[2 * i + 1]
+        if c == 0 and vacio == 0 then vacio := i + 1
+        total := total + c
+        ordenes := ordenes + 2
+        if ops[2 * i] == 2 and c > 1 then ordenes := ordenes + 1
+        i := i + 1
+      endwh
+      if total > 256 then throw RuntimeError(op + ": " + intToString(total) + " bytes supera el máximo de 256 bytes por transacción")
+      if vacio > 0 then throw RuntimeError(this.name_() + ": el mensaje " + intToString(vacio) + " está vacío")
+      if ordenes > 8 then throw RuntimeError(this.name_() + ": la transacción necesita " + intToString(ordenes) + " órdenes del bus y caben 8 (cada mensaje 2, una lectura de más de un byte 3, y el STOP)")
+    end messages_
+
+    // ---- los mensajes, seguidos: repeated START entre dos, y STOP al final. Los bytes
+    // movidos, o -1.
+    function move_(addr: integer, ops: integer[], nops: integer, tx: integer[], rx: integer[]): integer
+      if this.pc_ then return this.log_(addr, ops, nops, tx, rx)
+      var i:  integer := 0
+      var pt: integer := 0
+      var pr: integer := 0
+      var ok: boolean := true
+      this.lock_.lock()
+      try
+        this.check_(addr)              // otro hilo pudo soltarlo mientras se esperaba el turno
+        while ok and i < nops do
+          var n: integer := ops[2 * i + 1]
+          if ops[2 * i] == 1 then
+            ok := __message(this.sda, this.scl, this.half_, addr shl 1, tx, pt, n) == 1
+            pt := pt + n
+          else
+            ok := __message(this.sda, this.scl, this.half_, (addr shl 1) | 1, rx, pr, n) == 1
+            pr := pr + n
+          endif
+          i := i + 1
+        endwh
+        __stop(this.sda, this.scl, this.half_)
+      finally
+        this.lock_.unlock()
+      endtry
+      if ok then return pt + pr
+      return -1
+    end move_
+
+    // ---- al abrir: en reposo las dos líneas están arriba. Se bajan y se sueltan sin START ni
+    // STOP (el reloj, el primero en bajar y el último en subir). Mirarlas sin bajarlas no
+    // vale: dos pines al aire se leen como quieren.
+    function idle_()
+      __pinWrite(this.scl, 0)
+      __pinWrite(this.sda, 0)
+      sleepUs(20)
+      __pinWrite(this.sda, 1)
+      sleepUs(50)
+      if __sclUp(this.scl, this.half_) == 0 then this.stuck_(this.scl, "scl")
+      var i: integer := 0
+      while i < 9 and __pinRead(this.sda) == 0 do       // un dispositivo a media lectura
+        __pinWrite(this.scl, 0)
+        sleepUs(this.half_)
+        __sclUp(this.scl, this.half_)
+        i := i + 1
+      endwh
+      if __pinRead(this.sda) == 0 then this.stuck_(this.sda, "sda")
+      if i > 0 then
+        __pinWrite(this.scl, 0)
+        __stop(this.sda, this.scl, this.half_)
+      endif
+    end idle_
+
+    function stuck_(pin: integer, cual: string)
+      this.drop_()
+      throw RuntimeError(this.name_() + ": el pin " + intToString(pin) + " (" + cual + ") no sube: sin resistencia, o alguien lo sujeta")
+    end stuck_
+
+    // ---- en el PC: la operación, en una línea, y lo leído a cero.
+    function log_(addr: integer, ops: integer[], nops: integer, tx: integer[], rx: integer[]): integer
+      var s: string := "[i2c] sda=" + intToString(this.sda) + " scl=" + intToString(this.scl) + " addr=0x" + I2c.__hex(addr, 2)
+      var i:  integer := 0
+      var pt: integer := 0
+      var pr: integer := 0
+      while i < nops do
+        var n: integer := ops[2 * i + 1]
+        var k: integer := 0
+        if ops[2 * i] == 1 then
+          s := s + " write=["
+          while k < n do
+            if k > 0 then s := s + " "
+            s := s + I2c.__hex(tx[pt] & 0xFF, 2)
+            pt := pt + 1
+            k := k + 1
+          endwh
+          s := s + "]"
+        else
+          s := s + " read=" + intToString(n)
+          while k < n do
+            rx[pr] := 0
+            pr := pr + 1
+            k := k + 1
+          endwh
+        endif
+        i := i + 1
+      endwh
+      if pr > 0 then s := s + " (sim → ceros)"
+      print s
+      return pt + pr
+    end log_
+
+  end SoftI2C
+
+end SoftI2c

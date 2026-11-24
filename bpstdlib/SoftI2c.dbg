@@ -1,0 +1,468 @@
+dbg 3
+module SoftI2c
+source C:\lenguajes\pm\bpstdlib\SoftI2c.bp
+lines
+0 0
+29 0
+40 0
+55 0
+69 0
+84 0
+98 0
+113 0
+127 0
+130 200
+150 0
+153 206
+164 207
+183 208
+230 0
+233 212
+244 213
+263 214
+310 0
+313 218
+324 219
+343 220
+362 221
+404 222
+419 223
+445 223
+459 224
+472 0
+475 230
+491 231
+522 0
+525 235
+568 0
+571 239
+583 240
+592 241
+607 0
+610 245
+623 245
+640 246
+653 246
+670 247
+680 0
+683 252
+708 252
+736 253
+739 254
+742 255
+745 256
+748 257
+758 258
+770 259
+794 259
+805 260
+812 261
+818 262
+848 262
+859 263
+867 265
+880 265
+908 266
+917 266
+949 267
+962 267
+997 0
+1000 273
+1011 273
+1043 274
+1046 275
+1049 276
+1052 277
+1055 278
+1067 279
+1074 280
+1085 281
+1108 282
+1120 283
+1135 284
+1175 285
+1187 287
+1229 288
+1236 290
+1245 292
+1273 294
+1293 294
+1319 296
+1326 296
+1343 297
+1356 0
+1359 304
+1372 305
+1385 306
+1395 307
+1408 308
+1418 309
+1443 309
+1467 310
+1470 311
+1506 312
+1519 313
+1530 314
+1550 315
+1558 317
+1575 317
+1599 318
+1608 319
+1621 320
+1656 0
+1659 325
+1668 326
+1704 0
+1707 331
+1750 332
+1753 333
+1756 334
+1759 335
+1769 336
+1781 337
+1784 338
+1799 339
+1813 340
+1823 341
+1832 341
+1851 342
+1878 343
+1884 344
+1892 346
+1911 348
+1930 349
+1940 350
+1947 351
+1953 352
+1961 355
+1970 357
+1979 357
+1998 358
+2002 359
+2018 0
+2043 0
+2046 183
+2057 184
+2068 185
+2079 186
+2089 186
+2113 187
+2122 187
+2154 188
+2173 189
+2182 190
+2199 191
+2207 192
+2214 193
+2222 194
+2229 195
+2241 195
+2258 0
+2292 0
+2328 0
+2346 0
+2366 0
+2390 0
+2404 0
+2433 0
+2457 0
+2460 57
+2463 58
+2475 59
+2481 60
+2494 60
+2507 61
+2519 63
+2531 0
+2534 68
+2542 69
+2549 70
+2561 70
+2574 71
+2592 0
+2595 76
+2603 77
+2610 78
+2626 78
+2639 79
+2647 80
+2654 81
+2662 82
+2674 0
+2677 87
+2685 88
+2692 89
+2703 90
+2711 91
+2721 0
+2724 96
+2731 97
+2740 98
+2752 99
+2759 100
+2767 101
+2774 102
+2786 103
+2800 103
+2818 105
+2826 106
+2834 108
+2842 109
+2849 110
+2865 110
+2878 111
+2887 112
+2895 113
+2908 0
+2911 118
+2914 119
+2917 120
+2925 121
+2938 122
+2945 123
+2953 124
+2960 125
+2972 126
+2986 126
+3005 128
+3017 129
+3025 130
+3033 132
+3042 133
+3049 134
+3065 134
+3079 135
+3087 136
+3095 137
+3108 0
+3111 143
+3129 143
+3142 144
+3162 144
+3175 145
+3182 146
+3193 147
+3203 148
+3227 148
+3240 149
+3253 152
+3256 153
+3266 154
+3278 154
+3286 155
+3301 156
+3310 156
+3323 157
+3331 158
+3339 161
+3351 0
+3408 0
+3475 0
+3560 0
+3681 0
+vars
+func __init 0
+func __startup 29
+func SoftI2C.getSda 40
+this -20 8 0 ?
+func SoftI2C.setSda 55
+this -24 8 0 ?
+func SoftI2C.getScl 69
+this -20 8 0 ?
+func SoftI2C.setScl 84
+this -24 8 0 ?
+func SoftI2C.getBaudrate 98
+this -20 8 0 ?
+func SoftI2C.setBaudrate 113
+this -24 8 0 ?
+func SoftI2C.__dtor 127
+this -20 8 0 ?
+func SoftI2C.write 150
+this -36 8 0 ?
+addr -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func SoftI2C.read 230
+this -36 8 0 ?
+addr -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func SoftI2C.writeRead 310
+this -48 8 0 ?
+addr -40 4 0 integer
+tx -36 8 0 ref
+ntx -28 4 0 integer
+rx -24 8 0 ref
+nrx -16 4 0 integer
+ops 8 8 0 ?
+func SoftI2C.run_ 472
+this -52 8 0 ?
+addr -44 4 0 integer
+ops -40 8 0 ref
+nops -32 4 0 integer
+tx -28 8 0 ref
+rx -20 8 0 ref
+func SoftI2C.name_ 522
+this -20 8 0 ?
+func SoftI2C.close_ 568
+this -20 8 0 ?
+func SoftI2C.drop_ 607
+this -20 8 0 ?
+func SoftI2C.messages_ 680
+this -40 8 0 ?
+ops -32 8 0 ref
+n -24 4 0 integer
+op -20 8 0 string
+total 0 4 0 integer
+ordenes 4 4 0 integer
+vacio 8 4 0 integer
+i 12 4 0 integer
+c 16 4 0 integer
+func SoftI2C.move_ 997
+this -52 8 0 ?
+addr -44 4 0 integer
+ops -40 8 0 ref
+nops -32 4 0 integer
+tx -28 8 0 ref
+rx -20 8 0 ref
+i 4 4 0 integer
+pt 8 4 0 integer
+pr 12 4 0 integer
+ok 16 4 0 boolean
+n 24 4 0 integer
+func SoftI2C.idle_ 1356
+this -20 8 0 ?
+i 4 4 0 integer
+func SoftI2C.stuck_ 1656
+this -32 8 0 ?
+pin -24 4 0 integer
+cual -20 8 0 string
+func SoftI2C.log_ 1704
+this -52 8 0 ?
+addr -44 4 0 integer
+ops -40 8 0 ref
+nops -32 4 0 integer
+tx -28 8 0 ref
+rx -20 8 0 ref
+s 4 8 0 string
+i 12 4 0 integer
+pt 16 4 0 integer
+pr 20 4 0 integer
+n 24 4 0 integer
+k 28 4 0 integer
+func SoftI2C.__init 2018
+this -28 8 0 ?
+sda -20 4 0 integer
+scl -16 4 0 integer
+func SoftI2C.__init$iii 2043
+this -32 8 0 ?
+sda -24 4 0 integer
+scl -20 4 0 integer
+baudrate -16 4 0 integer
+func __cls_new_SoftI2C(ii) 2258
+sda -20 4 0 integer
+scl -16 4 0 integer
+func __cls_new_SoftI2C(iii) 2292
+sda -24 4 0 integer
+scl -20 4 0 integer
+baudrate -16 4 0 integer
+func __cls_init_SoftI2C(ii) 2328
+this -28 8 0 ?
+sda -20 4 0 integer
+scl -16 4 0 integer
+func __cls_init_SoftI2C(iii) 2346
+this -32 8 0 ?
+sda -24 4 0 integer
+scl -20 4 0 integer
+baudrate -16 4 0 integer
+func __cls_m_SoftI2C#read(i[ii)i 2366
+this -36 8 0 ?
+addr -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func __cls_m_SoftI2C#__dtor()V 2390
+this -20 8 0 ?
+func __cls_m_SoftI2C#writeRead(i[ii[ii)i 2404
+this -48 8 0 ?
+addr -40 4 0 integer
+tx -36 8 0 ref
+ntx -28 4 0 integer
+rx -24 8 0 ref
+nrx -16 4 0 integer
+func __cls_m_SoftI2C#write(i[ii)i 2433
+this -36 8 0 ?
+addr -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func __stretch 2457
+scl -16 4 0 integer
+n 4 4 0 integer
+func __sclUp 2531
+scl -20 4 0 integer
+us -16 4 0 integer
+func __start 2592
+sda -24 4 0 integer
+scl -20 4 0 integer
+us -16 4 0 integer
+func __stop 2674
+sda -24 4 0 integer
+scl -20 4 0 integer
+us -16 4 0 integer
+func __send 2721
+sda -28 4 0 integer
+scl -24 4 0 integer
+us -20 4 0 integer
+b -16 4 0 integer
+m 4 4 0 integer
+r 12 4 0 integer
+func __recv 2908
+sda -28 4 0 integer
+scl -24 4 0 integer
+us -20 4 0 integer
+last -16 4 0 integer
+b 4 4 0 integer
+i 8 4 0 integer
+func __message 3108
+sda -44 4 0 integer
+scl -40 4 0 integer
+us -36 4 0 integer
+head -32 4 0 integer
+d -28 8 0 ref
+p -20 4 0 integer
+n -16 4 0 integer
+fin 4 4 0 integer
+last 8 4 0 integer
+b 12 4 0 integer
+func __strconcat 3351
+a -28 8 0 ?
+b -20 8 0 ?
+la 0 4 0 ?
+lb 4 4 0 ?
+out 8 8 0 ?
+d 16 4 0 ?
+func __strconcat3 3408
+s0 -36 8 0 ?
+s1 -28 8 0 ?
+s2 -20 8 0 ?
+out 0 8 0 ?
+d 8 4 0 ?
+func __strconcat4 3475
+s0 -44 8 0 ?
+s1 -36 8 0 ?
+s2 -28 8 0 ?
+s3 -20 8 0 ?
+out 0 8 0 ?
+d 8 4 0 ?
+func __strconcat6 3560
+s0 -60 8 0 ?
+s1 -52 8 0 ?
+s2 -44 8 0 ?
+s3 -36 8 0 ?
+s4 -28 8 0 ?
+s5 -20 8 0 ?
+out 0 8 0 ?
+d 8 4 0 ?
+func __strequals 3681
+a -28 8 0 ?
+b -20 8 0 ?
+la 0 4 0 ?

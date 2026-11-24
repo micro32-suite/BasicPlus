@@ -84,6 +84,7 @@ en §ABIERTAS, en el bloque de V9:
 |---|---|---|
 | **H1** | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`) | ⬜ abierto el 22-nov |
 | **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA; cada acción del IDE, un comando, con la `Action` de Swing como su cara en la ventana y MCP como la de la IA (Eduardo, 22-nov). Va antes que el H1 | ⏳ abierto el 22-nov; H2.1, el análisis, H2.2, los comandos (53, probados por Eduardo), y H2.3, la IA por MCP (probado por una IA de verdad en la Pico 2 y en la VM-C), hechos; H2.4 (el depurador, por la IA), analizado y aplazado a una segunda fase (23-nov): lo que haga falta, lo dirá el uso, en el H1 |
+| **H3** | **el I2C y el SPI por software** (Eduardo, 24-nov): una clase base por bus, la del periférico y la de software, que se intercambian cambiando sólo el constructor; las de software, cada una en su módulo (`#881`–`#884`) | ⏳ abierto el 24-nov; el I2C, hecho y probado en el PC y en la Nucleo (falta verlo en las otras familias, que pide grabarlas); el SPI, analizado |
 
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
@@ -14432,6 +14433,130 @@ variables y sigue.
 - **Hecho cuando:** un Run on Device contra la VM Java del panel ejecuta un programa con imports de la stdlib, y otro
   detrás sin reiniciarla; el árbol del panel enseña su FS como el de una placa; y la red, igual (cambia la VM de
   referencia).
+
+#### 🧩 H3 — el I2C y el SPI por software (abierto el 24-nov; Eduardo: *«Lo del I2C por software y el SPI por software lo damos de alta como hito 3»*)
+
+Del alcance de V9 (*«De las que podamos hacemos una versión software para los micros con pocos puertos»*). Eduardo,
+24-nov: *«Lo que quiero ahora es una Clase I2C por software que podamos utilizar en los programas para cuando no nos
+queden suficientes buses I2C o los pines no coincidan. Y aquí viene lo que tenemos que decidir: si hacer una clase base
+I2C y 2 clases SoftI2C y HardI2C que hereden de la primera. La clase I2C sería abstracta ( en el lenguaje no tenemos
+clases abstractas pero como si lo fuera )»*; y *«La idea es que el bus ya sea por hardware o por software se puedan
+intercambiar. En cada caso se utiliza un constructor diferente pero todo lo demás es común.»*
+
+**El análisis** (`notas/V9_I2C_software.md`, con los prototipos), en tres vueltas: (1) la jerarquía en BP, probada en el PC
+y en la Nucleo con un BME280: funciona, pero los errores no eran los mismos en los dos buses; (2) el software en C, como un
+bus con otro número: *«No, no me gusta.»*; (3) el modelo de MicroPython, que trajo Eduardo (*«Te copio la ayuda de
+Micropython por si te puede servir de modelo»*): dos clases con los mismos métodos y otro constructor; su bus por software
+fue antes un número, `I2C(-1, …)`, y lo retiraron a favor de la clase. Es su diseño; la base, que Python no necesita, en BP
+hace falta para decir qué recibe una librería.
+
+**Decidido** (Eduardo, 24-nov):
+- **Los nombres:** *«I2C para la clase base, HardI2C para la de hardware y SoftI2C para la de software.»*
+- **Los módulos:** *«Las dos clases de software pueden ir con su propio módulo, y así se ahorra memoria (normalmente
+  utilizarás las hardware y las de software solamente si no te queda otro remedio ).»*
+- **El colector abierto en la RP2350, emulado** (*«3) OK»*): cambia lo de V7/H4, que lo dejó en un error con nombre.
+- **Otro hardware, si ayuda:** *«Aunque digamos software también se puede utilizar otro hardware a parte de los pines. Si
+  es de ayuda se puede utilizar por ejemplo un Timer. En el caso de la Pico2 y la Metro podemos tener unas versiones
+  específicas que aprovechen el PIO, pero lo dejaría para mas adelante.»*
+- **La velocidad:** *«Lo normal es que las librerías de software sean mas lentas que las de hardware pero en muchos casos
+  la velocidad no es crítica. Así que una versión SPI por software no nos va a servir para comunicar con una memoria o una
+  pantalla pero nos puede servir perfectamente para comunicar con un sensor.»*
+
+| apartado | qué | ficha | estado |
+|---|---|---|---|
+| **H3.1** | el I2C: la base `I2C`, `HardI2C` y, en su módulo, `SoftI2C` | `#881` | 🧬 hecho el 24-nov: las dos VMs y la Nucleo; las otras placas, con `#882` |
+| **H3.2** | el colector abierto donde falta o falla: la RP2350, las ESP32 y el PC | `#882` | 🧬 hecho el 24-nov y compilado en las ocho imágenes; por ver en las placas |
+| **H3.3** | las librerías de los dispositivos I2C, con el bus como objeto | `#883` | 🧬 hecho el 24-nov; `Bmp280`, probada en la Nucleo |
+| **H3.4** | el SPI: el análisis, y la base, la del periférico y la de software | `#884` | ⬜ analizado (`notas/V9_SPI_software.md`), por decidir |
+| **H3.5** | la Pico 2 y la Metro, por la PIO | — | para más adelante (Eduardo) |
+
+**Se da por hecho** cuando un programa con un sensor cambie de bus cambiando sólo el constructor, en las tres familias, y
+lo mismo con el SPI.
+
+#### 🧬 `#881` — H3.1: el I2C: la base `I2C`, `HardI2C` (el periférico) y `SoftI2c.SoftI2C` (por software) (abierta el 24-nov · Eduardo · hecha el mismo día; por ver en las placas de `#882`)
+
+- **Lo que pone cada una:** `I2C`, como si fuera abstracta: `write`, `read` y `writeRead` los pone cada bus (en la base
+  lanzan un error con su nombre), y, una vez para todos, `execute`, `release`, `scan`, `isPresent`, `readReg`, `readRegs` y
+  `writeReg`. `HardI2C`, la `Bus` de antes; `Bus extends HardI2C` se queda, con su constructor y sus constantes: lo ya escrito
+  no cambia, **ni recompilándolo**: siete programas compilados con la V8.1 publicada dan lo mismo byte a byte con el `I2c`
+  nuevo, en las dos VMs (el octavo, de tres hilos, las mismas líneas). `SoftI2C`, en `SoftI2c`: sus dos pines, sus reglas (las
+  del C, con sus textos) y los bits, en BP.
+- **En BP y no en C ni en `native`:** nada en las imágenes; y la clase lo tapa: si un día hace falta más velocidad, se
+  cambia por dentro y ningún programa se entera. Medido en la Nucleo: 19–22 kHz (el periférico, 100): 500 lecturas de un
+  registro, 965 ms frente a 293. En `native`, 1,5 veces más, y su código a la RAM ejecutable. Los bits, en funciones del
+  módulo y no en métodos: el intérprete las lleva casi el doble de rápido (964 ms frente a 1781).
+- **Lo que se iguala de paso en el periférico:** usarlo tras `release()` y una dirección de más de 7 bits eran −1 en
+  silencio: error con nombre, en los dos; y soltarlo dos veces ya no es un error. Cuesta 13 µs por operación. Las funciones
+  por número, como estaban.
+- **Cuesta:** `I2c.mod`, de 7,8 a 12,4 KB (va en las imágenes: a la C3 le quedan 346 KB); `SoftI2c.mod`, 8,3 KB, sólo para
+  quien lo usa. `Stdlib.pack`, 37 módulos.
+- **Probado:** `samples/I2cContrato.bp` (nuevo, en el corpus): la misma función, con los dos buses, y las dos actas
+  comparadas línea a línea: en el PC, 32 iguales y ninguna distinta, en MOD9 y en MOD8; en la Nucleo, con el BME280, 39
+  iguales —lo que va bien, nadie contesta, los errores— y una distinta, que era `#887`, del C (el tope de 20 ms, del
+  periférico, no se compara). Dos hilos a la vez sobre el bus por software, 400 lecturas y ninguna mal; soltarlo con tres
+  hilos usándolo: cada lectura acaba entera y los tres reciben el error; el sensor parado a media lectura, sujetando los
+  datos, en cada uno de los bits: al abrir se recupera; sin resistencias, encima de un bus abierto, el mismo pin dos veces
+  y un baudrate imposible: errores con nombre. La red, VERDE (paridad 220, MOD8 211 y los 9 de siempre, dos workers 220);
+  los 419 ejemplos, compilados.
+- **Lo que enseñó MOD8:** un método redefinido en OTRO módulo que recibe una clase (`execute(addr, t: I2c.Transaction)`) no
+  se ve como redefinido (la firma dice `Transaction` en uno e `I2c.Transaction` en el otro): corría el de la base. En MOD9,
+  bien. De ahí que `execute` esté en la base, sobre una operación interna con enteros y arrays.
+- **Hecho cuando:** lo mismo que en la Nucleo, en una RP2350 y en una ESP32, con `#882`.
+
+#### 🧬 `#882` — H3.2: el colector abierto (`Gpio.Pin.OPEN_COLLECTOR`): emulado en la RP2350 y en el PC, y en las ESP32, que se lea (abierta el 24-nov · Eduardo: *«3) OK»* · hecha el mismo día; por ver en las placas)
+
+- **Para qué:** un bus por software —I2C hoy; 1-Wire o un DHT mañana— baja una línea o la suelta, y la LEE.
+- **Las ESP32 (las cinco), un fallo:** el pin se abre con `GPIO_MODE_OUTPUT_OD`, sólo salida, y `gpio_get_level` da siempre
+  0 (IDF 6.1, `gpio.h`): leer un pin en colector abierto no vale. Con `GPIO_MODE_INPUT_OUTPUT_OD` (el de MicroPython), sí.
+  Y lo mismo en `OUTPUT`: `Pin.value()` y `Pin.toggle()` de una salida leerían siempre 0. Del código y del IDF, por ver en
+  una placa.
+- **La RP2350:** su pad no lo tiene; se emula por la dirección (el pestillo a 0: de salida baja la línea, de entrada la
+  suelta), como MicroPython. En V7/H4 se dejó en error («sin emular»); la palabra de Eduardo lo cambia. El perfil del PC,
+  que es el de la RP2350A, igual.
+- **Y nace suelto**, en las tres familias: hoy, en la STM32, un pin en colector abierto nace bajando la línea.
+- **Hecho (24-nov):** el contrato, en `bpvm_gpio.h` (nace suelto y sin pull; `write(0)` baja y `write(1)` suelta; `read()`
+  lee la línea, también la de una salida); las ESP32, con su entrada (`GPIO_MODE_INPUT_OUTPUT` y `…_OD`); la RP2350,
+  emulado (una máscara de 48 bits: `write` mueve la dirección); la STM32, con el latch a 1 antes de configurarlo; y el
+  perfil del PC, en las dos VMs (`Machine.openDrainPins()`, los 30). Las ocho imágenes compilan (la RP2350, las cinco ESP32
+  y las dos STM32); **sin grabar**. `PinMapa` (en el corpus) y la referencia, al día.
+- **Hecho cuando:** en las tres familias, un pin en colector abierto se suelta, se baja y se lee.
+
+#### 🧬 `#883` — H3.3: las librerías de los dispositivos I2C (`bpdevices`), con el bus como objeto (abierta el 24-nov · hecha el mismo día)
+
+- `Bmp280`, `Bme688`, `Mcp9804` y `Pca9554` pedían un NÚMERO de bus y llamaban a las funciones de `I2c`: sólo valían con el
+  periférico. Ahora, un constructor más, con un `I2c.I2C`; el del número se queda: se engancha a ese bus —ya abierto, o
+  declarado en el ENV de la placa— la primera vez que lo usa, y sin abrir es un error con nombre (antes, −1 en silencio).
+  Los registros se leen en una transacción, con repeated start. Las dos demos, al día; el comentario de `Bme688` («pasar un
+  array a un método de una clase de otro módulo revienta en el micro»), fuera: el 24-nov, en la Nucleo, va.
+- **Probado:** `Bmp280` en la Nucleo, con un `HardI2C`, un `Bus`, el número y un `SoftI2C`: la misma temperatura y la misma
+  presión (19,9 grados y 1012,3 hPa). `Bme688`, su paridad en las dos VMs. `Mcp9804` y `Pca9554`, compiladas, sin su chip.
+
+#### 🧬 `#884` — H3.4: el SPI por software: la base, la del periférico y la de software (abierta el 24-nov · analizada el mismo día, por decidir)
+
+- Para un sensor, no para una memoria ni una pantalla (Eduardo, arriba). El análisis, en `notas/V9_SPI_software.md`: con los
+  nombres del I2C, `SPI`, `HardSPI` (la `Bus` de hoy) y `SoftSPI` (en `SoftSpi`); y la diferencia: en el SPI, lo que de verdad
+  se cambia sin tocar una librería es `Spi.Device` (el bus, su CS, su velocidad y su modo), que hoy lleva el NÚMERO del bus:
+  un constructor más, con un `Spi.SPI`. Nada nuevo en C. Se prueba con un sensor de verdad por SPI (sin ACK, no se sabe si
+  llegó): hace falta uno conectado.
+
+#### 🧬 `#887` — STM32: el error de una `I2c.Transaction` de más de 256 bytes salía torcido: «ld bytes supera el máximo de 300 bytes» (abierta el 24-nov · la cazó el contrato del H3 en la Nucleo; desde V7 · arreglada el mismo día; por ver en la Nucleo)
+
+- El total se escribía con `PRId64`, y la `printf` de la newlib-nano de la STM32 no lleva los de 64 bits: pintaba «ld» y
+  desplazaba el resto. Era el único que quedaba en el código de las placas (el resto va por `bpvm_format_i64`). Arreglado
+  (`builtins.c`); el texto, el de siempre. Se verá en la Nucleo al grabarla con lo de `#882`.
+
+#### 🧬 `#886` — un módulo que se llama `Main` con una `function Main()` se ejecuta DOS veces, sin un aviso (abierta el 24-nov · vista de paso, con un programa de prueba · pendiente)
+
+- La función con el nombre del módulo es su inicializador (corre al cargarlo: la gramática, «INICIALIZADOR DE MÓDULO»), y
+  además `Main` es el programa: las dos VMs la corren dos veces, igual. Nadie lo avisa, y `Main` es un nombre natural para
+  el primer programa de alguien (o de una IA). Propuesto: un aviso del compilador en ese caso; o que, siendo el principal,
+  corra una vez.
+
+#### 🧬 `#885` — STM32: el I2C del periférico va siempre a 100 kHz, se pida lo que se pida (abierta el 24-nov · medida al hacer el H3 · pendiente)
+
+- `gpio_stm32.c` pone un `TIMINGR` fijo (el de CubeMX) e ignora la velocidad: en la Nucleo, a 400 kHz tarda lo mismo que
+  a 100 (500 lecturas de un registro, 255 ms). Sabido desde antes (el comentario de `stm32_i2c_abrir`; `V7_IDEAS` §H6),
+  sin ficha. Una velocidad que se pide, se acepta y no se cumple, en silencio.
 
 #### 🧬 `#880` — lo aplazado del H1.8: la captura de la VM Java, el botón con tamaño puesto a mano y la ruta relativa de `Gui.shot` (abierta el 23-nov · Eduardo, al decidir `#859`: *«3 lo aplazamos»* · pendiente)
 

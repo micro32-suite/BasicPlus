@@ -200,7 +200,7 @@ Misma lógica se aplicará a otros módulos de información global cuando los ha
 | `Pwm` | `Pwm.Slice` | sliceId del PWM HW + pin físico (canal A/B) | ✅ #131 |
 | `Spi` | (`Spi.Bus`) | busId + pines + baudrate + mode | 📋 #124 pendiente refactor |
 | `Uart` | (`Uart.Port`) | busId + pines + baudrate + format | 📋 #125 pendiente refactor |
-| `I2c` | (`I2c.Bus`) | busId + pines + baudrate | 📋 #126 pendiente refactor |
+| `I2c` | `I2c.I2C` (la base: un bus, sea el que sea), `I2c.HardI2C` (= `I2c.Bus`) y `SoftI2c.SoftI2C` | los pines y el baudrate; en el del periférico, su número | ✅ #126; la jerarquía, V9 H3 (#881) |
 | `Rtc` | (`Rtc.Clock`) | RTC HW del MCU (singleton, pero con setTime/getTime útiles) | 📋 #127 pendiente |
 | `Adc` | (`Adc.Channel`) | channel del ADC HW + pin | 📋 #128 pendiente |
 | `Wdt` | (`Wdt.Timer`) | watchdog HW (singleton) | 📋 #129 pendiente |

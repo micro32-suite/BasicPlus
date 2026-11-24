@@ -114,7 +114,7 @@ module Gpio
     // Static consts accesibles como `Gpio.Pin.OUTPUT`, etc.
     public const Pin.INPUT:     integer := 0
     public const Pin.OUTPUT:    integer := 1
-    public const Pin.OPEN_COLLECTOR: integer := 2   // V7/H4: salida en colector abierto, donde el silicio la tiene (ESP32, STM32)
+    public const Pin.OPEN_COLLECTOR: integer := 2   // V7/H4: salida en colector abierto: 0 baja la línea y 1 la suelta (V9 H3: en la RP2350, emulada)
     public const Pin.ANALOG:    integer := 3        // V7/H4: entrada de ADC; lo pone AnPin
     public const Pin.PULL_NONE: integer := 0
     public const Pin.PULL_UP:   integer := 1
@@ -129,7 +129,7 @@ module Gpio
     // Constructor: configura el pin en el modo indicado. V7/H4 (#479): la validación la hace
     // el común contra la TABLA de capacidades del micro y el estado de los pines, con nombre
     // («el pin 99 no existe en esp32c5», «el pin 26 es analógico (AnPin): primero release()»,
-    // «el pin 5 de rp2350a no puede salir en colector abierto») — el mismo texto en las dos VMs.
+    // «el pin 5 de rp2350a no es analógico») — el mismo texto en las dos VMs.
     public function Pin(num: integer, mode: integer)
       this.num  := num
       this.mode := mode

@@ -13,165 +13,249 @@ lines
 125 0
 142 0
 157 0
-160 167
-171 168
-182 169
+160 187
+171 188
+182 189
 197 0
-200 197
-216 198
-258 0
-261 203
-277 204
-319 0
-322 209
-339 0
-342 214
-350 215
-358 216
-368 0
-371 223
-374 224
-377 225
-386 226
-397 227
-411 228
-428 230
-440 232
-452 234
-466 235
-497 237
-513 239
-527 240
-558 242
-574 244
-588 245
-603 248
-606 249
-615 250
-626 251
-640 252
-668 253
-685 255
-697 257
-730 259
-739 260
-742 261
-751 262
-762 263
-776 264
-804 265
-821 267
-838 270
-851 0
-854 274
-868 275
-882 277
-897 279
-906 281
-920 282
-962 284
-977 285
-1001 286
-1015 288
-1037 289
-1061 290
-1078 0
-1081 295
-1092 296
-1111 298
-1120 299
-1146 301
-1158 302
-1197 0
-1200 191
-1210 0
-1240 0
-1254 0
-1273 0
-1287 0
-1308 0
-1325 0
-1344 0
-1359 0
-1373 0
-1388 0
-1402 0
-1417 0
-1431 0
-1446 0
-1460 0
-1463 353
-1491 0
-1494 359
-1522 0
-1525 365
-1540 0
-1543 372
-1576 0
-1579 378
-1606 0
-1609 386
-1631 387
-1642 388
-1645 389
-1652 390
-1665 391
-1683 392
-1692 393
-1700 394
-1711 396
-1719 398
-1727 399
-1742 400
-1758 0
-1761 343
-1772 344
-1783 345
-1794 346
-1805 347
-1821 0
-1859 0
-1881 0
-1905 0
-1919 0
-1938 0
-1967 0
-1991 0
+200 217
+217 218
+259 0
+262 223
+279 224
+321 0
+324 229
+341 0
+344 234
+352 235
+360 236
+370 0
+373 242
+382 243
+415 244
+424 244
+438 245
+451 0
+454 251
+457 252
+460 253
+469 254
+480 255
+494 256
+511 258
+523 260
+535 262
+549 263
+580 265
+596 267
+610 268
+641 270
+657 272
+671 273
+686 275
+689 276
+698 277
+709 278
+723 279
+751 280
+768 282
+783 0
+786 287
+789 288
+798 289
+809 290
+823 291
+851 292
+868 294
+883 0
+886 299
+905 0
+908 302
+927 0
+930 305
+949 0
+952 309
+966 310
+980 312
+995 314
+1004 316
+1018 317
+1060 319
+1075 320
+1099 321
+1113 323
+1135 324
+1159 325
+1176 0
+1179 211
+1189 0
+1219 0
+1233 0
+1247 0
+1266 0
+1280 0
+1299 0
+1318 0
+1332 0
+1353 0
+1370 0
+1389 0
+1408 0
+1411 374
+1421 0
+1424 380
+1435 0
+1438 387
+1450 388
+1457 389
+1474 0
+1477 397
+1488 0
+1491 405
+1502 406
+1511 407
+1550 408
+1559 408
+1573 409
+1586 0
+1589 415
+1611 416
+1622 417
+1625 418
+1632 419
+1645 420
+1665 421
+1673 422
+1684 424
+1692 426
+1700 427
+1715 428
+1731 0
+1734 433
+1756 434
+1782 0
+1785 440
+1828 0
+1831 446
+1872 0
+1875 451
+1897 452
+1933 452
+1952 453
+1974 0
+1977 460
+1993 0
+1999 0
+2002 467
 2013 0
-2016 102
-2032 0
-2035 106
-2058 0
-2061 110
-2084 0
-2087 114
-2097 0
-2100 120
-2128 0
-2131 128
-2153 129
-2164 130
-2167 131
-2174 132
-2187 133
-2200 134
-2209 135
-2217 136
-2228 138
-2236 141
-2244 142
-2259 143
-2275 0
-2278 148
-2290 0
-2293 151
-2305 0
-2308 154
-2324 0
-2327 157
-2343 0
-2400 0
-2485 0
+2016 471
+2027 471
+2051 472
+2080 472
+2118 0
+2138 0
+2162 0
+2185 0
+2199 0
+2218 0
+2237 0
+2259 0
+2288 0
+2309 0
+2335 0
+2359 0
+2374 0
+2388 0
+2403 0
+2417 0
+2432 0
+2446 0
+2461 0
+2475 0
+2478 498
+2489 499
+2517 0
+2520 503
+2531 504
+2559 0
+2562 508
+2573 509
+2606 0
+2609 513
+2643 0
+2646 519
+2661 0
+2664 523
+2695 0
+2698 490
+2709 491
+2720 492
+2731 493
+2742 494
+2758 0
+2796 0
+2818 0
+2842 0
+2871 0
+2895 0
+2898 535
+2919 0
+2957 0
+2979 0
+2982 106
+2998 0
+3001 110
+3024 0
+3027 114
+3050 0
+3053 118
+3063 0
+3066 124
+3094 0
+3097 132
+3119 133
+3130 134
+3133 135
+3140 136
+3153 137
+3166 138
+3175 139
+3183 140
+3194 142
+3202 145
+3210 146
+3225 147
+3241 0
+3244 152
+3256 0
+3259 155
+3271 0
+3274 158
+3290 0
+3293 161
+3309 0
+3312 166
+3323 167
+3349 169
+3358 170
+3386 172
+3398 173
+3442 175
+3467 176
+3506 0
+3509 332
+3515 333
+3521 334
+3528 335
+3537 336
+3550 337
+3602 337
+3626 338
+3634 340
+3650 0
+3707 0
+3792 0
+3913 0
+4070 0
 vars
 func __init 0
 func __startup 24
@@ -200,167 +284,299 @@ func Transaction.write 197
 this -32 8 0 ?
 data -24 8 0 ref
 count -16 4 0 integer
-func Transaction.read 258
+func Transaction.read 259
 this -32 8 0 ?
 data -24 8 0 ref
 count -16 4 0 integer
-func Transaction.size 319
+func Transaction.size 321
 this -20 8 0 ?
-func Transaction.clear 339
+func Transaction.clear 341
 this -20 8 0 ?
-func Transaction.executeOn 368
+func Transaction.executeOn 370
 this -28 8 0 ?
 bus -20 4 0 integer
 addr -16 4 0 integer
-sale 4 4 0 integer
-entra 8 4 0 integer
-o 12 8 0 ?
-p 20 4 0 integer
-r 28 4 0 integer
-func Transaction.add 851
+r 8 4 0 integer
+func Transaction.__gather 451
+this -20 8 0 ?
+sale 0 4 0 integer
+entra 4 4 0 integer
+o 8 8 0 ?
+p 16 4 0 integer
+func Transaction.__scatter 783
+this -20 8 0 ?
+p 0 4 0 integer
+o 4 8 0 ?
+func Transaction.__ops 883
+this -20 8 0 ?
+func Transaction.__tx 905
+this -20 8 0 ?
+func Transaction.__rx 927
+this -20 8 0 ?
+func Transaction.add 949
 this -28 8 0 ?
 o -20 8 0 ref
 mas 4 8 0 ?
-func Transaction.checkArray 1078
-this -40 8 0 ?
-data -32 8 0 ref
-count -24 4 0 integer
-op -20 8 0 string
-func Transaction.__init 1197
+func Transaction.__init 1176
 this -20 8 0 ?
-func __cls_new_Transaction() 1210
-func __cls_init_Transaction() 1240
+func __cls_new_Transaction() 1189
+func __cls_init_Transaction() 1219
 this -20 8 0 ?
-func __cls_m_Transaction#read([ii)V 1254
+func __cls_m_Transaction#__scatter()V 1233
+this -20 8 0 ?
+func __cls_m_Transaction#read([ii)V 1247
 this -32 8 0 ?
 data -24 8 0 ref
 count -16 4 0 integer
-func __cls_m_Transaction#clear()V 1273
+func __cls_m_Transaction#clear()V 1266
 this -20 8 0 ?
-func __cls_m_Transaction#executeOn(ii)i 1287
+func __cls_m_Transaction#__tx()[i 1280
+this -20 8 0 ?
+func __cls_m_Transaction#__rx()[i 1299
+this -20 8 0 ?
+func __cls_m_Transaction#__gather()V 1318
+this -20 8 0 ?
+func __cls_m_Transaction#executeOn(ii)i 1332
 this -28 8 0 ?
 bus -20 4 0 integer
 addr -16 4 0 integer
-func __cls_m_Transaction#size()i 1308
+func __cls_m_Transaction#size()i 1353
 this -20 8 0 ?
-func __cls_m_Transaction#write([ii)V 1325
+func __cls_m_Transaction#__ops()[i 1370
+this -20 8 0 ?
+func __cls_m_Transaction#write([ii)V 1389
 this -32 8 0 ?
 data -24 8 0 ref
 count -16 4 0 integer
-func Bus.getId 1344
-this -20 8 0 ?
-func Bus.setId 1359
-this -24 8 0 ?
-func Bus.getSda 1373
-this -20 8 0 ?
-func Bus.setSda 1388
-this -24 8 0 ?
-func Bus.getScl 1402
-this -20 8 0 ?
-func Bus.setScl 1417
-this -24 8 0 ?
-func Bus.getBaudrate 1431
-this -20 8 0 ?
-func Bus.setBaudrate 1446
-this -24 8 0 ?
-func Bus.write 1460
+func I2C.write 1408
 this -36 8 0 ?
 addr -28 4 0 integer
 data -24 8 0 ref
 count -16 4 0 integer
-func Bus.read 1491
+func I2C.read 1421
 this -36 8 0 ?
 addr -28 4 0 integer
 data -24 8 0 ref
 count -16 4 0 integer
-func Bus.release 1522
+func I2C.release 1435
 this -20 8 0 ?
-func Bus.writeRead 1540
+func I2C.writeRead 1474
 this -48 8 0 ?
 addr -40 4 0 integer
 tx -36 8 0 ref
 ntx -28 4 0 integer
 rx -24 8 0 ref
 nrx -16 4 0 integer
-func Bus.execute 1576
+func I2C.execute 1488
 this -32 8 0 ?
 addr -24 4 0 integer
 t -20 8 0 ref
-func Bus.scan 1606
+r 8 4 0 integer
+func I2C.scan 1586
 this -20 8 0 ?
 rxbuf 8 8 0 ?
 max 24 8 0 ?
 found 32 4 0 integer
 addr 36 4 0 integer
-rc 40 4 0 integer
-result 44 8 0 ?
-func Bus.__init 1758
-this -36 8 0 ?
-id -28 4 0 integer
-sda -24 4 0 integer
-scl -20 4 0 integer
-baudrate -16 4 0 integer
-func __cls_new_Bus(iiii) 1821
-id -28 4 0 integer
-sda -24 4 0 integer
-scl -20 4 0 integer
-baudrate -16 4 0 integer
-func __cls_init_Bus(iiii) 1859
-this -36 8 0 ?
-id -28 4 0 integer
-sda -24 4 0 integer
-scl -20 4 0 integer
-baudrate -16 4 0 integer
-func __cls_m_Bus#read(i[ii)i 1881
+result 40 8 0 ?
+func I2C.isPresent 1731
+this -24 8 0 ?
+addr -16 4 0 integer
+rxbuf 4 8 0 ?
+func I2C.writeReg 1782
+this -32 8 0 ?
+addr -24 4 0 integer
+reg -20 4 0 integer
+value -16 4 0 integer
+func I2C.readRegs 1828
+this -40 8 0 ?
+addr -32 4 0 integer
+reg -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func I2C.readReg 1872
+this -28 8 0 ?
+addr -20 4 0 integer
+reg -16 4 0 integer
+b 4 8 0 ?
+func I2C.name_ 1974
+this -20 8 0 ?
+func I2C.close_ 1993
+this -20 8 0 ?
+func I2C.run_ 1999
+this -52 8 0 ?
+addr -44 4 0 integer
+ops -40 8 0 ref
+nops -32 4 0 integer
+tx -28 8 0 ref
+rx -20 8 0 ref
+func I2C.check_ 2013
+this -24 8 0 ?
+addr -16 4 0 integer
+func __cls_new_I2C() 2118
+func __cls_m_I2C#read(i[ii)i 2138
 this -36 8 0 ?
 addr -28 4 0 integer
 data -24 8 0 ref
 count -16 4 0 integer
-func __cls_m_Bus#release()V 1905
+func __cls_m_I2C#writeReg(iii)i 2162
+this -32 8 0 ?
+addr -24 4 0 integer
+reg -20 4 0 integer
+value -16 4 0 integer
+func __cls_m_I2C#release()V 2185
 this -20 8 0 ?
-func __cls_m_Bus#scan()[i 1919
+func __cls_m_I2C#scan()[i 2199
 this -20 8 0 ?
-func __cls_m_Bus#writeRead(i[ii[ii)i 1938
+func __cls_m_I2C#isPresent(i)z 2218
+this -24 8 0 ?
+addr -16 4 0 integer
+func __cls_m_I2C#execute(iLI2c/Transaction;)i 2237
+this -32 8 0 ?
+addr -24 4 0 integer
+t -20 8 0 ref
+func __cls_m_I2C#writeRead(i[ii[ii)i 2259
 this -48 8 0 ?
 addr -40 4 0 integer
 tx -36 8 0 ref
 ntx -28 4 0 integer
 rx -24 8 0 ref
 nrx -16 4 0 integer
-func __cls_m_Bus#write(i[ii)i 1967
+func __cls_m_I2C#readReg(ii)i 2288
+this -28 8 0 ?
+addr -20 4 0 integer
+reg -16 4 0 integer
+func __cls_m_I2C#readRegs(ii[ii)i 2309
+this -40 8 0 ?
+addr -32 4 0 integer
+reg -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func __cls_m_I2C#write(i[ii)i 2335
 this -36 8 0 ?
 addr -28 4 0 integer
 data -24 8 0 ref
 count -16 4 0 integer
-func __cls_m_Bus#execute(iLI2c/Transaction;)i 1991
-this -32 8 0 ?
-addr -24 4 0 integer
-t -20 8 0 ref
-func init 2013
+func HardI2C.getId 2359
+this -20 8 0 ?
+func HardI2C.setId 2374
+this -24 8 0 ?
+func HardI2C.getSda 2388
+this -20 8 0 ?
+func HardI2C.setSda 2403
+this -24 8 0 ?
+func HardI2C.getScl 2417
+this -20 8 0 ?
+func HardI2C.setScl 2432
+this -24 8 0 ?
+func HardI2C.getBaudrate 2446
+this -20 8 0 ?
+func HardI2C.setBaudrate 2461
+this -24 8 0 ?
+func HardI2C.write 2475
+this -36 8 0 ?
+addr -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func HardI2C.read 2517
+this -36 8 0 ?
+addr -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func HardI2C.writeRead 2559
+this -48 8 0 ?
+addr -40 4 0 integer
+tx -36 8 0 ref
+ntx -28 4 0 integer
+rx -24 8 0 ref
+nrx -16 4 0 integer
+func HardI2C.run_ 2606
+this -52 8 0 ?
+addr -44 4 0 integer
+ops -40 8 0 ref
+nops -32 4 0 integer
+tx -28 8 0 ref
+rx -20 8 0 ref
+func HardI2C.close_ 2643
+this -20 8 0 ?
+func HardI2C.name_ 2661
+this -20 8 0 ?
+func HardI2C.__init 2695
+this -36 8 0 ?
+id -28 4 0 integer
+sda -24 4 0 integer
+scl -20 4 0 integer
+baudrate -16 4 0 integer
+func __cls_new_HardI2C(iiii) 2758
+id -28 4 0 integer
+sda -24 4 0 integer
+scl -20 4 0 integer
+baudrate -16 4 0 integer
+func __cls_init_HardI2C(iiii) 2796
+this -36 8 0 ?
+id -28 4 0 integer
+sda -24 4 0 integer
+scl -20 4 0 integer
+baudrate -16 4 0 integer
+func __cls_m_HardI2C#read(i[ii)i 2818
+this -36 8 0 ?
+addr -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func __cls_m_HardI2C#writeRead(i[ii[ii)i 2842
+this -48 8 0 ?
+addr -40 4 0 integer
+tx -36 8 0 ref
+ntx -28 4 0 integer
+rx -24 8 0 ref
+nrx -16 4 0 integer
+func __cls_m_HardI2C#write(i[ii)i 2871
+this -36 8 0 ?
+addr -28 4 0 integer
+data -24 8 0 ref
+count -16 4 0 integer
+func Bus.__init 2895
+this -36 8 0 ?
+id -28 4 0 integer
+sda -24 4 0 integer
+scl -20 4 0 integer
+baudrate -16 4 0 integer
+func __cls_new_Bus(iiii) 2919
+id -28 4 0 integer
+sda -24 4 0 integer
+scl -20 4 0 integer
+baudrate -16 4 0 integer
+func __cls_init_Bus(iiii) 2957
+this -36 8 0 ?
+id -28 4 0 integer
+sda -24 4 0 integer
+scl -20 4 0 integer
+baudrate -16 4 0 integer
+func init 2979
 bus -28 4 0 integer
 sda -24 4 0 integer
 scl -20 4 0 integer
 baudrate -16 4 0 integer
-func write 2032
+func write 2998
 bus -32 4 0 integer
 addr -28 4 0 integer
 data -24 8 0 ref
 count -16 4 0 integer
-func read 2058
+func read 3024
 bus -32 4 0 integer
 addr -28 4 0 integer
 data -24 8 0 ref
 count -16 4 0 integer
-func release 2084
+func release 3050
 bus -16 4 0 integer
-func writeRead 2097
+func writeRead 3063
 bus -44 4 0 integer
 addr -40 4 0 integer
 tx -36 8 0 ref
 ntx -28 4 0 integer
 rx -24 8 0 ref
 nrx -16 4 0 integer
-func scan 2128
+func scan 3094
 bus -16 4 0 integer
 rxbuf 8 8 0 ?
 max 24 8 0 ?
@@ -368,25 +584,38 @@ found 32 4 0 integer
 addr 36 4 0 integer
 rc 40 4 0 integer
 result 44 8 0 ?
-func BUS0 2275
-func BUS1 2290
-func STANDARD 2305
-func FAST 2324
-func __strconcat 2343
+func BUS0 3241
+func BUS1 3256
+func STANDARD 3271
+func FAST 3290
+func __checkArray 3309
+data -44 8 0 ref
+count -36 4 0 integer
+op -32 8 0 string
+which -24 8 0 string
+max -16 4 0 integer
+func __hex 3506
+n -20 4 0 integer
+min -16 4 0 integer
+d 8 8 0 string
+s 16 8 0 string
+i 24 4 0 integer
+c 28 4 0 integer
+func __strconcat 3650
 a -28 8 0 ?
 b -20 8 0 ?
 la 0 4 0 ?
 lb 4 4 0 ?
 out 8 8 0 ?
 d 16 4 0 ?
-func __strconcat4 2400
+func __strconcat4 3707
 s0 -44 8 0 ?
 s1 -36 8 0 ?
 s2 -28 8 0 ?
 s3 -20 8 0 ?
 out 0 8 0 ?
 d 8 4 0 ?
-func __strconcat6 2485
+func __strconcat6 3792
 s0 -60 8 0 ?
 s1 -52 8 0 ?
 s2 -44 8 0 ?
@@ -395,3 +624,18 @@ s4 -28 8 0 ?
 s5 -20 8 0 ?
 out 0 8 0 ?
 d 8 4 0 ?
+func __strconcat8 3913
+s0 -76 8 0 ?
+s1 -68 8 0 ?
+s2 -60 8 0 ?
+s3 -52 8 0 ?
+s4 -44 8 0 ?
+s5 -36 8 0 ?
+s6 -28 8 0 ?
+s7 -20 8 0 ?
+out 0 8 0 ?
+d 8 4 0 ?
+func __strequals 4070
+a -28 8 0 ?
+b -20 8 0 ?
+la 0 4 0 ?

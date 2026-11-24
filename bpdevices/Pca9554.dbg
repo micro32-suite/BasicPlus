@@ -2,82 +2,124 @@ dbg 3
 module Pca9554
 source C:\lenguajes\pm\bpdevices\Pca9554.bp
 lines
-43 43
-68 44
-95 49
-113 50
-134 51
-151 52
-172 53
-191 60
-213 65
-235 70
-253 75
-275 78
-293 83
-315 86
-333 36
-341 37
+0 0
+29 0
+40 0
+43 54
+57 54
+82 55
+101 0
+104 59
+130 0
+133 63
+155 64
+180 65
+196 0
+199 72
+218 0
+221 77
+240 0
+243 82
+258 0
+261 87
+280 0
+283 90
+298 0
+301 95
+320 0
+323 98
+338 0
+341 40
+350 41
+361 0
+364 45
+372 46
+383 0
+418 0
+452 0
+471 0
+489 0
+506 0
+522 0
+538 0
+556 0
+573 0
+592 0
+609 0
+625 0
 vars
-func Expander.wreg 40
+func __init 0
+func __startup 29
+func Expander.bus_ 40
+this -20 8 0 ?
+func Expander.wreg 101
 this -28 8 0 ?
 reg -20 4 0 integer
 value -16 4 0 integer
-buf 0 8 0 ?
-func Expander.rreg 92
+func Expander.rreg 130
 this -24 8 0 ?
 reg -16 4 0 integer
-ptr 4 8 0 ?
-rx 24 8 0 ?
-func Expander.readIn 188
+rx 4 8 0 ?
+func Expander.readIn 196
 this -20 8 0 ?
-func Expander.getOut 210
+func Expander.getOut 218
 this -20 8 0 ?
-func Expander.writeOut 232
+func Expander.writeOut 240
 this -24 8 0 ?
 value -16 4 0 integer
-func Expander.getInvert 250
+func Expander.getInvert 258
 this -20 8 0 ?
-func Expander.setInvert 272
+func Expander.setInvert 280
 this -24 8 0 ?
 value -16 4 0 integer
-func Expander.getDir 290
+func Expander.getDir 298
 this -20 8 0 ?
-func Expander.setDir 312
+func Expander.setDir 320
 this -24 8 0 ?
 value -16 4 0 integer
-func Expander.__init 330
+func Expander.__init 338
+this -32 8 0 ?
+bus -24 8 0 ref
+addr -16 4 0 integer
+func Expander.__init$ii 361
 this -28 8 0 ?
-bus -20 4 0 integer
+busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_new_Expander(ii) 352
-bus -20 4 0 integer
+func __cls_new_Expander(LI2c/I2C;i) 383
+bus -24 8 0 ref
 addr -16 4 0 integer
-func __cls_init_Expander(ii) 386
+func __cls_new_Expander(ii) 418
+busId -20 4 0 integer
+addr -16 4 0 integer
+func __cls_init_Expander(LI2c/I2C;i) 452
+this -32 8 0 ?
+bus -24 8 0 ref
+addr -16 4 0 integer
+func __cls_init_Expander(ii) 471
 this -28 8 0 ?
-bus -20 4 0 integer
+busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_m_Expander#getOut()i 404
+func __cls_m_Expander#getInvert()i 489
 this -20 8 0 ?
-func __cls_m_Expander#getInvert()i 421
-this -20 8 0 ?
-func __cls_m_Expander#setInvert(i)V 438
+func __cls_m_Expander#setInvert(i)V 506
 this -24 8 0 ?
 value -16 4 0 integer
-func __cls_m_Expander#rreg(i)i 454
-this -24 8 0 ?
-reg -16 4 0 integer
-func __cls_m_Expander#setDir(i)V 473
+func __cls_m_Expander#setDir(i)V 522
 this -24 8 0 ?
 value -16 4 0 integer
-func __cls_m_Expander#wreg(ii)V 489
+func __cls_m_Expander#wreg(ii)V 538
 this -28 8 0 ?
 reg -20 4 0 integer
 value -16 4 0 integer
-func __cls_m_Expander#readIn()i 507
+func __cls_m_Expander#getOut()i 556
 this -20 8 0 ?
-func __cls_m_Expander#writeOut(i)V 524
+func __cls_m_Expander#rreg(i)i 573
+this -24 8 0 ?
+reg -16 4 0 integer
+func __cls_m_Expander#readIn()i 592
+this -20 8 0 ?
+func __cls_m_Expander#writeOut(i)V 609
 this -24 8 0 ?
 value -16 4 0 integer
-func __cls_m_Expander#getDir()i 540
+func __cls_m_Expander#getDir()i 625
 this -20 8 0 ?

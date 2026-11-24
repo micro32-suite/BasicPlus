@@ -2,107 +2,144 @@ dbg 3
 module Bmp280
 source C:\lenguajes\pm\bpdevices\Bmp280.bp
 lines
-43 58
-56 59
-76 61
-92 66
-117 67
-144 71
-162 72
-183 73
-211 77
-228 78
-243 79
-262 86
-281 87
-291 88
-309 89
-349 90
-362 92
-371 93
-386 94
-405 95
-415 96
-430 100
-441 101
-463 102
-486 103
-516 104
-550 105
-581 106
-619 107
-657 108
-695 109
-733 110
-771 111
-809 112
-847 113
-891 118
-902 119
-924 120
-953 121
-986 122
-1001 123
-1032 128
-1074 129
-1108 130
-1126 131
-1139 132
-1171 136
-1200 137
-1228 138
-1256 139
-1290 140
-1340 141
-1374 142
-1392 143
-1414 145
-1430 146
-1464 147
-1492 148
-1516 149
-1548 150
-1567 155
-1589 158
-1611 161
-1631 52
-1639 53
+0 0
+29 0
+40 0
+43 62
+56 63
+76 65
+89 0
+92 72
+106 72
+131 73
+150 0
+153 77
+179 0
+182 81
+211 0
+214 85
+236 86
+251 87
+267 0
+270 94
+289 95
+299 96
+317 97
+357 98
+370 100
+379 101
+394 102
+413 103
+423 104
+435 0
+438 108
+449 109
+471 110
+494 111
+524 112
+558 113
+589 114
+627 115
+665 116
+703 117
+741 118
+779 119
+817 120
+855 121
+896 0
+899 126
+910 127
+932 128
+961 129
+994 130
+1009 131
+1037 0
+1040 136
+1082 137
+1116 138
+1134 139
+1147 140
+1176 0
+1179 144
+1208 145
+1236 146
+1264 147
+1298 148
+1348 149
+1382 150
+1400 151
+1422 153
+1438 154
+1472 155
+1500 156
+1524 157
+1556 158
+1572 0
+1575 163
+1594 0
+1597 166
+1616 0
+1619 169
+1636 0
+1639 51
+1648 52
+1659 0
+1662 56
+1670 57
+1681 0
+1716 0
+1750 0
+1769 0
+1787 0
+1805 0
+1819 0
+1838 0
+1857 0
+1878 0
+1899 0
+1918 0
+1932 0
+1953 0
+1972 0
+1989 0
 vars
+func __init 0
+func __startup 29
 func Sensor.s16 40
 this -24 8 0 ?
 v -16 4 0 integer
-func Sensor.writeReg 89
+func Sensor.bus_ 89
+this -20 8 0 ?
+func Sensor.writeReg 150
 this -28 8 0 ?
 reg -20 4 0 integer
 val -16 4 0 integer
-b 0 8 0 ?
-func Sensor.readRegs 141
+func Sensor.readRegs 179
 this -36 8 0 ?
 reg -28 4 0 integer
 buf -24 8 0 ref
 n -16 4 0 integer
-p 0 8 0 ?
-func Sensor.readReg 208
+func Sensor.readReg 211
 this -24 8 0 ?
 reg -16 4 0 integer
 buf 4 8 0 ?
-func Sensor.begin 259
+func Sensor.begin 267
 this -20 8 0 ?
-func Sensor.readCalibration 427
+func Sensor.readCalibration 435
 this -20 8 0 ?
 c 0 8 0 ?
-func Sensor.measure 888
+func Sensor.measure 896
 this -20 8 0 ?
 d 0 8 0 ?
 adcP 12 4 0 integer
 adcT 16 4 0 integer
-func Sensor.compTemp 1029
+func Sensor.compTemp 1037
 this -24 8 0 ?
 adc -16 4 0 integer
 var1 8 8 0 double
 dd 16 8 0 double
 var2 24 8 0 double
-func Sensor.compPress 1168
+func Sensor.compPress 1176
 this -24 8 0 ?
 adc -16 4 0 integer
 var1 8 8 0 double
@@ -110,53 +147,64 @@ var2 16 8 0 double
 p 24 8 0 double
 pv1 32 8 0 double
 pv2 40 8 0 double
-func Sensor.temperature 1564
+func Sensor.temperature 1572
 this -20 8 0 ?
-func Sensor.pressure 1586
+func Sensor.pressure 1594
 this -20 8 0 ?
-func Sensor.chipID 1608
+func Sensor.chipID 1616
 this -20 8 0 ?
-func Sensor.__init 1628
+func Sensor.__init 1636
+this -32 8 0 ?
+bus -24 8 0 ref
+addr -16 4 0 integer
+func Sensor.__init$ii 1659
 this -28 8 0 ?
 busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_new_Sensor(ii) 1650
+func __cls_new_Sensor(LI2c/I2C;i) 1681
+bus -24 8 0 ref
+addr -16 4 0 integer
+func __cls_new_Sensor(ii) 1716
 busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_init_Sensor(ii) 1684
+func __cls_init_Sensor(LI2c/I2C;i) 1750
+this -32 8 0 ?
+bus -24 8 0 ref
+addr -16 4 0 integer
+func __cls_init_Sensor(ii) 1769
 this -28 8 0 ?
 busId -20 4 0 integer
 addr -16 4 0 integer
-func __cls_m_Sensor#writeReg(ii)V 1702
+func __cls_m_Sensor#writeReg(ii)V 1787
 this -28 8 0 ?
 reg -20 4 0 integer
 val -16 4 0 integer
-func __cls_m_Sensor#readCalibration()V 1720
+func __cls_m_Sensor#readCalibration()V 1805
 this -20 8 0 ?
-func __cls_m_Sensor#temperature()d 1734
+func __cls_m_Sensor#temperature()d 1819
 this -20 8 0 ?
-func __cls_m_Sensor#s16(i)i 1753
+func __cls_m_Sensor#s16(i)i 1838
 this -24 8 0 ?
 v -16 4 0 integer
-func __cls_m_Sensor#readRegs(i[ii)V 1772
+func __cls_m_Sensor#readRegs(i[ii)V 1857
 this -36 8 0 ?
 reg -28 4 0 integer
 buf -24 8 0 ref
 n -16 4 0 integer
-func __cls_m_Sensor#compPress(i)d 1793
+func __cls_m_Sensor#compPress(i)d 1878
 this -24 8 0 ?
 adc -16 4 0 integer
-func __cls_m_Sensor#pressure()d 1814
+func __cls_m_Sensor#pressure()d 1899
 this -20 8 0 ?
-func __cls_m_Sensor#measure()V 1833
+func __cls_m_Sensor#measure()V 1918
 this -20 8 0 ?
-func __cls_m_Sensor#compTemp(i)d 1847
+func __cls_m_Sensor#compTemp(i)d 1932
 this -24 8 0 ?
 adc -16 4 0 integer
-func __cls_m_Sensor#readReg(i)i 1868
+func __cls_m_Sensor#readReg(i)i 1953
 this -24 8 0 ?
 reg -16 4 0 integer
-func __cls_m_Sensor#begin()z 1887
+func __cls_m_Sensor#begin()z 1972
 this -20 8 0 ?
-func __cls_m_Sensor#chipID()i 1904
+func __cls_m_Sensor#chipID()i 1989
 this -20 8 0 ?

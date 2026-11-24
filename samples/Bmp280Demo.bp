@@ -2,26 +2,27 @@
 // Bmp280Demo.bp — demo en placa del sensor BMP280 (o BME280)
 // por I2C: temperatura + presión, en bucle.
 //
-// Usa funciones top-level I2c.* + el driver Bmp280 (que también
-// es top-level por dentro). Bucle infinito a propósito (probar Stop).
+// El bus, el del periférico. Por software (V9 H3) se cambia el constructor, y su import:
+// lo demás es igual. Bucle infinito a propósito (probar Stop).
 // ============================================================
 module Bmp280Demo
   import I2c
+  // import SoftI2c
   import Bmp280
 
   function Main()
-    var BUS: integer := 0
-    I2c.init(BUS, 20, 21, 100000)        // SDA=GP20, SCL=GP21
+    var bus: I2c.I2C := I2c.HardI2C(0, 20, 21, 100000)     // SDA=GP20, SCL=GP21
+    // var bus: I2c.I2C := SoftI2c.SoftI2C(20, 21)         // por software, en los mismos pines
 
     print "Escaneando bus I2C..."
-    var devs: integer[] := I2c.scan(BUS)
+    var devs: integer[] := bus.scan()
     var i: integer := 0
     while i < len(devs) do
       print "  dispositivo I2C (dec) = ", devs[i]
       i := i + 1
     endwh
 
-    var s: Bmp280.Sensor := Bmp280.Sensor(BUS, 0x76)
+    var s: Bmp280.Sensor := Bmp280.Sensor(bus, 0x76)
     if s.begin() then
       print "BMP280/BME280 OK: chip (dec)=", s.chipID()
       while true do
