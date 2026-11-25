@@ -556,7 +556,9 @@ The P4 and the DK2 take no driver pack: the driver for their display
    pick each one in `packs/`, in the order of the table. The IDE prepares it
    for that board as it burns it —it keeps the engine for its family and
    seals it for the spot the board assigns— and, if the engine does not fit
-   in the RAM block, it says so before burning.
+   in the RAM block, it says so before burning. (Without the IDE, from the
+   command line: `bp placa COM22 pack Gui`; and `bp placa COM22 packs`, the
+   ones it has.)
 4. **Try it.** `samples/GuiDemo.bp` → **Run on Device**: the title and the
    button show up on the display (**Stop** to end).
 

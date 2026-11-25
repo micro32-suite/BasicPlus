@@ -1202,6 +1202,13 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
       dice entonces «zona sin formatear».</li>
 </ul>
 <p>
+  La IA (§13) los lista, los graba y los retira con los mismos comandos que estos
+  botones: con la ventana abierta se ve lo que hace. Y formatear la zona, si lo pide
+  ella, se te pregunta antes. Sin abrir el IDE, <code>bp placa COM22 packs</code> los
+  lista y <code>bp placa COM22 pack Stdlib</code> graba uno (V9;
+  <a href="referencia.html#cli">§16 de la referencia</a>).
+</p>
+<p>
   Al grabar, el IDE <strong>prepara el pack para esa placa</strong>: de un pack con
   motor nativo se queda con el de su arquitectura y lo sella para el sitio que la
   placa le da en la flash y en su bloque de RAM (§9.3, <code>packRam</code>); si el
@@ -1313,8 +1320,9 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
       IDE deja en ella la guía para la IA (<code>AGENTS.md</code>, en inglés, y un
       <code>CLAUDE.md</code> que la nombra), si no las tiene ya.</li>
   <li>Cada comando del IDE es una herramienta para la IA: lo mismo que los menús y los
-      botones, también las variables de entorno de la placa (§9.3). Lo que hace sale en la
-      consola, con <code>[ia]</code>.</li>
+      botones, también las variables de entorno (§9.3) y los packs (§10.3) de la placa. Lo que
+      hace sale en la consola, con <code>[ia]</code>. Formatear la zona de packs, que no se
+      deshace, te lo pregunta antes cada vez.</li>
   <li><strong>IA → Cómo conectar…</strong> dice dónde escucha y la orden para conectar
       Claude Code, una vez:
       <code>claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp</code>.</li>

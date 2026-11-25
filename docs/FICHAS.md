@@ -14346,8 +14346,9 @@ panel de la placa; 48 diálogos modales en `FrmMain`, que pasan a ser resultados
 | **H2.4** | **el depurador, por la IA**: los puntos de parada, el paso a paso y las variables | ⬜ **aplazado a una segunda fase** (Eduardo, 23-nov: *«el debug lo podemos aplazar para una segunda fase. Podemos avanzar en H1 y con lo que tengamos podemos probar que tal va y ver lo que necesitamos realmente»*). Analizado (`notas/V9_H2_comandos.md`, «H2.4, el análisis»): lo que le falta a una IA, del IDE solo —la pila con nombres y sus locales, «pausar», ver y quitar todos los puntos de parada, las globales en el resultado— a lo que toca las dos VMs, el protocolo y el compilador —un objeto por dentro (hoy `@12345`), parar en una excepción—; y el §6.4 del protocolo, que promete `EVAL` e `INSPECT`. Decidido: `EVAL`, *«No»*; la entrada del programa, *«Contesta quien lo lanzó»* (`#870`) |
 
 **Para más adelante** (Eduardo, 23-nov, al cerrar el H1.6): los packs de la placa y sus variables de entorno, como los
-otros comandos, desde su botón y por la IA: `#876` (el ENV: ✅ 25-nov) y `#875` (grabar, borrar y formatear, `bp placa …
-pack`, y al instalar el pack de la GUI o el de la BD, también sus variables: la siguiente).
+otros comandos, desde su botón y por la IA: `#876` (el ENV: ✅ 25-nov) y `#875` (grabar, borrar y formatear, y `bp placa …
+pack`: hecho el 25-nov, a falta de verlo Eduardo; y al instalar el pack de la GUI o el de la BD, también sus variables: con
+los guiones, por diseñar).
 
 **El orden:** el de los apartados; el H2 va antes que el H1 (Eduardo, 22-nov). Lo que el H1 pensaba darle (el cable por
 línea de órdenes, `#857`) no hace falta para empezar: los comandos usan el `BpvmClient` del IDE.
@@ -14702,7 +14703,8 @@ mantiene sola.»*
     sin enseñarlo y la IA por su servidor) y el IDE entero sin ventana, con la VM Java (que no tiene: lo dice). Y con Eduardo,
     en la Metro: la IA de verdad (esta sesión, con el IDE abierto con `--ia` y su sí) la conectó, listó, puso `log=1`,
     reinició, reconectó y vio que valía —el log de la placa guardó el programa—, la cambió y la borró con el diálogo
-    abierto, y se vio en la tabla; y él, los botones (*«Todo OK.»*). Al acabar, sus cuatro variables de siempre.
+    abierto, y se vio en la tabla; y él, los botones (*«Todo OK.»*) y el diálogo abierto desde «Gestión de placa»
+    (*«Verificado»*). Al acabar, sus cuatro variables de siempre.
 - **Lo que había:** el ENV se ve y se cambia en el diálogo «Variables de entorno…» (`entorno_placa`, `EnvDialog`; sólo
   desde la ventana: la IA no lo ve), con `ENV_LS`, `ENV_SET` y `ENV_DEL`. Y quien graba el pack de la GUI o el de la BD
   tiene que escribir antes, a mano, sus variables (`INSTALAR_FIRMWARE.md`, «Cómo se graban», el paso 1): el bloque de
@@ -14716,9 +14718,38 @@ mantiene sola.»*
   el de la BD crea también sus variables: con los packs, en `#875`.
 - **Hecho cuando:** desde el botón, como hoy, y por la IA, se listan, se ponen y se borran variables del ENV de una placa.
 
-#### 🧬 `#875` — los packs de la placa, como comandos (grabar, borrar, formatear la zona), y `bp placa … pack`; y al instalar el pack de la GUI o el de la BD, también sus variables de entorno (abierta el 23-nov · lo que quedó de `#857`, y lo de las variables, de `#876` · la siguiente: Eduardo, 25-nov, *«Y cuando terminemos, hacemos lo mismo con los Packs»*)
+#### 🧬 `#875` — los packs de la placa, como comandos (grabar, borrar, formatear la zona), y `bp placa … pack`; y al instalar el pack de la GUI o el de la BD, también sus variables de entorno (abierta el 23-nov · lo que quedó de `#857`, y lo de las variables, de `#876` · Eduardo, 25-nov, *«Y cuando terminemos, hacemos lo mismo con los Packs»* · la (a), los packs, hecha el 25-nov, a falta de verla Eduardo; la (b), sus variables, con los guiones)
 
-- **Lo que hay:** el panel de Packs, dentro de «Gestión de placa» (`gestion_placa`, sólo desde la ventana): Refrescar,
+- **(a) Los packs, como comandos: hecha el 25-nov** (`9628545` en `toolchain`), en los tres pasos del Entorno (`#876`):
+  - **Las acciones:** `PacksPlaca`, la lógica sin ventana (grabar —avisar, podar, sellar y mandar— y retirar) y cinco
+    comandos: `packs_listar`, `pack_ficheros`, `pack_grabar` (uno de la instalación por su nombre, o un `.pack`),
+    `pack_borrar` (por su nombre, o por su offset si hay varios activos con él) y `packs_formatear`. Los que cambian la zona
+    acaban cuando el IDE ha acabado con la placa (si tenía motores cargados se reinicia, `#671`: la espera y la reconecta) y
+    devuelven la zona como queda; `pack_grabar`, además, los avisos y los que ya había activos con ese nombre.
+  - **Los botones:** el panel de packs de «Gestión de placa» ya no habla con la placa: los llama, y enseña lo que ellos
+    leen (si la IA graba uno con la ventana abierta, se ve, con su avance). Se ve como siempre. Y si la placa se reinicia
+    —lo pida la ventana, la IA o un pack—, la ventana se engancha sola al volver.
+  - **La IA:** las cinco. Grabar y retirar uno, sin preguntar en cada una, como el Entorno; **formatear se le pregunta cada
+    vez a la persona** (Eduardo, 25-nov: *«1) si»*), con la placa, los packs que se pierden y «No» por defecto
+    (`Comandos.pregunta`: lo hace el comando llamado por su nombre, y con un no, no se hace). Lo dicen la pregunta que la
+    autoriza, las instrucciones del servidor, la guía para IA y la guía del IDE (§10.3 y §13).
+  - **`bp`** (decidido en `#857`): `bp placa <destino> packs` y `bp placa <destino> pack <fichero.pack | nombre>`, sobre la
+    misma lógica (`PlacaCli`; la referencia, §16).
+  - **De paso, `placa_reiniciar` con `reconectar`:** espera a que la placa vuelva y se conecta otra vez (la IA tuvo que
+    hacerlo a mano con el Entorno). Y «ha vuelto» es cuando el IDE ha acabado lo suyo (el árbol y el INFO), como al conectar
+    (`#868`).
+  - **Probado:** `PacksSmoke` (nuevo, contra el micro simulado: listar, grabar, los ficheros, dos con el mismo nombre,
+    retirar, los errores, un motor en una placa sin él, la pregunta con un no y con un sí, el panel sin enseñarlo y la IA por
+    su servidor), `EntornoSmoke` y `ComandosSmoke`; el IDE entero sin ventana, con el micro simulado y con la Metro (en ella,
+    sólo leer y `placa_reiniciar` con `reconectar`: vuelve en 3 s, y la ventana se engancha); y `bp placa sim packs | pack`.
+    **Falta**, con Eduardo: grabar en una placa con motores cargados (el reinicio de `#671`) y ver la pregunta en la pantalla.
+- **(b) Al instalar la GUI o la BD, sus variables: con los guiones, por diseñar.** Eduardo, 25-nov: *«2) También. Un matiz
+  sobre 2, a mi me recuerda a un pequeño programa o un script. Estoy pensando si con todos los comandos que estamos
+  proporcionando a la IA, se podrían poner en un script, por si queremos automatizar una tarea, ya sea que la ejecute un
+  usuario o una IA.»* Lo propuesto (`notas/V9_H2_comandos.md`): un fichero de texto con un comando por línea, que para en el
+  primero que falla; lo lanza la persona, desde un menú, o la IA; y la GUI o la BD, un guion por placa (los valores, los de
+  `INSTALAR_FIRMWARE`).
+- **Lo que había:** el panel de Packs, dentro de «Gestión de placa» (`gestion_placa`, sólo desde la ventana): Refrescar,
   «Copiar pack a la placa…», Borrar y «Formatear zona…», cada uno con su diálogo. Al grabar, el IDE prepara el pack
   para esa placa (`PackBurn.podar` se queda con el motor de su familia y `PackBurn.sellar` lo sella para el sitio que
   ella le da) y avisa si declara un pack que la placa no tiene (`requires-pack=`) o si usa módulos de la stdlib que ni
@@ -14730,11 +14761,11 @@ mantiene sola.»*
   para que la use también `bp placa <destino> pack …` (decidido en `#857`).
 - **Cuidado:** escribe la flash de la placa, y formatear borra la zona entera. El comando acaba cuando la placa ha
   vuelto y el IDE la ha reconectado (como en `#868`). Si la IA graba o formatea con la confirmación de quien usa el IDE
-  (`#873`: la IA pide, la persona autoriza): por decidir, al hacerla.
+  (`#873`: la IA pide, la persona autoriza): decidido el 25-nov, sólo formatear (la (a)).
 - **Y sus variables (de `#876`; Eduardo, 23-nov):** *«Cuando se instala el pack de LVGL o el de BD además hay que crear las
-  variables de entorno correspondientes»*. Por decidir: de dónde salen los valores de cada placa (una tabla en el IDE, la de
-  `INSTALAR_FIRMWARE`, o el propio pack, que ya declara los packs que necesita con `requires-pack=`); y qué se hace con una
-  variable que ya está (son de la placa: se escriben una vez y sobreviven al reflasheo). Cuidado: lo que se da al bloque se
+  variables de entorno correspondientes»*. De dónde salen los valores de cada placa: de un guion por placa (la (b)). Por
+  decidir: qué se hace con una variable que ya está (son de la placa: se escriben una vez y sobreviven al reflasheo).
+  Cuidado: lo que se da al bloque se
   le quita a la VM (la C3 y la C6 van justas, `MEMORIA.md`), y en la P4 un ENV que dejaba a la VM sin sus 2 MB la reiniciaba
   en bucle (`#686`): los valores, los probados. Las acciones del ENV ya están (`#876`).
 - **Hecho cuando:** desde el botón, como hoy; la IA graba un pack en una placa y en el micro simulado, y lo ve en la

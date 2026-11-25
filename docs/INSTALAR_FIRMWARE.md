@@ -542,6 +542,8 @@ con su táctil) va en la imagen.
    en el orden de la tabla. El IDE lo prepara para esa placa al grabarlo —se
    queda con el motor de su familia y lo sella para el sitio que ella le
    da— y, si el motor no cabe en el bloque de RAM, lo dice antes de grabar.
+   (Sin el IDE, por línea de órdenes: `bp placa COM22 pack Gui`; y
+   `bp placa COM22 packs`, los que tiene.)
 4. **Probarlo.** `samples/GuiDemo.bp` → **Run on Device**: el título y el
    botón salen en la pantalla (**Stop** para acabar).
 

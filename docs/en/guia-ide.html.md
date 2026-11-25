@@ -408,6 +408,8 @@ In the board management window (§9), on the right. The table lists the burnt pa
 - **Borrar** (delete) — marks it as retired. It stops being used *immediately*, but **still takes up space** until compaction: on NOR flash you can cross something out without erasing, and crossing out is safe. That is why the table also shows the retired ones — it is the truth about the space. The board lists up to 16: the active ones always, and in the room left the most recently retired; if the chain is longer, the summary says how many older retired ones are not listed (the usage bar counts them all).
 - **Formatear zona…** (format area) — leaves it blank. It is also the way out when the area carries leftovers from a previous use of that flash: the summary then says «zona sin formatear» (area not formatted).
 
+The AI (§13) lists, burns and retires them with the same commands as these buttons: with the window open, you see what it does. And formatting the area, if it is the AI that asks for it, is asked of you first. Without opening the IDE, `bp placa COM22 packs` lists them and `bp placa COM22 pack Stdlib` burns one (V9; [§16 of the reference](referencia.html.md#cli)).
+
 When burning, the IDE **prepares the pack for that board**: from a pack with a native engine it keeps the one for its architecture and seals it for the place the board gives it in the flash and in its RAM block (§9.3, `packRam`); if the engine does not fit in the block, it says so before sending anything. And it warns, though it burns anyway, if that pack is going to lack something on the board: another pack it declares it needs, or standard library modules it does not carry and the board does not have («graba tambien el Stdlib.pack», burn the Stdlib.pack too).
 
 If the board already had the **engines** of its packs loaded —the first program or the first *Info* loads them—, burning, deleting or formatting any pack **reboots** it: those engines' tables point to the area as it was. The panel says so and connects again by itself; wait for it to come back before going on.
@@ -446,7 +448,7 @@ On the Pico 2 and the Metro (the dual-core image, the default one) and on the ST
 An AI assistant (Claude Code, for instance) can drive the IDE: open a source, compile it and run it on the PC, on the simulated micro or on a board, with its output and its exit code. It does so through a server in the IDE itself (MCP), which listens **only on this PC** (`127.0.0.1`, port 7340) and is **off** until you turn it on: **IA → Servidor para la IA (MCP)**.
 
 - When you turn it on, you choose **the AI's folder**: only inside it can the AI open, save, upload and download files. Better a folder just for the work with the AI. The IDE leaves the guide for AI assistants in it (`AGENTS.md`, and a `CLAUDE.md` that points to it), unless they are already there.
-- Each IDE command is a tool for the AI: the same as the menus and the buttons, the board's environment variables (§9.3) included. What it does shows up in the console, with `[ia]`.
+- Each IDE command is a tool for the AI: the same as the menus and the buttons, the board's environment variables (§9.3) and its packs (§10.3) included. What it does shows up in the console, with `[ia]`. Formatting the packs area, which cannot be undone, is asked of you first, every time.
 - **IA → Cómo conectar…** tells where it listens and the command to connect Claude Code, once: `claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp`.
 
 **If it is the AI that opens the IDE**, it opens it with `--ia` and the folder it works in:

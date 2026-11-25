@@ -3449,14 +3449,17 @@ bp run --c samples/out/Blink.mod   (con la VM-C)</code></pre>
   <em>Run on Device</em> del IDE: sólo lo que la placa no tiene igual— y ejecutan; la salida y el código, como con las
   VMs del PC, y el argumento, detrás del programa. El micro simulado es el del IDE, con su configuración y su carpeta:
   si no está en marcha, <code>bp</code> lo arranca y lo para al acabar. <code>bp placa</code> hace lo demás:
-  <code>ls</code> (sus ficheros), <code>get</code> (bajar uno), <code>stop</code> (parar lo que corre) e
-  <code>info</code> (qué placa es). Una placa, o el simulado, atiende a uno a la vez: con el IDE conectado a ella,
-  <code>bp</code> no puede, y lo dice.
+  <code>ls</code> (sus ficheros), <code>get</code> (bajar uno), <code>stop</code> (parar lo que corre),
+  <code>info</code> (qué placa es), <code>packs</code> (los que tiene grabados y el sitio que queda) y
+  <code>pack</code> (grabar uno: un <code>.pack</code>, o uno de la instalación por su nombre; como el IDE, lo prepara
+  para esa placa). Una placa, o el simulado, atiende a uno a la vez: con el IDE conectado a ella, <code>bp</code> no
+  puede, y lo dice.
 </p>
 <pre><code>bp run --sim samples/blink.bp          (en el micro simulado)
 bp run --placa=COM22 samples/blink.bp  (en la placa del COM22)
 bp placa COM22 ls                      (sus ficheros: /app/Blink.mod…)
-bp placa COM22 get MiApp.shot          (una captura de Gui.shot; después, bp png MiApp.shot)</code></pre>
+bp placa COM22 get MiApp.shot          (una captura de Gui.shot; después, bp png MiApp.shot)
+bp placa COM22 pack Stdlib             (graba en ella el Stdlib.pack de la instalación)</code></pre>
 <p>
   Las rutas de la placa empiezan por <code>/</code> (<code>/app/Blink.mod</code>). En el bash de Git, con dos
   (<code>//app/Blink.mod</code>): el bash cambia <code>/app</code> por una ruta de Windows antes de que llegue a

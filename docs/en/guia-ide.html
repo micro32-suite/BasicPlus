@@ -1207,6 +1207,13 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
       the summary then says «zona sin formatear» (area not formatted).</li>
 </ul>
 <p>
+  The AI (§13) lists, burns and retires them with the same commands as these buttons:
+  with the window open, you see what it does. And formatting the area, if it is the AI
+  that asks for it, is asked of you first. Without opening the IDE,
+  <code>bp placa COM22 packs</code> lists them and <code>bp placa COM22 pack Stdlib</code>
+  burns one (V9; <a href="referencia.html#cli">§16 of the reference</a>).
+</p>
+<p>
   When burning, the IDE <strong>prepares the pack for that board</strong>: from a
   pack with a native engine it keeps the one for its architecture and seals it for
   the place the board gives it in the flash and in its RAM block (§9.3,
@@ -1321,8 +1328,9 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
       The IDE leaves the guide for AI assistants in it (<code>AGENTS.md</code>, and a
       <code>CLAUDE.md</code> that points to it), unless they are already there.</li>
   <li>Each IDE command is a tool for the AI: the same as the menus and the buttons, the
-      board's environment variables (§9.3) included. What it does shows up in the console, with
-      <code>[ia]</code>.</li>
+      board's environment variables (§9.3) and its packs (§10.3) included. What it does shows
+      up in the console, with <code>[ia]</code>. Formatting the packs area, which cannot be
+      undone, is asked of you first, every time.</li>
   <li><strong>IA → Cómo conectar…</strong> tells where it listens and the command to connect
       Claude Code, once:
       <code>claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp</code>.</li>

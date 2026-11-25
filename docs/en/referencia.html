@@ -3445,14 +3445,17 @@ bp run --c samples/out/Blink.mod   (on the C VM)</code></pre>
   IDE's <em>Run on Device</em>: only what the board does not already have— and run; the output and the exit code, as
   with the PC VMs, and the argument, after the program. The simulated micro is the IDE's, with its settings and its
   folder: if it is not running, <code>bp</code> starts it and stops it at the end. <code>bp placa</code> does the rest:
-  <code>ls</code> (its files), <code>get</code> (download one), <code>stop</code> (stop what is running) and
-  <code>info</code> (which board it is). A board, or the simulated micro, serves one client at a time: with the IDE
-  connected to it, <code>bp</code> cannot, and says so.
+  <code>ls</code> (its files), <code>get</code> (download one), <code>stop</code> (stop what is running),
+  <code>info</code> (which board it is), <code>packs</code> (the ones burnt on it and the room left) and
+  <code>pack</code> (burn one: a <code>.pack</code>, or one of the installation's by its name; like the IDE, it prepares
+  it for that board). A board, or the simulated micro, serves one client at a time: with the IDE connected to it,
+  <code>bp</code> cannot, and says so.
 </p>
 <pre><code>bp run --sim samples/blink.bp          (on the simulated micro)
 bp run --placa=COM22 samples/blink.bp  (on the board at COM22)
 bp placa COM22 ls                      (its files: /app/Blink.mod…)
-bp placa COM22 get MyApp.shot          (a capture from Gui.shot; then, bp png MyApp.shot)</code></pre>
+bp placa COM22 get MyApp.shot          (a capture from Gui.shot; then, bp png MyApp.shot)
+bp placa COM22 pack Stdlib             (burns the installation's Stdlib.pack on it)</code></pre>
 <p>
   The board's paths start with <code>/</code> (<code>/app/Blink.mod</code>). In Git Bash, with two
   (<code>//app/Blink.mod</code>): bash turns <code>/app</code> into a Windows path before it reaches <code>bp</code>,

@@ -1845,13 +1845,14 @@ bp run samples/blink.bp            (compiles and runs)
 bp run --c samples/out/Blink.mod   (on the C VM)
 ```
 
-**On a board or on the simulated micro** (V9), without opening the IDE: `bp run --placa=COM22` (or the IP of a board on the network) and `bp run --sim` compile, upload what is needed —the same as the IDE's *Run on Device*: only what the board does not already have— and run; the output and the exit code, as with the PC VMs, and the argument, after the program. The simulated micro is the IDE's, with its settings and its folder: if it is not running, `bp` starts it and stops it at the end. `bp placa` does the rest: `ls` (its files), `get` (download one), `stop` (stop what is running) and `info` (which board it is). A board, or the simulated micro, serves one client at a time: with the IDE connected to it, `bp` cannot, and says so.
+**On a board or on the simulated micro** (V9), without opening the IDE: `bp run --placa=COM22` (or the IP of a board on the network) and `bp run --sim` compile, upload what is needed —the same as the IDE's *Run on Device*: only what the board does not already have— and run; the output and the exit code, as with the PC VMs, and the argument, after the program. The simulated micro is the IDE's, with its settings and its folder: if it is not running, `bp` starts it and stops it at the end. `bp placa` does the rest: `ls` (its files), `get` (download one), `stop` (stop what is running), `info` (which board it is), `packs` (the ones burnt on it and the room left) and `pack` (burn one: a `.pack`, or one of the installation's by its name; like the IDE, it prepares it for that board). A board, or the simulated micro, serves one client at a time: with the IDE connected to it, `bp` cannot, and says so.
 
 ```
 bp run --sim samples/blink.bp          (on the simulated micro)
 bp run --placa=COM22 samples/blink.bp  (on the board at COM22)
 bp placa COM22 ls                      (its files: /app/Blink.mod…)
 bp placa COM22 get MyApp.shot          (a capture from Gui.shot; then, bp png MyApp.shot)
+bp placa COM22 pack Stdlib             (burns the installation's Stdlib.pack on it)
 ```
 
 The board's paths start with `/` (`/app/Blink.mod`). In Git Bash, with two (`//app/Blink.mod`): bash turns `/app` into a Windows path before it reaches `bp`, and `bp` says so if that happens.
