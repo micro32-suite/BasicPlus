@@ -15003,13 +15003,14 @@ mantiene sola.»*
 - **Visto el 25-nov en las dos**, grabadas (*«graba»*; *«la discovery la puedes grabar cuando quieras»*): contestan los suyos
   (`scripts/placas/nucleo.txt` y `dk2.txt`), y la DK2 pinta su pantalla.
 
-#### 🧬 `#895` — en las STM32 `Pulse.Counter` no funciona: «stm32u5g9 no tiene contador de pulsos», con el contador hecho (abierta el 25-nov · vista con `#861`, comprobada en la DK2 · de antes: está en la V7.0, la V8.0 y la V8.1 · hecha el mismo día, a falta de un puente)
+#### ✅ `#895` — en las STM32 `Pulse.Counter` no funciona: «stm32u5g9 no tiene contador de pulsos», con el contador hecho (abierta el 25-nov · vista con `#861`, comprobada en la DK2 · de antes: está en la V7.0, la V8.0 y la V8.1 · hecha y **CERRADA** el mismo día, `ad7a6d5` del runtime)
 
 - Desde V7 el pin se comprueba contra la tabla de capacidades, y la de las STM32 no marcaba el de su contador (`PC6` en la
   Nucleo, `PB7` en la DK2; `c21bfa7` y `947aa59`, de V3).
 - **Hecho:** la marca (`stm32_caps_pulsos`, de la tabla del contador). Grabadas las dos: el contador se crea y arranca, y
   cuenta 0 (sin puente).
-- **Hecho cuando:** `PulseDemo` (Nucleo, `PC8`–`PC6`) o `PulseDemo_Dk2` (`PB8`–`PB7`) cuenta, con su puente.
+- **Visto el 25-nov en la DK2** (Eduardo movió el puente de una prueba anterior a `PB8`–`PB7`: *«a ver ahora»*):
+  `PulseDemo_Dk2` cuenta 999, 500 y 201 de los 1000, 500 y 200 esperados. La Nucleo, el mismo código con su pin.
 
 #### 🧬 `#893` — la guía para IA que el IDE deja en una carpeta no se pone al día: se queda la de la primera vez (abierta el 25-nov · vista en la carpeta de pruebas: la del 23 no sabía de packs ni de guiones · hecha el mismo día)
 

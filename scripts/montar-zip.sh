@@ -553,23 +553,27 @@ done
 # le falte el .mod es otra cosa — y no es asunto de este guardián.
 echo "-- comprobando que los proyectos de ejemplo ABREN --"
 malos=0
+set +e   # los códigos se miran uno a uno
 for p in $(find "$PRUEBA/$NOMBRE" \( -name '*.bpproject' -o -name '*.bpbuild' \) | sort); do
     rel="${p#$PRUEBA/$NOMBRE/}"
     case "$rel" in
-      *.bpbuild)   # lo abre el compilador
-        ( cd "$(dirname "$p")" && java -cp "$PRUEBA/$NOMBRE/BpIde-$VER.jar" \
-            basicplus.frontend.Main --project "$(basename "$p")" --backend=mivm ) \
-            > "$PRUEBA/plog" 2>&1 || true ;;
+      *.bpbuild)   # lo compila `bp build`, como quien lo usa (V9, 25-nov: antes, el compilador a secas, que desde una
+                   # carpeta del ZIP no encuentra la stdlib; sus errores no se miraban —sólo un JSON mal formado— y
+                   # desde #856 llevan la forma que se buscaba, fichero:línea:columna)
+        ( cd "$(dirname "$p")" && "$PRUEBA/$NOMBRE/bp" build "$(basename "$p")" ) > "$PRUEBA/plog" 2>&1
+        mal=$? ;;
       *)           # .bpproject lo abre la VM
         java -cp "$PRUEBA/$NOMBRE/BpIde-$VER.jar" edu.bpgenvm.Main "$p" \
-            > "$PRUEBA/plog" 2>&1 || true ;;
+            > "$PRUEBA/plog" 2>&1 || true
+        mal=0; grep -qE ':[0-9]+:[0-9]+: ' "$PRUEBA/plog" && mal=1 ;;
     esac
-    if grep -qE ':[0-9]+:[0-9]+: ' "$PRUEBA/plog"; then
-        echo "  MAL FORMADO: $rel"
-        grep -E ':[0-9]+:[0-9]+: ' "$PRUEBA/plog" | head -2 | sed 's/^/    /'
+    if [ "$mal" -ne 0 ]; then
+        echo "  NO ABRE: $rel"
+        head -3 "$PRUEBA/plog" | sed 's/^/    /'
         malos=$((malos+1))
     fi
 done
+set -e
 if [ "$malos" -gt 0 ]; then
     echo "  $malos fichero(s) de proyecto no abren — no se monta el ZIP"
     rm -rf "$PRUEBA" "$NOMBRE.zip"; exit 1
