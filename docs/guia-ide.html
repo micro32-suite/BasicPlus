@@ -946,7 +946,8 @@ hola, Eduardo
   entorno…</em> en la ventana de la placa) y se añaden, editan y borran desde la
   tabla. Los tamaños de partición también viven ahí, pero <strong>no</strong> se
   listan aquí: los gestiona la sección de particiones, para que no se puedan tocar
-  por dos caminos.
+  por dos caminos. La IA (§13) las ve y las cambia con los mismos comandos que los
+  botones; con el diálogo abierto, se ve lo que cambia.
 </p>
 
 <p>
@@ -1312,7 +1313,8 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
       IDE deja en ella la guía para la IA (<code>AGENTS.md</code>, en inglés, y un
       <code>CLAUDE.md</code> que la nombra), si no las tiene ya.</li>
   <li>Cada comando del IDE es una herramienta para la IA: lo mismo que los menús y los
-      botones. Lo que hace sale en la consola, con <code>[ia]</code>.</li>
+      botones, también las variables de entorno de la placa (§9.3). Lo que hace sale en la
+      consola, con <code>[ia]</code>.</li>
   <li><strong>IA → Cómo conectar…</strong> dice dónde escucha y la orden para conectar
       Claude Code, una vez:
       <code>claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp</code>.</li>

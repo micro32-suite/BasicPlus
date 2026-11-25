@@ -308,7 +308,7 @@ On the boards with **32 MB of flash** —the C5 and the Waveshare P4— there is
 <a id="entorno"></a>
 ### 9.3 Environment variables
 
-Settings that live on the board, outside the filesystem, read by the firmware: which display panel this particular board carries, for instance, or whether it has PSRAM (that one has a checkbox of its own, being so common). They open with **Entorno** on the toolbar (or *Variables de entorno…* in the board window) and are added, edited and removed from the table. Partition sizes also live there, but are **not** listed here: the partitions section manages them, so they cannot be changed through two different doors.
+Settings that live on the board, outside the filesystem, read by the firmware: which display panel this particular board carries, for instance, or whether it has PSRAM (that one has a checkbox of its own, being so common). They open with **Entorno** on the toolbar (or *Variables de entorno…* in the board window) and are added, edited and removed from the table. Partition sizes also live there, but are **not** listed here: the partitions section manages them, so they cannot be changed through two different doors. The AI (§13) sees and changes them with the same commands as the buttons; with the dialog open, you see what it changes.
 
 **Which keys there are.** The full list —each key, its values and the one it takes when missing, what it does, on which boards it counts and when it is read— is in the [reference, appendix A](referencia.html.md#env), together with how numbers and yes/no values are written. Here, what needs more explaining.
 
@@ -446,7 +446,7 @@ On the Pico 2 and the Metro (the dual-core image, the default one) and on the ST
 An AI assistant (Claude Code, for instance) can drive the IDE: open a source, compile it and run it on the PC, on the simulated micro or on a board, with its output and its exit code. It does so through a server in the IDE itself (MCP), which listens **only on this PC** (`127.0.0.1`, port 7340) and is **off** until you turn it on: **IA → Servidor para la IA (MCP)**.
 
 - When you turn it on, you choose **the AI's folder**: only inside it can the AI open, save, upload and download files. Better a folder just for the work with the AI. The IDE leaves the guide for AI assistants in it (`AGENTS.md`, and a `CLAUDE.md` that points to it), unless they are already there.
-- Each IDE command is a tool for the AI: the same as the menus and the buttons. What it does shows up in the console, with `[ia]`.
+- Each IDE command is a tool for the AI: the same as the menus and the buttons, the board's environment variables (§9.3) included. What it does shows up in the console, with `[ia]`.
 - **IA → Cómo conectar…** tells where it listens and the command to connect Claude Code, once: `claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp`.
 
 **If it is the AI that opens the IDE**, it opens it with `--ia` and the folder it works in:

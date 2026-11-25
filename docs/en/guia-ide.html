@@ -946,7 +946,9 @@ hola, Eduardo
   <strong>Entorno</strong> on the toolbar (or <em>Variables de entorno…</em> in the
   board window) and are added, edited and removed from the table. Partition sizes
   also live there, but are <strong>not</strong> listed here: the partitions section
-  manages them, so they cannot be changed through two different doors.
+  manages them, so they cannot be changed through two different doors. The AI (§13)
+  sees and changes them with the same commands as the buttons; with the dialog open,
+  you see what it changes.
 </p>
 
 <p>
@@ -1318,8 +1320,9 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
       AI open, save, upload and download files. Better a folder just for the work with the AI.
       The IDE leaves the guide for AI assistants in it (<code>AGENTS.md</code>, and a
       <code>CLAUDE.md</code> that points to it), unless they are already there.</li>
-  <li>Each IDE command is a tool for the AI: the same as the menus and the buttons. What it
-      does shows up in the console, with <code>[ia]</code>.</li>
+  <li>Each IDE command is a tool for the AI: the same as the menus and the buttons, the
+      board's environment variables (§9.3) included. What it does shows up in the console, with
+      <code>[ia]</code>.</li>
   <li><strong>IA → Cómo conectar…</strong> tells where it listens and the command to connect
       Claude Code, once:
       <code>claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp</code>.</li>

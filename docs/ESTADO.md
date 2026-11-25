@@ -27,6 +27,10 @@
 
 ## Última sesión
 
+> **25-nov** — **Vuelta a la IA: las variables de entorno de la placa, como comandos** (`#876` (a); Eduardo: *«Volvemos a la interfaz con la IA. Teniamos pendiente la gestión de las variables de entorno y la gestión de la zona de Packs y los Packs. […] Es lo mismo que ya hemos hecho pero aplicado a las variables de entorno. Y cuando terminemos, hacemos lo mismo con los Packs.»*).
+> - **Hecho**, en los tres pasos que pidió: las acciones (`EntornoPlaca`: `entorno_listar`, `entorno_poner`, `entorno_borrar`), los botones del diálogo del Entorno sobre ellas (ya no habla con la placa) y la IA (sus explicaciones, la pregunta que la autoriza, las guías). `EntornoSmoke`, la prueba, contra el micro simulado. El jar del IDE, rehecho con el IDE cerrado.
+> - **El traspaso:** que Eduardo lo vea en el IDE (el diálogo, y la IA con una placa); después, los packs (`#875`), que llevan dos decisiones: si la IA graba y formatea con el sí de la persona, y de dónde salen las variables de cada placa al instalar la GUI o la BD (`#876` (b)). El SPI (`#884`) sigue esperando sus decisiones (el nombre de la clase base, `Spi.Device` con un bus y el sensor).
+>
 > **24-nov** — **El H3 de V9: el I2C y el SPI por software** (Eduardo: *«Lo del I2C por software y el SPI por software lo damos de alta como hito 3»*).
 > - **El sensor de la Nucleo** (Eduardo: *«Está conectada la núcleo y tiene conectado un sensor I2C»*): un BME280 en el I2C 2 (PF0, PF1), en 0x76; la primera vez no contestaba nadie (*«creo que había conectado mal la alimentación»*).
 > - **El análisis del I2C por software**, en tres vueltas (`notas/V9_I2C_software.md`, con sus prototipos): su jerarquía en BP (funciona, pero los errores no eran los mismos en los dos buses); el software en C, como un bus con otro número (*«No, no me gusta. Hacemos un descanso.»*); y el modelo de MicroPython, que trajo él. De su código: los métodos, una vez para las dos clases, y cada bus pone una operación; su bus por software fue antes un número, `I2C(-1, …)`, y lo retiraron; y en sus pines hace los dos arreglos que nos faltaban (el RP2, por la dirección; las ESP32, con la entrada).

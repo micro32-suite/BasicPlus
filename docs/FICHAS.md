@@ -14682,8 +14682,25 @@ mantiene sola.»*
   también decide por el nombre), así que se usaría el de la stdlib. ¿Un aviso del compilador, o un error, cuando un
   módulo se llama como uno de la stdlib?
 
-#### 🧬 `#876` — las variables de entorno de la placa, como comandos; y al instalar el pack de la GUI o el de la BD, también las suyas (abierta el 23-nov · Eduardo, al cerrar el H1.6 · pendiente, para más adelante)
+#### 🧬 `#876` — las variables de entorno de la placa, como comandos; y al instalar el pack de la GUI o el de la BD, también las suyas (abierta el 23-nov · Eduardo, al cerrar el H1.6 · (a), hecha el 25-nov, a falta de verla Eduardo; (b), con los packs de `#875`)
 
+- **(a), hecha (25-nov).** Eduardo: *«Lo que hacemos ahora es crear las acciones en el IDE para gestionar el enviroment. Despues
+  ajustamos los botones para que utilicen las acciones y por último habilitamos que la IA pueda utilizar las acciones. Es lo
+  mismo que ya hemos hecho pero aplicado a las variables de entorno. Y cuando terminemos, hacemos lo mismo con los Packs.»*
+  - **Las acciones:** `EntornoPlaca`, la lógica sin ventana y tres comandos: `entorno_listar`, `entorno_poner` y
+    `entorno_borrar`. Un cambio dice lo que había, no escribe si ya valía eso y lee de la placa lo que quedó. Lo que no se
+    deja, sin tocarla: las de las particiones (tampoco en mayúsculas, que se colaban por el diálogo: la placa no las
+    distingue) y lo que no guardaría bien (una clave con espacios o «=», un valor vacío o de varias líneas, más de 63 o de
+    191 bytes: el cable decía «falta value»).
+  - **Los botones:** el diálogo (`EnvDialog`, el de la barra y el de «Gestión de placa») ya no habla con la placa: sus
+    botones y la casilla de la PSRAM llaman a los comandos, y la tabla enseña lo que leen ellos (si la IA cambia una con el
+    diálogo abierto, se ve). Usa la conexión de ahora, no la del momento en que se abrió. Se ve como siempre.
+  - **La IA:** las tres, como las demás herramientas de la placa (sin preguntar en cada una: *«como los otros»*); lo dicen
+    la pregunta con la que la persona la autoriza («ver y cambiar las variables de entorno de esas placas»), las
+    instrucciones del servidor, la guía para IA y la guía del IDE (§9.3 y §13).
+  - **Probado:** `EntornoSmoke` (nuevo, contra el micro simulado: las reglas, un valor con comillas y acentos, el diálogo
+    sin enseñarlo y la IA por su servidor) y el IDE entero sin ventana, con la Metro (leer) y con la VM Java (que no tiene:
+    lo dice).
 - **Lo que hay:** el ENV se ve y se cambia en el diálogo «Variables de entorno…» (`entorno_placa`, `EnvDialog`; sólo
   desde la ventana: la IA no lo ve), con `ENV_LS`, `ENV_SET` y `ENV_DEL`. Y quien graba el pack de la GUI o el de la BD
   tiene que escribir antes, a mano, sus variables (`INSTALAR_FIRMWARE.md`, «Cómo se graban», el paso 1): el bloque de
