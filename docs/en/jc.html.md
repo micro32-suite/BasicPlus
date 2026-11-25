@@ -2162,7 +2162,7 @@ module Entidades
 <a id="no-tiene"></a>
 ### 17.1 What JC does not have
 
-JC is BP: what BP does not have, JC does not have. Much of what is missing from C#, the compiler recognizes and calls by its name («JC no tiene el ?? de C#…», JC does not have C#'s ??); the rest gives a syntax error.
+JC is BP: what BP does not have, JC does not have. The most common of what is missing from Java and C#, or is written another way, the compiler recognizes and says how it is («JC no tiene el ?? de C#…», JC does not have C#'s ??; «en JC es 'is', como en C#», in JC it is is); the rest gives a syntax error.
 
 | From Java or C# | In JC |
 |---|---|
@@ -2325,8 +2325,8 @@ Just the essentials; the details are in the [IDE guide](guia-ide.html.md).
 <a id="errores"></a>
 ### 18.5 The error messages
 
-- **Syntax errors** are JC's: `[línea:columna] error sintáctico: …` (or `error léxico`), with the line and the column. The JC reader stops at the first one.
-- **Many say how it is written in JC**: «en JC es 'base', como en C#» (in JC it is base, as in C#); «en JC, ++ y -- van detrás: v++;» (in JC, ++ and -- go after); «JC no tiene el ?? de C#, de momento (el ternario, c ? a : b, sí)» (JC does not have C#'s ?? for now; the ternary, yes); «'Perro(…)' crea un objeto: en JC se escribe 'new Perro(…)'» (it creates an object: in JC, write new).
+- **Syntax errors** are JC's: `File.jc:line:column: error sintáctico: …` (or `error léxico`), with the line and the column. The JC reader stops at the first one.
+- **Many say how it is written in JC**: «en JC es 'base', como en C#» (in JC it is base, as in C#); «en JC, ++ y -- van detrás: v++;» (in JC, ++ and -- go after); «JC no tiene el ?? de C#, de momento (el ternario, c ? a : b, sí)» (JC does not have C#'s ?? for now; the ternary, yes); «'Perro(…)' crea un objeto: en JC se escribe 'new Perro(…)'» (it creates an object: in JC, write new); and what is brought from Java: «en JC la clase base y las interfaces van tras ':', como en C#: class Perro : Animal» (the base class and the interfaces go after ':'), «un método lleva 'function' delante del tipo: function int getX(…)» (a method takes function before its type), «en JC lo que se recorre va con foreach: foreach (var x in lista)» (what is traversed goes with foreach), «tipo 'String' no encontrado: en JC es 'string'».
 - **The other errors** —types, names, visibility— come from the analysis, which is BP's, and some of them speak BP: `i += 1.5` gives «'+=': 'integer' + 'double' da 'double', que no se guarda solo en 'integer' (como en C#: escribe la conversión, x := integer(x + …))» (the result is a double, which is not stored in an integer by itself: write the conversion), which in JC is `i = (int) (i + 1.5);`. The tables in this volume give the equivalence.
 
 <a id="librerias"></a>

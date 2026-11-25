@@ -1,0 +1,41 @@
+// V9 #860 (H1.9) — los mensajes que enseñan: lo que escribe quien viene de otro lenguaje, y cómo se escribe en BP.
+// No compila, y está bien: cada línea da un error que lo dice.
+module ComoSeEscribe
+import Collections
+
+  class Cuenta
+    function saldo(): integer
+      return 3
+    end saldo
+
+    public function total(): integer
+      return 4
+    end total
+  end Cuenta
+
+  function pinta(o: Object)
+    print o.toString()
+  end pinta
+
+  function Main()
+    var nombre: string := "ana"
+    print nombre.toUpperCase()          // 'string' no tiene miembros: upper(s)
+    print nombre.length()               // len(s)
+    if nombre.equals("ana") then print "si"
+
+    var lista: List<Integer> := List()
+    print lista.size()                  // es protegido de List: lo público, length()
+    var mapa: Collections.Map := Collections.stringMap()
+    mapa.put("uno", 1)                  // ninguna sobrecarga: las que hay, y la caja del número
+    pinta(5)                            // un argumento que va en su caja
+    var otro: Collections.Map := Map()  // está en Collections
+
+    var n: int := 3                     // en BP es integer
+    print Integer.parseInt("3")         // es una función
+    print Math.PI                       // falta import Math
+    System.out.println("hola")          // print x
+
+    var c: Cuenta := Cuenta()
+    print c.getSaldo()                  // no existe: lo público de Cuenta es total()
+  end Main
+end ComoSeEscribe

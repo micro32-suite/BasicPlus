@@ -2009,7 +2009,8 @@ Counter.bump()</code></pre>
   Static state lives as a global of the owning module (one per class, not per
   instance); 8-byte types (<code>long</code>/<code>double</code>) work the same.
   <code>final</code> on a class: not extensible; on a method: not overridable
-  (the modifier goes before <code>function</code> or <code>class</code>).
+  (the modifier goes before <code>function</code> or <code>class</code>). On a variable it does not go, and the
+  compiler says so: what does not change is a <code>const</code>.
 </p>
 <p>
   <strong>Static members cross the module boundary</strong> (since V7):

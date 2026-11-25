@@ -1186,7 +1186,7 @@ Counter.total += 3
 Counter.bump()
 ```
 
-Static state lives as a global of the owning module (one per class, not per instance); 8-byte types (`long`/`double`) work the same. `final` on a class: not extensible; on a method: not overridable (the modifier goes before `function` or `class`).
+Static state lives as a global of the owning module (one per class, not per instance); 8-byte types (`long`/`double`) work the same. `final` on a class: not extensible; on a method: not overridable (the modifier goes before `function` or `class`). On a variable it does not go, and the compiler says so: what does not change is a `const`.
 
 **Static members cross the module boundary** (since V7): `Lib.Counter.total := 3`, `Lib.Counter.total += 1` and `Lib.Counter.bump()` work from another module just like from their own, and a child in another module sees the protected statics of its base. Static `const`s travelled already. The only thing that cannot call a static is a `native` function ([§8.3](#funciones-native)).
 

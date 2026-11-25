@@ -13866,7 +13866,7 @@ el IDE, que es el H2 (abajo).
 | **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ✅ 23-nov, `b79c4a13` (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; la subida del IDE, la misma, probada por Eduardo con la P4; sin `pack`, para más adelante (`#875`) |
 | **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | 🧬 hecho el 23-nov, a falta de verlo Eduardo: (a) `bp api` (`7cee427`; *«Si»*), (b) la documentación en Markdown y (d) `llms.txt`, sacados del HTML por `docs_md.py` (*«OK, sigue con b»*); (c) y (e), no; y una idea de Eduardo, `#879` |
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | 🧬 (a) y (b), hechas el 23-nov, a falta de verlas Eduardo (*«1 y 2 si»*): `bp test`, `Assert` y `Gui.click`/`change`/`dumpTree`; (c), (d) y (e), aplazadas (*«3 lo aplazamos»*): `#880` |
-| **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | ⬜ |
+| **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | 🧬 (a) y (b), hechas el 25-nov, a falta de verlas Eduardo; (c), un error por declaración en JC, lo decide él |
 | **H1.10** | las placas, descritas para leer | `#861` | su pregunta abierta | ⬜ |
 
 **El orden**, el del análisis, que es bueno: H1.1 lo primero (es un fallo, y silencioso); después lo barato que se nota
@@ -14292,7 +14292,7 @@ analizarla. Es el suelo del H2 (`#728`).
 - **Hecho cuando:** un comando ejecuta las pruebas de un proyecto y sale con 0 o 1; la §24 de `gui.html` lista la API
   de prueba de la GUI y un ejemplo de GUI se prueba solo. (Lo de (c), (d) y (e), en `#880`.)
 
-#### 🧬 `#860` — H1.9: los mensajes que enseñan: el arreglo en los de BP, y en JC las costumbres de Java (abierta el 22-nov · M-9, M-16 y M-17 del análisis)
+#### 🧬 `#860` — H1.9: los mensajes que enseñan: el arreglo en los de BP, y en JC las costumbres de Java (abierta el 22-nov · M-9, M-16 y M-17 del análisis · (a) y (b), hechas el 25-nov, a falta de verlas Eduardo; (c), lo decide él)
 
 - **(a) BP:** tres mensajes que dicen el fallo y no el arreglo —una sobrecarga que no casa (listar las candidatas), un
   miembro protegido (sugerir el público) y «'string' no tiene miembros» (nombrar las funciones: `strlen`, `upper`…)—;
@@ -14304,6 +14304,28 @@ analizarla. Es el suelo del H2 (`#728`).
 - **(c) JC, más de un error de sintaxis por pasada:** hoy el lector para en el primero; al menos uno por declaración. Si
   compensa: decide Eduardo.
 - **Hecho cuando:** cada caso da un mensaje que dice cómo se escribe; y los samples de error, al día.
+- **(a) y (b), hechas el 25-nov** (Eduardo: *«De la IA hacemos todo lo que propones»*). Las ayudas salen de lo que sabe el
+  compilador (los símbolos de la clase, las firmas, los import), no de tablas por clase; sólo son tabla los nombres que
+  otros lenguajes dan a los tipos y lo que se pone en vez de un método de cadena.
+  - **En el análisis (BP y JC):** las firmas que hay cuando ninguna encaja, y la caja si con ella encajaría («Un número va
+    en su caja, Integer(x)»; en JC, `new Integer(x)`); lo público de la clase en un miembro que no existe, y en uno
+    protegido de una clase de otro módulo (que quien la usa no puede cambiar); la función que es, en una cadena
+    (`s.length()` → `len(s)`), un número, un array o `Integer.parseInt`; el módulo en que está un nombre
+    (`Collections.Map`), el `import` que falta, y el nombre del tipo aquí (`String`, `int`, `char`…).
+  - **En el lector de JC:** las diez de la ficha y las que salieron al mirarlas: `implements`, la cabecera de un fichero de
+    Java (`package`, `public class`), `import a.*`, `abstract`, `override`, `virtual`, `synchronized`, los genéricos
+    propios, `throws`, `this(…)`, `int v[]`, `{1, 2}`, `<>`, `instanceof`, la asignación dentro de una expresión.
+  - **En BP, lo de otro BASIC:** `sub`, `dim`, `let`, `int z`, `x++`, `"a" & "b"`, y un `=` donde va `:=` en una
+    declaración o en un `for`, que ya no arrastra más errores.
+  - **Visto de paso:** `final` en una variable se tomaba y no hacía nada, en los dos lenguajes: ahora es un error que dice
+    `const`.
+  - **Probado:** `MensajesQueEnsenanTest` (20; la suite, 439), `samples/errores/ComoSeEscribe.bp` (`h13-errores.sh`, 165
+    comprobaciones), los 419 fuentes de `samples` con el compilador de antes y con éste (los `.mod`, idénticos) y la
+    stdlib, idéntica. La guía de JC (§17.1 y §18.5) y el manual (§9.6), en las dos lenguas.
+- **(c), analizada, a falta de decidir:** el lector de JC lanza el error donde lo ve. Para dar uno por declaración bastaría
+  con apuntarlo, saltar hasta el final de esa declaración (contando llaves) y seguir con la siguiente: unas 30 líneas, sin
+  tocar cómo lee lo que está bien. Con los mensajes de ahora, el fichero de la sonda (`Inventario-como-en-java.jc`) pasaría
+  de una vuelta por error a una vuelta por cada nivel (los miembros de una clase, de una vez).
 
 #### 🧬 `#861` — H1.10: las placas, descritas para leer: sus pines y sus periféricos (abierta el 22-nov · la pregunta abierta del análisis)
 
@@ -14313,8 +14335,12 @@ RP2350 y sólo lleva `name`, `variant`, `ledPin`, `neopixelPin` y `psramCsPin`; 
 persona— inventa números de pin. Por placa: los pines libres, los de cada bus (I2C, SPI, UART…) y los del sistema (la
 flash, la PSRAM, la pantalla, el USB), en la referencia y en un fichero de la release, sacados de lo que sabe la imagen y
 no copiados a mano. Va con el tema principal de V9, las librerías de dispositivos.
-- **Hecho cuando:** cada una de las once placas, con su tabla y su fichero; y lo que dicen casa con lo que contesta la
-  placa.
+- **Los enlaces (Eduardo, 25-nov):** *«Para H1.10 de las placas que tenemos podemos incluir los enlaces de Internet de
+  su documentación. Así la IA puede buscar los pines por ella misma.»* Por placa, los de su fabricante (su página, el
+  pinout y el esquema), comprobados; lo que es de la placa y no nuestro se busca allí. De la imagen sale lo que sólo ella
+  sabe: los pines del sistema y los de cada bus.
+- **Hecho cuando:** cada una de las once placas, con su tabla, sus enlaces y su fichero; y lo que dicen casa con lo que
+  contesta la placa.
 
 #### 🧩 H2 — la IA maneja el IDE (`#728`) (abierto el 22-nov)
 
