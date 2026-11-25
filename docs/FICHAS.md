@@ -15139,7 +15139,7 @@ mantiene sola.»*
   proyecto `library "mio"` que tiene su propio módulo `Log` (`import mio.Log`): `bp run`, `--c`, `--sim`, Run, y Run on
   Device en el simulado, dos veces; usa el suyo, y el `Log` de la stdlib sigue en su sitio. `ProyectoDaoTest`.
 
-#### 🧬 `#902` — las ESP32 de dos núcleos: tras una operación del I2C que nadie contesta, la siguiente podía darse por hecha sin estarlo, y la placa se reiniciaba (abierta el 25-nov · al repetir el punto 5 de la prueba final con la imagen nueva en la P4 · de antes: también en lo publicado · hecha el mismo día, `394dfb7` del runtime, y medida en la P4; falta la S3, y que Eduardo toque la pantalla y oiga el sonido de la P4)
+#### 🧬 `#902` — las ESP32 de dos núcleos: tras una operación del I2C que nadie contesta, la siguiente podía darse por hecha sin estarlo, y la placa se reiniciaba (abierta el 25-nov · al repetir el punto 5 de la prueba final con la imagen nueva en la P4 · de antes: también en lo publicado · hecha el mismo día, `394dfb7` del runtime, medida en la P4 y, su táctil y su sonido a la vez, vistos por Eduardo: *«1) todo OK»*; falta la S3)
 
 - **Qué pasa:** una operación que nadie contesta acaba en su STOP, y el IDF (6.1) vuelve en cuanto el bus queda libre: ni espera
   la interrupción de ese STOP, que se levanta un poco después, ni la limpia. Queda pendiente, y salta al poner las suyas la
@@ -15155,6 +15155,10 @@ mantiene sola.»*
 - **Hecho**, sin tocar el IDF: tras un fallo, se espera a que acabe el STOP —y el tiempo de un bit— y se limpia lo pendiente
   (`esp32_i2c_tras_un_no`, `gpio_esp32.c`), con el turno del bus tomado. El táctil y el códec de la P4 hablaban por el mismo bus
   del IDF sin turno: ahora lo piden (`pant_touch`: si está tomado, repite lo último leído). Las cinco imágenes, compiladas.
+- **Dos hilos y la GUI con su táctil, por el mismo bus** (25-nov, en la P4): 16 000 vueltas —un sondeo de nadie, una lectura y un
+  sondeo del códec—, ninguna mal. Y `samples/SoundDemo.bp`, para verlo con el dedo: se fabrica su WAV, y su deslizador cambia el
+  volumen mientras suena (el táctil y el códec, a la vez por el I2C); en las dos VMs del PC, en silencio, igual.
+- **Falta:** en la S3, los 400 sondeos de una dirección vacía (sin nada conectado) y, con un sensor, las lecturas.
 
 #### ✅ `#903` — un dispositivo de `bpdevices` (o un módulo de `"dependencies"`) se compila y no se ejecuta en el PC: «falta el modulo 'Mcp9804'» (abierta el 25-nov · la prueba final, su punto 4 · de antes: también en lo publicado, en el Run del IDE · hecha y **CERRADA** el mismo día, `936b3ef` de `toolchain`)
 

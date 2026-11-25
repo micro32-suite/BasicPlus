@@ -1,0 +1,218 @@
+// SoundDemo.bp — el sonido con una pantalla: tocar, parar, el volumen y por dónde va. El WAV se lo fabrica el programa (unas
+// notas, 16 kHz y 16 bits, en SoundDemo.wav), así que no hace falta ningún fichero.
+//
+// En una placa, con la pantalla y su sonido (la P4: la línea `audio` del ENV), el táctil y el códec van por el mismo I2C: el
+// volumen se cambia mientras suena, con el dedo en el deslizador. En el PC, por el audio del sistema.
+//
+// Con el argumento "prueba" pulsa él los botones, deja la captura en SoundDemo.shot y acaba: para verlo sin nadie delante
+// (en silencio, en el PC: BPVM_SONIDO=mudo en el entorno).
+module SoundDemo
+  import Gui
+  import IO
+  import Math
+  import Sound
+
+  public const RUTA: string := "SoundDemo.wav"   // public: la usa la clase de la pantalla
+  const HZ: integer := 16000
+  const MS: integer := 250                 // lo que dura cada nota
+  const VUELTAS: integer := 3
+
+  // ---------------------------------------------------------------- el WAV
+
+  function pon16(b: byte[], i: integer, v: integer)
+    b[i] := byte(v & 255)
+    b[i + 1] := byte((v shr 8) & 255)
+  end pon16
+
+  function pon32(b: byte[], i: integer, v: integer)
+    pon16(b, i, v & 65535)
+    pon16(b, i + 2, (v shr 16) & 65535)
+  end pon32
+
+  function texto(b: byte[], i: integer, s: string)
+    for k := 0 to len(s) - 1 do
+      b[i + k] := byte(charCodeAt(s, k))
+    next k
+  end texto
+
+  // La cabecera: PCM, una voz, 16 bits. `bytes`, lo que ocupa el sonido.
+  function cabecera(bytes: integer): byte[]
+    var b: byte[] := byte[44]
+    texto(b, 0, "RIFF")
+    pon32(b, 4, 36 + bytes)
+    texto(b, 8, "WAVEfmt ")
+    pon32(b, 16, 16)
+    pon16(b, 20, 1)
+    pon16(b, 22, 1)
+    pon32(b, 24, HZ)
+    pon32(b, 28, HZ * 2)
+    pon16(b, 32, 2)
+    pon16(b, 34, 16)
+    texto(b, 36, "data")
+    pon32(b, 40, bytes)
+    return b
+  end cabecera
+
+  // Una nota: un seno, que entra en 10 ms y se apaga en 60 (sin eso, cada nota empieza y acaba con un chasquido).
+  function nota(hz: float): byte[]
+    var n: integer := HZ * MS / 1000
+    var entra: integer := HZ / 100
+    var sale: integer := HZ * 6 / 100
+    var b: byte[] := byte[n * 2]
+    var w: float := 2.0 * Math.pi() * hz / HZ
+    var c: float := 2.0 * Math.cos(w)      // sen(k·w) sale de los dos anteriores: sin un seno por muestra
+    var s1: float := -Math.sin(w)
+    var s2: float := -Math.sin(2.0 * w)
+    for k := 0 to n - 1 do
+      var s: float := c * s1 - s2
+      s2 := s1
+      s1 := s
+      var nivel: float := 9000.0
+      if k < entra then nivel := nivel * k / entra
+      if n - k < sale then nivel := nivel * (n - k) / sale
+      pon16(b, k * 2, integer(s * nivel))
+    next k
+    return b
+  end nota
+
+  function creaWav()
+    var notas: float[] := [523.25, 659.25, 783.99, 1046.5, 783.99, 659.25, 523.25, 392.0]
+    var bytes: integer := len(notas) * (HZ * MS / 1000) * 2 * VUELTAS
+    if fileExists(RUTA) then
+      if IO.fileSize(RUTA) == bytes + 44 then return   // ya está
+    endif
+    var suenan: List<Nota> := List()
+    for hz in notas do
+      suenan.add(Nota(nota(hz)))
+    next hz
+    var f: IO.File := IO.File(RUTA, "w")
+    f.write(cabecera(bytes))
+    for v := 1 to VUELTAS do
+      for x in suenan do
+        f.write(x.datos)
+      next x
+    next v
+    f.close()
+  end creaWav
+
+  public class Nota
+    public property datos: byte[]
+    public function Nota(datos: byte[])
+      this.datos := datos
+    end Nota
+  end Nota
+
+  // ---------------------------------------------------------------- la pantalla
+
+  public class Panel
+    public property tocar: Gui.Button
+    public property parar: Gui.Button
+    public property volumen: Gui.Slider
+    public property fin: boolean
+    var estado: Gui.Label
+    var dice: Gui.Label
+    var barra: Gui.Bar
+    var pulsado: integer
+
+    public function Panel(scr: Gui.Screen)
+      var t: Gui.Label := Gui.Label(scr, "El sonido")
+      t.align(Gui.Align.TOP_MID, 0, 10)
+      this.estado := Gui.Label(scr, "")
+      this.estado.align(Gui.Align.TOP_MID, 0, 36)
+      this.barra := Gui.Bar(scr)
+      this.barra.setRange(0, 100)
+      this.barra.setSize(scr.width - 60, 16)
+      this.barra.align(Gui.Align.TOP_MID, 0, 66)
+      this.tocar := Gui.Button(scr, "Tocar")
+      this.tocar.setSize(scr.width / 2 - 40, 56)
+      this.tocar.align(Gui.Align.LEFT_MID, 24, 0)
+      this.tocar.onClick := this::tocar_onClick
+      this.parar := Gui.Button(scr, "Parar")
+      this.parar.setSize(scr.width / 2 - 40, 56)
+      this.parar.align(Gui.Align.RIGHT_MID, -24, 0)
+      this.parar.onClick := this::parar_onClick
+      this.dice := Gui.Label(scr, "")
+      this.dice.align(Gui.Align.BOTTOM_MID, 0, -56)
+      this.volumen := Gui.Slider(scr)
+      this.volumen.setRange(0, 100)
+      this.volumen.setSize(scr.width - 80, 20)
+      this.volumen.align(Gui.Align.BOTTOM_MID, 0, -24)
+      this.volumen.onChange := this::volumen_onChange
+      if Sound.isAvailable() then
+        this.volumen.value := Sound.getVolume()
+        this.estado.setText("listo")
+      else
+        this.estado.setText("esta placa no tiene sonido")
+      endif
+      this.refresca()
+    end Panel
+
+    function event tocar_onClick(quien: Gui.Component)
+      this.pulsado += 1
+      try
+        Sound.play(RUTA)
+      catch e: RuntimeError
+        this.estado.setText(e.msg)
+      endtry
+    end tocar_onClick
+
+    function event parar_onClick(quien: Gui.Component)
+      Sound.stop()
+    end parar_onClick
+
+    function event volumen_onChange(quien: Gui.Component)
+      try
+        Sound.setVolume(this.volumen.value)
+      catch e: RuntimeError
+        this.estado.setText(e.msg)
+      endtry
+    end volumen_onChange
+
+    // En su hilo: por dónde va, diez veces por segundo.
+    public function vigila()
+      while not this.fin do
+        this.refresca()
+        sleep(100)
+      endwh
+    end vigila
+
+    function refresca()
+      this.dice.setText("volumen " + this.volumen.value)
+      if this.pulsado == 0 then return
+      var total: integer := Sound.getLength()
+      if total > 0 then this.barra.value := integer(long(Sound.getPosition()) * 100 / total)
+      if Sound.isPlaying() then
+        this.estado.setText("suena (" + this.pulsado + ")")
+      else
+        this.estado.setText("parado")
+      endif
+    end refresca
+  end Panel
+
+  function main(arg: string)
+    creaWav()
+    var scr: Gui.Screen := Gui.Screen()
+    var p: Panel := Panel(scr)
+    var vigia: Thread := Thread(p::vigila())
+    vigia.start()
+    if arg == "prueba" then
+      Gui.click(p.tocar)                    // antes de Gui.start(): sin pantalla, el lazo acaba en cuanto no tiene qué atender
+      p.volumen.value := 60
+      Gui.change(p.volumen)
+      Gui.start()
+      sleep(1500)
+      print "suena: " + Sound.isPlaying() + ", volumen " + Sound.getVolume()
+      Gui.shot("SoundDemo.shot")
+      Sound.stop()
+      sleep(300)
+      print "suena: " + Sound.isPlaying()
+      Gui.stop()
+      Gui.join()
+    else
+      Gui.run()
+    endif
+    Sound.stop()
+    p.fin := true
+    vigia.join()
+  end main
+end SoundDemo

@@ -1494,6 +1494,8 @@ var pct: integer := integer(long(Sound.getPosition()) * 100 / Sound.getLength())
 
 **Where it sounds.** On the PC, through the system's audio (the C VM, on Windows); with `BPVM_SONIDO=mudo` in the environment, silently and at the same pace (the tests). On a board, if its family carries the sound part and its ENV the `audio` line ([appendix A](#env)) —the P4, with its ES8311 codec—; if not, `play` gives the error with the reason and `isAvailable()` returns `false`. The codec and the amplifier are only switched on while it sounds. When the program ends, whatever is sounding stops, the progress goes back to 0 and the volume to 85.
 
+The example, with its screen —play, stop, the volume and how far it is—: `samples/SoundDemo.bp`, which makes its own WAV.
+
 <a id="stdlib-air"></a>
 ### 14.19 `Air` (WiFi and Bluetooth)
 
