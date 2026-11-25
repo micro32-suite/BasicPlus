@@ -508,6 +508,23 @@ p.y := <span class="num">20</span>
 p.width := <span class="num">100</span>
 p.height := <span class="num">50</span>
 p.scrollDir := Gui.ScrollDir.VER</code></pre>
+<p>
+  <strong>Lo que cabe en un <code>Panel</code> es menos de lo que mide</strong>: tiene un borde de 2&nbsp;px, gris muy claro,
+  y un margen por dentro, y las <code>x</code>, <code>y</code> y los <code>align</code> de sus hijos se cuentan desde ahí, no
+  desde su esquina. El margen depende del ancho de la pantalla (el de fábrica: girarla no lo cambia). La página de una pestaña
+  (<code>TabPage</code>) deja el mismo margen, sin borde; y la ventana de un formulario (<code>Gui.Window</code>) es un panel.
+</p>
+<table>
+  <tr><th>ancho de la pantalla</th><th>un hijo en (0, 0) sale a</th><th>dentro de uno de 200 × 100 caben</th></tr>
+  <tr><td>hasta 320</td><td>15&nbsp;px de su esquina (2 + 13)</td><td>170 × 70</td></tr>
+  <tr><td>de 321 a 719</td><td>18&nbsp;px (2 + 16)</td><td>164 × 64</td></tr>
+  <tr><td>720 o más</td><td>22&nbsp;px (2 + 20)</td><td>156 × 56</td></tr>
+</table>
+<p>
+  Lo que no cabe se recorta, y en la placa, con sus barras, se desplaza con el dedo. Para cubrir un panel entero, un hijo de su
+  tamaño, centrado (<code>align(Gui.Align.CENTER, 0, 0)</code>), y <code>scrollDir := Gui.ScrollDir.NONE</code> en el panel.
+  Todo esto es de LVGL; desde V9, la VM Java lo hace igual, con el margen de su pantalla, la de 480 × 320.
+</p>
 <div class="note">
   <p><strong>BasicPlus no dibuja formas libres</strong> (líneas, círculos, canvas): la interfaz se compone con
   widgets. Para un rectángulo de color basta un <code>Panel</code> con <code>setBgColor</code>. Un lienzo de

@@ -200,6 +200,16 @@ p.height := 50
 p.scrollDir := Gui.ScrollDir.VER
 ```
 
+**What fits inside a `Panel` is less than its size**: it has a 2 px border, very light grey, and a padding inside, and the `x`, `y` and `align` of its children are counted from there, not from its corner. The padding depends on the width of the screen (its native one: rotating it does not change it). The page of a tab (`TabPage`) leaves the same padding, with no border; and the window of a form (`Gui.Window`) is a panel.
+
+| width of the screen | a child at (0, 0) comes out at | inside a 200 × 100 one there is room for |
+|---|---|---|
+| up to 320 | 15 px from its corner (2 + 13) | 170 × 70 |
+| from 321 to 719 | 18 px (2 + 16) | 164 × 64 |
+| 720 or more | 22 px (2 + 20) | 156 × 56 |
+
+What does not fit is cut off and, on the board, scrolls with the finger, with its bars. To cover a whole panel, a child of its size, centered (`align(Gui.Align.CENTER, 0, 0)`), and `scrollDir := Gui.ScrollDir.NONE` on the panel. All this is LVGL's; since V9, the Java VM does the same, with the padding of its screen, the 480 × 320 one.
+
 > **BasicPlus does not draw free shapes** (lines, circles, canvas): the interface is composed out of widgets. For a colored rectangle, a `Panel` with `setBgColor` is enough. A pixel-level drawing canvas would be a future extension; it is not there today.
 
 <a id="catalogo"></a>

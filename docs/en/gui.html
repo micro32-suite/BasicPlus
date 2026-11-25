@@ -510,6 +510,23 @@ p.y := <span class="num">20</span>
 p.width := <span class="num">100</span>
 p.height := <span class="num">50</span>
 p.scrollDir := Gui.ScrollDir.VER</code></pre>
+<p>
+  <strong>What fits inside a <code>Panel</code> is less than its size</strong>: it has a 2&nbsp;px border, very light grey, and a
+  padding inside, and the <code>x</code>, <code>y</code> and <code>align</code> of its children are counted from there, not from
+  its corner. The padding depends on the width of the screen (its native one: rotating it does not change it). The page of a tab
+  (<code>TabPage</code>) leaves the same padding, with no border; and the window of a form (<code>Gui.Window</code>) is a panel.
+</p>
+<table>
+  <tr><th>width of the screen</th><th>a child at (0, 0) comes out at</th><th>inside a 200 × 100 one there is room for</th></tr>
+  <tr><td>up to 320</td><td>15&nbsp;px from its corner (2 + 13)</td><td>170 × 70</td></tr>
+  <tr><td>from 321 to 719</td><td>18&nbsp;px (2 + 16)</td><td>164 × 64</td></tr>
+  <tr><td>720 or more</td><td>22&nbsp;px (2 + 20)</td><td>156 × 56</td></tr>
+</table>
+<p>
+  What does not fit is cut off and, on the board, scrolls with the finger, with its bars. To cover a whole panel, a child of its
+  size, centered (<code>align(Gui.Align.CENTER, 0, 0)</code>), and <code>scrollDir := Gui.ScrollDir.NONE</code> on the panel. All
+  this is LVGL's; since V9, the Java VM does the same, with the padding of its screen, the 480 × 320 one.
+</p>
 <div class="note">
   <p><strong>BasicPlus does not draw free shapes</strong> (lines, circles, canvas): the interface is
   composed out of widgets. For a colored rectangle, a <code>Panel</code> with <code>setBgColor</code> is

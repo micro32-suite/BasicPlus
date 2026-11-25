@@ -86,6 +86,14 @@ en §ABIERTAS, en el bloque de V9:
 | **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA; cada acción del IDE, un comando, con la `Action` de Swing como su cara en la ventana y MCP como la de la IA (Eduardo, 22-nov). Va antes que el H1 | ⏳ abierto el 22-nov; H2.1, el análisis, H2.2, los comandos (53, probados por Eduardo), y H2.3, la IA por MCP (probado por una IA de verdad en la Pico 2 y en la VM-C), hechos; H2.4 (el depurador, por la IA), analizado y aplazado a una segunda fase (23-nov; el 25, fuera de la V8.5): lo que haga falta, lo dirá el uso, en el H1 |
 | **H3** | **el I2C y el SPI por software** (Eduardo, 24-nov): una clase base por bus, la del periférico y la de software, que se intercambian cambiando sólo el constructor; las de software, cada una en su módulo (`#881`–`#884`) | ⏳ abierto el 24-nov; el I2C, hecho y visto en las tres familias con un sensor; el SPI, analizado |
 
+**La V8.5** (Eduardo, 25-nov): se publica el viernes 27-nov si es posible —*«OK, entonces publicamos el viernes si es posible.»*—, con lo
+hecho desde la V8.1. Congelada de hecho desde el 25-nov: no se hace código nuevo, sólo se arreglan fallos —*«de hecho ya hemos
+congelado, no hacemos código nuevo salvo para corregir bugs»*—; la congelación formal, tras la prueba de la IA con el ZIP nuevo
+(*«No podemos congelar codigo hasta que pasemos la prueba de la IA»*). Lo que falta, en orden: el ZIP de prueba y la IA; lo que vea
+Eduardo de lo hecho; la versión (8.1 → 8.5), las nueve imágenes, los packs y el repaso de `PUBLICAR.md`; el lote de las once placas
+(y en él, `#902` en la S3, `#861`, `#890`, `#892` y los guiones sin probar); y la publicación, con su OK. Fuera, por decisión suya:
+`#865`, `#879`, `#884` y el H2.4.
+
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
 No cambia nada del producto: reorganiza el proyecto. BasicPlus pasa a la organización `micro32-suite`, con `toolchain`
@@ -15229,7 +15237,7 @@ mantiene sola.»*
 - **La guía vieja:** la carpeta de la prueba tenía la de un ZIP anterior, y la IA trabajó media prueba con ella (el IDE la pone al
   día al abrirse, `#893`). La copia que deja el IDE dice ahora, bajo el título, cuál es la de ahora. `GuiaIaSmoke`.
 
-#### ⬜ `#909` — un `Panel` se desplaza aunque su `scrollDir` sea `NONE`, y lo que cabe dentro es menos de lo que mide (abierta el 25-nov · vista al mirar `#905` · de siempre · medida el mismo día · por decidir Eduardo)
+#### ⬜ `#909` — un `Panel` se desplaza aunque su `scrollDir` sea `NONE`, y lo que cabe dentro es menos de lo que mide (abierta el 25-nov · vista al mirar `#905` · de siempre · el tamaño, hecho el mismo día, `f0f2ec5` de `toolchain` · el desplazamiento, decidido: no se desplaza si no se pide; por hacer)
 
 - La guía (§19.4) y `Gui.bp` dicen que el desplazamiento es opcional y por defecto `NONE`, y `scrollDir` da 0; pero en LVGL un
   objeto nace desplazable en las dos direcciones, con sus barras si no cabe, y nadie se lo quita. Hacerlo verdad puede romper a
@@ -15251,11 +15259,25 @@ mantiene sola.»*
   Así que en el PC y en la placa no sale en el mismo sitio, ni en dos placas de distinto ancho; y el desplazamiento viene de ahí:
   un hijo tan grande como el panel no cabe, y salen las barras; con uno de lo que cabe, no. La página de una pestaña, sin borde,
   con el mismo margen (16 en la P4). Lo mismo que le pasó a la ventana de `#905`, que se arregló en un solo sitio (`Window.load`).
-- **Por decidir:** **A**, en LVGL el panel (y la página de una pestaña) nace sin margen y sin borde que ocupe: (0, 0) es su esquina
+- **Decidido: B** (Eduardo, 25-nov: *«3) b»*). Las dos salidas que se le dieron: **A**, en LVGL el panel (y la página de una pestaña) nace sin margen y sin borde que ocupe: (0, 0) es su esquina
   y cabe lo que mide, en el PC y en todas las placas igual; lo que hoy está dentro de un panel se mueve en las placas 15, 18 o 22 px
   hacia su esquina, que es donde ya sale en el PC. **B**, que la VM Java ponga el borde y el margen de LVGL: en las placas no cambia
   nada, pero lo que cabe sigue dependiendo del ancho de la pantalla. Recomendado: A (con sus notas de la versión: cambia el aspecto
   en las placas; pide grabar el `Gui.pack`), y el desplazamiento, después, con lo que quede.
+- **Hecho, B** (`GuiBackend`, en miVM): un panel de la VM Java tiene el borde y el margen de LVGL, se pinta como el suyo (blanco, las
+  esquinas redondeadas, el borde encima de los hijos), y las x, y y los `align` de sus hijos se cuentan desde lo de dentro; la página de
+  una pestaña, el margen. Los números, los del tema de LVGL, y por el ancho de fábrica (medido: al girar la pantalla no cambian).
+  De paso, la casilla y el deslizador, sin fondo propio, como en LVGL: el suyo, gris, se veía sobre el panel, que ahora es blanco.
+  En las placas y en la VM-C no cambia nada. `GuiPanelTest` (6): los píxeles de la captura. **Comprobado** frente a la VM-C con LVGL, a
+  480 de ancho: las mismas cajas en los ocho casos de la medida, un hijo alineado y un formulario `.win` entero, y el mismo volcado.
+  La guía de la GUI (§19.4), en los dos idiomas, y la de IA. En la pestaña quedan los 25 px de cabecera de Swing (65 en LVGL) y los
+  2 de su marco: no se han tocado.
+- **El desplazamiento, decidido** (Eduardo, 25-nov: *«No recuerdo en LVGL pero los scrolls es responsabilidad del programador
+  auorizarlos o no. En general en un dispositivo no son muy prácticos.»*): no se desplaza nada si el programa no lo pide. Las dos
+  salidas que se le dieron: (i) que naciera `BOTH`, que es lo que hace en la placa, y decirlo; (ii) ésta. En LVGL es al revés: todo
+  nace desplazable y el programador lo quita. Por hacer, lo primero del 26-nov, antes del ZIP: en `gui.c`, la pantalla, los paneles
+  (también la ventana) y las páginas de pestaña nacen con lo que dice su `scrollDir` (`NONE`); la lista, el campo de texto y la tabla
+  conservan el suyo, que es parte de lo que son. Va en el `Gui.pack` y el `GuiMini.pack` (se regraban); la guía, §19.4.
 
 #### ✅ `#910` — el ZIP de prueba de la V8.5 llevaba las nueve imágenes de la V8.1, y nadie lo dijo (abierta el 25-nov · al ir a grabar la P4 · hecha y **CERRADA** el mismo día, `394dfb7` del runtime)
 
@@ -15268,6 +15290,14 @@ mantiene sola.»*
 
 - El ejemplo de la hoja de datos del fabricante da 256 menos lo leído, y es al revés: −10 °C salían 10. **Probado** con un bus que
   contesta como el sensor, en las dos VMs: −0,0625, −10,5 y −40 (antes, 0,0625, 10,5 y 40).
+
+#### ✅ `#912` — los resultados de ejecutar (la IA) mezclan lo que imprime el programa con lo de compilar, subir y ejecutar (abierta el 25-nov · de la prueba final · hecha y **CERRADA** el mismo día, `f0f2ec5` de `toolchain`)
+
+- La IA tenía que buscar en la `salida` de la consola lo que imprimió su programa. **Hecho** (Eduardo: *«4) si»*): `imprime`, sólo lo
+  que imprime el programa, tal cual, en `ejecutar`, `ejecutar_placa`, `ejecutar_ventana` (las dos salidas de la VM-C se leen aparte: lo
+  suyo va por la de errores) y `placa_ejecutar`; `salida` sigue siendo lo que se ve. Si no llegó a ejecutarse, no está. **Probado** por
+  los comandos, con el IDE sin ventana: un programa que acaba bien, uno que falla y uno que no compila, en el PC, en la ventana de la
+  VM-C, en el micro simulado y en la P4. `SubidaSmoke`.
 
 #### 🧬 `#893` — la guía para IA que el IDE deja en una carpeta no se pone al día: se queda la de la primera vez (abierta el 25-nov · vista en la carpeta de pruebas: la del 23 no sabía de packs ni de guiones · hecha el mismo día)
 
