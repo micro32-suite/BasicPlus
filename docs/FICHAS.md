@@ -14609,11 +14609,15 @@ lo mismo con el SPI.
   el primer programa de alguien (o de una IA). Propuesto: un aviso del compilador en ese caso; o que, siendo el principal,
   corra una vez.
 
-#### 🧬 `#885` — STM32: el I2C del periférico va siempre a 100 kHz, se pida lo que se pida (abierta el 24-nov · medida al hacer el H3 · pendiente)
+#### 🧬 `#885` — STM32: el I2C del periférico va siempre a 100 kHz, se pida lo que se pida (abierta el 24-nov · medida al hacer el H3 · hecha el 25-nov —*«sobre los bugs, si los arreglamos»*—, a falta de verla en la Nucleo)
 
 - `gpio_stm32.c` pone un `TIMINGR` fijo (el de CubeMX) e ignora la velocidad: en la Nucleo, a 400 kHz tarda lo mismo que
   a 100 (500 lecturas de un registro, 255 ms). Sabido desde antes (el comentario de `stm32_i2c_abrir`; `V7_IDEAS` §H6),
   sin ficha. Una velocidad que se pide, se acepta y no se cumple, en silencio.
+- **Hecho:** el registro se calcula para la velocidad pedida (`stm32/port/i2c_timing.h`, puro: lo prueba el PC en `test-bus`,
+  contra lo que pide la norma en cada modo): de ~20 kHz a 1 MHz (por encima de 400 kHz, con el Fast-mode Plus); nunca pasa de
+  la pedida, y para 100 kHz da, bit a bit, el valor de antes. Las dos imágenes STM32, compiladas. **Falta** medirlo en la
+  Nucleo, con el sensor.
 
 #### 🧬 `#880` — lo aplazado del H1.8: la captura de la VM Java, el botón con tamaño puesto a mano y la ruta relativa de `Gui.shot` (abierta el 23-nov · Eduardo, al decidir `#859`: *«3 lo aplazamos»* · pendiente)
 
