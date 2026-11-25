@@ -2178,9 +2178,16 @@ e.etiqueta := <span class="str">"cuadrado de 2"</span>              <span class=
   ...
 <span class="kw">end</span> Util</code></pre>
 <p>
-  If you declare <code>library</code>, the artifact is named
-  <code>com.example.app.Util.mod</code>. Without
-  <code>library</code>, it is called <code>Util.mod</code>.
+  A module's full name is its <code>library</code> and its own: the one above is
+  <code>com.example.app.Util</code>, and its artifact, <code>com.example.app.Util.mod</code>. Without
+  <code>library</code> it is as if that part did not exist: <code>Util</code>, and <code>Util.mod</code>.
+</p>
+<p>
+  It is Java's <code>package</code>, with the same convention: the domain of whoever makes it, reversed, the name of
+  the project and that of the module. The right thing is for every module to have its own: two with the same name do
+  not clash if their <code>library</code> is different. One without it that is called like one of the standard
+  library (<code>Log</code>, <code>App</code>, <code>Json</code>…) has the same full name, and which of the two is used
+  depends on where the program runs: give it one.
 </p>
 
 <h3 id="main">10.2 <code>main(arg: string)</code> and module constructor</h3>
@@ -2218,14 +2225,20 @@ e.etiqueta := <span class="str">"cuadrado de 2"</span>              <span class=
 
 <h3 id="imports">10.3 <code>import</code> / <code>from</code></h3>
 <pre><code><span class="kw">module</span> App
-  <span class="kw">import</span> Util                       <span class="comment">// same library</span>
-  <span class="kw">import</span> com.example.Util           <span class="comment">// qualified path</span>
+  <span class="kw">import</span> Util                       <span class="comment">// without library</span>
+  <span class="kw">import</span> com.example.Motor          <span class="comment">// with its own</span>
   <span class="kw">import</span> ext.tools.Helper <span class="kw">from</span> <span class="str">"plugins/helper.mod"</span>
   ...
 <span class="kw">end</span> App</code></pre>
 <ul>
-  <li>The last segment of the path is the local alias (<code>Util</code>,
-      <code>Helper</code>). You use it as <code>Util.foo()</code>.</li>
+  <li>The last segment of the path is the local alias (<code>Util</code>, <code>Motor</code>,
+      <code>Helper</code>). You use it as <code>Util.foo()</code>. In one module, no two <code>import</code>s may end
+      the same: it is an error.</li>
+  <li><strong>A module is imported by its full name</strong>: with its <code>library</code> in front if it has one,
+      also from another module of the same one. <code>import Util</code> is the one that has none. If there are two with
+      the same name, whoever writes it settles it: with the <code>library</code> (giving one to their own, if it has
+      none) or, if it comes from a pack, saying which (<code>import Util from pack MyLibs</code>,
+      <a href="guia-ide.html#packs-usar">IDE guide §10.2</a>).</li>
   <li><code>from "&lt;path&gt;"</code> tells the <strong>compiler</strong> where to find the
       <code>.mod</code> (or the <code>.bp</code>) to take the interface from. At run time the VM
       looks the module up by its name, always in the same order: the running pack, the program's

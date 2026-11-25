@@ -651,8 +651,8 @@ total = total
 <p>
   A module variable cannot be <code>public</code> (it is an error): what is shared with other modules is a
   property, like <code>ultima</code> (<a href="manual.html#props">manual §9.5</a>). With <code>library "com.ejemplo";</code>
-  before <code>module</code>, the <code>.mod</code> is called <code>com.ejemplo.Medidor.mod</code>
-  (<a href="manual.html#library">manual §10.1</a>).
+  before <code>module</code> —it is Java's <code>package</code>—, the module is <code>com.ejemplo.Medidor</code>, and its
+  <code>.mod</code>, <code>com.ejemplo.Medidor.mod</code> (<a href="manual.html#library">manual §10.1</a>).
 </p>
 
 <h3 id="main">5.2 <code>main</code> and the startup function</h3>

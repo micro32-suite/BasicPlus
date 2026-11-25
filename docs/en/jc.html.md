@@ -335,7 +335,7 @@ module Medidor
 2 lecturas, la última 120
 ```
 
-A module variable cannot be `public` (it is an error): what is shared with other modules is a property, like `ultima` ([manual §9.5](manual.html.md#props)). With `library "com.ejemplo";` before `module`, the `.mod` is called `com.ejemplo.Medidor.mod` ([manual §10.1](manual.html.md#library)).
+A module variable cannot be `public` (it is an error): what is shared with other modules is a property, like `ultima` ([manual §9.5](manual.html.md#props)). With `library "com.ejemplo";` before `module` —it is Java's `package`—, the module is `com.ejemplo.Medidor`, and its `.mod`, `com.ejemplo.Medidor.mod` ([manual §10.1](manual.html.md#library)).
 
 <a id="main"></a>
 ### 5.2 `main` and the startup function

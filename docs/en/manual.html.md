@@ -1291,7 +1291,9 @@ module Util
 end Util
 ```
 
-If you declare `library`, the artifact is named `com.example.app.Util.mod`. Without `library`, it is called `Util.mod`.
+A module's full name is its `library` and its own: the one above is `com.example.app.Util`, and its artifact, `com.example.app.Util.mod`. Without `library` it is as if that part did not exist: `Util`, and `Util.mod`.
+
+It is Java's `package`, with the same convention: the domain of whoever makes it, reversed, the name of the project and that of the module. The right thing is for every module to have its own: two with the same name do not clash if their `library` is different. One without it that is called like one of the standard library (`Log`, `App`, `Json`…) has the same full name, and which of the two is used depends on where the program runs: give it one.
 
 <a id="main"></a>
 ### 10.2 `main(arg: string)` and module constructor
@@ -1320,14 +1322,15 @@ end MiApp
 
 ```
 module App
-  import Util                       // same library
-  import com.example.Util           // qualified path
+  import Util                       // without library
+  import com.example.Motor          // with its own
   import ext.tools.Helper from "plugins/helper.mod"
   ...
 end App
 ```
 
-- The last segment of the path is the local alias (`Util`, `Helper`). You use it as `Util.foo()`.
+- The last segment of the path is the local alias (`Util`, `Motor`, `Helper`). You use it as `Util.foo()`. In one module, no two `import`s may end the same: it is an error.
+- **A module is imported by its full name**: with its `library` in front if it has one, also from another module of the same one. `import Util` is the one that has none. If there are two with the same name, whoever writes it settles it: with the `library` (giving one to their own, if it has none) or, if it comes from a pack, saying which (`import Util from pack MyLibs`, [IDE guide §10.2](guia-ide.html.md#packs-usar)).
 - `from "<path>"` tells the **compiler** where to find the `.mod` (or the `.bp`) to take the interface from. At run time the VM looks the module up by its name, always in the same order: the running pack, the program's folder (`/app`), the standard library (`/lib`) and the pack zone — the `from` path is not used.
 - **`import Core` is not needed** (since V7): the compiler adds it to every module ([§10.0](#raiz)), so the `Core` types —`List`, `Integer`/`Long`/`Float`/`Double`/`Boolean`, `Comparable`, `Exception`, `RuntimeError`— and `try/catch` or `throw` ([§11](#excepciones)) are used without writing it. Writing it changes nothing.
 - **Imports are not transitive** (`Core` aside, which is always there). Importing `A` does not bring in the modules `A` imports: to name a type of `B` you have to import `B` ("tipo cualificado 'B.Y' no encontrado"), and also if what you use from `A` depends on `B`. The compiler says so depending on the case:

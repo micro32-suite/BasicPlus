@@ -14776,6 +14776,15 @@ mantiene sola.»*
     («'Log' se toma de … y NO de la stdlib») y las dos VMs del PC, también («tapa al de /lib»). Donde no es así es al subirlo
     desde el IDE o con `bp run` a una placa, al simulado o a la VM local: la subida decide por el nombre y deja fuera el del
     programa (en el simulado: «lib 'Log' presente pero no exporta 'Log.hola()s'»).
+  - **Decidido (Eduardo, 25-nov): nada en el compilador.** *«Es verdad que puede ser ambiguo. Debería ser el programador el que
+    lo resolviera, indicando la librería (y añadiéndola si fuese necesario). También puede indicar que proviene de un pack
+    concreto. Lo correcto es que todos los módulos pertenezcan a una library, y la convención es la misma que la de Java:
+    dominio de la empresa (en orden invertido) '.' nombre del proyecto '.' ... nombre del módulo. Yo no haría nada, si no hay
+    library es como si no existiera esa parte.»* Hecho: el manual (§10.1 y §10.3), que decía «misma library» y ponía de ejemplo
+    dos import que chocan, dice eso; la guía de JC y la guía para IA, también (`library` es el `package` de Java); y el lector
+    de JC, a un `package es.prueba;`, contesta «en JC es library, con su nombre entre comillas: library "es.prueba";» y sigue.
+    La subida de un módulo sin `library` que se llama como uno de la stdlib se queda como está, dicho en el §10.1: ponerle
+    una.
 
 #### ✅ `#876` — las variables de entorno de la placa, como comandos, desde su botón y por la IA (abierta el 23-nov · Eduardo, al cerrar el H1.6 · **CERRADA el 25-nov**, `337286b` en `toolchain` y `520b6fa2`; instalar la GUI o la BD con sus variables, a `#875` y de ella a `#891`)
 
