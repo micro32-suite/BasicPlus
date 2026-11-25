@@ -460,7 +460,9 @@
   Si el programa pide datos al usuario con <code>IO.prompt</code>, el
   IDE despliega un formulario y la ejecución se pausa hasta que lo
   rellenas: campos de texto, numéricos, casillas y desplegables según
-  lo que el programa declare.
+  lo que el programa declare. Si lo lanzó la IA (§13) o un guion (§14),
+  los datos los da quien lo lanzó, con <code>responder</code>; a ti no
+  te sale el formulario (V9).
 </p>
 <p><img src="img/ide-prompt.png" alt="Formulario de IO.prompt desplegado durante un Run"></p>
 <p class="note">
@@ -1320,7 +1322,8 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   <li>Al encenderlo eliges <strong>la carpeta de la IA</strong>: sólo dentro de ella puede
       abrir, guardar, subir y bajar ficheros. Mejor una sólo para el trabajo con la IA. El
       IDE deja en ella la guía para la IA (<code>AGENTS.md</code>, en inglés, y un
-      <code>CLAUDE.md</code> que la nombra), si no las tiene ya.</li>
+      <code>CLAUDE.md</code> que la nombra), si no las tiene ya; la que dejó otro IDE, si no la
+      has cambiado, la pone al día.</li>
   <li>Cada comando del IDE es una herramienta para la IA: lo mismo que los menús y los
       botones, también las variables de entorno (§9.3) y los packs (§10.3) de la placa. Lo que
       hace sale en la consola, con <code>[ia]</code>. Formatear la zona de packs, que no se

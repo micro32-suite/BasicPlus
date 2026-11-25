@@ -109,7 +109,7 @@ On completion, the Console closes with the exit code, the reason and **the execu
 
 If it ends with an **uncaught error**, the Console also says **where**, on the board and on the PC: the line of the error and the calls that led to it, up to 8, each with its file —`en Prueba.bp:23`, `llamado desde Prueba.bp:9` (at…, called from…)—. The board does not have the `.dbg`: it gives positions, and the IDE translates them with the one in the output folder. The frames inside the standard library stay as positions (`Collections+1815`); and on the board, if the error starts inside a compiled `native` function, the line is that of its caller —to see its own, remove the `native`— ([manual §11](manual.html.md#excepciones)).
 
-If the program asks the user for data with `IO.prompt`, the IDE pops a form and execution pauses until you fill it in: text fields, numeric fields, checkboxes and drop-downs as declared by the program.
+If the program asks the user for data with `IO.prompt`, the IDE pops a form and execution pauses until you fill it in: text fields, numeric fields, checkboxes and drop-downs as declared by the program. If the AI (§13) or a script (§14) launched it, whoever launched it gives the data, with `responder`; the form does not come up for you (V9).
 
 ![IO.prompt form shown during a Run](../img/ide-prompt.png)
 
@@ -448,7 +448,7 @@ On the Pico 2 and the Metro (the dual-core image, the default one) and on the ST
 
 An AI assistant (Claude Code, for instance) can drive the IDE: open a source, compile it and run it on the PC, on the simulated micro or on a board, with its output and its exit code. It does so through a server in the IDE itself (MCP), which listens **only on this PC** (`127.0.0.1`, port 7340) and is **off** until you turn it on: **IA → Servidor para la IA (MCP)**.
 
-- When you turn it on, you choose **the AI's folder**: only inside it can the AI open, save, upload and download files. Better a folder just for the work with the AI. The IDE leaves the guide for AI assistants in it (`AGENTS.md`, and a `CLAUDE.md` that points to it), unless they are already there.
+- When you turn it on, you choose **the AI's folder**: only inside it can the AI open, save, upload and download files. Better a folder just for the work with the AI. The IDE leaves the guide for AI assistants in it (`AGENTS.md`, and a `CLAUDE.md` that points to it), unless they are already there; the one another IDE left, unless you have changed it, it brings up to date.
 - Each IDE command is a tool for the AI: the same as the menus and the buttons, the board's environment variables (§9.3) and its packs (§10.3) included. What it does shows up in the console, with `[ia]`. Formatting the packs area, which cannot be undone, is asked of you first, every time.
 - **IA → Cómo conectar…** tells where it listens and the command to connect Claude Code, once: `claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp`.
 

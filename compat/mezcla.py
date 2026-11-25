@@ -551,7 +551,10 @@ def run_vm(vm, d, mod):
     else:                   args = [vm, mod]
     try: rc, out, err = sh(args, d)
     except subprocess.TimeoutExpired: return -99, '<timeout>'
-    return rc, filt(out)
+    # V9 #855 — el error de enlace va por la salida de errores: aquí, detrás, para compararlo y clasificarlo
+    enlace = ''.join(l + '\n' for l in err.replace('\r', '').splitlines() if l.startswith('=== ERROR DE LINK: '))
+    sal = filt(out)
+    return rc, sal + (chr(10) if sal and enlace else '') + enlace.rstrip()
 
 FORMATO = 9   # V11 (17-sep): MOD9 es el formato del compilador; --formato=8 da la foto «antes» (norma #500)
 VMS = 'ambas'

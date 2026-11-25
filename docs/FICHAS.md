@@ -14097,8 +14097,10 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   y la stdlib embebida; las cuentas, las de la red anterior. **Y sin su filtro** (una copia de `compat.sh` que no quita
   las líneas de las VMs): la paridad, 219 de 219: las dos salidas estándar, iguales sin filtrar en todo el corpus. La
   batería del IDE (`ComandosSmoke`, `TrazaVmLocalSmoke`, `VmJavaRunnerSmoke`), bien.
-- **Se queda en la salida estándar, por decidir (Eduardo):** `=== ERROR DE LINK: … ===` (y los rechazos de versión),
-  cuando el programa no llega a arrancar: la red los lee de ahí (`compat.sh`, `norma_caso`; `mezcla.py`, `clasificar`).
+- **`=== ERROR DE LINK: … ===`, por la salida de errores desde el 25-nov** (Eduardo, de lo que quedaba de la IA: *«hacemos
+  todo lo que propones»*): en las dos VMs del PC, como lo demás que no imprime el programa. La red lo sigue comparando
+  (`compat.sh`, `run_vm`; `mezcla.py`): `check-norma`, 9/9. Los rechazos de versión siguen por OUTPUT, que es también como
+  salen en las placas.
 - **Visto por Eduardo** (23-nov, en el IDE, con un programa que falla en un módulo importado): la traza, con su
   función, salía **dos veces** en la consola: la traducía la VM Java, desde (c), y el IDE también, con la que le llega
   en el EXITED (`TrazaDeLaVmLocal`); la de la VM, con `[vm]` delante. **Arreglo** (`bf659ec` en `toolchain`): la VM la
@@ -14671,7 +14673,7 @@ mantiene sola.»*
 - **El arreglo, por decidir:** la etiqueta, con el nombre del backend (ya distingue la VM Java del micro simulado), o
   con lo que dice la placa de sí misma (su `boardName`, en el INFO).
 - **Hecho cuando:** conectado al micro simulado, a la P4 por serie y a la VM Java, lo que se dice de cada uno es lo que
-  es.
+  es. **Hecho el 25-nov, con `#869`.**
 
 #### 🧬 `#877` — un programa que se llama como un módulo de la stdlib no se sube al ejecutarlo en el PC: con `App`, «falta el modulo 'App'» (abierta el 23-nov · vista por Eduardo al probar el H1 · hecha el mismo día, a falta de verla Eduardo)
 
@@ -14933,6 +14935,14 @@ mantiene sola.»*
 - **Para publicar V9:** con la regla que se queda, una placa con los packs de V8 y un programa que use lo que cambió de
   interfaz en V9 (como `__guiClick`) falla así; lo que lo evita es grabar los packs de V9 (`INSTALAR_FIRMWARE`).
 
+#### 🧬 `#893` — la guía para IA que el IDE deja en una carpeta no se pone al día: se queda la de la primera vez (abierta el 25-nov · vista en la carpeta de pruebas: la del 23 no sabía de packs ni de guiones · hecha el mismo día)
+
+- El IDE la escribe si falta y no la vuelve a tocar (`GuiaIa.dejaEn`): con un IDE nuevo, o con la instalación en otra carpeta
+  (lleva sus rutas), la IA leía la de antes.
+- **Hecho** (Eduardo: *«hacemos todo lo que propones»*): lleva al final una marca con la huella de su texto; la que dejó otro IDE
+  y nadie ha cambiado se pone al día al encender el servidor; una cambiada, o sin la marca, no se toca, y se dice.
+  `GuiaIaSmoke`. La guía del IDE (§13).
+
 #### 🧬 `#870` — la entrada del programa (`IO.prompt`): en el PC, un diálogo en la pantalla de Eduardo aunque lo lance la IA; en la placa, vacío y sin preguntar a nadie (abierta el 23-nov · el análisis del H2.4)
 
 - **Lo que pasa:** con la VM del PC, el IDE contesta cada `PROMPT_REQUEST` con un diálogo (`PromptDialog`, en
@@ -14944,10 +14954,17 @@ mantiene sola.»*
   también en la placa; desde la IA, el resultado dice «el programa pide un dato: …» (lo que pide), y la IA lo contesta
   con un comando.
 - **Cuándo:** con la segunda fase del H2.4, o antes, si en el H1 hace falta.
-- **Hecho cuando:** un programa con `IO.prompt`, lanzado desde la ventana, pregunta con el diálogo en el PC y en la
-  placa; lanzado por la IA, su resultado dice qué pide y la IA lo contesta.
+- **Hecho (25-nov; Eduardo: *«hacemos todo lo que propones»*):** lanzado por su nombre (la IA, un guion), el comando acaba donde el
+  programa pide (`pide`: su título y sus campos), y `responder` le da los valores y devuelve cómo sigue: el fin, otra
+  parada (depurando) u otros datos. Desde la ventana o la consola, el formulario de siempre. En un guion, los da la línea
+  siguiente; si no es `responder`, el guion para y lo dice. En la placa no hay nada que hacer: la VM-C no tiene
+  `IO.prompt` (lanza un error atrapable, y está dicho); lo de «contesta vacío» era sólo del cliente. Probado con el IDE sin
+  ventana: dos peticiones seguidas, un JSON mal escrito, pararlo mientras espera, un guion con y sin `responder`, y
+  depurando.
+- **Hecho cuando:** un programa con `IO.prompt`, lanzado desde la ventana, pregunta con el diálogo; lanzado por la IA, su
+  resultado dice qué pide y la IA lo contesta.
 
-#### 🧬 `#869` — el IDE presenta a la placa con un nombre puesto a mano: el micro simulado, como «bpvm-java v1»; cualquier placa por serie, como «bpvm-pico» (abierta el 22-nov · la tercera prueba de verdad del H2.3: la IA tuvo que mirar qué proceso atendía el puerto para saber que era la VM-C)
+#### 🧬 `#869` (y `#878`, la misma) — el IDE presenta a la placa con un nombre puesto a mano: el micro simulado, como «bpvm-java v1»; cualquier placa por serie, como «bpvm-pico» (abierta el 22-nov · la tercera prueba de verdad del H2.3: la IA tuvo que mirar qué proceso atendía el puerto para saber que era la VM-C)
 
 - **Lo visto:** conectado al micro simulado, el resultado de conectar dice «bpvm-java v1 @ 127.0.0.1:5099»; la IA lo
   comprobó por su cuenta («Comprobé que quien atiende ese puerto (127.0.0.1:5099) es `bpvm-sim.exe`»).
@@ -14964,6 +14981,10 @@ mantiene sola.»*
 - **Hecho cuando:** conectado al micro simulado, el IDE dice «bpvm-sim»; a la P4 por serie, «bpvm-esp32p4»; y el Log y
   el Clr Log del micro simulado funcionan (con la VM Java, el error que dé ella).
 - **Decidido (Eduardo, 22-nov): después** (*«Cierra el H2.3; #869 después»*).
+- **Hecho (25-nov; Eduardo: *«hacemos todo lo que propones»*), con `#878`:** el saludo, con el nombre que da el otro lado en su
+  HELLO (`bpvm-sim`, `bpvm-esp32c5`, `bpvm-esp32p4`, `bpvm-stm32`, `bpvm-java`; visto en los cinco, con el IDE sin ventana), y por
+  la red, dicho; el Log y el Clr Log por TCP se le preguntan al otro lado: el micro simulado los atiende, y la VM Java dice
+  que no los tiene.
 - **Visto otra vez** (23-nov, la prueba de la IA del H1.3, su punto 4): «conectado a 127.0.0.1:5099 — bpvm-java v1», y la
   IA tuvo que mirar qué proceso escuchaba en el 5099 para saber que era la VM-C.
 

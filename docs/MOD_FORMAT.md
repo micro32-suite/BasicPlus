@@ -143,7 +143,7 @@ El texto del rechazo sale por **OUTPUT** (el `stdout` del programa: mismo texto
 byte a byte en miVM y bpgenvm-c, ASCII, sin rutas) y la carga falla con **exit 2**
 («no se pudo cargar»; `BPVM_ERR_DEP_VERSION` en C, `IOException` en Java, y
 `load: <texto>` en el `errorMessage` del wire). Un símbolo que no enlaza sale como
-`=== ERROR DE LINK: <texto> ===` con el texto de `link.c` en las dos VMs, exit 1.
+`=== ERROR DE LINK: <texto> ===` (por la salida de errores, desde V9) con el texto de `link.c` en las dos VMs, exit 1.
 Lo prueba `compat/compat.sh check-norma` con `Core` de verdad (9 casos).
 
 - `name` es el qualifiedName del símbolo importado:

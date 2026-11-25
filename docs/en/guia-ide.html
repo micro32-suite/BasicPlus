@@ -459,7 +459,9 @@
 <p>
   If the program asks the user for data with <code>IO.prompt</code>, the
   IDE pops a form and execution pauses until you fill it in: text fields,
-  numeric fields, checkboxes and drop-downs as declared by the program.
+  numeric fields, checkboxes and drop-downs as declared by the program. If
+  the AI (§13) or a script (§14) launched it, whoever launched it gives the
+  data, with <code>responder</code>; the form does not come up for you (V9).
 </p>
 <p><img src="../img/ide-prompt.png" alt="IO.prompt form shown during a Run"></p>
 <p class="note">
@@ -1328,7 +1330,8 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   <li>When you turn it on, you choose <strong>the AI's folder</strong>: only inside it can the
       AI open, save, upload and download files. Better a folder just for the work with the AI.
       The IDE leaves the guide for AI assistants in it (<code>AGENTS.md</code>, and a
-      <code>CLAUDE.md</code> that points to it), unless they are already there.</li>
+      <code>CLAUDE.md</code> that points to it), unless they are already there; the one another
+      IDE left, unless you have changed it, it brings up to date.</li>
   <li>Each IDE command is a tool for the AI: the same as the menus and the buttons, the
       board's environment variables (§9.3) and its packs (§10.3) included. What it does shows
       up in the console, with <code>[ia]</code>. Formatting the packs area, which cannot be

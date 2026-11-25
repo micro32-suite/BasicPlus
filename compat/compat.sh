@@ -226,6 +226,9 @@ run_vm() {  # $1=bin(.jar|.exe) $2=mod [$3...=opciones de la VM, p. ej. --smp=2]
   esac
   # V8 #739 (2-nov) — y el aviso de una cadena que nace rota («MAL NACIDA»: no puede nacer ninguna; si nace, rojo).
   grep -E "HEAP INCONSISTENTE|MAL NACIDA" "$err" 2>/dev/null | head -2 | sed 's/^/!! stderr: /'
+  # V9 #855 — el error de enlace va por la salida de errores (no lo imprime el programa): aquí, detrás, para que se siga
+  # comparando entre las dos VMs (norma_caso y los demás lo leen de esto).
+  grep -E "^=== ERROR DE LINK: " "$err" 2>/dev/null | head -1 | tr -d '\r'
   # V8 #765 (2-nov) — el mensaje de una excepcion sin atrapar (el de la VM-C), para el FAIL de un codigo de salida que
   # no es el que el sample tiene que dar (check_parity).
   case "$bin" in *.jar) ;; *) grep -o 'el mensaje que traia: .*' "$err" 2>/dev/null | tail -1 > "$WORK/.msg.c" ;; esac
