@@ -1,0 +1,15 @@
+// La interfaz gráfica, en la Waveshare ESP32-P4-WIFI6-Touch-LCD-4.3
+placa_comprobar micro=esp32p4
+
+// La zona de packs, desde cero: lo pregunta antes (con un no, no se ha tocado nada)
+packs_formatear
+
+// Su panel y la memoria de los motores, 4 MB: se leen al arrancar
+entorno_poner rw clave=display valor=st7701
+entorno_borrar clave=packRam
+entorno_poner rw clave=SQLite valor=4
+placa_reiniciar reconectar
+
+// Los packs
+pack_grabar pack=Stdlib
+pack_grabar pack=Gui

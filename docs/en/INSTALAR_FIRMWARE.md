@@ -532,15 +532,32 @@ The packs ship in the package's **`packs/`** folder:
 
 ### What each display board takes
 
-| board | packs, in this order | RAM block (ENV) | more ENV |
-|---|---|---|---|
-| ESP32-C5 (Waveshare 2.8") | `Gui.pack`, `DriverSpi.pack` | `packRam=512` | the panel lines ([below](#panel-spi)) |
-| ESP32-C6 (Waveshare 1.3") | `Stdlib.pack`, `GuiMini.pack`, `DriverSpi.pack` | `packRam=136` | the panel lines ([below](#panel-spi)) |
-| ESP32-P4 (EV kit and Waveshare 4.3") | `Gui.pack` | `SQLite=4` | `display=st7701` on the Waveshare |
-| Discovery STM32U5G9J-DK2 | `Stdlib.pack` (recommended), `Gui.pack` | `packRam=768` | — |
+| board | packs, in this order | RAM block (ENV) | more ENV | script |
+|---|---|---|---|---|
+| ESP32-C5 (Waveshare 2.8") | `Gui.pack`, `DriverSpi.pack` | `packRam=512` | the panel lines ([below](#panel-spi)) | `gui-esp32c5` |
+| ESP32-C6 (Waveshare 1.3") | `Stdlib.pack`, `GuiMini.pack`, `DriverSpi.pack` | `packRam=136` | the panel lines ([below](#panel-spi)) | `gui-esp32c6` |
+| ESP32-P4 (EV kit and Waveshare 4.3") | `Gui.pack` | `SQLite=4` | `display=st7701` on the Waveshare | `gui-esp32p4-kit`, `gui-esp32p4-waveshare` |
+| Discovery STM32U5G9J-DK2 | `Stdlib.pack` (recommended), `Gui.pack` | `packRam=768` | — | `gui-stm32-dk2` |
 
 The P4 and the DK2 take no driver pack: the driver for their display
 (MIPI-DSI and LTDC, with their touch) is in the image.
+
+### What each board with the database takes
+
+| board | packs, in this order | RAM block (ENV) | more ENV | script |
+|---|---|---|---|---|
+| Metro RP2350 (with PSRAM) | `Stdlib.pack`, `SQLite.pack` | `SQLite=2` | `psram=1` | `bd-metro` |
+| ESP32-P4, with the graphical interface | `Stdlib.pack`, `SQLite.pack`, `Gui.pack` | `SQLite=4` | `display=st7701` on the Waveshare | `gui-bd-esp32p4-kit`, `gui-bd-esp32p4-waveshare` |
+| Discovery STM32U5G9J-DK2 | `Stdlib.pack`, `SQLite.pack` | `packRam=512` | — | `bd-stm32-dk2` |
+
+### All at once: your board's script
+
+With the board connected, in the IDE: **Guiones → Ejecutar un guion…** (run a
+script) and the one in the tables (V9; they are in `guiones/`). It checks that it
+is that board, formats its packs area —it asks first, with the packs that will be
+lost; with a «No», it touches nothing—, sets its ENV variables, reboots it and
+burns the packs (the P4's ones, the `Stdlib.pack` too). It is the same as what
+follows, by hand. Scripts, in the [IDE guide §14](guia-ide.html#guiones).
 
 ### How to burn them
 

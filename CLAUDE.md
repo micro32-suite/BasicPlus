@@ -96,6 +96,7 @@ toolchain/        SUBMÓDULO micro32-suite/toolchain — lo de Java:
 bpgenvm-c/        SUBMÓDULO micro32-suite/runtime — VM C99: host + firmwares (pico/esp32*/stm32) [make]
 bpstdlib/         biblioteca estándar (.bp + .mod compilados)
 samples/          programas de ejemplo (.bp / .mod)
+guiones/          los guiones del IDE que lleva la instalación (instalar la GUI o la BD en una placa; V9 #891)
 compat/           la red: paridad dual-VM, MOD8, la cápsula de V6, la resistencia…
 scripts/          el empaquetador, los generadores y las herramientas de docs y corpus
 docs/             manual, specs (.mod, opcodes, heap, wire), backlog, ESTADO

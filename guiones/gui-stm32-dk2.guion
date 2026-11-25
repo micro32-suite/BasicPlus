@@ -1,0 +1,13 @@
+// La interfaz gráfica, en la Discovery STM32U5G9J-DK2
+placa_comprobar micro=stm32u5g9
+
+// La zona de packs, desde cero: lo pregunta antes (con un no, no se ha tocado nada)
+packs_formatear
+
+// La memoria de los motores: se lee al arrancar
+entorno_poner rw clave=packRam valor=768
+placa_reiniciar reconectar
+
+// Los packs
+pack_grabar pack=Stdlib
+pack_grabar pack=Gui

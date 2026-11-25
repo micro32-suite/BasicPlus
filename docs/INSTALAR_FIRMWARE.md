@@ -519,15 +519,32 @@ Los packs vienen en la carpeta **`packs/`** del paquete:
 
 ### Qué lleva cada placa con pantalla
 
-| placa | packs, en este orden | bloque de RAM (ENV) | más ENV |
-|---|---|---|---|
-| ESP32-C5 (Waveshare 2,8") | `Gui.pack`, `DriverSpi.pack` | `packRam=512` | las líneas del panel ([abajo](#panel-spi)) |
-| ESP32-C6 (Waveshare 1,3") | `Stdlib.pack`, `GuiMini.pack`, `DriverSpi.pack` | `packRam=136` | las líneas del panel ([abajo](#panel-spi)) |
-| ESP32-P4 (kit EV y Waveshare 4,3") | `Gui.pack` | `SQLite=4` | `display=st7701` en la Waveshare |
-| Discovery STM32U5G9J-DK2 | `Stdlib.pack` (recomendado), `Gui.pack` | `packRam=768` | — |
+| placa | packs, en este orden | bloque de RAM (ENV) | más ENV | guion |
+|---|---|---|---|---|
+| ESP32-C5 (Waveshare 2,8") | `Gui.pack`, `DriverSpi.pack` | `packRam=512` | las líneas del panel ([abajo](#panel-spi)) | `gui-esp32c5` |
+| ESP32-C6 (Waveshare 1,3") | `Stdlib.pack`, `GuiMini.pack`, `DriverSpi.pack` | `packRam=136` | las líneas del panel ([abajo](#panel-spi)) | `gui-esp32c6` |
+| ESP32-P4 (kit EV y Waveshare 4,3") | `Gui.pack` | `SQLite=4` | `display=st7701` en la Waveshare | `gui-esp32p4-kit`, `gui-esp32p4-waveshare` |
+| Discovery STM32U5G9J-DK2 | `Stdlib.pack` (recomendado), `Gui.pack` | `packRam=768` | — | `gui-stm32-dk2` |
 
 La P4 y la DK2 no llevan pack de driver: el de su pantalla (MIPI-DSI y LTDC,
 con su táctil) va en la imagen.
+
+### Qué lleva cada placa con base de datos
+
+| placa | packs, en este orden | bloque de RAM (ENV) | más ENV | guion |
+|---|---|---|---|---|
+| Metro RP2350 (con PSRAM) | `Stdlib.pack`, `SQLite.pack` | `SQLite=2` | `psram=1` | `bd-metro` |
+| ESP32-P4, con la interfaz gráfica | `Stdlib.pack`, `SQLite.pack`, `Gui.pack` | `SQLite=4` | `display=st7701` en la Waveshare | `gui-bd-esp32p4-kit`, `gui-bd-esp32p4-waveshare` |
+| Discovery STM32U5G9J-DK2 | `Stdlib.pack`, `SQLite.pack` | `packRam=512` | — | `bd-stm32-dk2` |
+
+### De una vez: el guion de tu placa
+
+Con la placa conectada, en el IDE: **Guiones → Ejecutar un guion…** y el de las
+tablas (V9; están en `guiones/`). Comprueba que es esa placa, formatea su zona
+de packs —lo pregunta antes, con los que se pierden; con un «No», no toca
+nada—, pone sus variables en el ENV, la reinicia y graba los packs (los de la P4,
+también el `Stdlib.pack`). Es lo mismo que sigue, a mano. Los guiones, en la
+[guía del IDE §14](guia-ide.html#guiones).
 
 ### Cómo se graban
 

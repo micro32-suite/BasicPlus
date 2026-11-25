@@ -1,0 +1,15 @@
+// La base de datos (SQLite), en la Adafruit Metro RP2350 con PSRAM
+placa_comprobar micro=rp2350b
+
+// La zona de packs, desde cero: lo pregunta antes (con un no, no se ha tocado nada)
+packs_formatear
+
+// La PSRAM y la memoria del motor, 2 MB en ella: se leen al arrancar
+entorno_poner rw clave=psram valor=1
+entorno_borrar clave=packRam
+entorno_poner rw clave=SQLite valor=2
+placa_reiniciar reconectar
+
+// Los packs
+pack_grabar pack=Stdlib
+pack_grabar pack=SQLite

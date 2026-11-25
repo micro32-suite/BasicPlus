@@ -10,6 +10,7 @@
 #
 # La ESTRUCTURA no es un gusto mío: sale de lo que el código busca.
 #   packs/       IdePrefs.installSubdir("packs")      → biblioteca de packs
+#   guiones/     IdePrefs.installSubdir("guiones")    → los guiones del IDE (V9 #891)
 #   bin/         SimRunner.locateExe                  → micro simulado + SDL2
 #                FrmMain (Run Window), Bp.laVmC        → la VM-C con ventana (V9 #853)
 #   bp, bp.bat   (la documentación: `bp build`, `bp run`) → la línea de órdenes (V9 #853)
@@ -65,7 +66,7 @@ for par in "Stdlib.pack:bpstdlib/out/Stdlib.pack" \
     fi
 done
 
-rm -rf "$OUT"; mkdir -p "$OUT"/{bin,packs,docs,firmware,bpstdlib,bpdevices,samples}
+rm -rf "$OUT"; mkdir -p "$OUT"/{bin,packs,guiones,docs,firmware,bpstdlib,bpdevices,samples}
 
 # --- el IDE -----------------------------------------------------------------
 cp "$JAR" "$OUT/"
@@ -151,6 +152,8 @@ cp -r "$RAIZ/bpgenvm-c/src"     "$OUT/bpgenvm-c/"
 
 # --- biblioteca + stdlib ----------------------------------------------------
 cp "$RAIZ/packs/"*.pack        "$OUT/packs/"
+python -I -X utf8 "$RAIZ/scripts/guiones_doc.py" || exit 1   # V9 #891: sus valores, los de la instalación
+cp "$RAIZ/guiones/"*.guion     "$OUT/guiones/"
 cp "$RAIZ/bpstdlib/"*.mod      "$OUT/bpstdlib/"
 cp "$RAIZ/bpdevices/"*.mod     "$OUT/bpdevices/"
 

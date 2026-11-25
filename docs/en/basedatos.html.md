@@ -33,6 +33,8 @@ SQLite=4
 
 In megabytes: four is what the P4 uses; **the minimum is 2** and the maximum 4095. Since V7 there is also a generic key, `packRam=<KB>`, in kilobytes and without that minimum, which **takes precedence over `SQLite=`** when both are there; with it the Discovery, which has no PSRAM, runs `SqlDemo` with `packRam=512`. The block belongs to **all** the engines on the board: if it also loads the graphical interface's, SQLite gets whatever LVGL leaves. With no block —neither key, `SQLite=` below 2 or a value that does not fit— the pack will not start; boot says so on its `packs:` line, and the IDE's INFO under «RAM packs», with the remedy.
 
+**All at once, with a script** (V9; [IDE guide §14.1](guia-ide.html.md#guiones-instalacion)): in the IDE, **Guiones → Ejecutar un guion…** (run a script) and `bd-metro`, `bd-stm32-dk2` or, with the graphical interface, `gui-bd-esp32p4-kit` or `gui-bd-esp32p4-waveshare`. It formats the packs area (it asks first), sets the memory, reboots the board and burns the packs.
+
 > **On the PC: the simulated micro.** The simulator shipped with the IDE carries the engine **linked in** since V6 (`SQLite.mod` and `Orm.mod` travel to it just as to a board, and there is no pack to burn): the examples on this page run without a board. If you build it yourself, that is `make sim LVGL=1 SQLITE=1`. The command-line C VM (`bpgenvm-c`) does not: the first call throws *«sql_open: falta el codigo nativo del pack 'SQLI' v1»*.
 
 <a id="sinorm"></a>

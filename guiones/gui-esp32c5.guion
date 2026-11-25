@@ -1,0 +1,18 @@
+// La interfaz gráfica, en la Waveshare ESP32-C5-Touch-LCD-2.8
+placa_comprobar micro=esp32c5
+
+// La zona de packs, desde cero: lo pregunta antes (con un no, no se ha tocado nada)
+packs_formatear
+
+// El panel, su táctil y la memoria de los motores: se leen al arrancar
+entorno_poner rw clave=spi2 valor=sck:6,mosi:7,miso:8
+entorno_poner rw clave=i2c0 valor=sda:0,scl:1,khz:400
+entorno_poner rw clave=lcd valor=st7789,spi:2,dc:9,cs:10,rst:x1,bl:xpwm,mhz:40,w:240,h:320,inv
+entorno_poner rw clave=exp valor=ch32,i2c:0,addr:0x24
+entorno_poner rw clave=touch valor=cst3530,i2c:0,addr:0x58,rst:x0
+entorno_poner rw clave=packRam valor=512
+placa_reiniciar reconectar
+
+// Los packs
+pack_grabar pack=Gui
+pack_grabar pack=DriverSpi

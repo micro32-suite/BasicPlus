@@ -210,6 +210,7 @@ sd · sd mount   — SD card diagnostics (see below)
 | `log` · `logclr` | read the board's log · clear it |
 | `save` · `reset` · `cls` | save · reboot the device · clear the console |
 | `help error` | what each exit code means (the table below) |
+| `comandos [text]` | the IDE's commands, with their parameters (V9): they are typed here as in a script (§14) |
 
 **The run argument.** `Main` may declare a string parameter with a default value; `run` passes it after the file, quoted or not, and if nothing is passed the source's default applies:
 
@@ -458,6 +459,55 @@ bpide.bat --ia=C:\work\with-the-ai
 ```
 
 The first thing the IDE does is ask you whether you allow it, with the folder in view (if it is too broad —the root of a disk, your user folder, Documents or the Desktop—, it warns you). With your yes, the server is turned on as from the menu; with a no, the IDE stays open without it. With no folder (a bare `--ia`), you choose it. And it tells the AI how it went in a line of its output (`[ia] servidor para la IA en …`, or why not).
+
+<a id="guiones"></a>
+## 14. Scripts (guiones)
+
+A **guion** (script) is a text file with the IDE's commands, one per line: what its menus and buttons do, the same things the AI can ask for (§13), written down to be repeated. You launch it, or the AI does. The one that installs the database on the Metro, for instance, in essence:
+
+```
+// The database (SQLite), on the Adafruit Metro RP2350 with PSRAM
+placa_comprobar micro=rp2350b
+packs_formatear
+entorno_poner rw clave=psram valor=1
+entorno_poner rw clave=SQLite valor=2
+placa_reiniciar reconectar
+pack_grabar pack=Stdlib
+pack_grabar pack=SQLite
+```
+
+A line is the name of the command and its parameters, `name=value`, separated by spaces:
+
+- a value with spaces goes between quotes, and a quote inside is doubled, as in BASIC (`valor="says ""hello"""`);
+- a yes/no parameter on its own is `true`: `rw`, `reconectar`;
+- one that takes several is repeated: `ficheros=a.txt ficheros=b.txt`;
+- paths are relative to the script's folder;
+- a line that starts with `//` is a comment, and the first one is the script's description.
+
+No variables, conditions or loops: what needs them is a program. The IDE **checks it all before starting** —a command that does not exist or a parameter that is not valid is an error, with its line, and nothing is done—, runs it line by line, with each step and its result in the Console, and **stops at the first one that fails**. One at a time.
+
+**Launching it.** **Guiones → Ejecutar un guion…** (run a script): you pick the file (at first, in the folder of the installation's ones) and, if you want, two options that come unticked: *Mostrarlo antes de empezar* (show it before starting: it shows what it is going to do, and you say whether it goes on) and *Sobrescribir sin preguntar lo que ya esté (rw)* (overwrite without asking what is already there). **Guiones → Parar el guion** (stop the script) finishes the step it is on and goes no further. Or in the console (§7): `guion nombre=bd-metro`, one of the installation's; or `guion fichero=…`, with `rw` and `mostrar` after it. The AI, with its tools `guion`, `guiones_listar` and `guion_parar`.
+
+**What it asks.** Before changing an environment variable that already has another value —it belongs to the board—, the IDE asks; with `rw`, on the line or for the whole script, it does not. Formatting the packs area, which cannot be undone, is **always** asked. With a «No», the script stops there.
+
+**The commands.** In the console, `comandos` lists them with their parameters (`comandos pack`, the ones with that word), and any of them can be typed there just as it would go in a script: that is how to try a line. What the AI does shows up in the Console in that same form (`[ia] entorno_poner clave=log valor=1`): copy it and it is a script.
+
+<a id="guiones-instalacion"></a>
+### 14.1 The installation's scripts
+
+In `guiones/`, the ones that leave a board with what is its own, from scratch: they check that it is that board, format its packs area (asking first, with the packs that will be lost: with a «No», nothing has been touched), set its environment variables, reboot it and burn the packs in their order. That way the result is always the same. The board has to be connected.
+
+| script | what it installs |
+|---|---|
+| `gui-esp32c5` | the graphical interface, on the Waveshare ESP32-C5-Touch-LCD-2.8 |
+| `gui-esp32c6` | the graphical interface, on the Waveshare ESP32-C6-LCD-1.3 |
+| `gui-esp32p4-kit` · `gui-bd-esp32p4-kit` | the graphical interface (and the database), on the ESP32-P4-Function-EV-Board kit |
+| `gui-esp32p4-waveshare` · `gui-bd-esp32p4-waveshare` | the same, on the Waveshare ESP32-P4-WIFI6-Touch-LCD-4.3 |
+| `gui-stm32-dk2` | the graphical interface, on the Discovery STM32U5G9J-DK2 |
+| `bd-stm32-dk2` | the database, on the Discovery STM32U5G9J-DK2 |
+| `bd-metro` | the database, on the Adafruit Metro RP2350 with PSRAM |
+
+The values are those of the [installation guide](INSTALAR_FIRMWARE.md#packs). For another board, copy one and change it.
 
 ---
 

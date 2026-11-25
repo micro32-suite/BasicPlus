@@ -1,0 +1,13 @@
+// La base de datos (SQLite), en la Discovery STM32U5G9J-DK2
+placa_comprobar micro=stm32u5g9
+
+// La zona de packs, desde cero: lo pregunta antes (con un no, no se ha tocado nada)
+packs_formatear
+
+// La memoria del motor: se lee al arrancar
+entorno_poner rw clave=packRam valor=512
+placa_reiniciar reconectar
+
+// Los packs
+pack_grabar pack=Stdlib
+pack_grabar pack=SQLite

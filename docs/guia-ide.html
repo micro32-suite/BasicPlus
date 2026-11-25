@@ -193,6 +193,7 @@
     <li><a href="#debug">11. Depurar</a></li>
     <li><a href="#autorun">12. Dispositivo autónomo</a></li>
     <li><a href="#ia">13. La IA maneja el IDE</a></li>
+    <li><a href="#guiones">14. Guiones</a></li>
   </ul>
   <h2>Volúmenes</h2>
   <ul>
@@ -741,6 +742,7 @@ sd · sd mount   — diagnóstico de la tarjeta (ver abajo)</code></pre>
   <tr><td><code>log</code> · <code>logclr</code></td><td>ver el log de la placa · vaciarlo</td></tr>
   <tr><td><code>save</code> · <code>reset</code> · <code>cls</code></td><td>guardar · reiniciar el dispositivo · limpiar la consola</td></tr>
   <tr><td><code>help error</code></td><td>qué significa cada código de salida (la tabla de abajo)</td></tr>
+  <tr><td><code>comandos [texto]</code></td><td>los comandos del IDE, con sus parámetros (V9): se escriben aquí como en un guion (§14)</td></tr>
 </table>
 
 <p>
@@ -1338,6 +1340,87 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   avisa). Con tu sí, el servidor se enciende como desde el menú; con un no, el IDE se queda
   abierto sin él. Sin carpeta (<code>--ia</code> a secas), la eliges tú. Y cómo acabó se lo dice
   a la IA en una línea de su salida (<code>[ia] servidor para la IA en …</code>, o por qué no).
+</p>
+
+<h2 id="guiones">14. Guiones</h2>
+<p>
+  Un <strong>guion</strong> es un fichero de texto con los comandos del IDE, uno por línea: lo
+  que hacen sus menús y sus botones, lo mismo que puede pedir la IA (§13), escrito para
+  repetirlo. Lo lanzas tú, o la IA. El de instalar la base de datos en la Metro, por ejemplo, en
+  lo esencial:
+</p>
+<pre><code>// La base de datos (SQLite), en la Adafruit Metro RP2350 con PSRAM
+placa_comprobar micro=rp2350b
+packs_formatear
+entorno_poner rw clave=psram valor=1
+entorno_poner rw clave=SQLite valor=2
+placa_reiniciar reconectar
+pack_grabar pack=Stdlib
+pack_grabar pack=SQLite</code></pre>
+<p>
+  Una línea es el nombre del comando y sus parámetros, <code>nombre=valor</code>, separados por
+  espacios:
+</p>
+<ul>
+  <li>un valor con espacios va entre comillas, y una comilla dentro se dobla, como en BASIC
+      (<code>valor="dice ""hola"""</code>);</li>
+  <li>un parámetro de sí o no, a secas, es <code>true</code>: <code>rw</code>,
+      <code>reconectar</code>;</li>
+  <li>uno que admite varios se repite: <code>ficheros=a.txt ficheros=b.txt</code>;</li>
+  <li>las rutas, desde la carpeta del guion;</li>
+  <li>una línea que empieza por <code>//</code> es un comentario, y la primera, la descripción
+      del guion.</li>
+</ul>
+<p>
+  Sin variables, condiciones ni bucles: lo que los necesita es un programa. El IDE <strong>lo mira
+  entero antes de empezar</strong> —un comando que no hay o un parámetro que no vale son un error,
+  con su línea, y no se hace nada—, lo hace línea a línea, con cada paso y su resultado en la
+  Consola, y <strong>para en la primera que falla</strong>. Uno a la vez.
+</p>
+<p>
+  <strong>Lanzarlo.</strong> <strong>Guiones → Ejecutar un guion…</strong>: eliges el fichero (de
+  entrada, en la carpeta de los de la instalación) y, si quieres, dos opciones que salen sin
+  marcar: <em>Mostrarlo antes de empezar</em> —enseña lo que va a hacer, y dices si sigue— y
+  <em>Sobrescribir sin preguntar lo que ya esté (rw)</em>. <strong>Guiones → Parar el
+  guion</strong> acaba el paso que está haciendo y no sigue. O en la consola (§7):
+  <code>guion nombre=bd-metro</code>, uno de la instalación; o <code>guion fichero=…</code>, con
+  <code>rw</code> y <code>mostrar</code> detrás. La IA, con sus herramientas <code>guion</code>,
+  <code>guiones_listar</code> y <code>guion_parar</code>.
+</p>
+<p>
+  <strong>Lo que pregunta.</strong> Antes de cambiar una variable de entorno que ya está con otro
+  valor —es de la placa—, el IDE pregunta; con <code>rw</code>, en la línea o para todo el guion,
+  no. Formatear la zona de packs, que no se deshace, se pregunta <strong>siempre</strong>. Con un
+  «No», el guion para ahí.
+</p>
+<p>
+  <strong>Los comandos.</strong> En la consola, <code>comandos</code> los lista con sus parámetros
+  (<code>comandos pack</code>, los que llevan esa palabra), y cualquiera se puede escribir en ella
+  tal como iría en un guion: es la forma de probar una línea. Lo que hace la IA sale en la Consola
+  con esa misma forma (<code>[ia] entorno_poner clave=log valor=1</code>): se copia y ya es un
+  guion.
+</p>
+
+<h3 id="guiones-instalacion">14.1 Los de la instalación</h3>
+<p>
+  En <code>guiones/</code>, los que dejan una placa con lo suyo, desde cero: comprueban que es esa
+  placa, formatean su zona de packs (preguntando, con los que se pierden: con un «No» no se ha
+  tocado nada), ponen sus variables de entorno, la reinician y graban los packs en su orden. Así
+  el resultado es siempre el mismo. La placa tiene que estar conectada.
+</p>
+<table>
+  <tr><th>guion</th><th>qué instala</th></tr>
+  <tr><td><code>gui-esp32c5</code></td><td>la interfaz gráfica, en la Waveshare ESP32-C5-Touch-LCD-2.8</td></tr>
+  <tr><td><code>gui-esp32c6</code></td><td>la interfaz gráfica, en la Waveshare ESP32-C6-LCD-1.3</td></tr>
+  <tr><td><code>gui-esp32p4-kit</code> · <code>gui-bd-esp32p4-kit</code></td><td>la interfaz gráfica (y la base de datos), en el kit ESP32-P4-Function-EV-Board</td></tr>
+  <tr><td><code>gui-esp32p4-waveshare</code> · <code>gui-bd-esp32p4-waveshare</code></td><td>lo mismo, en la Waveshare ESP32-P4-WIFI6-Touch-LCD-4.3</td></tr>
+  <tr><td><code>gui-stm32-dk2</code></td><td>la interfaz gráfica, en la Discovery STM32U5G9J-DK2</td></tr>
+  <tr><td><code>bd-stm32-dk2</code></td><td>la base de datos, en la Discovery STM32U5G9J-DK2</td></tr>
+  <tr><td><code>bd-metro</code></td><td>la base de datos, en la Adafruit Metro RP2350 con PSRAM</td></tr>
+</table>
+<p>
+  Los valores son los de la <a href="INSTALAR_FIRMWARE.md#packs">instalación</a>. Para otra placa,
+  copia uno y cámbialo.
 </p>
 
 <hr>

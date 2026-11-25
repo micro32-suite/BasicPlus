@@ -14717,17 +14717,41 @@ mantiene sola.»*
   el de la BD crea también sus variables: con los packs, en `#875`.
 - **Hecho cuando:** desde el botón, como hoy, y por la IA, se listan, se ponen y se borran variables del ENV de una placa.
 
-#### 🧬 `#891` — los guiones: los comandos del IDE, uno por línea en un fichero, que lanza la persona o la IA; y con ellos, instalar la GUI o la BD con sus variables de entorno (abierta el 25-nov · idea de Eduardo · lo de las variables, de `#876` y `#875` · el diseño, por decidir)
+#### 🧬 `#891` — los guiones: los comandos del IDE, uno por línea en un fichero, que lanza la persona o la IA; y con ellos, instalar la GUI o la BD con sus variables de entorno (abierta el 25-nov · idea de Eduardo · lo de las variables, de `#876` y `#875` · hecha el mismo día, a falta de verla Eduardo y de probar los de las placas con pantalla)
 
 - **La idea (Eduardo, 25-nov**, a si instalar la GUI o la BD pone también sus variables): *«2) También. Un matiz sobre 2, a mi
   me recuerda a un pequeño programa o un script. Estoy pensando si con todos los comandos que estamos proporcionando a la IA,
   se podrían poner en un script, por si queremos automatizar una tarea, ya sea que la ejecute un usuario o una IA.»*
-- **El análisis**, en `notas/V9_guiones.md`.
+- **Decidido (Eduardo, 25-nov)**, sobre el análisis (`notas/V9_guiones.md`): la forma, un fichero con los comandos, *«1) si»*;
+  una variable que ya está con otro valor, *«2) Añadir una opción sobreescribir ( rewrite o abreviado rw ) para que no pregunte
+  cada vez»*; ver el guion antes de que empiece, *«3) Lo mismo, una opción de mostrar pero por defecto no»*; y los de la
+  instalación, *«4) en una instalación lo seguro es borrar todo y empezar de cero, así el resultado es predecible»*.
+- **Hecho (25-nov; `d7917fc` en `toolchain`):**
+  - **Un guion** (`Guion`): un fichero `.guion` de texto, un comando por línea con sus parámetros (`entorno_poner clave=log
+    valor=1`; un valor con espacios, entre comillas; un parámetro de sí o no, a secas; uno repetido, una lista; `//`, un
+    comentario). Se mira entero antes de empezar (un comando que no hay, o un parámetro que no vale: todos los errores, con su
+    línea, y no se hace nada), se hace línea a línea y para en la primera que falla. Sin variables, condiciones ni bucles.
+  - **Quien lo lanza** (`Guiones`): la persona, con el menú Guiones («Ejecutar un guion…», con las dos opciones sin marcar, y
+    «Parar el guion») o en la consola (`guion nombre=bd-metro rw mostrar`); y la IA, con `guion`, `guiones_listar` y
+    `guion_parar`. Cada línea es una llamada por su nombre, con los límites de las de la IA: lo que no se deshace se pregunta
+    siempre, diciendo qué línea lo pide; y lanzado por ella, las rutas que lleve, dentro de su carpeta.
+  - **`rw` y `mostrar`**, como se decidieron: `entorno_poner` (por su nombre: la IA, un guion o la consola) pregunta antes de
+    cambiar una que ya está con otro valor; con `rw`, en la línea o para todo el guion, no. `entorno_borrar` de una que no
+    está, bien («nada que borrar»). Y `placa_comprobar`, para la primera línea: si la placa no es ésa, no se toca nada.
+  - **La consola** admite los comandos del IDE tal como irían en un guion (`comandos` los lista), y escribe con esa forma lo que
+    hace la IA: se copia y ya es un guion. Dentro de un guion, compilar y ejecutar no la vacían.
+  - **Los de la instalación** (`guiones/`, nueve): la GUI en la C5, la C6, las dos P4 y la DK2; la BD en la Metro y la DK2; y
+    las dos en las P4. Comprueban la placa, formatean (lo primero: con un «No», no se ha tocado nada), ponen las variables
+    (con `rw`), reinician y graban. Los valores, los de `INSTALAR_FIRMWARE` (que gana la tabla de la BD);
+    `scripts/guiones_doc.py`, en `montar-zip.sh`, mira que sean los mismos.
+  - **Probado:** `GuionSmoke` (nuevo: con los comandos de la placa de verdad contra el micro simulado), `EntornoSmoke`,
+    `PacksSmoke` y `ComandosSmoke`; y el IDE entero sin ventana: el menú, la consola y un guion que formatea, reinicia, graba,
+    compila y ejecuta en el PC y en el simulado. `doc_frags`, 0 FALLO.
+  - **Falta**, con Eduardo: lanzarlo él y la IA en la Metro (`bd-metro`); y los de las placas con pantalla, en cada una.
 - **Instalar la GUI o la BD con sus variables (de `#876`; Eduardo, 23-nov):** *«Cuando se instala el pack de LVGL o el de BD
   además hay que crear las variables de entorno correspondientes»*. Es poner las que falten, reiniciar (la placa aparta el
   bloque de RAM de los motores al arrancar, y el motor se sella para él) y grabar los packs, en su orden: un guion por placa,
-  con los valores de `INSTALAR_FIRMWARE`. Por decidir: qué se hace con una variable que ya está (son de la placa: se
-  escriben una vez y sobreviven al reflasheo). Cuidado: lo que se da al bloque se le quita a la VM (la C3 y la C6 van justas,
+  con los valores de `INSTALAR_FIRMWARE`. Cuidado: lo que se da al bloque se le quita a la VM (la C3 y la C6 van justas,
   `MEMORIA.md`), y en la P4 un ENV que dejaba a la VM sin sus 2 MB la reiniciaba en bucle (`#686`): los valores, los probados.
 - **Hecho cuando:** un guion lo lanza la persona desde el IDE, y la IA; e instalar la GUI en la C5 (o la BD en la P4) deja la
   placa lista para `GuiDemo` (o `SqlDemo`) sin escribir nada a mano.

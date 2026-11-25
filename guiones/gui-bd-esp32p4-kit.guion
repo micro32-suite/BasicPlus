@@ -1,0 +1,16 @@
+// La interfaz gráfica y la base de datos (SQLite), en el kit ESP32-P4-Function-EV-Board
+placa_comprobar micro=esp32p4
+
+// La zona de packs, desde cero: lo pregunta antes (con un no, no se ha tocado nada)
+packs_formatear
+
+// El panel del kit es el de por defecto; la memoria de los motores, 4 MB: se leen al arrancar
+entorno_borrar clave=display
+entorno_borrar clave=packRam
+entorno_poner rw clave=SQLite valor=4
+placa_reiniciar reconectar
+
+// Los packs
+pack_grabar pack=Stdlib
+pack_grabar pack=SQLite
+pack_grabar pack=Gui

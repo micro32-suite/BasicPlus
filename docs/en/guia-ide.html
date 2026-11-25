@@ -193,6 +193,7 @@
     <li><a href="#debug">11. Debugging</a></li>
     <li><a href="#autorun">12. Standalone device</a></li>
     <li><a href="#ia">13. An AI drives the IDE</a></li>
+    <li><a href="#guiones">14. Scripts (guiones)</a></li>
   </ul>
   <h2>Volumes</h2>
   <ul>
@@ -744,6 +745,7 @@ sd · sd mount   — SD card diagnostics (see below)</code></pre>
   <tr><td><code>log</code> · <code>logclr</code></td><td>read the board's log · clear it</td></tr>
   <tr><td><code>save</code> · <code>reset</code> · <code>cls</code></td><td>save · reboot the device · clear the console</td></tr>
   <tr><td><code>help error</code></td><td>what each exit code means (the table below)</td></tr>
+  <tr><td><code>comandos [text]</code></td><td>the IDE's commands, with their parameters (V9): they are typed here as in a script (§14)</td></tr>
 </table>
 
 <p>
@@ -1346,6 +1348,88 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   With your yes, the server is turned on as from the menu; with a no, the IDE stays open
   without it. With no folder (a bare <code>--ia</code>), you choose it. And it tells the AI how
   it went in a line of its output (<code>[ia] servidor para la IA en …</code>, or why not).
+</p>
+
+<h2 id="guiones">14. Scripts (guiones)</h2>
+<p>
+  A <strong>guion</strong> (script) is a text file with the IDE's commands, one per line: what its
+  menus and buttons do, the same things the AI can ask for (§13), written down to be repeated.
+  You launch it, or the AI does. The one that installs the database on the Metro, for instance,
+  in essence:
+</p>
+<pre><code>// The database (SQLite), on the Adafruit Metro RP2350 with PSRAM
+placa_comprobar micro=rp2350b
+packs_formatear
+entorno_poner rw clave=psram valor=1
+entorno_poner rw clave=SQLite valor=2
+placa_reiniciar reconectar
+pack_grabar pack=Stdlib
+pack_grabar pack=SQLite</code></pre>
+<p>
+  A line is the name of the command and its parameters, <code>name=value</code>, separated by
+  spaces:
+</p>
+<ul>
+  <li>a value with spaces goes between quotes, and a quote inside is doubled, as in BASIC
+      (<code>valor="says ""hello"""</code>);</li>
+  <li>a yes/no parameter on its own is <code>true</code>: <code>rw</code>,
+      <code>reconectar</code>;</li>
+  <li>one that takes several is repeated: <code>ficheros=a.txt ficheros=b.txt</code>;</li>
+  <li>paths are relative to the script's folder;</li>
+  <li>a line that starts with <code>//</code> is a comment, and the first one is the script's
+      description.</li>
+</ul>
+<p>
+  No variables, conditions or loops: what needs them is a program. The IDE <strong>checks it all
+  before starting</strong> —a command that does not exist or a parameter that is not valid is an
+  error, with its line, and nothing is done—, runs it line by line, with each step and its result
+  in the Console, and <strong>stops at the first one that fails</strong>. One at a time.
+</p>
+<p>
+  <strong>Launching it.</strong> <strong>Guiones → Ejecutar un guion…</strong> (run a script): you
+  pick the file (at first, in the folder of the installation's ones) and, if you want, two options
+  that come unticked: <em>Mostrarlo antes de empezar</em> (show it before starting: it shows what
+  it is going to do, and you say whether it goes on) and <em>Sobrescribir sin preguntar lo que ya
+  esté (rw)</em> (overwrite without asking what is already there). <strong>Guiones → Parar el
+  guion</strong> (stop the script) finishes the step it is on and goes no further. Or in the
+  console (§7): <code>guion nombre=bd-metro</code>, one of the installation's; or
+  <code>guion fichero=…</code>, with <code>rw</code> and <code>mostrar</code> after it. The AI,
+  with its tools <code>guion</code>, <code>guiones_listar</code> and <code>guion_parar</code>.
+</p>
+<p>
+  <strong>What it asks.</strong> Before changing an environment variable that already has another
+  value —it belongs to the board—, the IDE asks; with <code>rw</code>, on the line or for the whole
+  script, it does not. Formatting the packs area, which cannot be undone, is <strong>always</strong>
+  asked. With a «No», the script stops there.
+</p>
+<p>
+  <strong>The commands.</strong> In the console, <code>comandos</code> lists them with their
+  parameters (<code>comandos pack</code>, the ones with that word), and any of them can be typed
+  there just as it would go in a script: that is how to try a line. What the AI does shows up in
+  the Console in that same form (<code>[ia] entorno_poner clave=log valor=1</code>): copy it and it
+  is a script.
+</p>
+
+<h3 id="guiones-instalacion">14.1 The installation's scripts</h3>
+<p>
+  In <code>guiones/</code>, the ones that leave a board with what is its own, from scratch: they
+  check that it is that board, format its packs area (asking first, with the packs that will be
+  lost: with a «No», nothing has been touched), set its environment variables, reboot it and burn
+  the packs in their order. That way the result is always the same. The board has to be connected.
+</p>
+<table>
+  <tr><th>script</th><th>what it installs</th></tr>
+  <tr><td><code>gui-esp32c5</code></td><td>the graphical interface, on the Waveshare ESP32-C5-Touch-LCD-2.8</td></tr>
+  <tr><td><code>gui-esp32c6</code></td><td>the graphical interface, on the Waveshare ESP32-C6-LCD-1.3</td></tr>
+  <tr><td><code>gui-esp32p4-kit</code> · <code>gui-bd-esp32p4-kit</code></td><td>the graphical interface (and the database), on the ESP32-P4-Function-EV-Board kit</td></tr>
+  <tr><td><code>gui-esp32p4-waveshare</code> · <code>gui-bd-esp32p4-waveshare</code></td><td>the same, on the Waveshare ESP32-P4-WIFI6-Touch-LCD-4.3</td></tr>
+  <tr><td><code>gui-stm32-dk2</code></td><td>the graphical interface, on the Discovery STM32U5G9J-DK2</td></tr>
+  <tr><td><code>bd-stm32-dk2</code></td><td>the database, on the Discovery STM32U5G9J-DK2</td></tr>
+  <tr><td><code>bd-metro</code></td><td>the database, on the Adafruit Metro RP2350 with PSRAM</td></tr>
+</table>
+<p>
+  The values are those of the <a href="INSTALAR_FIRMWARE.md#packs">installation guide</a>. For
+  another board, copy one and change it.
 </p>
 
 <hr>
