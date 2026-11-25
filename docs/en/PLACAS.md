@@ -48,7 +48,18 @@ Its documentation:
 
 Image: `bpvm_esp32_merged.bin`.
 
-*(to be read from the board)*
+| | |
+|---|---|
+| Microcontroller | `esp32s3` |
+| The program's | 0-21, 38-42, 45-48 |
+| Analog | 1-20 |
+| PWM | all the program's |
+| Pulse counter | all the program's |
+| Open drain | all the program's |
+| I2C | 0, 1: any of the program's |
+| SPI | 2, 3: any of the program's |
+| UART | 1, 2: any of the program's |
+| The system's: not for the program | 26-37: the flash or the PSRAM; 43-44: the IDE's cable (the wire) |
 
 Its documentation:
 
@@ -164,7 +175,26 @@ Its documentation:
 
 Image: `bpvm_stm32_nucleo.bin`.
 
-*(to be read from the board)*
+| | |
+|---|---|
+| Microcontroller | `stm32u575`, LQFP144 |
+| The program's | PA0-PA8, PA11-PA15, PB0-PB11, PB13-PB15, PC0-PC3, PC6-PC15, PD0-PD15, PE0-PE15, PF0-PF15, PG0-PG10, PG12-PG15, PH0-PH1, PH3 |
+| Analog | PA0-PA7, PB0-PB2, PC0-PC3, PD11-PD13, PF14-PF15, PG0-PG1 |
+| PWM | PB7, PC7-PC8 |
+| Pulse counter | PC6 |
+| Open drain | all the program's |
+| I2C 1 | SCL PB6, PB8, PG14 · SDA PB3, PB7, PB9, PG13 |
+| I2C 2 | SCL PB10, PB13, PF1 · SDA PB11, PB14, PF0 |
+| I2C 3 | SCL PA7, PC0, PG7 · SDA PB4, PC1, PG8 |
+| I2C 4 | SCL PD12, PF14 · SDA PD13, PF15 |
+| SPI 1 | SCK PA1, PA5, PB3, PE13, PG2 · MOSI PA7, PA12, PB5, PE15, PG4 · MISO PA6, PA11, PB4, PE14, PG3 |
+| SPI 2 | SCK PB10, PB13, PD1 · MOSI PB15, PC3, PD4 · MISO PB14, PC2, PD3 |
+| SPI 3 | SCK PB3, PC10, PG9 · MOSI PB5, PC12 · MISO PB4, PC11, PG10 |
+| UART 2 | TX PA2, PD5 · RX PA3, PD6 |
+| UART 3 | TX PA7, PB10, PC10, PD8 · RX PA5, PB11, PC11, PD9 |
+| UART 4 | TX PA0, PC10 · RX PA1, PC11 |
+| UART 5 | TX PC12 · RX PD2 |
+| The system's: not for the program | PA9-PA10: the IDE's cable (the wire) |
 
 Its documentation:
 
@@ -177,7 +207,28 @@ Its documentation:
 
 Image: `bpvm_stm32_dk2.bin`.
 
-*(to be read from the board)*
+| | |
+|---|---|
+| Microcontroller | `stm32u5g9`, LQFP144 |
+| The program's | PA0-PA8, PA11-PA15, PB0-PB1, PB3-PB8, PB10-PB11, PB13-PB15, PC0-PC3, PC10-PC15, PD2, PD4-PD5, PD7, PE2-PE3, PF0-PF2, PG0-PG1, PG9-PG10, PG12-PG15, PH0-PH1, PH3, PH9-PH15 |
+| Analog | PA0-PA7, PB0-PB1, PC0-PC3, PG0-PG1 |
+| PWM | PB8 |
+| Pulse counter | PB7 |
+| Open drain | all the program's |
+| I2C 1 | SCL PB6, PB8, PG14 · SDA PB3, PB7, PG13 |
+| I2C 2 | SCL PB10, PB13, PF1 · SDA PB11, PB14, PF0 |
+| I2C 3 | SCL PA7, PC0 · SDA PB4, PC1 |
+| I2C 4 | — |
+| I2C 5 | — |
+| SPI 1 | SCK PA1, PA5, PB3 · MOSI PA7, PA12, PB5 · MISO PA6, PA11, PB4 |
+| SPI 2 | SCK PB10, PB13 · MOSI PB15, PC3, PD4 · MISO PB14, PC2 |
+| SPI 3 | SCK PB3, PC10, PG9 · MOSI PB5, PC12 · MISO PB4, PC11, PG10 |
+| UART 2 | TX PA2, PD5 · RX PA3 |
+| UART 3 | TX PA7, PB10, PC10 · RX PA5, PB11, PC11 |
+| UART 4 | TX PA0, PC10 · RX PA1, PC11 |
+| UART 5 | TX PC12 · RX PD2 |
+| UART 6 | TX PC3, PF0 · RX PC2, PF1 |
+| The system's: not for the program | PA9-PA10: the IDE's cable (the wire); PB2, PB9, PC6-PC9, PD0-PD1, PD3, PD6, PD8-PD15, PE0, PE4-PE15: the display |
 
 Its documentation:
 

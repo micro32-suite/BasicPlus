@@ -14353,9 +14353,9 @@ no copiados a mano. Va con el tema principal de V9, las librerías de dispositiv
     con las funciones alternas que pone nuestra imagen.
   - **Los enlaces**, comprobados uno a uno. `st.com` no contesta a una herramienta (sí a un navegador): para las dos placas
     de ST va también la página de Zephyr, que da sus pines en texto.
-  - **Preguntadas:** la C5 y la P4 de Waveshare. La DK2, también, y por eso salieron `#894` y `#895`: se le vuelve a
-    preguntar con la imagen nueva. **Faltan** las demás, al conectarlas (el lote de la versión): la Pico 2, la Metro, la
-    S3, la C3, la C6, los dos kits de la P4 y la Nucleo. `placas_doc.py --comprobar` lo dice.
+  - **Preguntadas:** la C5 y la P4 de Waveshare, la S3, y la Nucleo y la DK2 con su imagen nueva (al preguntarle a la DK2
+    con la de antes salieron `#894` y `#895`). **Faltan** las demás, al conectarlas (el lote de la versión): la Pico 2, la
+    Metro, la C3, la C6 y los dos kits de la P4. `placas_doc.py --comprobar` lo dice.
 
 #### 🧩 H2 — la IA maneja el IDE (`#728`) (abierto el 22-nov)
 
@@ -14645,7 +14645,7 @@ lo mismo con el SPI.
   desplazaba el resto. Era el único que quedaba en el código de las placas (el resto va por `bpvm_format_i64`). Arreglado
   (`builtins.c`); el texto, el de siempre. Visto en la Nucleo, grabada el 24-nov: el contrato, ninguna distinta.
 
-#### 🧬 `#886` — un módulo que se llama `Main` con una `function Main()` se ejecuta DOS veces, sin un aviso (abierta el 24-nov · vista de paso, con un programa de prueba · hecha el 25-nov —*«sobre los bugs, si los arreglamos»*—, a falta de la red)
+#### ✅ `#886` — un módulo que se llama `Main` con una `function Main()` se ejecuta DOS veces, sin un aviso (abierta el 24-nov · vista de paso, con un programa de prueba · hecha el 25-nov —*«sobre los bugs, si los arreglamos»*— y **CERRADA** el mismo día, `c5897c4` de toolchain, con la red)
 
 - La función con el nombre del módulo es su inicializador (corre al cargarlo: la gramática, «INICIALIZADOR DE MÓDULO»), y
   además `Main` es el programa: las dos VMs la corren dos veces, igual. Nadie lo avisa, y `Main` es un nombre natural para
@@ -14655,16 +14655,21 @@ lo mismo con el SPI.
   inicializador del módulo, aunque se llame como él (`SemanticAnalyzer.declarePass`); importado, su `Main` es una función
   normal, como en cualquier módulo. `ModuloMainTest`, cuatro casos (también que el inicializador de los demás corre como
   siempre); la suite del compilador, 419. El manual y la gramática lo dicen.
+- **La red del 25-nov** (con lo de `#855`, `#860`, `#861` y `#880`), VERDE: la paridad, 221 de 221; MOD8, 212 y los 9 de
+  siempre; dos workers, 221; las pruebas de C, 117.
 
-#### 🧬 `#885` — STM32: el I2C del periférico va siempre a 100 kHz, se pida lo que se pida (abierta el 24-nov · medida al hacer el H3 · hecha el 25-nov —*«sobre los bugs, si los arreglamos»*—, a falta de verla en la Nucleo)
+#### ✅ `#885` — STM32: el I2C del periférico va siempre a 100 kHz, se pida lo que se pida (abierta el 24-nov · medida al hacer el H3 · hecha el 25-nov —*«sobre los bugs, si los arreglamos»*— y **CERRADA** el mismo día, medida en la Nucleo con el sensor, `41321ab` del runtime)
 
 - `gpio_stm32.c` pone un `TIMINGR` fijo (el de CubeMX) e ignora la velocidad: en la Nucleo, a 400 kHz tarda lo mismo que
   a 100 (500 lecturas de un registro, 255 ms). Sabido desde antes (el comentario de `stm32_i2c_abrir`; `V7_IDEAS` §H6),
   sin ficha. Una velocidad que se pide, se acepta y no se cumple, en silencio.
 - **Hecho:** el registro se calcula para la velocidad pedida (`stm32/port/i2c_timing.h`, puro: lo prueba el PC en `test-bus`,
   contra lo que pide la norma en cada modo): de ~20 kHz a 1 MHz (por encima de 400 kHz, con el Fast-mode Plus); nunca pasa de
-  la pedida, y para 100 kHz da, bit a bit, el valor de antes. Las dos imágenes STM32, compiladas. **Falta** medirlo en la
-  Nucleo, con el sensor.
+  la pedida, y para 100 kHz da, bit a bit, el valor de antes. Las dos imágenes STM32, compiladas.
+- **Medido el 25-nov en la Nucleo** (Eduardo: *«graba»*), con el BME280 en el I2C 2: 500 lecturas de 24 registros, antes y
+  después. Antes, 1307–1314 ms se pidiera lo que se pidiera; después, 100 kHz, 1306 ms; 400 kHz, 389; 1 MHz, 202; y 50 kHz,
+  2544 (lo que no son bits del cable, unos 0,15 ms por lectura, lo pone el programa). 2000 lecturas, ninguna mal. El
+  contrato del H3, 43 iguales y ninguna distinta.
 
 #### 🧬 `#880` — lo aplazado del H1.8: la captura de la VM Java, el botón con tamaño puesto a mano y la ruta relativa de `Gui.shot` (abierta el 23-nov · Eduardo, al decidir `#859`: *«3 lo aplazamos»* · hecha el 25-nov, a falta de verla Eduardo)
 
@@ -14985,7 +14990,7 @@ mantiene sola.»*
 - **Para publicar V9:** con la regla que se queda, una placa con los packs de V8 y un programa que use lo que cambió de
   interfaz en V9 (como `__guiClick`) falla así; lo que lo evita es grabar los packs de V9 (`INSTALAR_FIRMWARE`).
 
-#### 🧬 `#894` — las STM32 dan por buenos pines que su encapsulado no tiene (abierta el 25-nov · vista al preguntar a la DK2 sus pines, `#861` · de antes: desde la tabla de capacidades de V7 · hecha el mismo día, por grabar)
+#### ✅ `#894` — las STM32 dan por buenos pines que su encapsulado no tiene (abierta el 25-nov · vista al preguntar a la DK2 sus pines, `#861` · de antes: desde la tabla de capacidades de V7 · hecha y **CERRADA** el mismo día, `ad7a6d5` del runtime)
 
 - `Machine.pins()` daba los 128 de los puertos A a H. El encapsulado de las dos (LQFP144 de las «Q», con la fuente conmutada
   en pines que en otras son GPIO) no saca `PB12`, `PC4`, `PC5` ni `PG11`; y en la DK2, tampoco `PE1`, `PF3`–`PF15`,
@@ -14994,15 +14999,17 @@ mantiene sola.»*
 - **Hecho:** la máscara de cada encapsulado, de los datos abiertos de ST (`STM32_open_pin_data`: el XML de
   `STM32U575ZITxQ` y el de `STM32U5G9ZJTxQ`), en `gpio_stm32.c`: los que no están, «no existe». 111 pines en la Nucleo y 97
   en la DK2 —de los que cada una quita los del cable y los de su pantalla—. Los `PI0`–`PI3` de la U5G9 no: la numeración
-  acaba en el puerto H. Las dos imágenes compilan.
-- **Hecho cuando:** las dos placas lo contestan (con `#861`).
+  acaba en el puerto H.
+- **Visto el 25-nov en las dos**, grabadas (*«graba»*; *«la discovery la puedes grabar cuando quieras»*): contestan los suyos
+  (`scripts/placas/nucleo.txt` y `dk2.txt`), y la DK2 pinta su pantalla.
 
-#### 🧬 `#895` — en las STM32 `Pulse.Counter` no funciona: «stm32u5g9 no tiene contador de pulsos», con el contador hecho (abierta el 25-nov · vista con `#861`, comprobada en la DK2 · de antes: está en la V7.0, la V8.0 y la V8.1 · hecha el mismo día, por grabar)
+#### 🧬 `#895` — en las STM32 `Pulse.Counter` no funciona: «stm32u5g9 no tiene contador de pulsos», con el contador hecho (abierta el 25-nov · vista con `#861`, comprobada en la DK2 · de antes: está en la V7.0, la V8.0 y la V8.1 · hecha el mismo día, a falta de un puente)
 
 - Desde V7 el pin se comprueba contra la tabla de capacidades, y la de las STM32 no marcaba el de su contador (`PC6` en la
   Nucleo, `PB7` en la DK2; `c21bfa7` y `947aa59`, de V3).
-- **Hecho:** la marca (`stm32_caps_pulsos`, de la tabla del contador). Las dos imágenes compilan.
-- **Hecho cuando:** `PulseDemo` (Nucleo) y `PulseDemo_Dk2` cuentan en su placa, con su puente del PWM al contador.
+- **Hecho:** la marca (`stm32_caps_pulsos`, de la tabla del contador). Grabadas las dos: el contador se crea y arranca, y
+  cuenta 0 (sin puente).
+- **Hecho cuando:** `PulseDemo` (Nucleo, `PC8`–`PC6`) o `PulseDemo_Dk2` (`PB8`–`PB7`) cuenta, con su puente.
 
 #### 🧬 `#893` — la guía para IA que el IDE deja en una carpeta no se pone al día: se queda la de la primera vez (abierta el 25-nov · vista en la carpeta de pruebas: la del 23 no sabía de packs ni de guiones · hecha el mismo día)
 

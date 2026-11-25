@@ -531,7 +531,8 @@ p.scrollDir := Gui.ScrollDir.VER</code></pre>
   <code>Gui.Label</code> shows text; <code>Gui.Button</code> is a pressable button. Both take the parent
   as the first argument, and the text next. On the button the text is <strong>optional</strong>
   (<code>Button(parent, text := "")</code>): a button is a container, and without text it is empty, ready
-  for whatever you hang on it (an icon, a label of your own).
+  for whatever you hang on it (an icon, a label of your own). The text goes in the center, also with a size of
+  your own.
 </p>
 <figure><img src="../img/gui/click.png" alt="Label and button"><figcaption>GuiClickDemo — a label and a centered button.</figcaption></figure>
 <pre><code><span class="kw">var</span> lbl: Gui.<span class="type">Label</span>  := Gui.<span class="fn">Label</span>(scr, <span class="str">"waiting"</span>)

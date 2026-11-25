@@ -528,7 +528,7 @@ p.scrollDir := Gui.ScrollDir.VER</code></pre>
   <code>Gui.Label</code> muestra texto; <code>Gui.Button</code> es un botón pulsable. Ambos toman el padre como
   primer argumento, y el texto a continuación. En el botón el texto es <strong>opcional</strong>
   (<code>Button(parent, text := "")</code>): un botón es un contenedor, y sin texto queda vacío para colgarle lo
-  que quieras (un icono, una etiqueta propia).
+  que quieras (un icono, una etiqueta propia). El texto va en el centro, también con el tamaño que le pongas tú.
 </p>
 <figure><img src="img/gui/click.png" alt="Etiqueta y botón"><figcaption>GuiClickDemo — una etiqueta y un botón centrado.</figcaption></figure>
 <pre><code><span class="kw">var</span> lbl: Gui.<span class="type">Label</span>  := Gui.<span class="fn">Label</span>(scr, <span class="str">"esperando"</span>)

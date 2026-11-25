@@ -1,0 +1,22 @@
+micro: stm32u5g9
+paquete: LQFP144
+fabricante: STMicroelectronics
+pines: PA0-PA8, PA11-PA15, PB0-PB1, PB3-PB8, PB10-PB11, PB13-PB15, PC0-PC3, PC10-PC15, PD2, PD4-PD5, PD7, PE2-PE3, PF0-PF2, PG0-PG1, PG9-PG10, PG12-PG15, PH0-PH1, PH3, PH9-PH15
+analógicos: PA0-PA7, PB0-PB1, PC0-PC3, PG0-PG1
+pwm: PB8
+pulsos: PB7
+colector abierto: PA0-PA8, PA11-PA15, PB0-PB1, PB3-PB8, PB10-PB11, PB13-PB15, PC0-PC3, PC10-PC15, PD2, PD4-PD5, PD7, PE2-PE3, PF0-PF2, PG0-PG1, PG9-PG10, PG12-PG15, PH0-PH1, PH3, PH9-PH15
+sólo entrada: ninguno
+uart: 2, 3, 4, 5, 6
+i2c: 1, 2, 3, 4, 5
+spi: 1, 2, 3
+sistema: PA9-PA10 (del cable del IDE (el wire))
+sistema: PB2 (de la pantalla)
+sistema: PB9 (de la pantalla)
+sistema: PC6-PC9 (de la pantalla)
+sistema: PD0-PD1 (de la pantalla)
+sistema: PD3 (de la pantalla)
+sistema: PD6 (de la pantalla)
+sistema: PD8-PD15 (de la pantalla)
+sistema: PE0 (de la pantalla)
+sistema: PE4-PE15 (de la pantalla)

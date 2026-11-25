@@ -210,7 +210,7 @@ Each widget is a `Gui` class descending from `Component` (§19.2), so it inherit
 <a id="w-label-button"></a>
 ### 20.1 Label and Button
 
-`Gui.Label` shows text; `Gui.Button` is a pressable button. Both take the parent as the first argument, and the text next. On the button the text is **optional** (`Button(parent, text := "")`): a button is a container, and without text it is empty, ready for whatever you hang on it (an icon, a label of your own).
+`Gui.Label` shows text; `Gui.Button` is a pressable button. Both take the parent as the first argument, and the text next. On the button the text is **optional** (`Button(parent, text := "")`): a button is a container, and without text it is empty, ready for whatever you hang on it (an icon, a label of your own). The text goes in the center, also with a size of your own.
 
 ![Label and button](../img/gui/click.png)
 

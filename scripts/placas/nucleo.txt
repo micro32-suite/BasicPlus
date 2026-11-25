@@ -1,0 +1,13 @@
+micro: stm32u575
+paquete: LQFP144
+fabricante: STMicroelectronics
+pines: PA0-PA8, PA11-PA15, PB0-PB11, PB13-PB15, PC0-PC3, PC6-PC15, PD0-PD15, PE0-PE15, PF0-PF15, PG0-PG10, PG12-PG15, PH0-PH1, PH3
+analógicos: PA0-PA7, PB0-PB2, PC0-PC3, PD11-PD13, PF14-PF15, PG0-PG1
+pwm: PB7, PC7-PC8
+pulsos: PC6
+colector abierto: PA0-PA8, PA11-PA15, PB0-PB11, PB13-PB15, PC0-PC3, PC6-PC15, PD0-PD15, PE0-PE15, PF0-PF15, PG0-PG10, PG12-PG15, PH0-PH1, PH3
+sólo entrada: ninguno
+uart: 2, 3, 4, 5
+i2c: 1, 2, 3, 4
+spi: 1, 2, 3
+sistema: PA9-PA10 (del cable del IDE (el wire))
