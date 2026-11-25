@@ -14347,7 +14347,7 @@ panel de la placa; 48 diálogos modales en `FrmMain`, que pasan a ser resultados
 
 **Para más adelante** (Eduardo, 23-nov, al cerrar el H1.6): los packs de la placa y sus variables de entorno, como los
 otros comandos, desde su botón y por la IA: `#876` (el ENV: ✅ 25-nov) y `#875` (grabar, borrar y formatear, y `bp placa …
-pack`: ✅ 25-nov). Y, al instalar el pack de la GUI o el de la BD, también sus variables: con los guiones, `#891`.
+pack`: ✅ 25-nov). Y, al instalar el pack de la GUI o el de la BD, también sus variables: con los guiones, `#891` (✅ 25-nov).
 
 **El orden:** el de los apartados; el H2 va antes que el H1 (Eduardo, 22-nov). Lo que el H1 pensaba darle (el cable por
 línea de órdenes, `#857`) no hace falta para empezar: los comandos usan el `BpvmClient` del IDE.
@@ -14733,7 +14733,7 @@ mantiene sola.»*
   los guiones: la C5 (`DriverSpi`, 16 KB; `GuiShot`, bien, y su captura), la P4 y la DK2.
 - **Por decidir (Eduardo):** si se publica un parche de la V8.1 (sólo el IDE) o va con V9.
 
-#### 🧬 `#891` — los guiones: los comandos del IDE, uno por línea en un fichero, que lanza la persona o la IA; y con ellos, instalar la GUI o la BD con sus variables de entorno (abierta el 25-nov · idea de Eduardo · lo de las variables, de `#876` y `#875` · hecha el mismo día y probada en la Metro, la C5, la P4 y la DK2)
+#### ✅ `#891` — los guiones: los comandos del IDE, uno por línea en un fichero, que lanza la persona o la IA; y con ellos, instalar la GUI o la BD con sus variables de entorno (abierta el 25-nov · idea de Eduardo · lo de las variables, de `#876` y `#875` · **CERRADA el 25-nov**, `d7917fc` y `ed90f51` en `toolchain`, `94f689f2` y `f77fc584`; probada con Eduardo en la Metro, la C5, la P4 y la DK2, *«2) Cierra»*)
 
 - **La idea (Eduardo, 25-nov**, a si instalar la GUI o la BD pone también sus variables): *«2) También. Un matiz sobre 2, a mi
   me recuerda a un pequeño programa o un script. Estoy pensando si con todos los comandos que estamos proporcionando a la IA,
