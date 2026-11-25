@@ -220,6 +220,7 @@
     <li class="sub"><a href="#ev-slots">22.4 From name to method (at load time)</a></li>
     <li class="sub"><a href="#ev-codigo">22.5 Subscribing from code (no .win)</a></li>
     <li class="sub"><a href="#ev-teclado">22.6 The keyboard and the mouse</a></li>
+    <li class="sub"><a href="#ev-claves">22.7 The keys of the .win</a></li>
 
     <li class="group"><a href="#ejecutar">23. Running (host and board)</a></li>
     <li class="sub"><a href="#ej-preview">23.1 Preview on the PC</a></li>
@@ -943,6 +944,42 @@ scr.onKey := screen::key
   wheel, and the keyboard in the controls, with the focus and Tab.
 </p>
 
+<h3 id="ev-claves">22.7 The keys of the <code>.win</code></h3>
+<p>
+  Each node is a widget: its <code>type</code> and its keys, all optional. Those of all of them:
+</p>
+<table>
+  <tr><th>Key</th><th>What it does</th></tr>
+  <tr><td><code>name</code></td><td>Its name: the window's property that receives it, and its derived handlers (§22.4)</td></tr>
+  <tr><td><code>align</code>, <code>x</code>, <code>y</code></td><td>With <code>align</code> (<code>"TOP_MID"</code>, <code>"CENTER"</code>…, §19.3), <code>x</code> and <code>y</code> are the offset from the anchor; without it, its position</td></tr>
+  <tr><td><code>width</code>, <code>height</code></td><td>Its size; without them, its automatic one</td></tr>
+  <tr><td><code>fontSize</code>, <code>bgColor</code>, <code>textColor</code></td><td>The text and the colours, as <code>"0x2060D0"</code> (§21)</td></tr>
+  <tr><td><code>clic</code>, <code>change</code></td><td>The handler, when it is not the one derived from <code>name</code> (§22.1)</td></tr>
+  <tr><td><code>children</code></td><td>The widgets inside it, in a <code>Panel</code> or a <code>Button</code></td></tr>
+</table>
+<p>
+  The root, with none of the position and size ones, covers the whole screen. And those of each one:
+</p>
+<table>
+  <tr><th><code>type</code></th><th>Its keys</th></tr>
+  <tr><td><code>Panel</code></td><td>those of all</td></tr>
+  <tr><td><code>Label</code>, <code>Button</code></td><td><code>text</code></td></tr>
+  <tr><td><code>Checkbox</code></td><td><code>text</code>, <code>checked</code></td></tr>
+  <tr><td><code>Toggle</code></td><td><code>checked</code></td></tr>
+  <tr><td><code>Slider</code>, <code>Bar</code>, <code>Spinbox</code></td><td><code>min</code>, <code>max</code> (0 and 100), <code>value</code></td></tr>
+  <tr><td><code>Textarea</code></td><td><code>text</code></td></tr>
+  <tr><td><code>Led</code></td><td><code>value</code> (0 to 255)</td></tr>
+  <tr><td><code>Dropdown</code></td><td><code>options</code> (separated by <code>\n</code>), <code>selected</code></td></tr>
+  <tr><td><code>ListBox</code></td><td><code>items</code> (separated by <code>\n</code>), <code>selected</code></td></tr>
+  <tr><td><code>Msgbox</code></td><td><code>text</code>, <code>buttons</code> (their labels, separated by <code>\n</code>)</td></tr>
+  <tr><td><code>Chart</code></td><td><code>points</code> (how many fit), <code>min</code> and <code>max</code> (its axis), <code>chartType</code> (<code>LINE</code> or <code>BARS</code>). The series and their data are set by the program, after <code>load</code> (<code>addSeries</code>)</td></tr>
+  <tr><td><code>Table</code></td><td><code>rows</code>, <code>cols</code> and <code>cells</code> (a list of rows, each a list of texts)</td></tr>
+</table>
+<p>
+  An unknown <code>type</code> is reported on the console, and a <code>Panel</code> takes its place. What
+  <code>toJson()</code> writes (§24.2) are these very keys.
+</p>
+
 <h2 id="ejecutar">23. Running (host and board)</h2>
 <p>
   A BasicPlus GUI can be run three ways, from fastest to most faithful: preview on the PC (Swing), real
@@ -1164,7 +1201,7 @@ packRam=136</code></pre>
   <code>--no-screen</code>), on miVM and on the five displays; the one that counts is LVGL's (the PC's C VM, the
   simulated micro or the board): the Java VM's is that of its preview, an approximation (it does not paint a
   <code>Chart</code> or a <code>Led</code>, and the fonts are the PC's). On failure it throws a catchable
-  <code>RuntimeError</code>: «sin pantalla» (C VM built without LVGL, or miVM without a window), «error de
+  <code>RuntimeError</code>: «sin pantalla» (C VM built without LVGL), «error de
   escritura», «no cabe en el tope de captura» (256&nbsp;KB; 40 with <code>GuiMini</code>, the C6's pack) or «sin
   memoria».
 </p>

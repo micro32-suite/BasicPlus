@@ -218,6 +218,7 @@
     <li class="sub"><a href="#stdlib-air">14.19 Air</a></li>
     <li class="sub"><a href="#stdlib-keyboards">14.20 Keyboards</a></li>
     <li class="sub"><a href="#stdlib-mice">14.21 Mice</a></li>
+    <li class="sub"><a href="#stdlib-devices">14.22 The devices (bpdevices)</a></li>
     <li class="group"><a href="#seguir">Where to go next</a></li>
     <li class="group"><a href="#packs">15. Packs</a></li>
     <li class="sub"><a href="#packs-what">15.1 What a pack is, and what it is not</a></li>
@@ -3093,6 +3094,28 @@ mo.onWheel := screen::wheel
   a click wakes it up.
 </p>
 
+<h3 id="stdlib-devices">14.22 The devices: <code>bpdevices</code></h3>
+<p>
+  The installation brings the libraries of some devices, with their source, in <code>bpdevices/</code>. They are imported
+  like those of the library (<code>import Bmp280</code>), but they do not live on the board: they belong to the program, and
+  the IDE and <code>bp</code> upload them with it. On the PC, the compiler leaves their copy beside the program, in its
+  output folder (V9). The I2C ones ask for a bus (<a href="#stdlib-i2c">§14.3</a>): an <code>I2c.HardI2C</code> or a
+  software one. Their whole API, with <code>bp api Bmp280</code>.
+</p>
+<table>
+  <tr><th>Module</th><th>What it is</th><th>How it is used</th></tr>
+  <tr><td><code>Bmp280</code></td><td>Pressure and temperature: Bosch BMP280 (and BME280, without its humidity). I2C, <code>0x76</code> or <code>0x77</code></td><td><code>Bmp280.Sensor(bus, 0x76)</code>: <code>begin(): boolean</code> (is it there?), <code>measure()</code> and then <code>temperature()</code>, in °C, and <code>pressure()</code>, in hPa (<code>double</code>)</td></tr>
+  <tr><td><code>Bme688</code></td><td>Temperature, humidity, pressure and gas: Bosch BME680 and BME688. I2C, <code>0x76</code> or <code>0x77</code></td><td><code>Bme688.Sensor(bus, 0x76)</code>: the same, plus <code>humidity()</code>, in %, <code>gas()</code>, in ohms, and <code>airIndex()</code>, from 0 to 100 (approximate: it does not measure CO<sub>2</sub>)</td></tr>
+  <tr><td><code>Mcp9804</code></td><td>Temperature: Microchip MCP9804. I2C, from <code>0x18</code> to <code>0x1F</code></td><td><code>Mcp9804.Sensor(bus, 0x18)</code>: <code>readTemp(): float</code>, in °C</td></tr>
+  <tr><td><code>Pca9554</code></td><td>Eight input/output pins: PCA9554, from <code>0x20</code> to <code>0x27</code>, and PCA9554A, from <code>0x38</code> to <code>0x3F</code>. I2C</td><td><code>Pca9554.Expander(bus, 0x20)</code>: <code>setDir(m)</code> (each bit a pin: 1, input; 0, output), <code>writeOut(v)</code> and <code>readIn()</code></td></tr>
+  <tr><td><code>Ad7177</code></td><td>A 24-bit converter: Analog Devices AD7177-2. SPI, mode 3</td><td><code>Ad7177.Adc(bus, cs, sync)</code>: <code>leerId()</code>, <code>leerPowerV()</code>, in volts, and its registers (<code>rreg</code>, <code>wreg</code>, <code>readData</code>…)</td></tr>
+</table>
+<p>
+  The examples: <code>samples/Bmp280Demo.bp</code>, <code>samples/Bme688Demo.bp</code>, <code>samples/tempread.bp</code>,
+  <code>samples/adcid.bp</code> and <code>samples/adcpower.bp</code>. To test without the sensor, a class of yours that
+  extends <code>I2c.I2C</code> and answers as it would is a valid bus: that is all the library asks for.
+</p>
+
 <!-- =========================================================== -->
 <h2 id="seguir">Where to go next</h2>
 
@@ -3684,7 +3707,9 @@ bp test --guarda tests/PruebaGui.bp   (writes tests/PruebaGui.out)</code></pre>
       <code>&lt;sourceDir&gt;/&lt;main&gt;.bp</code>.</li>
   <li><code>dependencies</code> (array of strings, optional): each entry
       is a directory (looks for any <code>.mod</code> inside when resolving
-      imports) or a specific <code>.mod</code> file.</li>
+      imports) or a specific <code>.mod</code> file. The one the program imports is copied to
+      <code>outDir</code> (V9), which is where the PC's VMs look for it; if it changes, it is copied again
+      when compiling.</li>
   <li><code>version</code> (integer, optional; V7): the project's <strong>generation</strong>.
       Every <code>.mod</code> it compiles carries it in its header, and the version rule (§17.1)
       uses it: a dependency older than the one the module needs is rejected at load time. Without

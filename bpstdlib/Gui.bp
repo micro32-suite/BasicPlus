@@ -1728,6 +1728,13 @@ import Core          // V6/G2: OwnerList extends Core.List — el import no es t
       var scr: integer := __guiScreenActive()
       if not node.has("width") then  w.width := __guiGetWidth(scr)
       if not node.has("height") then w.height := __guiGetHeight(scr)
+      // V9 #905 — y la cubre entera. La ventana es un panel del tema, con su borde y su margen por dentro: puesto en su
+      // esquina, un formulario tan grande como ella salía corrido por el margen y no cabía, con barras de desplazamiento y
+      // lo de abajo y la derecha cortado. Centrado en ella, la cubre; y la ventana no se desplaza.
+      if not (node.has("width") or node.has("height") or node.has("align") or node.has("x") or node.has("y")) then
+        w.align(Align.CENTER, 0, 0)
+        this.scrollDir := ScrollDir.NONE
+      endif
       return w
     end load
 

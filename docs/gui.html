@@ -220,6 +220,7 @@
     <li class="sub"><a href="#ev-slots">22.4 De nombre a método (en carga)</a></li>
     <li class="sub"><a href="#ev-codigo">22.5 Suscribir desde código (sin .win)</a></li>
     <li class="sub"><a href="#ev-teclado">22.6 El teclado y el ratón</a></li>
+    <li class="sub"><a href="#ev-claves">22.7 Las claves del .win</a></li>
 
     <li class="group"><a href="#ejecutar">23. Ejecutar (host y placa)</a></li>
     <li class="sub"><a href="#ej-preview">23.1 Vista previa en el PC</a></li>
@@ -933,6 +934,42 @@ scr.onKey := pant::tecla
   rueda, y el teclado en los controles, con el foco y Tab.
 </p>
 
+<h3 id="ev-claves">22.7 Las claves del <code>.win</code></h3>
+<p>
+  Cada nodo es un widget: su <code>type</code> y sus claves, todas opcionales. Las de todos:
+</p>
+<table>
+  <tr><th>Clave</th><th>Qué hace</th></tr>
+  <tr><td><code>name</code></td><td>Su nombre: la property de la ventana que lo recibe y sus handlers derivados (§22.4)</td></tr>
+  <tr><td><code>align</code>, <code>x</code>, <code>y</code></td><td>Con <code>align</code> (<code>"TOP_MID"</code>, <code>"CENTER"</code>…, §19.3), <code>x</code> e <code>y</code> son el desplazamiento desde el ancla; sin él, su sitio</td></tr>
+  <tr><td><code>width</code>, <code>height</code></td><td>Su tamaño; sin ellos, el suyo automático</td></tr>
+  <tr><td><code>fontSize</code>, <code>bgColor</code>, <code>textColor</code></td><td>El texto y los colores, como <code>"0x2060D0"</code> (§21)</td></tr>
+  <tr><td><code>clic</code>, <code>change</code></td><td>El handler, si no es el derivado de <code>name</code> (§22.1)</td></tr>
+  <tr><td><code>children</code></td><td>Los widgets que lleva dentro, en un <code>Panel</code> o un <code>Button</code></td></tr>
+</table>
+<p>
+  La raíz, sin ninguna de las de sitio y tamaño, cubre la pantalla entera. Y las de cada uno:
+</p>
+<table>
+  <tr><th><code>type</code></th><th>Sus claves</th></tr>
+  <tr><td><code>Panel</code></td><td>lo de todos</td></tr>
+  <tr><td><code>Label</code>, <code>Button</code></td><td><code>text</code></td></tr>
+  <tr><td><code>Checkbox</code></td><td><code>text</code>, <code>checked</code></td></tr>
+  <tr><td><code>Toggle</code></td><td><code>checked</code></td></tr>
+  <tr><td><code>Slider</code>, <code>Bar</code>, <code>Spinbox</code></td><td><code>min</code>, <code>max</code> (0 y 100), <code>value</code></td></tr>
+  <tr><td><code>Textarea</code></td><td><code>text</code></td></tr>
+  <tr><td><code>Led</code></td><td><code>value</code> (0 a 255)</td></tr>
+  <tr><td><code>Dropdown</code></td><td><code>options</code> (separadas por <code>\n</code>), <code>selected</code></td></tr>
+  <tr><td><code>ListBox</code></td><td><code>items</code> (separados por <code>\n</code>), <code>selected</code></td></tr>
+  <tr><td><code>Msgbox</code></td><td><code>text</code>, <code>buttons</code> (sus etiquetas, separadas por <code>\n</code>)</td></tr>
+  <tr><td><code>Chart</code></td><td><code>points</code> (los que caben), <code>min</code> y <code>max</code> (su eje), <code>chartType</code> (<code>LINE</code> o <code>BARS</code>). Las series y sus datos los pone el programa, tras <code>load</code> (<code>addSeries</code>)</td></tr>
+  <tr><td><code>Table</code></td><td><code>rows</code>, <code>cols</code> y <code>cells</code> (una lista de filas, cada una una lista de textos)</td></tr>
+</table>
+<p>
+  Un <code>type</code> que no se conoce se dice en la consola, y en su lugar va un <code>Panel</code>. Lo que escribe
+  <code>toJson()</code> (§24.2) son estas mismas claves.
+</p>
+
 <h2 id="ejecutar">23. Ejecutar (host y placa)</h2>
 <p>
   Una GUI de BasicPlus se puede ejecutar de tres maneras, de más rápida a más fiel: vista previa en el PC
@@ -1149,7 +1186,7 @@ packRam=136</code></pre>
   las cinco pantallas; la que vale es la de LVGL (la VM-C del PC, el micro simulado o la placa): la de la VM Java es
   la de su vista previa, una aproximación (no pinta un <code>Chart</code> ni un <code>Led</code>, y las fuentes son
   las del PC). Si falla, lanza <code>RuntimeError</code> atrapable: «sin pantalla» (VM-C compilada sin
-  LVGL, o miVM sin ventana), «error de escritura», «no cabe en el tope de captura» (256&nbsp;KB; 40 con
+  LVGL), «error de escritura», «no cabe en el tope de captura» (256&nbsp;KB; 40 con
   <code>GuiMini</code>, el pack de la C6) o «sin memoria».
 </p>
 <pre><code>Gui.<span class="fn">start</span>()

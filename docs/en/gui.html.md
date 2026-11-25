@@ -638,6 +638,39 @@ end key
 
 **On the PC**, the keyboard and the mouse are those of the window, and only with the simulated ones of `Air.Bluetooth` connected («Teclado simulado» and «Ratón simulado»), as on a board: with no keyboard connected the window does not type, not even the Swing one. With «Ratón simulado», the PC mouse stops acting as a touch screen and acts as a mouse, with the GUI's arrow in the window of the VM-C and the simulated micro (doing both, every click would count twice); without it, it acts as a touch screen, as always. **On the boards with Bluetooth and a screen** (the P4 and the C5), the same with a paired Bluetooth keyboard and mouse ([reference §14.19](referencia.html.md#stdlib-air-bt)): the mouse's arrow on the screen, the clicks and the wheel, and the keyboard in the controls, with the focus and Tab.
 
+<a id="ev-claves"></a>
+### 22.7 The keys of the `.win`
+
+Each node is a widget: its `type` and its keys, all optional. Those of all of them:
+
+| Key | What it does |
+|---|---|
+| `name` | Its name: the window's property that receives it, and its derived handlers (§22.4) |
+| `align`, `x`, `y` | With `align` (`"TOP_MID"`, `"CENTER"`…, §19.3), `x` and `y` are the offset from the anchor; without it, its position |
+| `width`, `height` | Its size; without them, its automatic one |
+| `fontSize`, `bgColor`, `textColor` | The text and the colours, as `"0x2060D0"` (§21) |
+| `clic`, `change` | The handler, when it is not the one derived from `name` (§22.1) |
+| `children` | The widgets inside it, in a `Panel` or a `Button` |
+
+The root, with none of the position and size ones, covers the whole screen. And those of each one:
+
+| `type` | Its keys |
+|---|---|
+| `Panel` | those of all |
+| `Label`, `Button` | `text` |
+| `Checkbox` | `text`, `checked` |
+| `Toggle` | `checked` |
+| `Slider`, `Bar`, `Spinbox` | `min`, `max` (0 and 100), `value` |
+| `Textarea` | `text` |
+| `Led` | `value` (0 to 255) |
+| `Dropdown` | `options` (separated by `\n`), `selected` |
+| `ListBox` | `items` (separated by `\n`), `selected` |
+| `Msgbox` | `text`, `buttons` (their labels, separated by `\n`) |
+| `Chart` | `points` (how many fit), `min` and `max` (its axis), `chartType` (`LINE` or `BARS`). The series and their data are set by the program, after `load` (`addSeries`) |
+| `Table` | `rows`, `cols` and `cells` (a list of rows, each a list of texts) |
+
+An unknown `type` is reported on the console, and a `Panel` takes its place. What `toJson()` writes (§24.2) are these very keys.
+
 <a id="ejecutar"></a>
 ## 23. Running (host and board)
 
@@ -788,7 +821,7 @@ On a board, the image is rotated because the panel has really been turned, to be
 <a id="ej-shot"></a>
 ### 23.5 Screenshot: `Gui.shot`
 
-`Gui.shot(path): integer` writes the screen **as LVGL drew it** to a `.shot` file (RGB565 in strips, compressed; format in `docs/SHOT_FORMAT.md`) and returns the bytes written. It goes through the same path on the host (with a window or `--no-screen`), on miVM and on the five displays; the one that counts is LVGL's (the PC's C VM, the simulated micro or the board): the Java VM's is that of its preview, an approximation (it does not paint a `Chart` or a `Led`, and the fonts are the PC's). On failure it throws a catchable `RuntimeError`: «sin pantalla» (C VM built without LVGL, or miVM without a window), «error de escritura», «no cabe en el tope de captura» (256 KB; 40 with `GuiMini`, the C6's pack) or «sin memoria».
+`Gui.shot(path): integer` writes the screen **as LVGL drew it** to a `.shot` file (RGB565 in strips, compressed; format in `docs/SHOT_FORMAT.md`) and returns the bytes written. It goes through the same path on the host (with a window or `--no-screen`), on miVM and on the five displays; the one that counts is LVGL's (the PC's C VM, the simulated micro or the board): the Java VM's is that of its preview, an approximation (it does not paint a `Chart` or a `Led`, and the fonts are the PC's). On failure it throws a catchable `RuntimeError`: «sin pantalla» (C VM built without LVGL), «error de escritura», «no cabe en el tope de captura» (256 KB; 40 with `GuiMini`, the C6's pack) or «sin memoria».
 
 ```
 Gui.start()

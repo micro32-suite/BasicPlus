@@ -132,7 +132,7 @@ Image: `bpvm_esp32c5_merged.bin`.
 | UART | 1: any of the program's |
 | The system's: not for the program | 13-14: the IDE's cable (the wire); 15-22: the flash or the PSRAM |
 
-The display, its touch and the TF slot go through pins of the program's: those of its ENV lines ([the panel lines](INSTALAR_FIRMWARE.md#panel-spi)), and its page names them.
+The display, its touch and the TF slot go through pins of the program's: those of its ENV lines ([the panel lines](INSTALAR_FIRMWARE.md#panel-spi)), and its page names them. I2C 0, the only one, is the board's (the touch and the expander), on 0 (SDA) and 1 (SCL), at 400 kHz, by its ENV line `i2c0`, and it is shared: `I2c.HardI2C(0, 0, 1, 400000)`; or a software one on another two pins.
 
 Its documentation:
 
@@ -162,6 +162,8 @@ Image: `bpvm_esp32p4_merged.bin`.
 
 *(to be read from the board)*
 
+I2C 0 is the board's (the touch), on 7 (SDA) and 8 (SCL), at 100 kHz, and it is shared: `I2c.HardI2C(0, 7, 8, 100000)` uses it along with the board (its addresses are taken). For a sensor of yours, better I2C 1, on another two: `I2c.HardI2C(1, 28, 29, 100000)`.
+
 Its documentation:
 
 - [The board and its pins](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4-function-ev-board/user_guide.html)
@@ -186,6 +188,8 @@ Image: `bpvm_esp32p4_merged.bin`.
 | UART | 1, 2: any of the program's |
 | The system's: not for the program | 9-10, 12-13, 53: the sound; 14-19, 54: the radio; 26-27: the display; 37-38: the IDE's cable (the wire) |
 
+I2C 0 is the board's (the touch and the sound), on 7 (SDA) and 8 (SCL), at 100 kHz, and it is shared: `I2c.HardI2C(0, 7, 8, 100000)` uses it along with the board (its addresses are taken). For a sensor of yours, better I2C 1, on another two: `I2c.HardI2C(1, 28, 29, 100000)`.
+
 Its documentation:
 
 - [The board and its 40-pin header](https://docs.waveshare.com/ESP32-P4-WIFI6-Touch-LCD-4.3)
@@ -198,6 +202,8 @@ Its documentation:
 Image: `bpvm_esp32p4x_merged.bin`.
 
 *(to be read from the board)*
+
+I2C 0 is the board's (the touch), on 7 (SDA) and 8 (SCL), at 100 kHz, and it is shared: `I2c.HardI2C(0, 7, 8, 100000)` uses it along with the board (its addresses are taken). For a sensor of yours, better I2C 1, on another two: `I2c.HardI2C(1, 28, 29, 100000)`.
 
 Its documentation:
 
@@ -263,6 +269,8 @@ Image: `bpvm_stm32_dk2.bin`.
 | UART 5 | TX PC12 · RX PD2 |
 | UART 6 | TX PC3, PF0 · RX PC2, PF1 |
 | The system's: not for the program | PA9-PA10: the IDE's cable (the wire); PB2, PB9, PC6-PC9, PD0-PD1, PD3, PD6, PD8-PD15, PE0, PE4-PE15: the display |
+
+I2C 2 is the board's (the touch), on PF0 (SDA) and PF1 (SCL), at 100 kHz, and it is shared; the others are the program's.
 
 Its documentation:
 

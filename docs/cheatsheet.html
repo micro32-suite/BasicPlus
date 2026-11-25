@@ -149,7 +149,8 @@
 <span class="k">var</span> err: <span class="t">boolean</span>, v: <span class="t">integer</span>
 { err, v } <span class="k">:=</span> Str.parseInt(<span class="s">"123"</span>)   <span class="c">// (error?, value): false 123</span></pre>
   <p class="note"><b>Public by default? No — private.</b> Only what you mark
-     <code>public</code> leaves the module.</p>
+     <code>public</code> leaves the module. And a class, even one of the same module, uses
+     only the <code>public</code> functions, variables and constants of its module.</p>
 </section>
 
 <section>
@@ -262,7 +263,9 @@ l.add("x")                 <span class="c">// compile error</span>
 l[<span class="t">0</span>] <span class="k">:=</span> Sensor(<span class="t">5</span>)          <span class="c">// l.set(0, …)</span></pre>
   <p class="note"><code>&lt;Sensor&gt;</code> is an order to the compiler: same class, same VM. What goes in must be a
      <code>Sensor</code>, and what comes out is one. Inside <code>&lt; &gt;</code> goes a class, an interface or
-     <code>string</code>; a number goes in its box, <code>List&lt;Integer&gt;</code>. A new class opts in with
+     <code>string</code>; a number goes in its box, <code>List&lt;Integer&gt;</code>. A map takes two:
+     <code>Collections.Map&lt;string, Sensor&gt;</code> (its key, <code>string</code> or
+     <code>integer</code>). A new class opts in with
      <code>@element{Base}</code>. On any object, <code>x[i]</code> is <code>x.get(i)</code> and
      <code>x.pin[i]</code> is <code>x.getPin(i)</code>; it looks like an array and costs a call.</p>
 </section>

@@ -218,6 +218,7 @@
     <li class="sub"><a href="#stdlib-air">14.19 Air</a></li>
     <li class="sub"><a href="#stdlib-keyboards">14.20 Keyboards</a></li>
     <li class="sub"><a href="#stdlib-mice">14.21 Mice</a></li>
+    <li class="sub"><a href="#stdlib-devices">14.22 Los dispositivos (bpdevices)</a></li>
     <li class="group"><a href="#seguir">Por dónde seguir</a></li>
     <li class="group"><a href="#packs">15. Packs</a></li>
     <li class="sub"><a href="#packs-what">15.1 Qué es un pack, y qué no</a></li>
@@ -3080,6 +3081,28 @@ ra.onWheel := pant::rueda
   de la GUI; en la S3, que no tiene pantalla, se conecta pero no hace nada. Dormido del todo, se despierta con un clic.
 </p>
 
+<h3 id="stdlib-devices">14.22 Los dispositivos: <code>bpdevices</code></h3>
+<p>
+  La instalación trae las librerías de algunos dispositivos, con su fuente, en <code>bpdevices/</code>. Se importan como las
+  de la biblioteca (<code>import Bmp280</code>), pero no van en la placa: son del programa, y el IDE y <code>bp</code> las
+  suben con él. En el PC, el compilador deja su copia junto al programa, en su carpeta de salida (V9). Las de I2C piden un
+  bus (<a href="#stdlib-i2c">§14.3</a>): un <code>I2c.HardI2C</code> o uno por software. Su API entera, con
+  <code>bp api Bmp280</code>.
+</p>
+<table>
+  <tr><th>Módulo</th><th>Qué es</th><th>Cómo se usa</th></tr>
+  <tr><td><code>Bmp280</code></td><td>Presión y temperatura: Bosch BMP280 (y BME280, sin su humedad). I2C, <code>0x76</code> o <code>0x77</code></td><td><code>Bmp280.Sensor(bus, 0x76)</code>: <code>begin(): boolean</code> (¿está ahí?), <code>measure()</code> y, después, <code>temperature()</code>, en °C, y <code>pressure()</code>, en hPa (<code>double</code>)</td></tr>
+  <tr><td><code>Bme688</code></td><td>Temperatura, humedad, presión y gas: Bosch BME680 y BME688. I2C, <code>0x76</code> o <code>0x77</code></td><td><code>Bme688.Sensor(bus, 0x76)</code>: lo mismo, y <code>humidity()</code>, en %, <code>gas()</code>, en ohmios, y <code>airIndex()</code>, de 0 a 100 (aproximado: no mide el CO<sub>2</sub>)</td></tr>
+  <tr><td><code>Mcp9804</code></td><td>Temperatura: Microchip MCP9804. I2C, de <code>0x18</code> a <code>0x1F</code></td><td><code>Mcp9804.Sensor(bus, 0x18)</code>: <code>readTemp(): float</code>, en °C</td></tr>
+  <tr><td><code>Pca9554</code></td><td>Ocho pines de entrada y salida: PCA9554, de <code>0x20</code> a <code>0x27</code>, y PCA9554A, de <code>0x38</code> a <code>0x3F</code>. I2C</td><td><code>Pca9554.Expander(bus, 0x20)</code>: <code>setDir(m)</code> (cada bit, un pin: 1, entrada; 0, salida), <code>writeOut(v)</code> y <code>readIn()</code></td></tr>
+  <tr><td><code>Ad7177</code></td><td>Conversor de 24 bits: Analog Devices AD7177-2. SPI, modo 3</td><td><code>Ad7177.Adc(bus, cs, sync)</code>: <code>leerId()</code>, <code>leerPowerV()</code>, en voltios, y sus registros (<code>rreg</code>, <code>wreg</code>, <code>readData</code>…)</td></tr>
+</table>
+<p>
+  Los ejemplos: <code>samples/Bmp280Demo.bp</code>, <code>samples/Bme688Demo.bp</code>, <code>samples/tempread.bp</code>,
+  <code>samples/adcid.bp</code> y <code>samples/adcpower.bp</code>. Para probar sin el sensor, una clase tuya que extienda
+  <code>I2c.I2C</code> y conteste como él vale de bus: es lo único que pide la librería.
+</p>
+
 <h2 id="seguir">Por dónde seguir</h2>
 
 <table>
@@ -3688,7 +3711,9 @@ bp test --guarda tests/PruebaGui.bp   (escribe tests/PruebaGui.out)</code></pre>
       <code>&lt;sourceDir&gt;/&lt;main&gt;.bp</code>.</li>
   <li><code>dependencies</code> (array de strings, opcional): cada entrada
       es un directorio (busca cualquier <code>.mod</code> dentro al resolver
-      imports) o un fichero <code>.mod</code> concreto.</li>
+      imports) o un fichero <code>.mod</code> concreto. El que el programa importa se copia a
+      <code>outDir</code> (V9), que es donde lo buscan las VMs del PC; si cambia, se vuelve a copiar al
+      compilar.</li>
   <li><code>version</code> (entero, opcional; V7): la <strong>generación</strong> del
       proyecto. Cada <code>.mod</code> que compila la lleva en su cabecera, y la norma de
       versiones (§17.1) la usa: una dependencia más antigua que la que el módulo necesita se

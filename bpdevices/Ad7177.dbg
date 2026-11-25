@@ -2,123 +2,170 @@ dbg 3
 module Ad7177
 source C:\lenguajes\pm\bpdevices\Ad7177.bp
 lines
+0 0
+34 0
+45 0
 48 43
+65 0
 68 47
+85 0
 88 51
-195 52
-220 58
-230 59
-240 60
-253 61
-256 62
-266 63
-273 64
-281 66
-302 67
-310 68
-313 69
-323 70
-337 71
-345 73
-364 77
-374 78
-381 79
-384 80
-394 81
-408 82
-416 84
-440 92
-483 93
-504 98
-517 99
-560 105
-586 109
-598 110
-623 114
-632 116
-656 120
-659 121
-668 122
-677 123
-686 124
-709 134
-712 135
-715 136
-725 137
-734 138
-741 139
-750 141
-757 142
-765 145
-781 151
-793 152
-812 153
-834 154
-856 155
-872 156
-888 167
-891 168
-898 169
-913 171
-932 172
-947 173
-962 174
-980 184
-983 185
-990 186
-1005 188
-1012 189
-1027 191
-1034 192
-1049 194
-1055 195
-1073 201
-1076 202
-1083 203
-1098 205
-1117 206
-1145 207
-1170 214
-1187 215
-1196 216
-1211 218
-1221 220
-1234 221
-1259 226
-1276 227
-1295 228
-1320 245
-1332 246
-1347 247
-1369 248
-1381 249
-1394 251
-1404 252
-1413 253
-1422 254
-1436 257
-1443 258
-1452 259
-1462 261
-1473 263
-1495 264
-1511 269
-1520 270
-1530 271
-1539 272
-1549 273
-1558 274
-1568 275
-1577 276
-1586 277
-1602 33
-1610 34
-1618 35
-1626 36
-1636 37
-1646 38
-1656 39
+200 52
+222 0
+225 58
+235 59
+245 60
+258 61
+261 62
+271 63
+278 64
+286 66
+307 67
+315 68
+318 69
+328 70
+342 71
+350 73
+366 0
+369 77
+379 78
+386 79
+389 80
+399 81
+413 82
+421 84
+442 0
+445 92
+493 93
+511 0
+514 98
+527 99
+567 0
+570 105
+593 0
+596 109
+608 110
+630 0
+633 114
+642 116
+663 0
+666 120
+669 121
+678 122
+687 123
+696 124
+716 0
+719 134
+722 135
+725 136
+735 137
+744 138
+751 139
+760 141
+767 142
+775 145
+788 0
+791 151
+803 152
+822 153
+844 154
+866 155
+882 156
+895 0
+898 167
+901 168
+908 169
+923 171
+942 172
+957 173
+972 174
+987 0
+990 184
+993 185
+1000 186
+1015 188
+1022 189
+1037 191
+1044 192
+1059 194
+1065 195
+1080 0
+1083 201
+1086 202
+1093 203
+1108 205
+1127 206
+1155 207
+1177 0
+1180 214
+1197 215
+1206 216
+1221 218
+1231 220
+1244 221
+1266 0
+1269 226
+1286 227
+1305 228
+1327 0
+1330 245
+1342 246
+1357 247
+1379 248
+1391 249
+1404 251
+1414 252
+1423 253
+1432 254
+1446 257
+1453 258
+1462 259
+1472 261
+1483 263
+1505 264
+1518 0
+1521 269
+1530 270
+1540 271
+1549 272
+1559 273
+1568 274
+1578 275
+1587 276
+1596 277
+1609 0
+1612 33
+1620 34
+1628 35
+1636 36
+1646 37
+1656 38
+1666 39
+1679 0
+1715 0
+1735 0
+1755 0
+1772 0
+1790 0
+1811 0
+1828 0
+1845 0
+1867 0
+1888 0
+1905 0
+1929 0
+1946 0
+1960 0
+1977 0
+1997 0
+2015 0
+2038 0
+2052 0
+2071 0
+2085 0
 vars
+func __init 0
+func __startup 34
 func Adc.enabled 45
 this -20 8 0 ?
 func Adc.disabled 65
@@ -126,7 +173,7 @@ this -20 8 0 ?
 func Adc.reset 85
 this -20 8 0 ?
 cmd 0 8 0 ?
-func Adc.rreg 217
+func Adc.rreg 222
 this -28 8 0 ?
 register -20 4 0 integer
 n -16 4 0 integer
@@ -134,57 +181,57 @@ tx 8 8 0 ?
 rx 16 8 0 ?
 i 24 4 0 integer
 out 32 8 0 ?
-func Adc.wreg 361
+func Adc.wreg 366
 this -36 8 0 ?
 register -28 4 0 integer
 data -24 8 0 ref
 n -16 4 0 integer
 cmd 0 8 0 ?
 i 8 4 0 integer
-func Adc.wreg16 437
+func Adc.wreg16 442
 this -28 8 0 ?
 register -20 4 0 integer
 value -16 4 0 integer
 buf 0 8 0 ?
-func Adc.rreg16 501
+func Adc.rreg16 511
 this -24 8 0 ?
 register -16 4 0 integer
 b 4 8 0 ?
-func Adc.leerId 557
+func Adc.leerId 567
 this -20 8 0 ?
-func Adc.leerStatus 583
+func Adc.leerStatus 593
 this -20 8 0 ?
 b 4 8 0 ?
-func Adc.isReady 620
+func Adc.isReady 630
 this -20 8 0 ?
 s 4 4 0 integer
-func Adc.waitReady 653
+func Adc.waitReady 663
 this -20 8 0 ?
 ready 0 4 0 boolean
-func Adc.waitReadyMax 706
+func Adc.waitReadyMax 716
 this -28 8 0 ?
 maxIter -20 4 0 integer
 stepMs -16 4 0 integer
 ready 4 4 0 boolean
 iter 8 4 0 integer
-func Adc.readData 778
+func Adc.readData 788
 this -20 8 0 ?
 b 4 8 0 ?
 r 12 4 0 integer
-func Adc.setMode 885
+func Adc.setMode 895
 this -36 8 0 ?
 intRef -28 4 0 boolean
 delay -24 4 0 integer
 mode -20 4 0 integer
 clock -16 4 0 integer
 m 0 4 0 integer
-func Adc.setInterface 977
+func Adc.setInterface 987
 this -32 8 0 ?
 altSync -24 4 0 boolean
 ioStrength -20 4 0 boolean
 contRead -16 4 0 boolean
 i 0 4 0 integer
-func Adc.setChannel 1070
+func Adc.setChannel 1080
 this -40 8 0 ?
 channel -32 4 0 integer
 enab -28 4 0 boolean
@@ -192,103 +239,103 @@ setupSel -24 4 0 integer
 ainp -20 4 0 integer
 ainn -16 4 0 integer
 c 0 4 0 integer
-func Adc.setChSetup 1167
+func Adc.setChSetup 1177
 this -32 8 0 ?
 channel -24 4 0 integer
 bipolar -20 4 0 integer
 ref -16 4 0 integer
 sc 0 4 0 integer
-func Adc.setSPS 1256
+func Adc.setSPS 1266
 this -28 8 0 ?
 channel -20 4 0 integer
 sps -16 4 0 integer
 s 0 4 0 integer
-func Adc.leerPowerV 1317
+func Adc.leerPowerV 1327
 this -20 8 0 ?
 data 8 4 0 integer
 raw 12 4 0 float
 v 16 4 0 float
-func Adc.test0 1508
+func Adc.test0 1518
 this -20 8 0 ?
 id 8 4 0 integer
-func Adc.__init 1599
+func Adc.__init 1609
 this -32 8 0 ?
 bus -24 4 0 integer
 cs -20 4 0 integer
 syncP -16 4 0 integer
-func __cls_new_Adc(iii) 1669
+func __cls_new_Adc(iii) 1679
 bus -24 4 0 integer
 cs -20 4 0 integer
 syncP -16 4 0 integer
-func __cls_init_Adc(iii) 1705
+func __cls_init_Adc(iii) 1715
 this -32 8 0 ?
 bus -24 4 0 integer
 cs -20 4 0 integer
 syncP -16 4 0 integer
-func __cls_m_Adc#setInterface(zzz)V 1725
+func __cls_m_Adc#setInterface(zzz)V 1735
 this -32 8 0 ?
 altSync -24 4 0 boolean
 ioStrength -20 4 0 boolean
 contRead -16 4 0 boolean
-func __cls_m_Adc#readData()i 1745
+func __cls_m_Adc#readData()i 1755
 this -20 8 0 ?
-func __cls_m_Adc#wreg16(ii)V 1762
+func __cls_m_Adc#wreg16(ii)V 1772
 this -28 8 0 ?
 register -20 4 0 integer
 value -16 4 0 integer
-func __cls_m_Adc#waitReadyMax(ii)z 1780
+func __cls_m_Adc#waitReadyMax(ii)z 1790
 this -28 8 0 ?
 maxIter -20 4 0 integer
 stepMs -16 4 0 integer
-func __cls_m_Adc#isReady()z 1801
+func __cls_m_Adc#isReady()z 1811
 this -20 8 0 ?
-func __cls_m_Adc#leerPowerV()f 1818
+func __cls_m_Adc#leerPowerV()f 1828
 this -20 8 0 ?
-func __cls_m_Adc#setMode(ziii)V 1835
+func __cls_m_Adc#setMode(ziii)V 1845
 this -36 8 0 ?
 intRef -28 4 0 boolean
 delay -24 4 0 integer
 mode -20 4 0 integer
 clock -16 4 0 integer
-func __cls_m_Adc#wreg(i[ii)V 1857
+func __cls_m_Adc#wreg(i[ii)V 1867
 this -36 8 0 ?
 register -28 4 0 integer
 data -24 8 0 ref
 n -16 4 0 integer
-func __cls_m_Adc#leerId()i 1878
+func __cls_m_Adc#leerId()i 1888
 this -20 8 0 ?
-func __cls_m_Adc#setChannel(iziii)V 1895
+func __cls_m_Adc#setChannel(iziii)V 1905
 this -40 8 0 ?
 channel -32 4 0 integer
 enab -28 4 0 boolean
 setupSel -24 4 0 integer
 ainp -20 4 0 integer
 ainn -16 4 0 integer
-func __cls_m_Adc#test0()i 1919
+func __cls_m_Adc#test0()i 1929
 this -20 8 0 ?
-func __cls_m_Adc#enabled()V 1936
+func __cls_m_Adc#enabled()V 1946
 this -20 8 0 ?
-func __cls_m_Adc#leerStatus()i 1950
+func __cls_m_Adc#leerStatus()i 1960
 this -20 8 0 ?
-func __cls_m_Adc#setChSetup(iii)V 1967
+func __cls_m_Adc#setChSetup(iii)V 1977
 this -32 8 0 ?
 channel -24 4 0 integer
 bipolar -20 4 0 integer
 ref -16 4 0 integer
-func __cls_m_Adc#setSPS(ii)V 1987
+func __cls_m_Adc#setSPS(ii)V 1997
 this -28 8 0 ?
 channel -20 4 0 integer
 sps -16 4 0 integer
-func __cls_m_Adc#rreg(ii)[i 2005
+func __cls_m_Adc#rreg(ii)[i 2015
 this -28 8 0 ?
 register -20 4 0 integer
 n -16 4 0 integer
-func __cls_m_Adc#reset()V 2028
+func __cls_m_Adc#reset()V 2038
 this -20 8 0 ?
-func __cls_m_Adc#rreg16(i)i 2042
+func __cls_m_Adc#rreg16(i)i 2052
 this -24 8 0 ?
 register -16 4 0 integer
-func __cls_m_Adc#disabled()V 2061
+func __cls_m_Adc#disabled()V 2071
 this -20 8 0 ?
-func __cls_m_Adc#waitReady()V 2075
+func __cls_m_Adc#waitReady()V 2085
 this -20 8 0 ?

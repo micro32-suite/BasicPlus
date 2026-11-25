@@ -212,6 +212,17 @@ cp "$RAIZ/docs/en/"*.html.md "$OUT/docs/en/"
 # --- firmware: las imágenes SELLADAS, no las de los directorios de compilación
 cp "$RAIZ/dist/firmware/"*.uf2 "$RAIZ/dist/firmware/"*.bin \
    "$RAIZ/dist/firmware/SHA256SUMS.txt" "$OUT/firmware/"
+# V9 #910 — y que sean las de esta stdlib: una imagen repone en cada arranque su I2c, su Gpio…, delante del Stdlib.pack.
+# En un ZIP de prueba (MONTAR_ETIQUETA), sólo se dice: las imágenes se rehacen al publicar.
+if ! python -I -X utf8 "$RAIZ/bpgenvm-c/scripts/check_mods_embebidos.py" --imagenes "$OUT/firmware" > "$OUT/../imagenes.txt"; then
+    echo "  AVISO: imágenes que no llevan la stdlib de hoy:" >&2
+    grep FALLO "$OUT/../imagenes.txt" | sed 's/^/    /' >&2
+    if [ -z "${MONTAR_ETIQUETA:-}" ]; then
+        echo "  ERROR: no se publica con ellas: se rehacen (y dist/firmware, con ellas)" >&2
+        rm -f "$OUT/../imagenes.txt"; rm -rf "$OUT"; exit 1
+    fi
+fi
+rm -f "$OUT/../imagenes.txt"
 # El README de dist/firmware es la nota INTERNA (habla de H13, PUBLICAR.md, «ayer»):
 # al usuario le vale INSTALAR_FIRMWARE.md, que viaja en docs/. Un LEEME corto apunta.
 cat > "$OUT/firmware/LEEME.md" <<'LEEME'

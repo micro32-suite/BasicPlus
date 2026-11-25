@@ -1650,6 +1650,21 @@ end wheel
 
 **Where.** On the **PC**, the mouse of the GUI window, only with a mouse connected: the simulated one from [`Air.Bluetooth`](#stdlib-air-bt), «Ratón simulado». As a touch screen, the window stays the same: the GUI buttons and fields respond to the PC mouse, connected or not. Without a GUI there is no mouse on the PC. In a program with a GUI, the GUI itself takes the mouse to its controls, with an arrow, and with «Ratón simulado» the PC mouse stops acting as a touch screen ([gui.html §22.6](gui.html.md#ev-teclado)). On the **boards with Bluetooth and a screen** (the P4 and the C5, [§14.19](#stdlib-air-bt)), a Bluetooth mouse, with the GUI's arrow; on the S3, which has no screen, it connects but does nothing. When fully asleep, a click wakes it up.
 
+<a id="stdlib-devices"></a>
+### 14.22 The devices: `bpdevices`
+
+The installation brings the libraries of some devices, with their source, in `bpdevices/`. They are imported like those of the library (`import Bmp280`), but they do not live on the board: they belong to the program, and the IDE and `bp` upload them with it. On the PC, the compiler leaves their copy beside the program, in its output folder (V9). The I2C ones ask for a bus ([§14.3](#stdlib-i2c)): an `I2c.HardI2C` or a software one. Their whole API, with `bp api Bmp280`.
+
+| Module | What it is | How it is used |
+|---|---|---|
+| `Bmp280` | Pressure and temperature: Bosch BMP280 (and BME280, without its humidity). I2C, `0x76` or `0x77` | `Bmp280.Sensor(bus, 0x76)`: `begin(): boolean` (is it there?), `measure()` and then `temperature()`, in °C, and `pressure()`, in hPa (`double`) |
+| `Bme688` | Temperature, humidity, pressure and gas: Bosch BME680 and BME688. I2C, `0x76` or `0x77` | `Bme688.Sensor(bus, 0x76)`: the same, plus `humidity()`, in %, `gas()`, in ohms, and `airIndex()`, from 0 to 100 (approximate: it does not measure CO2) |
+| `Mcp9804` | Temperature: Microchip MCP9804. I2C, from `0x18` to `0x1F` | `Mcp9804.Sensor(bus, 0x18)`: `readTemp(): float`, in °C |
+| `Pca9554` | Eight input/output pins: PCA9554, from `0x20` to `0x27`, and PCA9554A, from `0x38` to `0x3F`. I2C | `Pca9554.Expander(bus, 0x20)`: `setDir(m)` (each bit a pin: 1, input; 0, output), `writeOut(v)` and `readIn()` |
+| `Ad7177` | A 24-bit converter: Analog Devices AD7177-2. SPI, mode 3 | `Ad7177.Adc(bus, cs, sync)`: `leerId()`, `leerPowerV()`, in volts, and its registers (`rreg`, `wreg`, `readData`…) |
+
+The examples: `samples/Bmp280Demo.bp`, `samples/Bme688Demo.bp`, `samples/tempread.bp`, `samples/adcid.bp` and `samples/adcpower.bp`. To test without the sensor, a class of yours that extends `I2c.I2C` and answers as it would is a valid bus: that is all the library asks for.
+
 <a id="seguir"></a>
 ## Where to go next
 
@@ -2007,7 +2022,7 @@ Fields:
 - `sourceDir` (string, **required**): directory with the project's `.bp` files.
 - `outDir` (string, **required**): directory where the compiler emits the `.mod` files. Created on demand.
 - `main` (string, **required**): the logical name of the main module (without extension). The compiler looks for `<sourceDir>/<main>.bp`.
-- `dependencies` (array of strings, optional): each entry is a directory (looks for any `.mod` inside when resolving imports) or a specific `.mod` file.
+- `dependencies` (array of strings, optional): each entry is a directory (looks for any `.mod` inside when resolving imports) or a specific `.mod` file. The one the program imports is copied to `outDir` (V9), which is where the PC's VMs look for it; if it changes, it is copied again when compiling.
 - `version` (integer, optional; V7): the project's **generation**. Every `.mod` it compiles carries it in its header, and the version rule (§17.1) uses it: a dependency older than the one the module needs is rejected at load time. Without it, 0. It is not the `"version"` of the `"pack"` section (§15.3), which is free text.
 
 **Import resolution in project mode**:

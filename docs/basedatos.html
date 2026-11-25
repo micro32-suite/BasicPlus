@@ -292,9 +292,10 @@
   ejemplos de esta página corren sin placa. Uno hecho antes de V9 no lo tiene, porque el pack entero no le
   cabía (<em>«falta el modulo 'SQLite'»</em>): grábaselo una vez, con el gestor de packs o con
   <code>bp placa sim pack SQLite</code>. Si construyes tú el simulador, es
-  <code>make sim LVGL=1 SQLITE=1</code>. La VM-C de línea de comandos
-  (<code>bpgenvm-c</code>) no lo lleva: la primera llamada lanza <em>«sql_open: falta el
-  codigo nativo del pack 'SQLI' v1»</em>.
+  <code>make sim LVGL=1 SQLITE=1</code>. Las dos VMs del PC no
+  lo llevan —<code>bp run</code> y <code>bp run --c</code>; <em>Run</em> y <em>Run Window</em>, en el IDE—: un programa con
+  SQLite acaba ahí con <em>«falta el modulo 'SQLite'»</em>. Sin placa, se ejecuta en el micro simulado:
+  <code>bp run --sim</code>.
 </p>
 
 <h2 id="sinorm">2. Sin ORM: hablar SQL directamente</h2>

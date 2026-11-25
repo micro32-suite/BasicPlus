@@ -698,3 +698,9 @@ they do not match, or the line is missing (an image older than V7), flash the
 image from this package —or, if the image is newer than the IDE, update the
 IDE—. (On the S3, which has no AOT, a V7 image says «sin receta», no
 recipe.) Info does not show the image's build date.
+
+The ABI does not change in every version: it is 9 from V7 to V9. If a program ends
+on the board with «lib 'I2c' presente pero no exporta…» and the board has that
+module in `/lib`, its image is of another version than the installation: flash it.
+The `Stdlib.pack` alone is not enough: the image puts its own modules back in
+`/lib` at every start —even if they are deleted—, and `/lib` goes before the packs.

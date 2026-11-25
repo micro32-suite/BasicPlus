@@ -10,8 +10,8 @@
 //   LSB: [T7..T0 : 8 bits]
 //
 // La resolución 1/16 LSB significa que el valor de 12 bits
-// dividido entre 16 da los grados. Para negativos se aplica la
-// fórmula 256 - magnitud (sign-magnitude del datasheet).
+// dividido entre 16 da los grados. El signo, en complemento a 2:
+// por debajo de cero, ese valor menos 256 grados.
 //
 // Uso, con un bus del periférico o por software (V9 H3):
 //   import I2c
@@ -47,8 +47,7 @@ module Mcp9804
       return this.bus
     end bus_
 
-    // Lee la temperatura en grados Celsius. Devuelve magnitud según
-    // el formato sign-magnitude del MCP9804.
+    // Lee la temperatura en grados Celsius.
     public function readTemp(): float
       // Los 2 bytes del registro 0x05 (Ambient Temperature): [MSB, LSB].
       var data: integer[] := [0, 0]
@@ -59,10 +58,10 @@ module Mcp9804
       msb := msb & 0x1F
       var temp: float := 0.0
       if (msb & 0x10) == 0x10 then
-        // Temperatura negativa: limpia el bit de sign y aplica la
-        // fórmula del datasheet (sign-magnitude).
+        // Por debajo de cero: sin el bit de signo, y menos 256. (V9 #911: el ejemplo de su hoja de datos lo da al revés,
+        // 256 menos lo leído, y -10 grados salían 10.)
         msb := msb & 0x0F
-        temp := 256.0 - (msb * 16.0 + lsb / 16.0)
+        temp := msb * 16.0 + lsb / 16.0 - 256.0
       else
         // Temperatura positiva.
         temp := msb * 16.0 + lsb / 16.0

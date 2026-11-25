@@ -677,3 +677,9 @@ aparece (una imagen anterior a V7), graba la imagen de este paquete —o, si la
 imagen es más nueva que el IDE, pon el IDE al día—. (En la S3, que no tiene
 AOT, una imagen de V7 dice «sin receta».) El Info no muestra la fecha de
 compilación de la imagen.
+
+La ABI no cambia en cada versión: es la 9 de V7 a V9. Si un programa acaba en la
+placa con «lib 'I2c' presente pero no exporta…» y la placa tiene ese módulo en
+`/lib`, su imagen es de otra versión que la instalación: grábala. El
+`Stdlib.pack` solo no basta: la imagen repone los suyos en `/lib` en cada
+arranque —aunque se borren—, y `/lib` va antes que los packs.

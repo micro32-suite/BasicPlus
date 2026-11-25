@@ -82,7 +82,7 @@ en §ABIERTAS, en el bloque de V9:
 
 | hito | qué | estado |
 |---|---|---|
-| **H1** | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`) | ⏳ abierto el 22-nov; los diez apartados, hechos el 25-nov, y la prueba de la base de datos; a falta de que Eduardo vea los últimos, de preguntar a las placas que no estaban (`#861`) y de la prueba final, la de una IA sin contexto con el ZIP nuevo |
+| **H1** | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`) | ⏳ abierto el 22-nov; los diez apartados, hechos el 25-nov, y la prueba de la base de datos; la prueba final, la de una IA sin contexto con el ZIP nuevo, hecha el 25-nov (los seis puntos; lo que encontró, `#902` a `#911`); a falta de que Eduardo vea los últimos y de preguntar a las placas que no estaban (`#861`) |
 | **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA; cada acción del IDE, un comando, con la `Action` de Swing como su cara en la ventana y MCP como la de la IA (Eduardo, 22-nov). Va antes que el H1 | ⏳ abierto el 22-nov; H2.1, el análisis, H2.2, los comandos (53, probados por Eduardo), y H2.3, la IA por MCP (probado por una IA de verdad en la Pico 2 y en la VM-C), hechos; H2.4 (el depurador, por la IA), analizado y aplazado a una segunda fase (23-nov; el 25, fuera de la V8.5): lo que haga falta, lo dirá el uso, en el H1 |
 | **H3** | **el I2C y el SPI por software** (Eduardo, 24-nov): una clase base por bus, la del periférico y la de software, que se intercambian cambiando sólo el constructor; las de software, cada una en su módulo (`#881`–`#884`) | ⏳ abierto el 24-nov; el I2C, hecho y visto en las tres familias con un sensor; el SPI, analizado |
 
@@ -13896,6 +13896,18 @@ y en la SD: los datos siguen entre ejecuciones (4 arranques, 56 lecturas) y los 
 (`integrity_check`); una transacción de 100 lecturas, 1005 ms en la flash y 86 en la SD. Lo que encontró: `#896`, `#897`,
 `#898` y, al arreglarlas, `#899`. La placa, como estaba (`SQLite=4` y el pack de la GUI).
 
+**La prueba final** (25-nov por la tarde; la lanzó Eduardo, en una sesión nueva, con el ZIP de prueba y la P4 de Waveshare): los
+seis puntos, hechos, en un cuarto de hora (su informe, `C:\tmp\prueba_Ia\v85\INFORME.md`). El inventario, en dos vueltas de
+compilación; el termostato, a la primera; en JC, escrito como Java, seis vueltas; el proyecto de varios módulos, con su sensor
+simulado, su hilo, sus `native` y su `.win`, en tres, con cuatro pruebas bien en las dos VMs; los pines, preguntados a la placa; y
+la base de datos en la P4, con SQL y con el ORM, con los datos que siguen tras reiniciarla (el pack ya estaba: grabarlo no lo
+hizo). *«Los mensajes del compilador son lo mejor: casi siempre dicen la forma correcta, y `bp api` evita inventarse métodos.»* Lo
+que le costó: el formulario `.win`, `bpdevices` y el I2C de la placa. Lo que encontró, abajo: de `#903` a `#906` y `#908`; y al
+comprobarlo, `#902` —la placa se reiniciaba—, `#907`, `#909`, `#910` y `#911`. Dos cosas las diagnosticó mal: el `/lib/I2c.mod`
+«viejo» que borró y el escaneo que no veía a nadie eran lo mismo, una imagen anterior a la instalación (`#907`). **La red**, VERDE
+(16:58, con todo): la paridad, 221 de 221; MOD8, 212 y los 9 de siempre; dos workers, 221; las pruebas de C, 117; el sim, 16; la
+sombra, 15; el estrés; y los fragmentos de los documentos, 0 FALLO.
+
 #### ✅ `#852` — H1.1: `Gui.__guiClick` desde `Main`, con el lazo de `Gui.start()` en marcha, se pierde sin ventana (abierta el 22-nov · F-1 del análisis · **CERRADA el 22-nov**, `333c8f0d`: el error que dice qué hacer)
 
 El caso, `verificacion/sonda-gui/ClickT.bp` del análisis: el manejador del botón suscrito, `Gui.start()`, 100 ms, el clic
@@ -15126,6 +15138,104 @@ mantiene sola.»*
 - **Hecho:** el nombre, con su `library`; y el del main de un proyecto, del fuente (`BpBuild.modDelMain`). **Probado** con un
   proyecto `library "mio"` que tiene su propio módulo `Log` (`import mio.Log`): `bp run`, `--c`, `--sim`, Run, y Run on
   Device en el simulado, dos veces; usa el suyo, y el `Log` de la stdlib sigue en su sitio. `ProyectoDaoTest`.
+
+#### 🧬 `#902` — las ESP32 de dos núcleos: tras una operación del I2C que nadie contesta, la siguiente podía darse por hecha sin estarlo, y la placa se reiniciaba (abierta el 25-nov · al repetir el punto 5 de la prueba final con la imagen nueva en la P4 · de antes: también en lo publicado · hecha el mismo día, `394dfb7` del runtime, y medida en la P4; falta la S3, y que Eduardo toque la pantalla y oiga el sonido de la P4)
+
+- **Qué pasa:** una operación que nadie contesta acaba en su STOP, y el IDF (6.1) vuelve en cuanto el bus queda libre: ni espera
+  la interrupción de ese STOP, que se levanta un poco después, ni la limpia. Queda pendiente, y salta al poner las suyas la
+  operación SIGUIENTE; con dos núcleos, si su manejador corre en el otro, llega después de que el IDF vacíe su cola, y la nueva la
+  toma por su final. Se da por hecha sin estarlo: un sondeo dice que sí a una dirección vacía, y una lectura vuelve al instante;
+  al acabar de verdad, el manejador escribe lo leído en la pila de quien ya se fue (*Load access fault*: «causa del reset =
+  panic/exception»).
+- **Medido en la P4**, con el códec del sonido (0x18) en el I2C de la placa, y el mismo programa antes y después: 400 sondeos de
+  una dirección vacía, 10 decían que sí; 200 lecturas tras un «no», la placa se reiniciaba sin acabar; 12 escaneos, de 3 a 6
+  dispositivos (son 3). Después: 0, 200 bien y 3 en los 12; y con la GUI y su táctil en marcha, 160 escaneos (18 000 sondeos),
+  ninguno de más. La imagen de antes (la de V8 en adelante), con un byte de lectura en vez del sondeo, también veía uno de más
+  (62).
+- **Hecho**, sin tocar el IDF: tras un fallo, se espera a que acabe el STOP —y el tiempo de un bit— y se limpia lo pendiente
+  (`esp32_i2c_tras_un_no`, `gpio_esp32.c`), con el turno del bus tomado. El táctil y el códec de la P4 hablaban por el mismo bus
+  del IDF sin turno: ahora lo piden (`pant_touch`: si está tomado, repite lo último leído). Las cinco imágenes, compiladas.
+
+#### ✅ `#903` — un dispositivo de `bpdevices` (o un módulo de `"dependencies"`) se compila y no se ejecuta en el PC: «falta el modulo 'Mcp9804'» (abierta el 25-nov · la prueba final, su punto 4 · de antes: también en lo publicado, en el Run del IDE · hecha y **CERRADA** el mismo día, `936b3ef` de `toolchain`)
+
+- El compilador lo encuentra (`devicesDir`, `dependencies`) y las VMs del PC no: buscan en la carpeta del programa, en la stdlib y
+  en los packs (`#493`). A una placa sí llega (el IDE lo sube con el programa) y en un pack también. No se veía porque las pruebas
+  de esas librerías se hacían en placa.
+- **Hecho:** al compilar bien, el compilador deja junto al programa la copia de lo que usa de fuera, y de lo que eso importa
+  (`Main.traeLosDeFuera`); si el original cambia, manda el original y la copia se rehace; uno del proyecto con ese nombre es suyo.
+  La referencia lo dice (§14.22 y §17.5). **Probado:** `LosDeFueraTest`; en las dos VMs, `bp run`, y el proyecto de la prueba con
+  su comprobación contra el driver en `tests/`, 5 de 5 con `bp test`. De 420 fuentes, los `.mod`, idénticos; en los 10 que usan un
+  dispositivo, además, el suyo. De paso, los cinco `.mod` de `bpdevices`, al día.
+
+#### ✅ `#904` — los mensajes que enseñan, segunda vuelta: lo que no dijo cómo se escribe en la prueba final, y lo que salió al barrer lo demás (abierta el 25-nov · hecha y **CERRADA** el mismo día, `936b3ef` de `toolchain`)
+
+- **De la prueba:** `>>` (en BP, `shr`), `RuntimeException` (`RuntimeError`), una estática llamada sin su clase, y el `main` dentro
+  de una clase. Al leer el informe se barrieron 69 construcciones de Java, C# y otros BASIC en BP y 90 en JC, y las que se
+  callaban, también: en BP, `<<`, `>>=`, `&&`, `||`, `!`, `%`, `~`, `? :`, `new X()`, `(integer) x`, `is`, `'…'`, `$"…"`, `#`, `'` y
+  `REM`, `else if`, el `for` de C, `select case`, `s[0]`, `nil`, `println`, `System.currentTimeMillis()` y las excepciones de Java y
+  C#; en JC, `synchronized`, `lock`, `as`, `>>>`, el nombre de un bucle delante y el `catch` de varias. Cada uno, un solo error
+  (el operador ajeno se lee como el de BP, y no vienen otros detrás).
+- `bp run` de un programa que usa un módulo de un pack (`SQLite`) lo dice antes de que falle: que las VMs del PC no lo cargan, y
+  `bp run --sim`.
+- **Probado:** `MensajesQueEnsenanTest` (8 más); la suite, 463; los 165 ejemplos de error, como antes.
+
+#### ✅ `#905` — un formulario `.win` sale corrido, con barras de desplazamiento y lo de abajo y la derecha cortado: también el ejemplo de la guía (abierta el 25-nov · la prueba final, su punto 4 · de antes: desde que hay formularios · hecha y **CERRADA** el mismo día, `Gui.mod`)
+
+- La ventana (`Gui.Window`) es un panel del tema de LVGL, con su borde y su margen por dentro, y `load()` daba a la raíz del
+  formulario el tamaño de la pantalla entera, en su esquina: no cabía. La IA lo arregló a ojo, encogiendo la raíz tras mirar tres
+  capturas. Sin mirar el píxel no se ve: el árbol está bien.
+- **Hecho** (`Gui.bp`): la raíz sin medidas ni sitio, centrada en la ventana, la cubre entera, y la ventana no se desplaza. Cambia
+  su línea en el volcado (`align=4`). **Probado:** la captura del ejemplo de la guía, antes y después, y en las dos VMs la misma
+  salida. El `Stdlib.pack`, rehecho; en una placa, con él.
+
+#### ✅ `#906` — con `--no-screen`, `Gui.shot` captura en la VM-C y en la VM Java lanza «sin pantalla»: el mismo programa, distinto (abierta el 25-nov · la prueba final, su punto 2 · hecha y **CERRADA** el mismo día, `936b3ef` de `toolchain`)
+
+- Una prueba con captura no podía pasar en `bp test`. **Hecho:** con `--no-screen`, la VM Java pinta su pantalla fuera, como la
+  VM-C; un *headless* a secas (el arnés de paridad, frente a una VM-C sin LVGL) sigue sin pantalla. **Probado:** `GuiShot` y el
+  formulario, la misma salida en las dos, y sus capturas, miradas.
+
+#### 🧬 `#907` — una placa con la imagen de otra versión que la instalación: los módulos que la imagen repone en `/lib` tapan a los del `Stdlib.pack`, y nada lo dice (abierta el 25-nov · la prueba final, su punto 5 · la ayuda, hecha el mismo día, `936b3ef` de `toolchain` · por decidir Eduardo: que la placa diga su versión)
+
+- **Lo que pasó:** la P4 llevaba la imagen del 22-nov (la `I2c` de V8) y el `Stdlib.pack` de hoy. El programa de la IA no enlazó
+  («lib 'I2c' presente pero no exporta 'I2c.__cls_new_HardI2C(iiii)'»); la guía decía que era un pack viejo, y el pack era de hoy.
+  Encontró y borró `/lib/I2c.mod`, y fue; al reiniciar, la imagen lo repuso (`bpvm_mods`: lo suyo, en cada arranque). Con el `I2c`
+  nuevo del pack y la imagen vieja, el escaneo daba 0: el sondeo nuevo necesita la imagen nueva (`#888`). La regla de subida
+  (`#624`) se queda como está (*«Yo mantendría lo que tenemos»*, 23-nov).
+- **Hecho:** si un programa no enlaza con una librería de la placa en otra compilación, el IDE y `bp` dicen de dónde la carga y qué
+  hacer (`Despliegue.pista`): la de un pack, regrabar el pack; la de `/lib`, borrarla y, si vuelve, grabar la imagen de esta
+  instalación. La guía para IA e `INSTALAR_FIRMWARE`, igual. `SubidaSmoke`. La P4, grabada con la imagen de hoy (Eduardo: *«Puedes
+  grabar la imagen en la P4»*): `/lib/I2c.mod` fuera, «lo sirve el pack», y el punto 5 va.
+- **Por decidir:** que la imagen diga su versión al conectar (un campo del HELLO), y el IDE avise si es otra que la de la
+  instalación; una imagen sin ese campo es anterior a la 8.5. Hoy nadie lo puede saber: la ABI del Info es la 9 de V7 a V9.
+
+#### ✅ `#908` — la documentación que le faltó o le engañó a la IA de la prueba final (abierta el 25-nov · hecha y **CERRADA** el mismo día)
+
+- **Mal dicho:** en la guía para IA, que no hay mapa genérico (lo hay desde V8: `Collections.Map<string, Item>`) y el remedio de
+  «presente pero no exporta» (`#907`); en la de las bases de datos, que sólo la VM-C del PC no lleva SQLite (ninguna de las dos).
+- **Lo que no estaba:** las librerías de `bpdevices`, en ningún sitio (la referencia, §14.22); las claves del `.win` (la guía de la
+  GUI, §22.7); el bus que es de la placa (`PLACAS`: el I2C 0 de las P4, el de la C5 y el I2C 2 de la DK2); que una clase sólo usa lo
+  público de su módulo (la chuleta y la guía); lo que hay en `Thread`; y que `^` es la potencia, no el *xor*.
+- **La guía vieja:** la carpeta de la prueba tenía la de un ZIP anterior, y la IA trabajó media prueba con ella (el IDE la pone al
+  día al abrirse, `#893`). La copia que deja el IDE dice ahora, bajo el título, cuál es la de ahora. `GuiaIaSmoke`.
+
+#### ⬜ `#909` — un `Panel` se desplaza aunque su `scrollDir` sea `NONE` (abierta el 25-nov · vista al mirar `#905` · de siempre · por decidir Eduardo)
+
+- La guía (§19.4) y `Gui.bp` dicen que el desplazamiento es opcional y por defecto `NONE`, y `scrollDir` da 0; pero en LVGL un
+  objeto nace desplazable en las dos direcciones, con sus barras si no cabe, y nadie se lo quita. Hacerlo verdad puede romper a
+  quien hoy se desplaza por un panel que no cabe (también lo hace la rueda del ratón, §22.6); dejarlo, pide decirlo: que nazca
+  `BOTH`. Recomendado: lo segundo.
+
+#### ✅ `#910` — el ZIP de prueba de la V8.5 llevaba las nueve imágenes de la V8.1, y nadie lo dijo (abierta el 25-nov · al ir a grabar la P4 · hecha y **CERRADA** el mismo día, `394dfb7` del runtime)
+
+- `dist/firmware` no se toca hasta publicar, y `montar-zip.sh` copia lo que haya: en uno de prueba era de esperar, pero en uno de
+  verdad no lo habría visto nadie (la red mira los fuentes generados, no las imágenes). **Hecho:** `check_mods_embebidos.py
+  --imagenes` mira si cada imagen lleva byte a byte los módulos de `bpstdlib` que repone; al montar, en uno de prueba se dice y en
+  uno de verdad no se publica. Con las de la V8.1, las nueve: «no lleva la de hoy de I2c.mod»; con la P4 y la Pico 2 de hoy, bien.
+
+#### ✅ `#911` — `Mcp9804`: por debajo de cero, la temperatura salía en positivo (abierta el 25-nov · al leer la librería para documentarla · de antes: también en lo publicado · hecha y **CERRADA** el mismo día)
+
+- El ejemplo de la hoja de datos del fabricante da 256 menos lo leído, y es al revés: −10 °C salían 10. **Probado** con un bus que
+  contesta como el sensor, en las dos VMs: −0,0625, −10,5 y −40 (antes, 0,0625, 10,5 y 40).
 
 #### 🧬 `#893` — la guía para IA que el IDE deja en una carpeta no se pone al día: se queda la de la primera vez (abierta el 25-nov · vista en la carpeta de pruebas: la del 23 no sabía de packs ni de guiones · hecha el mismo día)
 

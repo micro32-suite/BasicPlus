@@ -132,7 +132,7 @@ La imagen: `bpvm_esp32c5_merged.bin`.
 | UART | 1: cualquiera de los del programa |
 | Del sistema: no son para el programa | 13-14: el cable del IDE (el wire); 15-22: la flash o la PSRAM |
 
-La pantalla, su táctil y la ranura TF van por pines de los del programa: los de sus líneas del ENV ([las líneas del panel](INSTALAR_FIRMWARE.md#panel-spi)), y su página los nombra.
+La pantalla, su táctil y la ranura TF van por pines de los del programa: los de sus líneas del ENV ([las líneas del panel](INSTALAR_FIRMWARE.md#panel-spi)), y su página los nombra. El I2C 0, el único, es de la placa (el táctil y el expansor), en el 0 (SDA) y el 1 (SCL), a 400 kHz, por su línea `i2c0` del ENV, y se comparte: `I2c.HardI2C(0, 0, 1, 400000)`; o uno por software en otros dos pines.
 
 Su documentación:
 
@@ -162,6 +162,8 @@ La imagen: `bpvm_esp32p4_merged.bin`.
 
 *(a falta de preguntárselo a la placa)*
 
+El I2C 0 es de la placa (el táctil), en el 7 (SDA) y el 8 (SCL), a 100 kHz, y se comparte: `I2c.HardI2C(0, 7, 8, 100000)` lo usa con ella (sus direcciones, ya cogidas). Para un sensor tuyo, mejor el I2C 1, en otros dos: `I2c.HardI2C(1, 28, 29, 100000)`.
+
 Su documentación:
 
 - [La placa y sus pines](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4-function-ev-board/user_guide.html)
@@ -186,6 +188,8 @@ La imagen: `bpvm_esp32p4_merged.bin`.
 | UART | 1, 2: cualquiera de los del programa |
 | Del sistema: no son para el programa | 9-10, 12-13, 53: el sonido; 14-19, 54: la radio; 26-27: la pantalla; 37-38: el cable del IDE (el wire) |
 
+El I2C 0 es de la placa (el táctil y el sonido), en el 7 (SDA) y el 8 (SCL), a 100 kHz, y se comparte: `I2c.HardI2C(0, 7, 8, 100000)` lo usa con ella (sus direcciones, ya cogidas). Para un sensor tuyo, mejor el I2C 1, en otros dos: `I2c.HardI2C(1, 28, 29, 100000)`.
+
 Su documentación:
 
 - [La placa y su conector de 40 pines](https://docs.waveshare.com/ESP32-P4-WIFI6-Touch-LCD-4.3)
@@ -198,6 +202,8 @@ Su documentación:
 La imagen: `bpvm_esp32p4x_merged.bin`.
 
 *(a falta de preguntárselo a la placa)*
+
+El I2C 0 es de la placa (el táctil), en el 7 (SDA) y el 8 (SCL), a 100 kHz, y se comparte: `I2c.HardI2C(0, 7, 8, 100000)` lo usa con ella (sus direcciones, ya cogidas). Para un sensor tuyo, mejor el I2C 1, en otros dos: `I2c.HardI2C(1, 28, 29, 100000)`.
 
 Su documentación:
 
@@ -263,6 +269,8 @@ La imagen: `bpvm_stm32_dk2.bin`.
 | UART 5 | TX PC12 · RX PD2 |
 | UART 6 | TX PC3, PF0 · RX PC2, PF1 |
 | Del sistema: no son para el programa | PA9-PA10: el cable del IDE (el wire); PB2, PB9, PC6-PC9, PD0-PD1, PD3, PD6, PD8-PD15, PE0, PE4-PE15: la pantalla |
+
+El I2C 2 es de la placa (el táctil), en PF0 (SDA) y PF1 (SCL), a 100 kHz, y se comparte; los demás, del programa.
 
 Su documentación:
 

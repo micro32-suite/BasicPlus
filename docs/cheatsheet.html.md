@@ -86,7 +86,7 @@ var err: boolean, v: integer
 { err, v } := Str.parseInt("123")   // (error?, value): false 123
 ```
 
-> **Public by default? No — private.** Only what you mark `public` leaves the module.
+> **Public by default? No — private.** Only what you mark `public` leaves the module. And a class, even one of the same module, uses only the `public` functions, variables and constants of its module.
 
 ## Classes
 
@@ -189,7 +189,7 @@ print l[0].value()         // l.get(0): no cast to write
 l[0] := Sensor(5)          // l.set(0, …)
 ```
 
-> `<Sensor>` is an order to the compiler: same class, same VM. What goes in must be a `Sensor`, and what comes out is one. Inside `< >` goes a class, an interface or `string`; a number goes in its box, `List<Integer>`. A new class opts in with `@element{Base}`. On any object, `x[i]` is `x.get(i)` and `x.pin[i]` is `x.getPin(i)`; it looks like an array and costs a call.
+> `<Sensor>` is an order to the compiler: same class, same VM. What goes in must be a `Sensor`, and what comes out is one. Inside `< >` goes a class, an interface or `string`; a number goes in its box, `List<Integer>`. A map takes two: `Collections.Map<string, Sensor>` (its key, `string` or `integer`). A new class opts in with `@element{Base}`. On any object, `x[i]` is `x.get(i)` and `x.pin[i]` is `x.getPin(i)`; it looks like an array and costs a call.
 
 ## Native: real machine code
 

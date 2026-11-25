@@ -61,8 +61,8 @@
    "id": "esp32c5",
    "nombre": "Waveshare ESP32-C5-Touch-LCD-2.8",
    "imagen": "bpvm_esp32c5_merged.bin",
-   "nota_es": "La pantalla, su táctil y la ranura TF van por pines de los del programa: los de sus líneas del ENV ([las líneas del panel](INSTALAR_FIRMWARE.md#panel-spi)), y su página los nombra.",
-   "nota_en": "The display, its touch and the TF slot go through pins of the program's: those of its ENV lines ([the panel lines](INSTALAR_FIRMWARE.md#panel-spi)), and its page names them.",
+   "nota_es": "La pantalla, su táctil y la ranura TF van por pines de los del programa: los de sus líneas del ENV ([las líneas del panel](INSTALAR_FIRMWARE.md#panel-spi)), y su página los nombra. El I2C 0, el único, es de la placa (el táctil y el expansor), en el 0 (SDA) y el 1 (SCL), a 400 kHz, por su línea `i2c0` del ENV, y se comparte: `I2c.HardI2C(0, 0, 1, 400000)`; o uno por software en otros dos pines.",
+   "nota_en": "The display, its touch and the TF slot go through pins of the program's: those of its ENV lines ([the panel lines](INSTALAR_FIRMWARE.md#panel-spi)), and its page names them. I2C 0, the only one, is the board's (the touch and the expander), on 0 (SDA) and 1 (SCL), at 400 kHz, by its ENV line `i2c0`, and it is shared: `I2c.HardI2C(0, 0, 1, 400000)`; or a software one on another two pins.",
    "enlaces": [
     ["La placa, sus periféricos y sus pines", "The board, its peripherals and their pins", "https://docs.waveshare.com/ESP32-C5-Touch-LCD-2.8"],
     ["El esquema y las hojas de datos", "The schematic and the datasheets", "https://docs.waveshare.com/ESP32-C5-Touch-LCD-2.8/Resources-And-Documents"],
@@ -87,6 +87,8 @@
    "id": "esp32p4-kit",
    "nombre": "ESP32-P4-Function-EV",
    "imagen": "bpvm_esp32p4_merged.bin",
+   "nota_es": "El I2C 0 es de la placa (el táctil), en el 7 (SDA) y el 8 (SCL), a 100 kHz, y se comparte: `I2c.HardI2C(0, 7, 8, 100000)` lo usa con ella (sus direcciones, ya cogidas). Para un sensor tuyo, mejor el I2C 1, en otros dos: `I2c.HardI2C(1, 28, 29, 100000)`.",
+   "nota_en": "I2C 0 is the board's (the touch), on 7 (SDA) and 8 (SCL), at 100 kHz, and it is shared: `I2c.HardI2C(0, 7, 8, 100000)` uses it along with the board (its addresses are taken). For a sensor of yours, better I2C 1, on another two: `I2c.HardI2C(1, 28, 29, 100000)`.",
    "enlaces": [
     ["La placa y sus pines", "The board and its pins", "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4-function-ev-board/user_guide.html"],
     ["El esquema (PDF)", "The schematic (PDF)", "https://dl.espressif.com/dl/schematics/esp32-p4-function-ev-board-schematics_v1.5.2.pdf"],
@@ -98,6 +100,8 @@
    "id": "esp32p4-waveshare",
    "nombre": "Waveshare ESP32-P4-WIFI6-Touch-LCD-4.3",
    "imagen": "bpvm_esp32p4_merged.bin",
+   "nota_es": "El I2C 0 es de la placa (el táctil y el sonido), en el 7 (SDA) y el 8 (SCL), a 100 kHz, y se comparte: `I2c.HardI2C(0, 7, 8, 100000)` lo usa con ella (sus direcciones, ya cogidas). Para un sensor tuyo, mejor el I2C 1, en otros dos: `I2c.HardI2C(1, 28, 29, 100000)`.",
+   "nota_en": "I2C 0 is the board's (the touch and the sound), on 7 (SDA) and 8 (SCL), at 100 kHz, and it is shared: `I2c.HardI2C(0, 7, 8, 100000)` uses it along with the board (its addresses are taken). For a sensor of yours, better I2C 1, on another two: `I2c.HardI2C(1, 28, 29, 100000)`.",
    "enlaces": [
     ["La placa y su conector de 40 pines", "The board and its 40-pin header", "https://docs.waveshare.com/ESP32-P4-WIFI6-Touch-LCD-4.3"],
     ["El esquema (PDF)", "The schematic (PDF)", "https://files.waveshare.com/wiki/ESP32-P4-WIFI6-Touch-LCD-4.3/ESP32-P4-WIFI6-Touch-LCD-4.3-schematic.pdf"],
@@ -109,6 +113,8 @@
    "id": "esp32p4x",
    "nombre": "ESP32-P4X-Function-EV",
    "imagen": "bpvm_esp32p4x_merged.bin",
+   "nota_es": "El I2C 0 es de la placa (el táctil), en el 7 (SDA) y el 8 (SCL), a 100 kHz, y se comparte: `I2c.HardI2C(0, 7, 8, 100000)` lo usa con ella (sus direcciones, ya cogidas). Para un sensor tuyo, mejor el I2C 1, en otros dos: `I2c.HardI2C(1, 28, 29, 100000)`.",
+   "nota_en": "I2C 0 is the board's (the touch), on 7 (SDA) and 8 (SCL), at 100 kHz, and it is shared: `I2c.HardI2C(0, 7, 8, 100000)` uses it along with the board (its addresses are taken). For a sensor of yours, better I2C 1, on another two: `I2c.HardI2C(1, 28, 29, 100000)`.",
    "enlaces": [
     ["La placa y sus pines", "The board and its pins", "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4x-function-ev-board/user_guide.html"],
     ["Los GPIO de la P4: cuáles tienen condiciones", "The P4's GPIOs: which ones have conditions", "https://docs.espressif.com/projects/esp-idf/en/stable/esp32p4/api-reference/peripherals/gpio.html"],
@@ -131,6 +137,8 @@
    "id": "dk2",
    "nombre": "Discovery STM32U5G9J-DK2",
    "imagen": "bpvm_stm32_dk2.bin",
+   "nota_es": "El I2C 2 es de la placa (el táctil), en PF0 (SDA) y PF1 (SCL), a 100 kHz, y se comparte; los demás, del programa.",
+   "nota_en": "I2C 2 is the board's (the touch), on PF0 (SDA) and PF1 (SCL), at 100 kHz, and it is shared; the others are the program's.",
    "buses": "stm32u5g9",
    "enlaces": [
     ["Los pines de la placa, en texto (Zephyr)", "The board's pins, as text (Zephyr)", "https://docs.zephyrproject.org/latest/boards/st/stm32u5g9j_dk2/doc/index.html"],
