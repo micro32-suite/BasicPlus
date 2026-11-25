@@ -690,17 +690,23 @@ Formatting also wipes the `Stdlib.pack`: it goes first.
 
 ## Which version is on my board?
 
-IDE → Connect → **Info** button: the micro, flash, RAM and PSRAM, the packs'
-RAM block («RAM packs») and the image's **native ABI** («ABI nativo»). That
-last line says whether the image and the IDE match: «9 (la misma que genera
-este IDE)» (the same one this IDE generates) is a V7 image with a V7 IDE. If
-they do not match, or the line is missing (an image older than V7), flash the
-image from this package —or, if the image is newer than the IDE, update the
-IDE—. (On the S3, which has no AOT, a V7 image says «sin receta», no
-recipe.) Info does not show the image's build date.
+On connecting, the IDE says it in the panel's bar: «bpvm-esp32p4, imagen 8.5»
+(image 8.5). If it is not the installation's, it warns in the Console and says what
+to do: with an older image, new things may not link or not work, and you flash this
+package's; if the image is newer, bring the installation up to date. An image
+**older than 8.5 does not say its version**, and that is what you read: «imagen
+anterior a la 8.5».
 
-The ABI does not change in every version: it is 9 from V7 to V9. If a program ends
-on the board with «lib 'I2c' presente pero no exporta…» and the board has that
-module in `/lib`, its image is of another version than the installation: flash it.
-The `Stdlib.pack` alone is not enough: the image puts its own modules back in
-`/lib` at every start —even if they are deleted—, and `/lib` goes before the packs.
+It is also in the **Info** button («Versión») and in `bp placa COM22 info`; and
+`bp run --placa` warns if it is not the same one. Info also gives the micro, flash,
+RAM and PSRAM, the packs' RAM block («RAM packs») and the image's **native ABI**
+(«ABI nativo»): «9 (la misma que genera este IDE)» (the same one this IDE
+generates) means that the board loads the native code this IDE generates (it is 9
+from V7 to V9; on the S3, which has no AOT, «sin receta», no recipe). It does not
+show the image's build date.
+
+If a program ends on the board with «lib 'I2c' presente pero no exporta…» and the
+board has that module in `/lib`, its image is of another version than the
+installation: flash it. The `Stdlib.pack` alone is not enough: the image puts its
+own modules back in `/lib` at every start —even if they are deleted—, and `/lib`
+goes before the packs.

@@ -187,8 +187,15 @@ responde con `HELLO_REPLY` antes de aceptar ningún otro mensaje.
  "protoVersion":1,
  "serverName":"bpvm-pico",
  "serverBuild":"May 24 2026 12:23:07",
+ "version":"8.5",
  "capabilities":["FILES","TERMINAL","DEBUG","META"]}
 ```
+
+`version` (V9 `#907`, 25-nov; opcional): la versión de BasicPlus con que se compiló la imagen (o el micro simulado), la de
+`include/bpvm_version.h` del runtime, que es la del producto. La pone el común, así que la dicen las cuatro familias y
+el simulado. Con ella el IDE y `bp` avisan si no es la de la instalación: la imagen repone en cada arranque sus módulos de
+`/lib`, delante de los del `Stdlib.pack`, y con una de otra versión lo nuevo no enlaza. Una imagen sin este campo es anterior
+a la 8.5. La VM-Java no la dice: va con la instalación.
 
 `putChunk` y `putWindow` (V7/H8 `#495`, 1-oct; opcionales): el trozo, en bytes, y la ventana —cuántos `PUT_DATA` sin
 acuse— con que la placa quiere recibir la subida por trozos (§6.2). Los decide su búfer de comunicaciones: 512 B y 4 en

@@ -143,7 +143,7 @@ The IDE **autodetects** it (the standard Arm GNU Toolchain install location, or 
 <a id="placa"></a>
 ## 6. Connecting to the board
 
-In the Explorer: pick the *serial board (v1)* backend, the micro's COM port and press **Connect**. The tree shows the device's internal filesystem:
+In the Explorer: pick the *serial board (v1)* backend, the micro's COM port and press **Connect**. The panel's bar says who answers and the version of its image (V9: «bpvm-esp32p4, imagen 8.5», image 8.5). If it is not this installation's, the Console warns and says what to do: with an older one, new things may not link or not work (flash the installation's on the board). An image older than 8.5 does not say its version, and that is what you read («imagen anterior a la 8.5»). The tree shows the device's internal filesystem:
 
 - `/app` — your programs (uploaded `.mod`).
 - `/lib` — the standard library embedded in the firmware. The firmware restores it by itself on every boot, module by module: if it is missing, if the one there is an older version, or if it is the same version but different (size or CRC); a newer one —the one the IDE uploaded with a program that needs it— is left alone (except on the STM32, which empty `/lib` on every boot and restore it from the image: what the IDE uploaded does not survive a restart, and the next Run uploads it again). And with the `Stdlib.pack` burnt, whatever the pack serves with the same bytes **leaves `/lib`**: it is loaded from the pack, from flash, without spending RAM (§10.3). Whatever is in `/app` is never touched.

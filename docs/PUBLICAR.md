@@ -338,6 +338,9 @@ vez**.
 - [ ] **BpIde**: ⚠️ **con el IDE CERRADO**. `mvn install` en `miVM` y en
       `lexer-java`, luego `mvn package` en `BpIde`. La versión sale del pom
       (`BpIde-8.1.jar`; el `<version>` del pom es la versión del producto en curso).
+      La misma, en `bpgenvm-c/include/bpvm_version.h` **antes de compilar las
+      imágenes** (V9 `#907`: es la que dicen al conectar); la red mira que sean
+      iguales, y el empaquetador, que las imágenes lleven ésa.
 - [ ] **Micro simulado con LVGL y SQLite**: `cd bpgenvm-c && make sim LVGL=1 SQLITE=1`
       (con SQLite desde V6: los demos de BD corren sin placa).
       ⚠️ *Trampa (hallazgo 37)*: **sin `LVGL=1` el simulador ejecuta pero no

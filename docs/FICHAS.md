@@ -15198,7 +15198,7 @@ mantiene sola.»*
   VM-C; un *headless* a secas (el arnés de paridad, frente a una VM-C sin LVGL) sigue sin pantalla. **Probado:** `GuiShot` y el
   formulario, la misma salida en las dos, y sus capturas, miradas.
 
-#### 🧬 `#907` — una placa con la imagen de otra versión que la instalación: los módulos que la imagen repone en `/lib` tapan a los del `Stdlib.pack`, y nada lo dice (abierta el 25-nov · la prueba final, su punto 5 · la ayuda, hecha el mismo día, `936b3ef` de `toolchain` · por decidir Eduardo: que la placa diga su versión)
+#### ✅ `#907` — una placa con la imagen de otra versión que la instalación: los módulos que la imagen repone en `/lib` tapan a los del `Stdlib.pack`, y nada lo dice (abierta el 25-nov · la prueba final, su punto 5 · la ayuda, `936b3ef` de `toolchain` · la versión al conectar, `e000dbe` del runtime y `21d005a` de `toolchain` · **CERRADA** el mismo día)
 
 - **Lo que pasó:** la P4 llevaba la imagen del 22-nov (la `I2c` de V8) y el `Stdlib.pack` de hoy. El programa de la IA no enlazó
   («lib 'I2c' presente pero no exporta 'I2c.__cls_new_HardI2C(iiii)'»); la guía decía que era un pack viejo, y el pack era de hoy.
@@ -15209,8 +15209,15 @@ mantiene sola.»*
   hacer (`Despliegue.pista`): la de un pack, regrabar el pack; la de `/lib`, borrarla y, si vuelve, grabar la imagen de esta
   instalación. La guía para IA e `INSTALAR_FIRMWARE`, igual. `SubidaSmoke`. La P4, grabada con la imagen de hoy (Eduardo: *«Puedes
   grabar la imagen en la P4»*): `/lib/I2c.mod` fuera, «lo sirve el pack», y el punto 5 va.
-- **Por decidir:** que la imagen diga su versión al conectar (un campo del HELLO), y el IDE avise si es otra que la de la
-  instalación; una imagen sin ese campo es anterior a la 8.5. Hoy nadie lo puede saber: la ABI del Info es la 9 de V7 a V9.
+- **La versión, al conectar** (Eduardo: *«2)OK»*; hasta hoy nadie la podía saber: la ABI del Info es la 9 de V7 a V9). El HELLO
+  de la imagen lleva `version`, del común, así que la dicen las cuatro familias y el micro simulado: la de
+  `include/bpvm_version.h` del runtime, que es la del pom del IDE (la red mira que sean la misma, y al montar el ZIP, que las
+  imágenes lleven ésa: `check_mods_embebidos.py`). El IDE y `bp` la dicen al conectar («conectado a COM15 — bpvm-esp32p4, imagen
+  8.5»), en el Info y en `bp placa … info`, y avisan si no es la de la instalación, con qué hacer. Una imagen que no la dice es
+  «anterior a la 8.5»; la VM-Java no la dice (va con el IDE). Entre dos versiones, las dos dicen la última publicada.
+- **Probado:** la P4, con la imagen de esta tarde (avisa) y con la nueva (la dice, y no avisa); el micro simulado publicado de la
+  V8.1 (avisa) y el de hoy; `VersionSmoke` y los demás del IDE; y las nueve imágenes publicadas (señaladas) frente a la Pico 2 y
+  la P4 de hoy (bien). Las demás se rehacen al congelar.
 
 #### ✅ `#908` — la documentación que le faltó o le engañó a la IA de la prueba final (abierta el 25-nov · hecha y **CERRADA** el mismo día)
 
@@ -15222,12 +15229,33 @@ mantiene sola.»*
 - **La guía vieja:** la carpeta de la prueba tenía la de un ZIP anterior, y la IA trabajó media prueba con ella (el IDE la pone al
   día al abrirse, `#893`). La copia que deja el IDE dice ahora, bajo el título, cuál es la de ahora. `GuiaIaSmoke`.
 
-#### ⬜ `#909` — un `Panel` se desplaza aunque su `scrollDir` sea `NONE` (abierta el 25-nov · vista al mirar `#905` · de siempre · por decidir Eduardo)
+#### ⬜ `#909` — un `Panel` se desplaza aunque su `scrollDir` sea `NONE`, y lo que cabe dentro es menos de lo que mide (abierta el 25-nov · vista al mirar `#905` · de siempre · medida el mismo día · por decidir Eduardo)
 
 - La guía (§19.4) y `Gui.bp` dicen que el desplazamiento es opcional y por defecto `NONE`, y `scrollDir` da 0; pero en LVGL un
   objeto nace desplazable en las dos direcciones, con sus barras si no cabe, y nadie se lo quita. Hacerlo verdad puede romper a
   quien hoy se desplaza por un panel que no cabe (también lo hace la rueda del ratón, §22.6); dejarlo, pide decirlo: que nazca
   `BOTH`. Recomendado: lo segundo.
+- **Es un problema de tamaño** (Eduardo, 25-nov: *«Sospecho que aquí hay un problema de tamaño. Los paneles tienen un borde aunque
+  no se vea y lo que pueden contener siempre es menor que el tamaño del panel. Swing es diferente en este sentido. Pero habría que
+  verificarlo antes de hacer cambios»*). **Medido, sin cambiar nada**, en los píxeles de las capturas: en LVGL un panel nace con el
+  estilo `card` del tema, un borde de 2 px (gris claro sobre casi blanco) y un margen por dentro que depende del ancho de la
+  pantalla. La VM-C y la P4, píxel a píxel igual; la VM Java, sin ninguno de los dos:
+
+  | un panel de 200 × 100 | dónde sale un hijo en (0, 0) | lo que cabe |
+  |---|---|---|
+  | VM Java (Swing) | en su esquina | 200 × 100 |
+  | LVGL, pantalla de 320 de ancho (la C5, la C6…) | a 15 px (borde 2 + margen 13) | 170 × 70 |
+  | LVGL, de 480 (la P4 de Waveshare) | a 18 px (2 + 16) | 164 × 64 |
+  | LVGL, de 800 (la DK2, el kit de la P4) | a 22 px (2 + 20) | 156 × 56 |
+
+  Así que en el PC y en la placa no sale en el mismo sitio, ni en dos placas de distinto ancho; y el desplazamiento viene de ahí:
+  un hijo tan grande como el panel no cabe, y salen las barras; con uno de lo que cabe, no. La página de una pestaña, sin borde,
+  con el mismo margen (16 en la P4). Lo mismo que le pasó a la ventana de `#905`, que se arregló en un solo sitio (`Window.load`).
+- **Por decidir:** **A**, en LVGL el panel (y la página de una pestaña) nace sin margen y sin borde que ocupe: (0, 0) es su esquina
+  y cabe lo que mide, en el PC y en todas las placas igual; lo que hoy está dentro de un panel se mueve en las placas 15, 18 o 22 px
+  hacia su esquina, que es donde ya sale en el PC. **B**, que la VM Java ponga el borde y el margen de LVGL: en las placas no cambia
+  nada, pero lo que cabe sigue dependiendo del ancho de la pantalla. Recomendado: A (con sus notas de la versión: cambia el aspecto
+  en las placas; pide grabar el `Gui.pack`), y el desplazamiento, después, con lo que quede.
 
 #### ✅ `#910` — el ZIP de prueba de la V8.5 llevaba las nueve imágenes de la V8.1, y nadie lo dijo (abierta el 25-nov · al ir a grabar la P4 · hecha y **CERRADA** el mismo día, `394dfb7` del runtime)
 

@@ -212,10 +212,11 @@ cp "$RAIZ/docs/en/"*.html.md "$OUT/docs/en/"
 # --- firmware: las imágenes SELLADAS, no las de los directorios de compilación
 cp "$RAIZ/dist/firmware/"*.uf2 "$RAIZ/dist/firmware/"*.bin \
    "$RAIZ/dist/firmware/SHA256SUMS.txt" "$OUT/firmware/"
-# V9 #910 — y que sean las de esta stdlib: una imagen repone en cada arranque su I2c, su Gpio…, delante del Stdlib.pack.
+# V9 #910 — y que sean las de esta stdlib (una imagen repone en cada arranque su I2c, su Gpio…, delante del Stdlib.pack) y
+# de esta versión (#907: la dicen al conectar, y el IDE la compara con la suya).
 # En un ZIP de prueba (MONTAR_ETIQUETA), sólo se dice: las imágenes se rehacen al publicar.
 if ! python -I -X utf8 "$RAIZ/bpgenvm-c/scripts/check_mods_embebidos.py" --imagenes "$OUT/firmware" > "$OUT/../imagenes.txt"; then
-    echo "  AVISO: imágenes que no llevan la stdlib de hoy:" >&2
+    echo "  AVISO: imágenes que no son las de hoy:" >&2
     grep FALLO "$OUT/../imagenes.txt" | sed 's/^/    /' >&2
     if [ -z "${MONTAR_ETIQUETA:-}" ]; then
         echo "  ERROR: no se publica con ellas: se rehacen (y dist/firmware, con ellas)" >&2

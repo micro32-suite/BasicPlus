@@ -669,17 +669,21 @@ también el `Stdlib.pack`: va el primero.
 
 ## ¿Qué versión tengo en la placa?
 
-IDE → Connect → botón **Info**: el micro, la flash, la RAM y la PSRAM, el
-bloque de RAM de los packs («RAM packs») y la **ABI de nativo** de la imagen.
-Esa última línea dice si la imagen y el IDE casan: «9 (la misma que genera
-este IDE)» es una imagen de V7 con un IDE de V7. Si no casan, o la línea no
-aparece (una imagen anterior a V7), graba la imagen de este paquete —o, si la
-imagen es más nueva que el IDE, pon el IDE al día—. (En la S3, que no tiene
-AOT, una imagen de V7 dice «sin receta».) El Info no muestra la fecha de
-compilación de la imagen.
+Al conectar, el IDE lo dice en la barra del panel: «bpvm-esp32p4, imagen 8.5».
+Si no es la de la instalación, lo avisa en la Consola y dice qué hacer: con una
+imagen más vieja, lo nuevo puede no enlazar o no ir, y se graba la de este
+paquete; si la imagen es más nueva, se pone al día la instalación. Una imagen
+**anterior a la 8.5 no dice su versión**, y eso es lo que se lee: «imagen anterior
+a la 8.5».
 
-La ABI no cambia en cada versión: es la 9 de V7 a V9. Si un programa acaba en la
-placa con «lib 'I2c' presente pero no exporta…» y la placa tiene ese módulo en
-`/lib`, su imagen es de otra versión que la instalación: grábala. El
-`Stdlib.pack` solo no basta: la imagen repone los suyos en `/lib` en cada
-arranque —aunque se borren—, y `/lib` va antes que los packs.
+Está también en el botón **Info** («Versión») y en `bp placa COM22 info`; y
+`bp run --placa`, si no es la misma, lo avisa. El Info da además el micro, la
+flash, la RAM y la PSRAM, el bloque de RAM de los packs («RAM packs») y la **ABI
+de nativo** de la imagen: «9 (la misma que genera este IDE)» es que la placa carga
+el nativo que genera este IDE (es la 9 de V7 a V9; en la S3, que no tiene AOT,
+«sin receta»). No muestra la fecha de compilación de la imagen.
+
+Si un programa acaba en la placa con «lib 'I2c' presente pero no exporta…» y la
+placa tiene ese módulo en `/lib`, su imagen es de otra versión que la instalación:
+grábala. El `Stdlib.pack` solo no basta: la imagen repone los suyos en `/lib` en
+cada arranque —aunque se borren—, y `/lib` va antes que los packs.

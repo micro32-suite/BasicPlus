@@ -562,8 +562,12 @@
 <h2 id="placa">6. Connecting to the board</h2>
 <p>
   In the Explorer: pick the <em>serial board (v1)</em> backend, the micro's
-  COM port and press <strong>Connect</strong>. The tree shows the device's
-  internal filesystem:
+  COM port and press <strong>Connect</strong>. The panel's bar says who answers
+  and the version of its image (V9: «bpvm-esp32p4, imagen 8.5», image 8.5). If it
+  is not this installation's, the Console warns and says what to do: with an older
+  one, new things may not link or not work (flash the installation's on the board).
+  An image older than 8.5 does not say its version, and that is what you read
+  («imagen anterior a la 8.5»). The tree shows the device's internal filesystem:
 </p>
 <ul>
   <li><code>/app</code> — your programs (uploaded <code>.mod</code>).</li>
