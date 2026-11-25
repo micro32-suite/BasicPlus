@@ -1159,7 +1159,9 @@ packRam=136</code></pre>
   <code>Gui.shot(path): integer</code> writes the screen <strong>as LVGL drew it</strong> to a
   <code>.shot</code> file (RGB565 in strips, compressed; format in <code>docs/SHOT_FORMAT.md</code>) and
   returns the bytes written. It goes through the same path on the host (with a window or
-  <code>--no-screen</code>), on miVM and on the five displays. On failure it throws a catchable
+  <code>--no-screen</code>), on miVM and on the five displays; the one that counts is LVGL's (the PC's C VM, the
+  simulated micro or the board): the Java VM's is that of its preview, an approximation (it does not paint a
+  <code>Chart</code> or a <code>Led</code>, and the fonts are the PC's). On failure it throws a catchable
   <code>RuntimeError</code>: «sin pantalla» (C VM built without LVGL, or miVM without a window), «error de
   escritura», «no cabe en el tope de captura» (256&nbsp;KB; 40 with <code>GuiMini</code>, the C6's pack) or «sin
   memoria».
@@ -1176,7 +1178,8 @@ Gui.<span class="fn">join</span>()</code></pre>
   the model.
 </p>
 <p>
-  On the board the file lands in the file system (path as is, like <code>writeFile</code>) and is
+  On the board the file lands in the file system (a relative path, from its root: <code>"MyApp.shot"</code> is
+  <code>/MyApp.shot</code>; to leave it elsewhere, the full path, <code>"/data/MyApp.shot"</code>) and is
   downloaded with the <code>get</code> command of the IDE console —since V7, also while the program is running:
   the board sends it in chunks, between its output— or, without the IDE, with <code>bp placa</code> (V9, §16 of the
   reference). On the PC, <code>bp png</code> turns it into a PNG:
@@ -1345,7 +1348,7 @@ end PruebaGui</code></pre>
 <pre class="salida" data-bp="skip"><code>screen [480x320 align=0 +0,0]
   label "PULSADO" [-1x-1 align=1 +0,10]
   button [-1x-1 align=4 +0,0]
-    label "Pulsa" [-1x-1 align=0 +0,0]</code></pre>
+    label "Pulsa" [-1x-1 align=4 +0,0]</code></pre>
 <p>
   The whole project, with another test: <code>samples/pruebas</code>. The old names (<code>Gui.__guiClick</code>,
   <code>Gui.__guiChange</code>, <code>Gui.__guiDumpTree</code>) still work; on a board with the library from before V9,
@@ -1388,7 +1391,8 @@ end PruebaGui</code></pre>
 <h3>Swing preview: an approximation</h3>
 <p>
   The host <em>Run</em> (miVM/Swing, §23.1) does not render <code>.bin</code> fonts (it uses the default
-  font even though the id is valid) and does not copy <code>resources/</code>, so a <code>.win</code>
+  font even though the id is valid), does not paint a <code>Chart</code> (its box, empty) or a <code>Led</code>,
+  and does not copy <code>resources/</code>, so a <code>.win</code>
   form there does not find its file. For the exact pixel or to try forms on the PC: the C VM with LVGL
   (§23.2), copying the <code>.win</code> and the assets next to the <code>.mod</code>.
 </p>

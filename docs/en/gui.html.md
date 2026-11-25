@@ -788,7 +788,7 @@ On a board, the image is rotated because the panel has really been turned, to be
 <a id="ej-shot"></a>
 ### 23.5 Screenshot: `Gui.shot`
 
-`Gui.shot(path): integer` writes the screen **as LVGL drew it** to a `.shot` file (RGB565 in strips, compressed; format in `docs/SHOT_FORMAT.md`) and returns the bytes written. It goes through the same path on the host (with a window or `--no-screen`), on miVM and on the five displays. On failure it throws a catchable `RuntimeError`: «sin pantalla» (C VM built without LVGL, or miVM without a window), «error de escritura», «no cabe en el tope de captura» (256 KB; 40 with `GuiMini`, the C6's pack) or «sin memoria».
+`Gui.shot(path): integer` writes the screen **as LVGL drew it** to a `.shot` file (RGB565 in strips, compressed; format in `docs/SHOT_FORMAT.md`) and returns the bytes written. It goes through the same path on the host (with a window or `--no-screen`), on miVM and on the five displays; the one that counts is LVGL's (the PC's C VM, the simulated micro or the board): the Java VM's is that of its preview, an approximation (it does not paint a `Chart` or a `Led`, and the fonts are the PC's). On failure it throws a catchable `RuntimeError`: «sin pantalla» (C VM built without LVGL, or miVM without a window), «error de escritura», «no cabe en el tope de captura» (256 KB; 40 with `GuiMini`, the C6's pack) or «sin memoria».
 
 ```
 Gui.start()
@@ -800,7 +800,7 @@ Gui.join()
 
 **Pump before capturing.** The LVGL theme animates state transitions (the check of a `Checkbox` takes ~100 ms to appear): a capture right after `cb.checked := true`, without a loop iteration, comes out with the box empty. The capture is what is seen at that instant, not the model.
 
-On the board the file lands in the file system (path as is, like `writeFile`) and is downloaded with the `get` command of the IDE console —since V7, also while the program is running: the board sends it in chunks, between its output— or, without the IDE, with `bp placa` (V9, §16 of the reference). On the PC, `bp png` turns it into a PNG:
+On the board the file lands in the file system (a relative path, from its root: `"MyApp.shot"` is `/MyApp.shot`; to leave it elsewhere, the full path, `"/data/MyApp.shot"`) and is downloaded with the `get` command of the IDE console —since V7, also while the program is running: the board sends it in chunks, between its output— or, without the IDE, with `bp placa` (V9, §16 of the reference). On the PC, `bp png` turns it into a PNG:
 
 ```
 bp placa COM22 get MyApp.shot   (downloads it from the board at COM22)
@@ -951,7 +951,7 @@ What it prints, the tree after the click, is its `tests/PruebaGui.out` (written 
 screen [480x320 align=0 +0,0]
   label "PULSADO" [-1x-1 align=1 +0,10]
   button [-1x-1 align=4 +0,0]
-    label "Pulsa" [-1x-1 align=0 +0,0]
+    label "Pulsa" [-1x-1 align=4 +0,0]
 ```
 
 The whole project, with another test: `samples/pruebas`. The old names (`Gui.__guiClick`, `Gui.__guiChange`, `Gui.__guiDumpTree`) still work; on a board with the library from before V9, only those: the new ones come with its `Stdlib.pack`.
@@ -975,7 +975,7 @@ Since V7 (3-Oct) it saves the ranges (`min`/`max`), the options and the items, t
 
 ### Swing preview: an approximation
 
-The host *Run* (miVM/Swing, §23.1) does not render `.bin` fonts (it uses the default font even though the id is valid) and does not copy `resources/`, so a `.win` form there does not find its file. For the exact pixel or to try forms on the PC: the C VM with LVGL (§23.2), copying the `.win` and the assets next to the `.mod`.
+The host *Run* (miVM/Swing, §23.1) does not render `.bin` fonts (it uses the default font even though the id is valid), does not paint a `Chart` (its box, empty) or a `Led`, and does not copy `resources/`, so a `.win` form there does not find its file. For the exact pixel or to try forms on the PC: the C VM with LVGL (§23.2), copying the `.win` and the assets next to the `.mod`.
 
 ### Display state between runs (board)
 

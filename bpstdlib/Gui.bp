@@ -898,6 +898,7 @@ import Core          // V6/G2: OwnerList extends Core.List — el import no es t
       this.attach(parent)
       if strlen(text) > 0 then
         this.etiqueta := Label(this, text)   // se registra sola como hijo
+        this.etiqueta.align(Align.CENTER, 0, 0)   // V9 #880: en el centro tambien si el boton tiene tamano puesto
       endif
     end Button
   end Button

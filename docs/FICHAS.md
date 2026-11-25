@@ -14625,7 +14625,7 @@ lo mismo con el SPI.
   la pedida, y para 100 kHz da, bit a bit, el valor de antes. Las dos imágenes STM32, compiladas. **Falta** medirlo en la
   Nucleo, con el sensor.
 
-#### 🧬 `#880` — lo aplazado del H1.8: la captura de la VM Java, el botón con tamaño puesto a mano y la ruta relativa de `Gui.shot` (abierta el 23-nov · Eduardo, al decidir `#859`: *«3 lo aplazamos»* · pendiente)
+#### 🧬 `#880` — lo aplazado del H1.8: la captura de la VM Java, el botón con tamaño puesto a mano y la ruta relativa de `Gui.shot` (abierta el 23-nov · Eduardo, al decidir `#859`: *«3 lo aplazamos»* · hecha el 25-nov, a falta de verla Eduardo)
 
 El análisis, el del 23-nov (`notas/V9_H1_ia.md`, «H1.8»):
 - **(c) La captura de la VM Java** (`Gui.shot` en miVM), frente a la de LVGL (las de la sonda del análisis): el fondo,
@@ -14642,6 +14642,15 @@ El análisis, el del 23-nov (`notas/V9_H1_ia.md`, «H1.8»):
 - **Visto de paso, al hacer `#859`:** un `Label` no tiene cómo leer su texto (sólo `setText`): una prueba de GUI
   compara el árbol (`Gui.dumpTree()`) o lo que hicieron los manejadores.
 - **Hecho cuando:** (c), (d) y (e), hechos o dichos, como decida Eduardo.
+- **Hecho el 25-nov** (Eduardo, 25-nov: *«De la IA hacemos todo lo que propones»*):
+  - **(c)** El negro no era de la captura: la raíz de la ventana era un panel negro y opaco (se veía negra también la
+    ventana). La raíz, del color del tema claro de LVGL, el de las placas (`GuiBackend.screenActive`). Y lo que no pinta
+    la vista previa (`Chart`, `Led`), dicho en la §23.5 y la §25, en las dos lenguas.
+  - **(d)** `Button(parent, text)` centra su etiqueta (`Gui.bp`). En la VM Java no bastaba: lo de dentro de un botón lo
+    coloca Swing (`OverlayLayout`), a la izquierda; ahora, donde dice su `align` (`GuiBackend.enBoton`). Mirado en las
+    capturas de las dos VMs, con el botón del tamaño de su texto y con el suyo puesto. `Gui.mod` (51708 → 51746), el
+    único módulo que cambia; el `Stdlib.pack`, rehecho; `tests/PruebaGui.out` y los árboles de la §24.4, con `align=4`.
+  - **(e)** Dicho en la §23.5: una ruta relativa, desde la raíz; para dejarlo en otro sitio, la ruta entera.
 
 #### 🧬 `#879` — los comentarios de documentación (`/** … */`, como Javadoc): la documentación de la API, sacada del código, que se mantiene sola (abierta el 23-nov · idea de Eduardo, al hablar del H1.7 · por analizar, al acabar (a) y (b) de `#858`)
 

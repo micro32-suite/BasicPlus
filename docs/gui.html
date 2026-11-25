@@ -1143,7 +1143,9 @@ packRam=136</code></pre>
   <code>Gui.shot(path): integer</code> escribe la pantalla <strong>tal como LVGL la dibujó</strong> en un fichero
   <code>.shot</code> (RGB565 por franjas, comprimido; formato en <code>docs/SHOT_FORMAT.md</code>) y devuelve los
   bytes escritos. Funciona por el mismo camino en el host (con ventana o <code>--no-screen</code>), en miVM y en
-  las cinco pantallas. Si falla, lanza <code>RuntimeError</code> atrapable: «sin pantalla» (VM-C compilada sin
+  las cinco pantallas; la que vale es la de LVGL (la VM-C del PC, el micro simulado o la placa): la de la VM Java es
+  la de su vista previa, una aproximación (no pinta un <code>Chart</code> ni un <code>Led</code>, y las fuentes son
+  las del PC). Si falla, lanza <code>RuntimeError</code> atrapable: «sin pantalla» (VM-C compilada sin
   LVGL, o miVM sin ventana), «error de escritura», «no cabe en el tope de captura» (256&nbsp;KB; 40 con
   <code>GuiMini</code>, el pack de la C6) o «sin memoria».
 </p>
@@ -1158,7 +1160,8 @@ Gui.<span class="fn">join</span>()</code></pre>
   sin una vuelta de lazo, sale con la casilla vacía. La captura es lo que se ve en ese instante, no el modelo.
 </p>
 <p>
-  En la placa el fichero queda en el sistema de archivos (ruta tal cual, como <code>writeFile</code>) y se baja
+  En la placa el fichero queda en el sistema de archivos (una ruta relativa, desde su raíz: <code>"MiApp.shot"</code>
+  es <code>/MiApp.shot</code>; para dejarlo en otro sitio, la ruta entera, <code>"/data/MiApp.shot"</code>) y se baja
   con el <code>get</code> de la consola del IDE —desde V7, también con el programa en marcha: la placa lo manda a
   trozos, entre su salida— o, sin el IDE, con <code>bp placa</code> (V9, §16 de la referencia). En el PC se pasa a
   PNG con <code>bp png</code>:
@@ -1326,7 +1329,7 @@ end PruebaGui</code></pre>
 <pre class="salida" data-bp="skip"><code>screen [480x320 align=0 +0,0]
   label "PULSADO" [-1x-1 align=1 +0,10]
   button [-1x-1 align=4 +0,0]
-    label "Pulsa" [-1x-1 align=0 +0,0]</code></pre>
+    label "Pulsa" [-1x-1 align=4 +0,0]</code></pre>
 <p>
   El proyecto entero, con otra prueba: <code>samples/pruebas</code>. Los nombres de siempre
   (<code>Gui.__guiClick</code>, <code>Gui.__guiChange</code>, <code>Gui.__guiDumpTree</code>) siguen valiendo; en una
@@ -1368,7 +1371,8 @@ end PruebaGui</code></pre>
 <h3>Vista previa Swing: aproximación</h3>
 <p>
   El <em>Run</em> de host (miVM/Swing, §23.1) no renderiza fuentes <code>.bin</code> (usa la fuente por defecto,
-  aunque el id es válido) y no copia <code>resources/</code>, así que un formulario <code>.win</code> allí no
+  aunque el id es válido), no pinta un <code>Chart</code> (su recuadro, vacío) ni un <code>Led</code>, y no copia
+  <code>resources/</code>, así que un formulario <code>.win</code> allí no
   encuentra su fichero. Para ver el píxel exacto o probar forms en el PC: la VM-C con LVGL (§23.2), copiando el
   <code>.win</code> y los assets junto al <code>.mod</code>.
 </p>
