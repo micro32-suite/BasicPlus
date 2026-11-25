@@ -14602,12 +14602,16 @@ lo mismo con el SPI.
   desplazaba el resto. Era el único que quedaba en el código de las placas (el resto va por `bpvm_format_i64`). Arreglado
   (`builtins.c`); el texto, el de siempre. Visto en la Nucleo, grabada el 24-nov: el contrato, ninguna distinta.
 
-#### 🧬 `#886` — un módulo que se llama `Main` con una `function Main()` se ejecuta DOS veces, sin un aviso (abierta el 24-nov · vista de paso, con un programa de prueba · pendiente)
+#### 🧬 `#886` — un módulo que se llama `Main` con una `function Main()` se ejecuta DOS veces, sin un aviso (abierta el 24-nov · vista de paso, con un programa de prueba · hecha el 25-nov —*«sobre los bugs, si los arreglamos»*—, a falta de la red)
 
 - La función con el nombre del módulo es su inicializador (corre al cargarlo: la gramática, «INICIALIZADOR DE MÓDULO»), y
   además `Main` es el programa: las dos VMs la corren dos veces, igual. Nadie lo avisa, y `Main` es un nombre natural para
   el primer programa de alguien (o de una IA). Propuesto: un aviso del compilador en ese caso; o que, siendo el principal,
   corra una vez.
+- **Decidido (Eduardo, 25-nov: *«OK, me parece bien»*): una vez.** La función que es el programa (`main` o `Main`) no es el
+  inicializador del módulo, aunque se llame como él (`SemanticAnalyzer.declarePass`); importado, su `Main` es una función
+  normal, como en cualquier módulo. `ModuloMainTest`, cuatro casos (también que el inicializador de los demás corre como
+  siempre); la suite del compilador, 419. El manual y la gramática lo dicen.
 
 #### 🧬 `#885` — STM32: el I2C del periférico va siempre a 100 kHz, se pida lo que se pida (abierta el 24-nov · medida al hacer el H3 · hecha el 25-nov —*«sobre los bugs, si los arreglamos»*—, a falta de verla en la Nucleo)
 

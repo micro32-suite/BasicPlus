@@ -837,7 +837,8 @@ gpio.pin[<span class="num">3</span>] := <span class="kw">true</span>        <spa
   value —an array literal, a call, an object, an expression— is <em>computed when
   the module loads</em>, in the order they are written, after the modules it
   imports have been initialized and before its initializer function (the function
-  with the same name as the module), which finds them already set.
+  with the same name as the module; in one called <code>Main</code>, its <code>Main</code> is
+  the program, and it runs once), which finds them already set.
 </p>
 <p>
   A global <code>string</code>, a <code>string</code> field or a <code>string</code> property with no value —that nobody

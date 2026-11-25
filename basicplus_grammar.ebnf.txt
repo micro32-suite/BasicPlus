@@ -72,6 +72,8 @@ module ::= 'module' name NEWLINE
            'return expr' es error de compilación.
          - Su visibilidad es irrelevante (lo invoca el runtime).
          - Es opcional: si no existe, el módulo se carga sin más.
+         - Si el módulo se llama 'Main' (o 'main'), su función Main es
+           el programa, no su inicializador: corre una vez.
 
    - ORDEN DE CARGA:
        Los módulos se cargan en profundidad siguiendo los 'import'.
