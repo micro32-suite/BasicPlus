@@ -650,6 +650,8 @@ Current state of the OO HW suite:
 
 GPIO pin control. The Java VM on the PC only logs; the C VM on the Pico 2 (RP2350) translates each call to the Pico SDK (`gpio_init`, `gpio_put`, `gpio_get`, `gpio_set_dir`, `gpio_pull_up/down`). The same `.mod` runs on both sides — handy for developing on the PC and then uploading to the microcontroller.
 
+**Which pins your board has** —the program's, each bus's and the system's—, and the links to its manufacturer's documentation: [the boards and their pins](PLACAS.md). Or ask the board itself: `samples/PinesPlaca.bp`.
+
 The module exposes two layers: an object-oriented `Gpio.Pin` class (recommended) and a set of low-level intrinsic functions that the class itself uses underneath (also available for drivers that need them).
 
 #### 14.2.1 The `Gpio.Pin` class (recommended)
@@ -1096,7 +1098,7 @@ Every image carries, compiled in, **one capability table for its micro** (and it
 | Function | Description |
 |---|---|
 | `uarts()` · `i2cs()` · `spis()`: `integer[]` | The **valid instances** of each bus, as `Uart.Port(id, …)`, `I2c.Bus(id, …)`, `Spi.Bus(id, …)` take them ("the count is the array's length"): `[0, 1]` on RP2350; on an ESP32-S3 `uarts() = [1, 2]` (0 is the IDE's cable), `spis() = [2, 3]`. |
-| `pins()` · `analogPins()` · `pwmPins()` · `pulsePins()` · `openDrainPins()`: `integer[]` | The **pin map**: the GPIOs that exist, and which of them can read analog (`AnPin`), drive PWM, count pulses or drive open-drain. What BP builds by pin is asked by pin. The system's are not listed: those of the flash or the PSRAM, the IDE cable's and, on a board with the screen in the image (the P4, the DK2), the screen's (`#574`, `#669`). |
+| `pins()` · `analogPins()` · `pwmPins()` · `pulsePins()` · `openDrainPins()`: `integer[]` | The **pin map**: the GPIOs that exist, and which of them can read analog (`AnPin`), drive PWM, count pulses or drive open-drain. What BP builds by pin is asked by pin. The system's are not listed: those of the flash or the PSRAM, the IDE cable's and, on a board with the screen in the image (the P4, the DK2), the screen's (`#574`, `#669`). `samples/PinesPlaca.bp` writes it all, those included, with the reason. |
 | `hasPin(n)` · `isAnalog(n)` · `isInputOnly(n)`: `boolean` | Questions about one pin (a GPIO that does not exist: `hasPin` false). |
 | `manufacturer()` · `package()` · `pwmUnit()`: `string` | The manufacturer ("Raspberry Pi", "Espressif", "STMicroelectronics"); the package chosen at boot ("QFN-60"/"QFN-80" on RP2350, "LQFP144" on the Nucleo; the ESP32s do not say); and the **unit** `PWM_SLICES()` counts in: "slice" on RP2350, "canal" (channel: LEDC, timer) on ESP32 and STM32 — the same thing used to be counted in two units without saying which. |
 | `adcUnits(): integer` · `hasBreadcrumb(): boolean` | How many ADC units the silicon has (the S3 and the P4, two), and whether the `setMark` breadcrumbs really exist on this micro. |

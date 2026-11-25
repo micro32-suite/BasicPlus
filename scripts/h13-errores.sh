@@ -179,7 +179,7 @@ EnumNombreMal|Enum.getName(): se esperaba 1 argumento, el valor de un enum
 EnumNombreNativa|no se traduce en una native; pide el nombre fuera de la native
 ComoSeEscribe|upper(s)
 ComoSeEscribe|se escribe len(s)
-ComoSeEscribe|se comparan con =,
+ComoSeEscribe|se comparan con ==,
 ComoSeEscribe|'size' es protegido de 'List'
 ComoSeEscribe|length(), remove(), set()
 ComoSeEscribe|las que hay: put(Object, Object), put(integer, Object), put(string, Object)

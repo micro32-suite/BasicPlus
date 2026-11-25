@@ -1325,6 +1325,11 @@ sleep(<span class="num">60000</span>)          <span class="comment">// and the 
   PC and then uploading to the microcontroller.
 </p>
 <p>
+  <strong>Which pins your board has</strong> —the program's, each bus's and the system's—, and the links to its
+  manufacturer's documentation: <a href="PLACAS.md">the boards and their pins</a>. Or ask the board itself:
+  <code>samples/PinesPlaca.bp</code>.
+</p>
+<p>
   The module exposes two layers: an object-oriented <code>Gpio.Pin</code>
   class (recommended) and a set of low-level intrinsic functions that
   the class itself uses underneath (also available
@@ -2177,7 +2182,8 @@ port.write(tx, <span class="num">4</span>)
           (<code>AnPin</code>), drive PWM, count pulses or drive open-drain. What BP builds by pin
           is asked by pin. The system's are not listed: those of the flash or the PSRAM, the IDE cable's
           and, on a board with the screen in the image (the P4, the DK2), the screen's (<code>#574</code>,
-          <code>#669</code>).</td></tr>
+          <code>#669</code>). <code>samples/PinesPlaca.bp</code> writes it all, those included, with the
+          reason.</td></tr>
   <tr><td><code>hasPin(n)</code> · <code>isAnalog(n)</code> · <code>isInputOnly(n)</code>: <code>boolean</code></td>
       <td>Questions about one pin (a GPIO that does not exist: <code>hasPin</code> false).</td></tr>
   <tr><td><code>manufacturer()</code> · <code>package()</code> · <code>pwmUnit()</code>: <code>string</code></td>

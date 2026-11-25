@@ -1318,6 +1318,11 @@ sleep(<span class="num">60000</span>)          <span class="comment">// y la jor
   PC y luego subir al microcontrolador.
 </p>
 <p>
+  <strong>Qué pines tiene tu placa</strong> —los del programa, los de cada bus y los del sistema—, y los enlaces a la
+  documentación de su fabricante: <a href="PLACAS.md">las placas y sus pines</a>. O se lo preguntas a ella:
+  <code>samples/PinesPlaca.bp</code>.
+</p>
+<p>
   El módulo expone dos capas: una clase <code>Gpio.Pin</code> orientada
   a objetos (recomendada) y un conjunto de funciones intrínsecas de
   bajo nivel que la propia clase usa por debajo (disponibles también
@@ -2169,7 +2174,8 @@ port.write(tx, <span class="num">4</span>)
           (<code>AnPin</code>), dar PWM, contar pulsos o salir en colector abierto. Lo que en BP se
           construye por pin se pregunta por pin. No salen los del sistema: los de la flash o la PSRAM, los
           del cable del IDE y, en una placa con la pantalla en la imagen (la P4, la DK2), los de la pantalla
-          (<code>#574</code>, <code>#669</code>).</td></tr>
+          (<code>#574</code>, <code>#669</code>). <code>samples/PinesPlaca.bp</code> lo escribe todo, también
+          ésos, con su porqué.</td></tr>
   <tr><td><code>hasPin(n)</code> · <code>isAnalog(n)</code> · <code>isInputOnly(n)</code>: <code>boolean</code></td>
       <td>Preguntas sobre un pin concreto (un GPIO que no existe: <code>hasPin</code> falso).</td></tr>
   <tr><td><code>manufacturer()</code> · <code>package()</code> · <code>pwmUnit()</code>: <code>string</code></td>

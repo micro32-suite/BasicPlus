@@ -44,6 +44,15 @@ ORDEN = [
 ]
 OPCIONALES = {"en/index.html", "en/creditos.html"}
 
+# Las que ya son Markdown (no salen de un HTML), para llms.txt: su ruta, su nombre y su descripción.
+EN_MD = [
+    ("en/PLACAS.md", "Boards and their pins",
+     "each supported board's pins (the program's, each bus's and the system's) and the links to its manufacturer's "
+     "documentation."),
+    ("en/INSTALAR_FIRMWARE.md", "Installing the firmware",
+     "flashing each board's image, its packs and its environment."),
+]
+
 MARCA = "<!-- Generated from %s by scripts/docs_md.py: edit the HTML, not this file. -->"
 
 VACIAS = {"br", "img", "meta", "link", "hr", "input", "col", "wbr", "source", "area", "base"}
@@ -456,6 +465,7 @@ def llms_txt():
            "`bp run`, and `bp api <Module>`: the API of a library module, in BasicPlus).",
            "", "## Documentation", ""]
     out += [linea(r, nombre) for r, nombre in ORDEN if r not in OPCIONALES]
+    out += ["- [%s](%s%s): %s" % (nombre, web, ruta, desc[0].upper() + desc[1:]) for ruta, nombre, desc in EN_MD]
     out += ["", "## Optional", ""]
     out += [linea(r, nombre) for r, nombre in ORDEN if r in OPCIONALES]
     return "\n".join(out) + "\n"

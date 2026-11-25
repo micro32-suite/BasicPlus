@@ -1,0 +1,126 @@
+// PinesPlaca.bp — los pines de esta placa, preguntados a ella (V9 H1.10, #861): qué micro es, los pines que tu programa
+// puede usar y para qué sirve cada uno, los buses que hay y los pines que usa el sistema, con su porqué. Con esto no hay
+// que inventarse un número de pin. Lo que hay soldado en la placa (un LED, una pantalla, un conector) no lo sabe la
+// imagen: está en la documentación de su fabricante (docs/placas.html tiene los enlaces de las nuestras).
+//
+// Las líneas son «clave: valor», y los pines seguidos van juntos: 0-22, 26-28. En las STM32 un pin es su puerto y su
+// número (PA5), y al programa se le da puerto × 16 + número (PA5 es el 5; PB5, el 21).
+module PinesPlaca
+import Core
+import Gpio
+import Machine
+import Str
+
+  function esStm32(): boolean
+    return Machine.manufacturer() == "STMicroelectronics"
+  end esStm32
+
+  function nombre(pin: integer): string
+    if esStm32() then return "P" + Str.fromCharCode(65 + pin / 16) + intToString(pin mod 16)
+    return intToString(pin)
+  end nombre
+
+  // ¿van seguidos? En una STM32, sólo dentro del mismo puerto.
+  function siguen(a: integer, b: integer): boolean
+    return b == a + 1 and (not esStm32() or a / 16 == b / 16)
+  end siguen
+
+  function lista(pins: integer[]): string
+    if len(pins) == 0 then return "ninguno"
+    var s: string := ""
+    var i: integer := 0
+    while i < len(pins) do
+      var j: integer := i
+      while j + 1 < len(pins) do
+        if not siguen(pins[j], pins[j + 1]) then break
+        j += 1
+      endwh
+      if i > 0 then s += ", "
+      s += nombre(pins[i])
+      if j > i then s += "-" + nombre(pins[j])
+      i := j + 1
+    endwh
+    return s
+  end lista
+
+  function ids(v: integer[]): string
+    if len(v) == 0 then return "ninguno"
+    var s: string := ""
+    for k := 0 to len(v) - 1 do
+      if k > 0 then s += ", "
+      s += intToString(v[k])
+    next k
+    return s
+  end ids
+
+  // Los que sólo valen de entrada.
+  function soloEntrada(): string
+    var s: string := ""
+    for p in Machine.pins() do
+      if Machine.isInputOnly(p) then
+        if strlen(s) > 0 then s += ", "
+        s += nombre(p)
+      endif
+    next p
+    if strlen(s) == 0 then return "ninguno"
+    return s
+  end soloEntrada
+
+  // Por qué un pin no está para el programa, con las palabras de la placa: «de la flash o la PSRAM», «del cable del
+  // IDE (el wire)», «de la pantalla»… "" si es que no existe. La placa lo dice antes de tocar el pin.
+  function motivo(pin: integer): string
+    if Machine.hasPin(pin) then return ""
+    try
+      var p: Gpio.Pin := Gpio.Pin(pin, Gpio.Pin.INPUT)
+      p.release()
+      return ""
+    catch e: RuntimeError
+      var i: integer := indexOf(e.msg, " es de")
+      var f: integer := indexOf(e.msg, ": no se puede usar")
+      if i < 0 or f < i then return ""
+      return substring(e.msg, i + 4, f)
+    endtry
+  end motivo
+
+  // Los del sistema, juntando los seguidos que son de lo mismo.
+  function sistema()
+    var desde: integer := -1
+    var hasta: integer := -1
+    var que: string := ""
+    for p := 0 to 160 do
+      var m: string := ""
+      if p < 160 then m := motivo(p)
+      if strlen(que) > 0 then
+        if m == que and siguen(hasta, p) then
+          hasta := p
+          continue
+        endif
+        var r: string := nombre(desde)
+        if hasta > desde then r += "-" + nombre(hasta)
+        print "sistema: " + r + " (" + que + ")"
+        que := ""
+      endif
+      if strlen(m) > 0 then
+        desde := p
+        hasta := p
+        que := m
+      endif
+    next p
+  end sistema
+
+  function Main()
+    print "micro: " + Machine.getMicro()
+    print "paquete: " + Machine.package()
+    print "fabricante: " + Machine.manufacturer()
+    print "pines: " + lista(Machine.pins())
+    print "analógicos: " + lista(Machine.analogPins())
+    print "pwm: " + lista(Machine.pwmPins())
+    print "pulsos: " + lista(Machine.pulsePins())
+    print "colector abierto: " + lista(Machine.openDrainPins())
+    print "sólo entrada: " + soloEntrada()
+    print "uart: " + ids(Machine.uarts())
+    print "i2c: " + ids(Machine.i2cs())
+    print "spi: " + ids(Machine.spis())
+    sistema()
+  end Main
+end PinesPlaca

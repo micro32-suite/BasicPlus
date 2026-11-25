@@ -1,0 +1,14 @@
+micro: esp32c5
+paquete:
+fabricante: Espressif
+pines: 0-12, 23-28
+analógicos: 1-6
+pwm: 0-12, 23-28
+pulsos: 0-12, 23-28
+colector abierto: 0-12, 23-28
+sólo entrada: ninguno
+uart: 1
+i2c: 0
+spi: 2
+sistema: 13-14 (del cable del IDE (el wire))
+sistema: 15-22 (de la flash o la PSRAM)

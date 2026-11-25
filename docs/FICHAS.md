@@ -13867,7 +13867,7 @@ el IDE, que es el H2 (abajo).
 | **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | 🧬 hecho el 23-nov, a falta de verlo Eduardo: (a) `bp api` (`7cee427`; *«Si»*), (b) la documentación en Markdown y (d) `llms.txt`, sacados del HTML por `docs_md.py` (*«OK, sigue con b»*); (c) y (e), no; y una idea de Eduardo, `#879` |
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | 🧬 (a) y (b), hechas el 23-nov, a falta de verlas Eduardo (*«1 y 2 si»*): `bp test`, `Assert` y `Gui.click`/`change`/`dumpTree`; (c), (d) y (e), aplazadas (*«3 lo aplazamos»*): `#880` |
 | **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | 🧬 (a) y (b), hechas el 25-nov, a falta de verlas Eduardo; (c), un error por declaración en JC, lo decide él |
-| **H1.10** | las placas, descritas para leer | `#861` | su pregunta abierta | ⬜ |
+| **H1.10** | las placas, descritas para leer | `#861` | su pregunta abierta | 🧬 hecho el 25-nov (`docs/PLACAS.md`, sacado de lo que contesta cada placa, con los enlaces: *«podemos incluir los enlaces de Internet de su documentación»*); a falta de preguntar a las placas que no estaban conectadas y de verlo Eduardo |
 
 **El orden**, el del análisis, que es bueno: H1.1 lo primero (es un fallo, y silencioso); después lo barato que se nota
 desde el primer día (H1.2, H1.3); lo que necesita cada vuelta de corrección (H1.4, H1.5); el cable (H1.6); y lo demás. Su
@@ -14341,6 +14341,21 @@ no copiados a mano. Va con el tema principal de V9, las librerías de dispositiv
   sabe: los pines del sistema y los de cada bus.
 - **Hecho cuando:** cada una de las once placas, con su tabla, sus enlaces y su fichero; y lo que dicen casa con lo que
   contesta la placa.
+- **Hecho el 25-nov:**
+  - **`docs/PLACAS.md`** y `docs/en/PLACAS.md` (en Markdown: lo lee igual una persona que una IA), escritos por
+    `scripts/placas_doc.py`; no se editan a mano. Por placa: los pines del programa, los analógicos, PWM, contador de
+    pulsos y colector abierto, los buses con sus pines, los del sistema con su porqué, y los enlaces. Desde la referencia
+    (§14.2 y §14.9), la portada, `llms.txt` y la guía para IA; y en el ZIP, por estar enlazado.
+  - **De dónde sale:** `samples/PinesPlaca.bp` (en el corpus) se lo pregunta a la placa (`--lee <id> <COM>` guarda lo que
+    contesta en `scripts/placas/<id>.txt`; `--mira`, comprueba que es lo que hay); los enlaces, en
+    `scripts/placas/placas.json`; y por qué pines sale cada bus en la RP2350 y en las STM32 —en las ESP32, por
+    cualquiera—, `scripts/placas_buses.py`, de los datos del fabricante (el SDK de la Pico y los datos abiertos de ST) y
+    con las funciones alternas que pone nuestra imagen.
+  - **Los enlaces**, comprobados uno a uno. `st.com` no contesta a una herramienta (sí a un navegador): para las dos placas
+    de ST va también la página de Zephyr, que da sus pines en texto.
+  - **Preguntadas:** la C5 y la P4 de Waveshare. La DK2, también, y por eso salieron `#894` y `#895`: se le vuelve a
+    preguntar con la imagen nueva. **Faltan** las demás, al conectarlas (el lote de la versión): la Pico 2, la Metro, la
+    S3, la C3, la C6, los dos kits de la P4 y la Nucleo. `placas_doc.py --comprobar` lo dice.
 
 #### 🧩 H2 — la IA maneja el IDE (`#728`) (abierto el 22-nov)
 
@@ -14969,6 +14984,25 @@ mantiene sola.»*
   simulado, `de_cero`).
 - **Para publicar V9:** con la regla que se queda, una placa con los packs de V8 y un programa que use lo que cambió de
   interfaz en V9 (como `__guiClick`) falla así; lo que lo evita es grabar los packs de V9 (`INSTALAR_FIRMWARE`).
+
+#### 🧬 `#894` — las STM32 dan por buenos pines que su encapsulado no tiene (abierta el 25-nov · vista al preguntar a la DK2 sus pines, `#861` · de antes: desde la tabla de capacidades de V7 · hecha el mismo día, por grabar)
+
+- `Machine.pins()` daba los 128 de los puertos A a H. El encapsulado de las dos (LQFP144 de las «Q», con la fuente conmutada
+  en pines que en otras son GPIO) no saca `PB12`, `PC4`, `PC5` ni `PG11`; y en la DK2, tampoco `PE1`, `PF3`–`PF15`,
+  `PG2`–`PG8` ni casi todo el puerto H: un programa podía pedirlos, sin error y sin efecto. Estaba dicho en el código (*«la
+  máscara de pines bondeados por paquete»*, por hacer).
+- **Hecho:** la máscara de cada encapsulado, de los datos abiertos de ST (`STM32_open_pin_data`: el XML de
+  `STM32U575ZITxQ` y el de `STM32U5G9ZJTxQ`), en `gpio_stm32.c`: los que no están, «no existe». 111 pines en la Nucleo y 97
+  en la DK2 —de los que cada una quita los del cable y los de su pantalla—. Los `PI0`–`PI3` de la U5G9 no: la numeración
+  acaba en el puerto H. Las dos imágenes compilan.
+- **Hecho cuando:** las dos placas lo contestan (con `#861`).
+
+#### 🧬 `#895` — en las STM32 `Pulse.Counter` no funciona: «stm32u5g9 no tiene contador de pulsos», con el contador hecho (abierta el 25-nov · vista con `#861`, comprobada en la DK2 · de antes: está en la V7.0, la V8.0 y la V8.1 · hecha el mismo día, por grabar)
+
+- Desde V7 el pin se comprueba contra la tabla de capacidades, y la de las STM32 no marcaba el de su contador (`PC6` en la
+  Nucleo, `PB7` en la DK2; `c21bfa7` y `947aa59`, de V3).
+- **Hecho:** la marca (`stm32_caps_pulsos`, de la tabla del contador). Las dos imágenes compilan.
+- **Hecho cuando:** `PulseDemo` (Nucleo) y `PulseDemo_Dk2` cuentan en su placa, con su puente del PWM al contador.
 
 #### 🧬 `#893` — la guía para IA que el IDE deja en una carpeta no se pone al día: se queda la de la primera vez (abierta el 25-nov · vista en la carpeta de pruebas: la del 23 no sabía de packs ni de guiones · hecha el mismo día)
 

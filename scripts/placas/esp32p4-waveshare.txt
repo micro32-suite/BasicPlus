@@ -1,0 +1,19 @@
+micro: esp32p4
+paquete:
+fabricante: Espressif
+pines: 0-8, 11, 20-25, 28-36, 39-52
+analógicos: 20-23, 49-52
+pwm: 0-8, 11, 20-25, 28-36, 39-52
+pulsos: 0-8, 11, 20-25, 28-36, 39-52
+colector abierto: 0-8, 11, 20-25, 28-36, 39-52
+sólo entrada: ninguno
+uart: 1, 2
+i2c: 0, 1
+spi: 2, 3
+sistema: 9-10 (del sonido)
+sistema: 12-13 (del sonido)
+sistema: 14-19 (de la radio)
+sistema: 26-27 (de la pantalla)
+sistema: 37-38 (del cable del IDE (el wire))
+sistema: 53 (del sonido)
+sistema: 54 (de la radio)

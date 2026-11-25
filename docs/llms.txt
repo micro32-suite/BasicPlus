@@ -14,6 +14,8 @@ BasicPlus is a statically typed, object-oriented language with a modern BASIC sy
 - [Databases](https://micro32-suite.github.io/BasicPlus/en/basedatos.html.md): SQLite and its ORM on microcontrollers with BasicPlus: the same engine, the same .db file and the same code on the PC, the Metro RP2350, the ESP32-P4 and the STM32 Discovery.
 - [IDE guide](https://micro32-suite.github.io/BasicPlus/en/guia-ide.html.md): BasicPlus IDE guide: compiling and running on the PC or on the board — by cable or over WiFi —, the board explorer, the console, the debugger and the simulated micro.
 - [How it is tested](https://micro32-suite.github.io/BasicPlus/en/pruebas.html.md): How BasicPlus is tested: the output, byte-identical on the Java VM and on the C VM; the tests on all eleven boards; and a 48-hour run without a single error or restart.
+- [Boards and their pins](https://micro32-suite.github.io/BasicPlus/en/PLACAS.md): Each supported board's pins (the program's, each bus's and the system's) and the links to its manufacturer's documentation.
+- [Installing the firmware](https://micro32-suite.github.io/BasicPlus/en/INSTALAR_FIRMWARE.md): Flashing each board's image, its packs and its environment.
 
 ## Optional
 
