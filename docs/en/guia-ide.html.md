@@ -56,7 +56,7 @@ Above them, the toolbar. On the left, files and project; in the middle, executio
 
 ![Errors tab with several diagnostics](../img/ide-errores.png)
 
-The compiler **does not stop at the first error** and does not drown in cascades: it recovers at statement/function level and keeps going, so a single pass surfaces the real errors of the whole module. In the screenshot, a lexical+syntactic error (a `=` where a `:=` belongs — the language assigns with `:=`) coexists with an undeclared identifier in another function further down: the first failure does not hide the second. Spurious cascades are pruned (an already-faulty operand produces no derived errors) and, if there were very many, they are capped with an "and N more".
+The compiler **does not stop at the first error** and does not drown in cascades: it recovers at statement/function level and keeps going, so a single pass surfaces the real errors of the whole module. In the screenshot, a lexical+syntactic error (a `=` where a `:=` belongs — the language assigns with `:=`) coexists with an undeclared identifier in another function further down: the first failure does not hide the second. Spurious cascades are pruned (an already-faulty operand produces no derived errors) and, if there are many, the first ten come out and an «… y más» («and more», V9). In JC, the same.
 
 <a id="jc"></a>
 ### 4.1 JC: `.jc` files and translation
@@ -179,7 +179,7 @@ In the screenshot, `GuiColorDemo` running on a simulated micro with a **480×800
 - **Flash** — the volume size, split the same way as on a board (§9.2).
 - **Screen** — width and height, or no screen at all. You can check how your interface looks at 480×320 and at 800×480 without owning both boards. If the program rotates it (`Gui.setRotation`), the window rotates with it ([GUI §23.4](gui.html.md#ej-rotacion)).
 
-Its "flash" and its filesystem are **files on the PC** and they **persist across restarts**, just like on a board: what you upload is still there tomorrow. On first start the FS only has its folders, `/sys`, `/lib`, `/app` and `/data`, empty — unlike a board, which carries the standard library embedded in its firmware — so the IDE burns into it the *pack library* that ships with the installation (§10).
+Its "flash" and its filesystem are **files on the PC** and they **persist across restarts**, just like on a board: what you upload is still there tomorrow. On first start the FS only has its folders, `/sys`, `/lib`, `/app` and `/data`, empty — unlike a board, which carries the standard library embedded in its firmware — so the IDE burns into it the *pack library* that ships with the installation (§10), without the boards' engines: its own, the GUI's and the database's, are built in.
 
 What persists can shadow what is new: an old library in `/app`, or another installation's in its packs zone, and the program fails with `… no exporta …`. To start over, with the simulated micro stopped, use *Vaciarlo (como la primera vez)…* in the gear dialog: it deletes all its files and its packs zone, and on the next start the IDE burns this installation's pack library into it. Its configuration — the partitions — stays.
 

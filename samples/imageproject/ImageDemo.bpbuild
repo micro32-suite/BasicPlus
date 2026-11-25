@@ -5,7 +5,7 @@
 //       ImageDemo.bp        (módulo main; import Gui se resuelve de la stdlib)
 //     resources/
 //       testimg.png         (sube al device como /app/testimg.png en el Run)
-//     out/                  (.mod y .bpi generados aquí)
+//     out/                  (el .mod generado)
 {
   "sourceDir":    "src",
   "outDir":       "out",

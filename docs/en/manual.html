@@ -414,16 +414,19 @@ bp run samples/out/Hola.mod
 
 <h3 id="multilinea">3.5 Line continuation</h3>
 <p>
-  A newline ends the statement, <strong>except inside open parentheses or
-  brackets</strong>: there the newline is not significant and the expression
-  continues on the next line. To split a long expression, wrap it in
-  <code>( )</code>:
+  A newline ends the statement, <strong>except in two places</strong>, where it continues on the next
+  line: inside open parentheses or brackets, and when the line ends in an operator (<code>+</code>,
+  <code>==</code>, <code>and</code>…), in <code>:=</code>, in a comma or in a dot. The operator goes at the
+  end of the line, not at the start of the next one:
 </p>
 <pre><code><span class="kw">print</span> (<span class="str">"total = "</span> + intToString(a)
     + <span class="str">" / "</span> + intToString(b))      <span class="comment">// OK: inside ( )</span>
 
 <span class="kw">var</span> v: <span class="type">integer</span>[] := [<span class="num">1</span>, <span class="num">2</span>,
-                       <span class="num">3</span>, <span class="num">4</span>]          <span class="comment">// OK: inside [ ]</span></code></pre>
+                       <span class="num">3</span>, <span class="num">4</span>]          <span class="comment">// OK: inside [ ]</span>
+
+<span class="kw">print</span> <span class="str">"total = "</span> + intToString(a) +
+    <span class="str">" / "</span> + intToString(b)        <span class="comment">// OK: the line above ends in +</span></code></pre>
 
 <!-- =========================================================== -->
 <!-- =========================================================== -->

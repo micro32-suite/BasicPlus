@@ -289,9 +289,11 @@
 
 <p class="warn">
   <strong>On the PC: the simulated micro.</strong> The simulator shipped with the IDE carries
-  the engine <strong>linked in</strong> since V6 (<code>SQLite.mod</code> and
-  <code>Orm.mod</code> travel to it just as to a board, and there is no pack to burn): the
-  examples on this page run without a board. If you build it yourself, that is
+  the engine <strong>linked in</strong> since V6, and when the IDE makes it, it burns into it the pack
+  without the boards' engines (<code>SQLite.mod</code> and <code>Orm.mod</code>): the
+  examples on this page run without a board. One made before V9 does not have it, because the whole pack did
+  not fit (<em>«falta el modulo 'SQLite'»</em>): burn it once, with the packs manager or with
+  <code>bp placa sim pack SQLite</code>. If you build the simulator yourself, that is
   <code>make sim LVGL=1 SQLITE=1</code>. The command-line C VM (<code>bpgenvm-c</code>) does
   not: the first call throws <em>«sql_open: falta el codigo nativo del pack 'SQLI' v1»</em>.
 </p>
@@ -453,7 +455,13 @@ w.<span class="fn">eq</span>(<span class="str">"sensor_id"</span>, <span class="
   It reads the project's <code>@BD</code> annotations and writes a module with one DAO per
   entity. The file opens by warning that it is <strong>not to be edited</strong>, and carries a
   <code>@generado</code> fingerprint: if nothing changed, the generator says <code>ya al dia</code>
-  and leaves it alone.
+  and leaves it alone. The entities may be written in BP or in JC (V9); the DAO is written in BP.
+</p>
+
+<p>
+  If the project lists its <code>sources</code>, the DAO goes there like the rest, even if it does not exist yet
+  (<code>"sources": ["Garden.bp", "GardenDao.bp", "Watering.bp"]</code>): the project opens all the same, and
+  until you generate it the build says that it is missing and how to generate it (V9).
 </p>
 
 <h2 id="crud">6. The operations (CRUD)</h2>

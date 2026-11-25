@@ -105,7 +105,7 @@ Any numeric literal may include a **visual separator `_`** between digits (Pytho
 <a id="multilinea"></a>
 ### 3.5 Line continuation
 
-A newline ends the statement, **except inside open parentheses or brackets**: there the newline is not significant and the expression continues on the next line. To split a long expression, wrap it in `( )`:
+A newline ends the statement, **except in two places**, where it continues on the next line: inside open parentheses or brackets, and when the line ends in an operator (`+`, `==`, `and`…), in `:=`, in a comma or in a dot. The operator goes at the end of the line, not at the start of the next one:
 
 ```
 print ("total = " + intToString(a)
@@ -113,6 +113,9 @@ print ("total = " + intToString(a)
 
 var v: integer[] := [1, 2,
                        3, 4]          // OK: inside [ ]
+
+print "total = " + intToString(a) +
+    " / " + intToString(b)        // OK: the line above ends in +
 ```
 
 <a id="tipos"></a>

@@ -579,6 +579,14 @@ if [ "$malos" -gt 0 ]; then
     rm -rf "$PRUEBA" "$NOMBRE.zip"; exit 1
 fi
 
+# V9 #900 — y las pruebas de ejemplo, con las dos VMs del propio ZIP. La red usa una VM-C sin ventana, y la del ZIP la
+# lleva: la suya escribía sus avisos por la salida estándar, y toda prueba con una GUI fallaba en `bp test`.
+echo "-- las pruebas de ejemplo (bp test), con las VMs del ZIP --"
+if ! ( cd "$PRUEBA/$NOMBRE/samples/pruebas" && "$PRUEBA/$NOMBRE/bp" test ); then
+    echo "  no pasan — no se monta el ZIP"
+    rm -rf "$PRUEBA" "$NOMBRE.zip"; exit 1
+fi
+
 rm -rf "$PRUEBA"
 
 sha256sum "$NOMBRE.zip" > "$NOMBRE.zip.sha256"

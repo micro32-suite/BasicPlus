@@ -287,9 +287,11 @@
 
 <p class="warn">
   <strong>En el PC: el micro simulado.</strong> El simulador que viene con el IDE lleva
-  el motor <strong>enlazado dentro</strong> desde V6 (<code>SQLite.mod</code> y
-  <code>Orm.mod</code> viajan a él igual que a una placa, y no hay pack que grabar): los
-  ejemplos de esta página corren sin placa. Si lo construyes tú, es
+  el motor <strong>enlazado dentro</strong> desde V6, y el IDE le graba al hacerlo el pack sin los motores
+  de las placas (<code>SQLite.mod</code> y <code>Orm.mod</code>): los
+  ejemplos de esta página corren sin placa. Uno hecho antes de V9 no lo tiene, porque el pack entero no le
+  cabía (<em>«falta el modulo 'SQLite'»</em>): grábaselo una vez, con el gestor de packs o con
+  <code>bp placa sim pack SQLite</code>. Si construyes tú el simulador, es
   <code>make sim LVGL=1 SQLITE=1</code>. La VM-C de línea de comandos
   (<code>bpgenvm-c</code>) no lo lleva: la primera llamada lanza <em>«sql_open: falta el
   codigo nativo del pack 'SQLI' v1»</em>.
@@ -457,7 +459,13 @@ w.<span class="fn">eq</span>(<span class="str">"sensor_id"</span>, <span class="
   Lee las <code>@BD</code> del proyecto y escribe un módulo con un DAO por entidad. El
   fichero empieza avisando de que <strong>no se edita</strong>, y lleva una huella
   <code>@generado</code>: si no ha cambiado, el generador dice <code>ya al dia</code> y no
-  lo reescribe.
+  lo reescribe. Las entidades pueden estar en BP o en JC (V9); el DAO se escribe en BP.
+</p>
+
+<p>
+  Si el proyecto dice sus <code>sources</code>, el DAO se pone ahí como los demás, aunque aún no esté
+  (<code>"sources": ["Jardin.bp", "JardinDao.bp", "Riego.bp"]</code>): el proyecto se abre igual, y hasta que
+  lo generes el build dice que falta y cómo se genera (V9).
 </p>
 
 <h2 id="crud">6. Las operaciones (CRUD)</h2>

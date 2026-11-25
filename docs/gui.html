@@ -844,7 +844,9 @@ l.<span class="fn">setFont</span>(fid)</code></pre>
 </p>
 <div class="note">
   <p>El <code>.win</code> y sus imágenes/fuentes van en la carpeta <code>resources/</code> del proyecto; el IDE los
-  sube al dispositivo junto con el programa (ver <a href="guia-ide.html">Guía del IDE</a>).</p>
+  sube al dispositivo junto con el programa (ver <a href="guia-ide.html">Guía del IDE</a>). En el PC, con <em>Run</em> y con
+  <code>bp run</code>, el programa los encuentra en su pack (<code>"out": "pack"</code> en el <code>.bpbuild</code>);
+  <em>Run Window</em> los copia él.</p>
 </div>
 
 <h3 id="ev-codigo">22.5 Suscribir desde código (sin <code>.win</code>)</h3>
@@ -942,7 +944,8 @@ scr.onKey := pant::tecla
   El botón <em>Run</em> del IDE ejecuta el programa en la VM Java y pinta los widgets con Swing. Es la vuelta
   más rápida para iterar el layout y la lógica. Al ser una <em>aproximación</em> (widgets Swing, no LVGL),
   tiene dos límites, detallados en §25: no renderiza fuentes <code>.bin</code> cargadas y no copia la carpeta
-  <code>resources/</code>, así que los formularios <code>.win</code> se prueban en la placa (o como en §23.2).
+  <code>resources/</code>, así que los formularios <code>.win</code> se prueban con el programa en pack
+  (<code>"out": "pack"</code>), en la placa o como en §23.2.
 </p>
 
 <h3 id="ej-host">23.2 Render real en el PC (VM-C + LVGL/SDL)</h3>
@@ -1373,7 +1376,7 @@ end PruebaGui</code></pre>
   El <em>Run</em> de host (miVM/Swing, §23.1) no renderiza fuentes <code>.bin</code> (usa la fuente por defecto,
   aunque el id es válido), no pinta un <code>Chart</code> (su recuadro, vacío) ni un <code>Led</code>, y no copia
   <code>resources/</code>, así que un formulario <code>.win</code> allí no
-  encuentra su fichero. Para ver el píxel exacto o probar forms en el PC: la VM-C con LVGL (§23.2), copiando el
+  encuentra su fichero (con el programa en pack, <code>"out": "pack"</code>, sí). Para ver el píxel exacto o probar forms en el PC: la VM-C con LVGL (§23.2), copiando el
   <code>.win</code> y los assets junto al <code>.mod</code>.
 </p>
 

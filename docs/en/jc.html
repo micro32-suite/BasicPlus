@@ -2687,7 +2687,8 @@ hola 2</code></pre>
 <h3 id="errores">18.5 The error messages</h3>
 <ul>
   <li><strong>Syntax errors</strong> are JC's: <code>File.jc:line:column: error sintáctico: …</code> (or
-      <code>error léxico</code>), with the line and the column. The JC reader stops at the first one.</li>
+      <code>error léxico</code>). The first ten come out at once (V9), as in BP; with <code>--max-errores=0</code>,
+      all of them.</li>
   <li><strong>Many say how it is written in JC</strong>: «en JC es 'base', como en C#» (in JC it is base, as in C#);
       «en JC, ++ y -- van detrás: v++;» (in JC, ++ and -- go after); «JC no tiene el ?? de C#, de momento (el ternario,
       c ? a : b, sí)» (JC does not have C#'s ?? for now; the ternary, yes); «'Perro(…)' crea un objeto: en JC se

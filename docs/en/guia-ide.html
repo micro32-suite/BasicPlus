@@ -306,8 +306,8 @@
   <code>:=</code> belongs — the language assigns with <code>:=</code>)
   coexists with an undeclared identifier in another function further down:
   the first failure does not hide the second. Spurious cascades are pruned
-  (an already-faulty operand produces no derived errors) and, if there were
-  very many, they are capped with an "and N more".
+  (an already-faulty operand produces no derived errors) and, if there are
+  many, the first ten come out and an «… y más» («and more», V9). In JC, the same.
 </p>
 
 <h3 id="jc">4.1 JC: <code>.jc</code> files and translation</h3>
@@ -700,7 +700,8 @@
   folders, <code>/sys</code>, <code>/lib</code>, <code>/app</code> and
   <code>/data</code>, empty — unlike a board, which carries the standard library
   embedded in its firmware — so the IDE burns into it the <em>pack library</em>
-  that ships with the installation (§10).
+  that ships with the installation (§10), without the boards' engines: its own, the GUI's and
+  the database's, are built in.
 </p>
 <p>
   What persists can shadow what is new: an old library in <code>/app</code>, or

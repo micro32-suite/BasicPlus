@@ -5,7 +5,7 @@
 //     src/
 //       App.bp             (módulo main)
 //       Util.bp            (módulo importado por App)
-//     out/                 (.mod y .bpi generados aquí)
+//     out/                 (el .mod generado)
 {
   "sourceDir":    "src",
   "outDir":       "out",

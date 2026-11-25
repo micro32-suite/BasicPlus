@@ -1839,7 +1839,7 @@ The complete case, end to end, is in [databases](basedatos.html.md) and in `bpst
 <a id="cli"></a>
 ## 16. Compilation & execution
 
-From the command line, everything goes through `bp` (at the root of the installation: `bp.bat`, and `bp` for bash). `bp build` compiles a source or a project (the `.mod` goes to `out/` next to the source) and only says where it went, or the errors, each one with its file (`App.bp:7:15: error semántico: …`, V9); `bp run` compiles if needed and runs on the Java VM (with `--c`, on the C VM), and exits with the program's code; `bp png` turns a capture into a PNG (§23.5 of the graphics guide); and `bp help` tells it all. The standard library is the one in [BpVM.cfg](#cli-vmcfg) and, with none in sight, the installation's. Below are the compiler and the Java VM with all their options: `bp frontend` and `bp vm`.
+From the command line, everything goes through `bp` (at the root of the installation: `bp.bat`, and `bp` for bash). `bp build` compiles a source or a project (the `.mod` goes to `out/` next to the source) and only says where it went, or the errors, each one with its file (`App.bp:7:15: error semántico: …`, V9): the first ten, or all of them with `--max-errores=0`; `bp run` compiles if needed and runs on the Java VM (with `--c`, on the C VM), and exits with the program's code (a project that comes out as a pack, in its pack: on the PC that is where its resources are, §15.3); `bp png` turns a capture into a PNG (§23.5 of the graphics guide); and `bp help` tells it all. The standard library is the one in [BpVM.cfg](#cli-vmcfg) and, with none in sight, the installation's. Below are the compiler and the Java VM with all their options: `bp frontend` and `bp vm`.
 
 ```
 bp build samples/blink.bp          (writes samples/out/Blink.mod)
@@ -1886,6 +1886,7 @@ bp frontend <file.bp> [options]
 | `--tokens` | Dump of the lexer's tokens. |
 | `--ast` | Dump of the AST. |
 | `--quiet` | Only the errors and warnings; if it compiles, nothing (V9). |
+| `--max-errores=<n>` | How many errors are written at most (V9): 10 if not given; with 0, all of them. Warnings do not count. |
 | `--compile <dir>` | Compiles to `.mod` (the interface goes inside). |
 | `--interface <dir>` | Only parses and builds the interface — no code, no output file. |
 | `--project <file.bpbuild>` | Compiles the whole project ([.bpbuild](#cli-bpbuild)); with `"out": "pack"`, it assembles the pack (§15.3). |

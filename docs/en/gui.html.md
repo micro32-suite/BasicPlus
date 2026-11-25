@@ -571,7 +571,7 @@ Thread(this::trabajo()).start()
 
 You write method *names* in the `.win`. When the form is loaded, `load` resolves each name against the method table the `.mod` already carries and subscribes the event: nothing is baked into the file and the IDE plays no part, so the `.win` goes to the board as is. With `"name": "boton1"` and no `"clic"`, the handler is *derived*: `boton1_onClick` / `boton1_onChange` (and the widget is assigned to the window's `boton1` property, if it declares one). An explicit `"clic"` wins over the derived name. An explicit name that does not exist shows up on press (`[bpvm] evento: slot -1 no resoluble … — descartado`); a derived name that does not exist is silently ignored, which is the normal case (a button rarely has an `onChange`).
 
-> The `.win` and its images/fonts live in the project's `resources/` folder; the IDE uploads them to the device along with the program (see the [IDE guide](guia-ide.html.md)).
+> The `.win` and its images/fonts live in the project's `resources/` folder; the IDE uploads them to the device along with the program (see the [IDE guide](guia-ide.html.md)). On the PC, with *Run* and with `bp run`, the program finds them in its pack (`"out": "pack"` in the `.bpbuild`); *Run Window* copies them itself.
 
 <a id="ev-codigo"></a>
 ### 22.5 Subscribing from code (without a `.win`)
@@ -646,7 +646,7 @@ A BasicPlus GUI can be run three ways, from fastest to most faithful: preview on
 <a id="ej-preview"></a>
 ### 23.1 Preview on the PC (miVM / Swing)
 
-The IDE's *Run* button executes the program on the Java VM and paints the widgets with Swing. It is the fastest loop for iterating layout and logic. Being an *approximation* (Swing widgets, not LVGL), it has two limits, detailed in §25: it does not render loaded `.bin` fonts and it does not copy the `resources/` folder, so `.win` forms are tested on the board (or as in §23.2).
+The IDE's *Run* button executes the program on the Java VM and paints the widgets with Swing. It is the fastest loop for iterating layout and logic. Being an *approximation* (Swing widgets, not LVGL), it has two limits, detailed in §25: it does not render loaded `.bin` fonts and it does not copy the `resources/` folder, so `.win` forms are tested with the program in a pack (`"out": "pack"`), on the board or as in §23.2.
 
 <a id="ej-host"></a>
 ### 23.2 Real render on the PC (VM-C + LVGL/SDL)
@@ -975,7 +975,7 @@ Since V7 (3-Oct) it saves the ranges (`min`/`max`), the options and the items, t
 
 ### Swing preview: an approximation
 
-The host *Run* (miVM/Swing, §23.1) does not render `.bin` fonts (it uses the default font even though the id is valid), does not paint a `Chart` (its box, empty) or a `Led`, and does not copy `resources/`, so a `.win` form there does not find its file. For the exact pixel or to try forms on the PC: the C VM with LVGL (§23.2), copying the `.win` and the assets next to the `.mod`.
+The host *Run* (miVM/Swing, §23.1) does not render `.bin` fonts (it uses the default font even though the id is valid), does not paint a `Chart` (its box, empty) or a `Led`, and does not copy `resources/`, so a `.win` form there does not find its file (with the program in a pack, `"out": "pack"`, it does). For the exact pixel or to try forms on the PC: the C VM with LVGL (§23.2), copying the `.win` and the assets next to the `.mod`.
 
 ### Display state between runs (board)
 

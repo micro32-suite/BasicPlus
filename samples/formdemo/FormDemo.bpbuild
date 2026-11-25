@@ -1,13 +1,13 @@
-// H13.1 — Sample de Forms (Camino A). Abre este proyecto en BpIde y dale a
-// Run-on-Device: el IDE compila (emite FormDemo.slots), HORNEA main.win
-// (eventos por nombre → slot de vtable) y lo sube; en la placa el loader
-// construye el árbol y cada widget despacha a su método de la ventana.
+// H13.1 — Un formulario: una ventana y su .win. Abre este proyecto en BpIde y dale a
+// Run on Device o a Run Window: el .win viaja tal cual, y al cargarlo (load) se
+// construye el árbol y cada widget se suscribe al método de la ventana que nombra.
+// En el PC, con Run o con bp run, los recursos sólo están en el pack: "out": "pack".
 //
 //   formdemo/
 //     FormDemo.bpbuild     (este fichero)
 //     src/FormDemo.bp      (módulo main: la ventana + handlers)
 //     resources/main.win   (el formulario, eventos por NOMBRE)
-//     out/                 (.mod/.bpi/.slots generados)
+//     out/                 (el .mod generado)
 {
   "sourceDir":    "src",
   "outDir":       "out",

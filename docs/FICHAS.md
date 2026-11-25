@@ -82,7 +82,7 @@ en §ABIERTAS, en el bloque de V9:
 
 | hito | qué | estado |
 |---|---|---|
-| **H1** | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`) | ⬜ abierto el 22-nov |
+| **H1** | **una IA trabaja con BasicPlus**: lo que les falta a las herramientas para que una IA escriba, compile, ejecute y compruebe un programa —en el PC, en el micro simulado y en la placa— con sólo lo publicado (`#852`–`#861`) | ⏳ abierto el 22-nov; los diez apartados, hechos el 25-nov, y la prueba de la base de datos; a falta de que Eduardo vea los últimos, de preguntar a las placas que no estaban (`#861`) y de la prueba final, la de una IA sin contexto con el ZIP nuevo |
 | **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA; cada acción del IDE, un comando, con la `Action` de Swing como su cara en la ventana y MCP como la de la IA (Eduardo, 22-nov). Va antes que el H1 | ⏳ abierto el 22-nov; H2.1, el análisis, H2.2, los comandos (53, probados por Eduardo), y H2.3, la IA por MCP (probado por una IA de verdad en la Pico 2 y en la VM-C), hechos; H2.4 (el depurador, por la IA), analizado y aplazado a una segunda fase (23-nov): lo que haga falta, lo dirá el uso, en el H1 |
 | **H3** | **el I2C y el SPI por software** (Eduardo, 24-nov): una clase base por bus, la del periférico y la de software, que se intercambian cambiando sólo el constructor; las de software, cada una en su módulo (`#881`–`#884`) | ⏳ abierto el 24-nov; el I2C, hecho y visto en las tres familias con un sensor; el SPI, analizado |
 
@@ -13866,7 +13866,7 @@ el IDE, que es el H2 (abajo).
 | **H1.6** | el cable, por línea de órdenes | `#857` | M-14, M-15 | ✅ 23-nov, `b79c4a13` (Eduardo: *«Java, en bp, sobre lo del IDE»*; *«Sacarla a una clase común»*; *«El mismo del IDE»*): `bp run --placa/--sim` y `bp placa`, probados en las cuatro placas y en el simulado; la subida del IDE, la misma, probada por Eduardo con la P4; sin `pack`, para más adelante (`#875`) |
 | **H1.7** | lo que una IA lee | `#858` | M-3, M-10, M-11, M-18, M-19 | 🧬 hecho el 23-nov, a falta de verlo Eduardo: (a) `bp api` (`7cee427`; *«Si»*), (b) la documentación en Markdown y (d) `llms.txt`, sacados del HTML por `docs_md.py` (*«OK, sigue con b»*); (c) y (e), no; y una idea de Eduardo, `#879` |
 | **H1.8** | probar un programa sin nadie delante | `#859` | M-12, M-13, H-011, H-012 | 🧬 (a) y (b), hechas el 23-nov, a falta de verlas Eduardo (*«1 y 2 si»*): `bp test`, `Assert` y `Gui.click`/`change`/`dumpTree`; (c), (d) y (e), aplazadas (*«3 lo aplazamos»*): `#880` |
-| **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | 🧬 (a) y (b), hechas el 25-nov, a falta de verlas Eduardo; (c), un error por declaración en JC, lo decide él |
+| **H1.9** | los mensajes que enseñan | `#860` | M-9, M-16, M-17 | 🧬 hecho el 25-nov, a falta de verlo Eduardo: (a), (b) y (c), los errores de JC de una vez, diez como mucho (*«Una lista corta de no mas de 10 errores»*) |
 | **H1.10** | las placas, descritas para leer | `#861` | su pregunta abierta | 🧬 hecho el 25-nov (`docs/PLACAS.md`, sacado de lo que contesta cada placa, con los enlaces: *«podemos incluir los enlaces de Internet de su documentación»*); a falta de preguntar a las placas que no estaban conectadas y de verlo Eduardo |
 
 **El orden**, el del análisis, que es bueno: H1.1 lo primero (es un fallo, y silencioso); después lo barato que se nota
@@ -13885,7 +13885,16 @@ probaremos más cosas.»*
 
 **Por decidir** (Eduardo), cada cosa al llegar a su ficha: el nombre de los lanzadores (`#853`); que el clic llegue
 (`#852`); la forma de las pruebas y la API pública de la GUI (`#859`); y si compensa que el lector de JC siga tras un
-error (`#860`).
+error (`#860`: sí, hasta diez, 25-nov).
+
+**La prueba de la base de datos** (Eduardo, 25-nov: *«Ahora añadiríamos una tercera prueba con una BD. En ella la IA añade
+el pack de la BD y modifica la variable de entorno que indica la RAM para la BD»*; *«yo lo haría en la P4, puedes borrar la
+zona de packs sin problema y como tiene una SD lo puedes probar con la BD en flash o en la SD»*), hecha el mismo día con el
+IDE del ZIP de prueba y la P4 de Waveshare: la IA formateó la zona de packs (con el sí de la persona), puso `SQLite=8`,
+reinició, grabó `Stdlib` y `SQLite` (565 KB con la poda) y ejecutó un proyecto suyo (SQL, ORM y DAO) con la base en la flash
+y en la SD: los datos siguen entre ejecuciones (4 arranques, 56 lecturas) y los dos ficheros, bajados, están enteros
+(`integrity_check`); una transacción de 100 lecturas, 1005 ms en la flash y 86 en la SD. Lo que encontró: `#896`, `#897`,
+`#898` y, al arreglarlas, `#899`. La placa, como estaba (`SQLite=4` y el pack de la GUI).
 
 #### ✅ `#852` — H1.1: `Gui.__guiClick` desde `Main`, con el lazo de `Gui.start()` en marcha, se pierde sin ventana (abierta el 22-nov · F-1 del análisis · **CERRADA el 22-nov**, `333c8f0d`: el error que dice qué hacer)
 
@@ -14292,7 +14301,7 @@ analizarla. Es el suelo del H2 (`#728`).
 - **Hecho cuando:** un comando ejecuta las pruebas de un proyecto y sale con 0 o 1; la §24 de `gui.html` lista la API
   de prueba de la GUI y un ejemplo de GUI se prueba solo. (Lo de (c), (d) y (e), en `#880`.)
 
-#### 🧬 `#860` — H1.9: los mensajes que enseñan: el arreglo en los de BP, y en JC las costumbres de Java (abierta el 22-nov · M-9, M-16 y M-17 del análisis · (a) y (b), hechas el 25-nov, a falta de verlas Eduardo; (c), lo decide él)
+#### 🧬 `#860` — H1.9: los mensajes que enseñan: el arreglo en los de BP, y en JC las costumbres de Java (abierta el 22-nov · M-9, M-16 y M-17 del análisis · hechas las tres el 25-nov, a falta de verlas Eduardo)
 
 - **(a) BP:** tres mensajes que dicen el fallo y no el arreglo —una sobrecarga que no casa (listar las candidatas), un
   miembro protegido (sugerir el público) y «'string' no tiene miembros» (nombrar las funciones: `strlen`, `upper`…)—;
@@ -14322,10 +14331,20 @@ analizarla. Es el suelo del H2 (`#728`).
   - **Probado:** `MensajesQueEnsenanTest` (20; la suite, 439), `samples/errores/ComoSeEscribe.bp` (`h13-errores.sh`, 165
     comprobaciones), los 419 fuentes de `samples` con el compilador de antes y con éste (los `.mod`, idénticos) y la
     stdlib, idéntica. La guía de JC (§17.1 y §18.5) y el manual (§9.6), en las dos lenguas.
-- **(c), analizada, a falta de decidir:** el lector de JC lanza el error donde lo ve. Para dar uno por declaración bastaría
-  con apuntarlo, saltar hasta el final de esa declaración (contando llaves) y seguir con la siguiente: unas 30 líneas, sin
-  tocar cómo lee lo que está bien. Con los mensajes de ahora, el fichero de la sonda (`Inventario-como-en-java.jc`) pasaría
-  de una vuelta por error a una vuelta por cada nivel (los miembros de una clase, de una vez).
+- **(c), hecha el 25-nov** (Eduardo: *«Siempre es mejor que de una lista de errores que los errores 1 a 1. Pero una lista
+  corta de no mas de 10 errores.»*; `3b5c4bb`). El lector de JC lanzaba el error donde lo veía: ahora lo apunta y sigue, por
+  la sentencia o la declaración siguiente o, si se sabe qué se quiso decir (`extends`, un método sin `function`,
+  `for (T x : c)`, `super`, `x++` dentro de una expresión…), como si estuviera bien. Los del escáner, igual, por la línea
+  siguiente. De una compilación se escriben los diez primeros, en BP y en JC (los dos igual: la lista corta vale para los
+  dos), y se dice que hay más; `--max-errores=0` los da todos (el compilador, `bp build`, `run` y `test`). A quien traduce
+  (`--escribir-bp`) le basta el primero, como siempre.
+  - **Visto:** `Inventario-como-en-java.jc`, que pedía una vuelta por error, da sus diez primeros de una vez, cada uno con su
+    arreglo, y ninguno de más.
+  - **De paso, en BP:** una línea que empieza por un operador (`+ "b"`) decía «se esperaba una expresión»: ahora, que el
+    operador va al final de la de arriba. Y el manual (§3.5) sólo contaba la mitad de la regla (los paréntesis): entera, en las
+    dos lenguas.
+  - **Probado:** `MensajesQueEnsenanTest` (27; la suite, 449), los 165 ejemplos de error, los `.mod` de los 420 fuentes de
+    `samples` con el compilador de antes y con éste, y los 37 de la stdlib, idénticos.
 
 #### 🧬 `#861` — H1.10: las placas, descritas para leer: sus pines y sus periféricos (abierta el 22-nov · la pregunta abierta del análisis)
 
@@ -14453,8 +14472,8 @@ variables y sigue.
   dentro de su carpeta de trabajo, así que `/lib/Core.mod` cae en la raíz del disco («escapa»). No es de `#848`: la
   opción «VM Java (TCP v1)» ya estaba; `#848` la deja a un clic.
 - **Decidido (Eduardo, 22-nov): la VM Java como placa, completa** (*«Placa completa, 1 a 5»*), y para después de
-  las acciones del IDE (*«apúntalo y terminamos con las acciones del IDE»*). Las cinco piezas, con lo que se vio del
-  código:
+  las acciones del IDE (*«apúntalo y terminamos con las acciones del IDE»*). Fuera de la V8.5: *«Para v9»* (25-nov). Las
+  cinco piezas, con lo que se vio del código:
   1. **Rutas de placa** (`/app`, `/lib`, `/sys`) dentro de su carpeta: todas las órdenes de ficheros pasan por
      `DebugServer.workdirPath` → `ModuleManager.resolveInWorkdir`, que en Windows resuelve `/lib/x` contra la raíz
      del disco. Una ruta con `/` delante, desde la raíz de la carpeta.
@@ -14746,6 +14765,17 @@ mantiene sola.»*
   (`Log`, `Json`…): en el PC sigue sin subirse, y a la placa se toma por el de la stdlib (`Despliegue.deLaStdlib`
   también decide por el nombre), así que se usaría el de la stdlib. ¿Un aviso del compilador, o un error, cuando un
   módulo se llama como uno de la stdlib?
+  - **Eduardo, 25-nov:** *«Dos módulos pueden llamarse igual pero ser de diferentes dominios. Pusimos un comando que no
+    recuerdo equivalente al "package" de Java.»* Es `library`: `library "mio"` y `module Log` es `mio.Log`, y no choca. Un
+    error del compilador, pues, no. Lo que se ha visto al mirarlo (medido, 25-nov):
+  - **con `library`:** va por todos los caminos desde `#901`. Dos cosas no: (a) `import Util` a secas no encuentra el de la
+    misma library, que es lo que dice el manual (§10.3); no lo ha hecho nunca (V5 a V8.1, probado): hay que escribir
+    `import mio.Util`; (b) dos import que acaban igual (`Log` y `mio.Log`) en el mismo módulo son un error («el alias de import
+    'Log' colisiona…»), y no hay otra forma de nombrarlos;
+  - **sin `library`** en ninguno de los dos, el nombre entero es el mismo, y manda el del programa: el compilador lo dice
+    («'Log' se toma de … y NO de la stdlib») y las dos VMs del PC, también («tapa al de /lib»). Donde no es así es al subirlo
+    desde el IDE o con `bp run` a una placa, al simulado o a la VM local: la subida decide por el nombre y deja fuera el del
+    programa (en el simulado: «lib 'Log' presente pero no exporta 'Log.hola()s'»).
 
 #### ✅ `#876` — las variables de entorno de la placa, como comandos, desde su botón y por la IA (abierta el 23-nov · Eduardo, al cerrar el H1.6 · **CERRADA el 25-nov**, `337286b` en `toolchain` y `520b6fa2`; instalar la GUI o la BD con sus variables, a `#875` y de ella a `#891`)
 
@@ -15011,6 +15041,76 @@ mantiene sola.»*
   cuenta 0 (sin puente).
 - **Visto el 25-nov en la DK2** (Eduardo movió el puente de una prueba anterior a `PB8`–`PB7`: *«a ver ahora»*):
   `PulseDemo_Dk2` cuenta 999, 500 y 201 de los 1000, 500 y 200 esperados. La Nucleo, el mismo código con su pin.
+
+#### ✅ `#896` — un micro simulado recién hecho no tiene la base de datos: «falta el modulo 'SQLite'» (abierta el 25-nov · la prueba de la base de datos · de antes: está en la V8.1 · hecha y **CERRADA** el mismo día, `3b5c4bb` de `toolchain`)
+
+- Al hacerlo, el IDE le graba los packs de la instalación enteros: `Gui.pack` (2,2 MB) y `SQLite.pack` (1,1 MB) no caben en su
+  zona, de 1 MB. Los motores no le hacen falta (los lleva su ejecutable), pero `SQLite.mod` y `Orm.mod` van en el pack.
+- Lo explicó Eduardo: *«El pack de la BD grabado en placa no ocupa 1,2 M. Tiene 2 imágenes, una para ARM y otra para RISC-V
+  y solamente graba la que toca.»* En una placa se poda al grabarlo; aquí, no.
+- **Hecho:** se podan como para una placa (`PackBurn.podar`): los cinco ocupan 296 KB. **Probado** con `bp run --sim` en uno
+  recién hecho: el proyecto de la prueba (SQL, ORM y DAO) y la GUI (`GuiShot`). A uno hecho antes le falta: se le graba una vez
+  (`bp placa sim pack SQLite`, 24 KB; probado), y está dicho en la guía de la BD, en las dos lenguas.
+
+#### ✅ `#897` — un proyecto que nombra en `sources` el DAO que aún no se ha generado no se puede abrir para generarlo (abierta el 25-nov · la prueba de la base de datos · hecha y **CERRADA** el mismo día, `3b5c4bb` de `toolchain`)
+
+- `BpBuild.load` daba «'sources' apunta a './JardinDao.bp' y ahí no hay ningún fichero», también con `--dao` y al abrirlo en
+  el IDE: había que quitarlo de la lista, generarlo y volverlo a poner.
+- **Hecho:** el proyecto se abre (`XDao.bp` con `X.bp` o `X.jc` a su lado) y, hasta que se genera, el build dice que falta y quién
+  lo genera. Otro fichero que falte sigue siendo un error al abrirlo. La guía de la BD (§5), en las dos lenguas.
+- **Y del mismo camino:**
+  - los DAO de unas entidades escritas en JC: el generador sólo leía `.bp` y decía «no hay ninguna entidad»;
+  - los avisos del proyecto (la `database` que no está, o la que está en `resources/` y se machacaría en cada Run), que sólo
+    enseñaba `bp frontend --project`: también `bp build` y el IDE, al abrirlo;
+  - `bp build` de un proyecto decía «compilado: out\J.mod» aunque fuera una librería, que no lo tiene, o un pack: dice lo
+    que queda;
+  - el IDE y `bp run --placa` buscaban el `.pack` por el nombre del main («no se encontró Hola.pack»); se llama como el
+    proyecto, o como diga su `pack.name`;
+  - de un proyecto con `sources`, el aviso «no define 'main'» salía de cada módulo en cada build: sólo del que es su main (`34f6875`).
+- **Probado:** `ProyectoDaoTest` (3) y por el camino del usuario (`bp build`, `--dao`, `bp run --sim` y el IDE): en BP, en JC y
+  un pack con otro nombre que su main.
+
+#### ✅ `#898` — con un proyecto abierto y ninguna pestaña, Compilar y Ejecutar dicen «Editor vacío» (abierta el 25-nov · la prueba de la base de datos: la IA abre el proyecto y lo ejecuta, sin abrir un fichero · hecha y **CERRADA** el mismo día, `3b5c4bb` de `toolchain`)
+
+- Lo que se compila es el proyecto (su main), no la pestaña. **Hecho:** sin pestaña, no hay nada que mirar ni que guardar; con una
+  abierta, como siempre. Probado sin ventana: compilar, ejecutar (VM Java) y ejecutar en el micro simulado.
+
+#### ✅ `#899` — el segundo Run on Device de un programa que sale en pack lo borra de la placa, y falla: «fichero no existe» (abierta el 25-nov · al probar `#897` · de antes: está en la V7.0, la V8.0 y la V8.1 · hecha y **CERRADA** el mismo día, `3b5c4bb` de `toolchain`)
+
+- La subida retira de la placa un `.mdn` de una tanda anterior (desde el 25-ago, el nativo va dentro del `.mod`), y su nombre
+  lo saca cambiando `.mod` por `.mdn`: con un `.pack` no cambia nada, el nombre es el del propio pack y, si ya estaba en la
+  placa, lo borraba después de subirlo. Una vez sí y otra no (medido en el IDE: 4 vueltas, las pares fallan), también con
+  `bp run --placa`.
+- **Hecho:** sólo con un `.mod`. **Probado:** las 4 vueltas, y `bp run --sim`, 3; `SubidaSmoke` lo sube dos veces y mira que está
+  (con la `Despliegue` de antes, la segunda falla).
+
+#### ✅ `#900` — con las VMs del ZIP, `bp test` de una GUI falla siempre: «la VM Java y la VM-C no imprimen lo mismo» (abierta el 25-nov · al ensayar la prueba final con el ZIP · hecha y **CERRADA** el mismo día, `7b1178c` del runtime y `b65f0fe` de `toolchain`)
+
+- Hasta la del ejemplo (`samples/pruebas`): la VM-C del ZIP lleva la ventana, y sus 19 avisos («[gui] sin pantalla…») iban por
+  la salida estándar, que desde `#855` es sólo del programa. La red no lo ve: usa una VM-C sin ventana.
+- **Hecho:** por el `stderr` (`bpvm_diag`). Y el montaje del ZIP pasa las pruebas de ejemplo con las dos VMs del propio ZIP.
+- **Del mismo ensayo** (el punto 4: un proyecto de varios módulos con un `.win`, un hilo, una `native` y un sensor simulado, que
+  acaba igual en las dos VMs):
+  - `bp run` de un proyecto que sale en pack ejecutaba su `.mod`, y no encontraba sus recursos, que en el PC sólo están en el
+    pack (Eduardo, `#808`: *«Si hay que subir resources la única manera es hacer un pack de aplicación que los incluya. Eso se
+    queda así.»*): ejecuta el pack, como el IDE. La referencia (§16) y la guía para IA lo dicen.
+  - un `.pack` con una ruta de más de 127 caracteres, en la VM-C del PC: «no se puede abrir». Hasta 1024 (en una placa, como
+    estaba).
+  - dos mensajes más de `#860`: «se esperaban 2 (addr: integer, reg: integer), se pasaron 3», y «no se puede llamar a
+    'fmtDouble': no hay ninguna función con ese nombre».
+  - la guía para IA nombra la guía de las bases de datos y la del IDE, y cómo lee un recurso una prueba.
+- **Probado:** con una copia del ZIP y sus dos VMs: las pruebas del ejemplo y las del proyecto, bien; el proyecto, igual en las
+  dos (10 líneas); el pack, desde una ruta larga. La suite, 450; los 165 ejemplos de error, los fragmentos de los documentos
+  y los `.mod` de los 420 fuentes, como antes. **La red**, VERDE (12:30, con todo lo del día): la paridad, 221 de 221; MOD8,
+  212 y los 9 de siempre; dos workers, 221; las pruebas de C, 117; el sim, 16; la sombra, 15; el estrés.
+
+#### ✅ `#901` — un programa con `library` no se ejecuta ni desde el IDE ni con `bp run`: «no se encontró Prog.mod» (abierta el 25-nov · al mirar lo de `#877` tras lo que recordó Eduardo · de antes: está en lo publicado · hecha y **CERRADA** el mismo día, `34f6875` de `toolchain`)
+
+- Su `.mod` es `com.ejemplo.Prog.mod`, y `Main.nombreDelModulo` —el de los Run, el depurador y `bp`— se saltaba la línea
+  `library`. Por la VM a mano (`bp vm …`) y en un pack, iba (`#365`).
+- **Hecho:** el nombre, con su `library`; y el del main de un proyecto, del fuente (`BpBuild.modDelMain`). **Probado** con un
+  proyecto `library "mio"` que tiene su propio módulo `Log` (`import mio.Log`): `bp run`, `--c`, `--sim`, Run, y Run on
+  Device en el simulado, dos veces; usa el suyo, y el `Log` de la stdlib sigue en su sitio. `ProyectoDaoTest`.
 
 #### 🧬 `#893` — la guía para IA que el IDE deja en una carpeta no se pone al día: se queda la de la primera vez (abierta el 25-nov · vista en la carpeta de pruebas: la del 23 no sabía de packs ni de guiones · hecha el mismo día)
 

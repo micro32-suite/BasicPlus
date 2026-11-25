@@ -308,8 +308,8 @@
   <code>:=</code> para asignar) y, en otra función más abajo, un
   identificador no declarado: el fallo de la primera no oculta el de la
   segunda. Las cascadas espurias se podan (un operando ya erróneo no
-  genera errores derivados) y, si hubiera muchísimos, se recortan con
-  un «y N más».
+  genera errores derivados) y, si hay muchos, salen los diez primeros y
+  un «… y más» (V9). En JC, igual.
 </p>
 
 <h3 id="jc">4.1 JC: los <code>.jc</code> y la traducción</h3>
@@ -698,7 +698,8 @@
   carpetas, <code>/sys</code>, <code>/lib</code>, <code>/app</code> y
   <code>/data</code>, vacías —a diferencia de una placa, que trae la biblioteca
   estándar embebida en el firmware—, así que el IDE le graba la <em>biblioteca de
-  packs</em> que acompaña a la instalación (§10).
+  packs</em> que acompaña a la instalación (§10), sin los motores de las placas: los suyos,
+  los de la GUI y la base de datos, los lleva dentro.
 </p>
 <p>
   Lo que persiste puede tapar a lo nuevo: una librería vieja en <code>/app</code>, o la

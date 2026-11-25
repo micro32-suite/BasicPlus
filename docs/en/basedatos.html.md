@@ -35,7 +35,7 @@ In megabytes: four is what the P4 uses; **the minimum is 2** and the maximum 409
 
 **All at once, with a script** (V9; [IDE guide §14.1](guia-ide.html.md#guiones-instalacion)): in the IDE, **Guiones → Ejecutar un guion…** (run a script) and `bd-metro`, `bd-stm32-dk2` or, with the graphical interface, `gui-bd-esp32p4-kit` or `gui-bd-esp32p4-waveshare`. It formats the packs area (it asks first), sets the memory, reboots the board and burns the packs.
 
-> **On the PC: the simulated micro.** The simulator shipped with the IDE carries the engine **linked in** since V6 (`SQLite.mod` and `Orm.mod` travel to it just as to a board, and there is no pack to burn): the examples on this page run without a board. If you build it yourself, that is `make sim LVGL=1 SQLITE=1`. The command-line C VM (`bpgenvm-c`) does not: the first call throws *«sql_open: falta el codigo nativo del pack 'SQLI' v1»*.
+> **On the PC: the simulated micro.** The simulator shipped with the IDE carries the engine **linked in** since V6, and when the IDE makes it, it burns into it the pack without the boards' engines (`SQLite.mod` and `Orm.mod`): the examples on this page run without a board. One made before V9 does not have it, because the whole pack did not fit (*«falta el modulo 'SQLite'»*): burn it once, with the packs manager or with `bp placa sim pack SQLite`. If you build the simulator yourself, that is `make sim LVGL=1 SQLITE=1`. The command-line C VM (`bpgenvm-c`) does not: the first call throws *«sql_open: falta el codigo nativo del pack 'SQLI' v1»*.
 
 <a id="sinorm"></a>
 ## 2. Without the ORM: plain SQL
@@ -162,7 +162,9 @@ In the IDE: the **«DAO build»** button (or menu). From the command line:
 bp frontend --project my/project.bpbuild --dao
 ```
 
-It reads the project's `@BD` annotations and writes a module with one DAO per entity. The file opens by warning that it is **not to be edited**, and carries a `@generado` fingerprint: if nothing changed, the generator says `ya al dia` and leaves it alone.
+It reads the project's `@BD` annotations and writes a module with one DAO per entity. The file opens by warning that it is **not to be edited**, and carries a `@generado` fingerprint: if nothing changed, the generator says `ya al dia` and leaves it alone. The entities may be written in BP or in JC (V9); the DAO is written in BP.
+
+If the project lists its `sources`, the DAO goes there like the rest, even if it does not exist yet (`"sources": ["Garden.bp", "GardenDao.bp", "Watering.bp"]`): the project opens all the same, and until you generate it the build says that it is missing and how to generate it (V9).
 
 <a id="crud"></a>
 ## 6. The operations (CRUD)

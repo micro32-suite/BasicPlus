@@ -1,13 +1,13 @@
 // H13.1 — Sample de Forms (Camino A): una ventana = clase + un .win (JSON).
 // El .win (resources/main.win) describe el árbol de widgets y nombra los
-// handlers; el IDE los hornea a slot de vtable al desplegar. Aquí solo
-// escribimos la ventana y sus métodos handler.
+// handlers; load() los busca por su nombre en la clase y los suscribe. Aquí
+// sólo escribimos la ventana y sus métodos handler.
 module FormDemo
 import Gui
 
-  // La ventana del formulario. PUBLIC para que el IDE lea su método→slot del
-  // .bpi al hornear el .win. Sus métodos públicos son los handlers que el .win
-  // referencia por nombre ("clic":"onSaludar", "change":"onActivar").
+  // La ventana del formulario. Sus métodos públicos son los handlers que el
+  // .win nombra ("clic": "onSaludar", "change": "onActivar"); el "class" de la
+  // raíz del .win, el nombre de esta clase.
   public class MainWin extends Gui.Window
     public function MainWin()
     end MainWin

@@ -202,7 +202,7 @@ while IFS='|' read -r nombre esperado; do
         printf '  NO ESTA  %-28s\n' "$nombre"; mal=$((mal+1)); continue
     fi
     rm -rf "$WORK"; mkdir -p "$WORK"
-    salida="$(java -jar "$FE" "$bp" --compile "$WORK" --backend=mivm 2>&1)"
+    salida="$(java -jar "$FE" "$bp" --compile "$WORK" --backend=mivm --max-errores=0 2>&1)"   # todos (#860 c)
 
     if [ -n "$(ls "$WORK"/*.mod 2>/dev/null)" ]; then
         printf '  COMPILA  %-28s <- tenia que FALLAR: se ha perdido la regla\n' "$nombre"

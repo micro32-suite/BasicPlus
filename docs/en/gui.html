@@ -852,7 +852,8 @@ l.<span class="fn">setFont</span>(fid)</code></pre>
 <div class="note">
   <p>The <code>.win</code> and its images/fonts live in the project's <code>resources/</code> folder;
   the IDE uploads them to the device along with the program (see the <a href="guia-ide.html">IDE
-  guide</a>).</p>
+  guide</a>). On the PC, with <em>Run</em> and with <code>bp run</code>, the program finds them in its pack
+  (<code>"out": "pack"</code> in the <code>.bpbuild</code>); <em>Run Window</em> copies them itself.</p>
 </div>
 
 <h3 id="ev-codigo">22.5 Subscribing from code (without a <code>.win</code>)</h3>
@@ -953,8 +954,8 @@ scr.onKey := screen::key
   The IDE's <em>Run</em> button executes the program on the Java VM and paints the widgets with Swing.
   It is the fastest loop for iterating layout and logic. Being an <em>approximation</em> (Swing widgets,
   not LVGL), it has two limits, detailed in §25: it does not render loaded <code>.bin</code> fonts and it
-  does not copy the <code>resources/</code> folder, so <code>.win</code> forms are tested on the board
-  (or as in §23.2).
+  does not copy the <code>resources/</code> folder, so <code>.win</code> forms are tested with the program
+  in a pack (<code>"out": "pack"</code>), on the board or as in §23.2.
 </p>
 
 <h3 id="ej-host">23.2 Real render on the PC (VM-C + LVGL/SDL)</h3>
@@ -1394,7 +1395,7 @@ end PruebaGui</code></pre>
   The host <em>Run</em> (miVM/Swing, §23.1) does not render <code>.bin</code> fonts (it uses the default
   font even though the id is valid), does not paint a <code>Chart</code> (its box, empty) or a <code>Led</code>,
   and does not copy <code>resources/</code>, so a <code>.win</code>
-  form there does not find its file. For the exact pixel or to try forms on the PC: the C VM with LVGL
+  form there does not find its file (with the program in a pack, <code>"out": "pack"</code>, it does). For the exact pixel or to try forms on the PC: the C VM with LVGL
   (§23.2), copying the <code>.win</code> and the assets next to the <code>.mod</code>.
 </p>
 

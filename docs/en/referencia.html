@@ -3433,10 +3433,11 @@ imported exactly like one living in <code>/lib</code>.</p>
   From the command line, everything goes through <code>bp</code> (at the root of the installation:
   <code>bp.bat</code>, and <code>bp</code> for bash). <code>bp build</code> compiles a source or a
   project (the <code>.mod</code> goes to <code>out/</code> next to the source) and only says where it
-  went, or the errors, each one with its file (<code>App.bp:7:15: error semántico: …</code>, V9);
-  <code>bp run</code>
+  went, or the errors, each one with its file (<code>App.bp:7:15: error semántico: …</code>, V9): the first
+  ten, or all of them with <code>--max-errores=0</code>; <code>bp run</code>
   compiles if needed and runs on the Java VM (with <code>--c</code>, on the C VM), and exits with the
-  program's code; <code>bp png</code> turns a capture into a PNG (§23.5 of the graphics guide); and
+  program's code (a project that comes out as a pack, in its pack: on the PC that is where its resources are,
+  §15.3); <code>bp png</code> turns a capture into a PNG (§23.5 of the graphics guide); and
   <code>bp help</code> tells it all. The standard library is the one in <a href="#cli-vmcfg">BpVM.cfg</a>
   and, with none in sight, the installation's. Below are the compiler and the Java VM with all their
   options: <code>bp frontend</code> and <code>bp vm</code>.
@@ -3503,6 +3504,7 @@ bp test --guarda tests/PruebaGui.bp   (writes tests/PruebaGui.out)</code></pre>
   <tr><td><code>--tokens</code></td><td>Dump of the lexer's tokens.</td></tr>
   <tr><td><code>--ast</code></td><td>Dump of the AST.</td></tr>
   <tr><td><code>--quiet</code></td><td>Only the errors and warnings; if it compiles, nothing (V9).</td></tr>
+  <tr><td><code>--max-errores=&lt;n&gt;</code></td><td>How many errors are written at most (V9): 10 if not given; with 0, all of them. Warnings do not count.</td></tr>
   <tr><td><code>--compile &lt;dir&gt;</code></td><td>Compiles to <code>.mod</code> (the interface goes inside).</td></tr>
   <tr><td><code>--interface &lt;dir&gt;</code></td><td>Only parses and builds the interface — no code, no output file.</td></tr>
   <tr><td><code>--project &lt;file.bpbuild&gt;</code></td><td>Compiles the whole project (<a href="#cli-bpbuild">.bpbuild</a>); with <code>"out": "pack"</code>, it assembles the pack (§15.3).</td></tr>

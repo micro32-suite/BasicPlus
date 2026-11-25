@@ -16,8 +16,9 @@ The compiler's and the VMs' messages are in Spanish.
    function does, and how.
 4. `@INSTALACION@samples/*.bp`: about 380 programs that compile. Look for a real use before guessing.
 5. The manual, `@INSTALACION@docs/en/manual.html.md`; the reference, `docs/en/referencia.html.md`; the GUI,
-   `docs/en/gui.html.md`; JC (below), `docs/en/jc.html.md`. In Markdown, made from each `.html` beside it: there the
-   code is plain text, and `grep` finds it. Spanish versions, HTML only, in `docs/`.
+   `docs/en/gui.html.md`; databases (SQL, the ORM and the DAOs the compiler writes), `docs/en/basedatos.html.md`; JC
+   (below), `docs/en/jc.html.md`; the IDE, `docs/en/guia-ide.html.md`. In Markdown, made from each `.html` beside it: there
+   the code is plain text, and `grep` finds it. Spanish versions, HTML only, in `docs/`.
 6. `@INSTALACION@docs/PENDIENTES.md`: what the language does not do yet (in Spanish).
 
 ## Compile and run on the PC (no board, no IDE)
@@ -36,14 +37,17 @@ bp help              # the rest: bp png (a screen capture to PNG), bp frontend a
 - `bp run` exits with the program's code: 0 if it ends well, 1 with an uncaught exception, 2 if it does not compile
   (then the errors go to stderr and nothing runs).
 - Errors come with their file, line and column: `App.bp:7:15: error semántico: …` (also those of an imported module,
-  with its own file). Read the whole message: it usually says how to fix it. `bp build` says only that, or
-  `compilado: out/X.mod`.
+  with its own file). Read the whole message: it usually says how to fix it. `bp build` says only that (the first ten;
+  `--max-errores=0`, all), or `compilado: out/X.mod`.
 - On stdout, only what the program prints, the same in both VMs: `bp run X.bp > out.txt` keeps just that. The VMs'
   own lines (`[miVM] …`, `[bpvm] …`) go to stderr.
 - An uncaught exception says where, on stderr: `=== traza: X+122 X+39 ===`, and under it the file, the line and the
   function (`  en X.bp:8 (Main)`, `  llamado desde …`).
 - What the program prints on the PC is what it will print on a board: make it print what it does, and check that.
 - Options for the VM go before the program: `bp run --no-screen X.bp` (a GUI without a window; also with `--c`).
+- A project's `resources/` (a `.win` form, images, fonts, data) travel to a board with the program. On the PC the program
+  finds them only in its pack: with `"out": "pack"` in the `.bpbuild`, `bp run App.bpbuild` runs the pack. A test in
+  `tests/`, run from the project's folder, reads them there: `w.load("resources/main.win")`.
 
 ## Tests
 
@@ -138,6 +142,7 @@ code. Files on the PC: only inside the folder the user allowed.
 | public fields | `public property x: integer` |
 | `{ }` and `;` | Every block closes with its name or keyword: `end main`, `end Counter`, `endif`, `endwh`, `next i`, `endtry`. No semicolons. |
 | `=` to assign | `:=` assigns; `==` compares |
+| a long line | It goes on if it ends in an operator or a comma: `"a" +` at the end of the line, not at the start of the next |
 
 What does work as you would expect: `class B extends A`, `super(x)` in the constructor and `super.method()`;
 `for i := 0 to n do … next i` (`n` included); `for x in list do … next x`; `"text " + number`; `+=`;
@@ -159,7 +164,7 @@ the same, with the same names and the same traps as above.
 | `for (Item x : list)` | `foreach (var x in list)` |
 | `System.out.println(x)` | `println(x)`; with several pieces, `println("a ", n)`; `print` does not end the line |
 
-- The JC compiler stops at the first syntax error: fix them one at a time.
+- The compiler gives the first ten errors, in JC too, each with how it is written.
 - The compiler translates between the two languages, and both compile to the same `.mod`:
   ```
   bp frontend X.bp --escribir-jc > X.jc     # BP -> JC

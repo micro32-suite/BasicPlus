@@ -11,12 +11,12 @@ acaba bien y otra falla.
 | `M2.bp`, `M3.bp` | sólo los usa A |
 | `M4.bp` | sólo lo usa B: se carga con él y se descarga con él. Tiene una clase de excepción y un destructor |
 
-Para probarlo, hay que compilar los dos programas en la misma carpeta:
+Para probarlo, desde la carpeta de la instalación (`bp` deja los `.mod` de los dos en `samples/overlay/out`, que es donde A
+busca a B):
 
 ```sh
-java -jar toolchain/lexer-java/target/basicplus-frontend.jar samples/overlay/ProgramaB.bp --compile samples/overlay/out --backend=mivm
-java -jar toolchain/lexer-java/target/basicplus-frontend.jar samples/overlay/ProgramaA.bp --compile samples/overlay/out --backend=mivm
-bpgenvm-c/build/bpgenvm-c samples/overlay/out/ProgramaA.mod
+bp build samples/overlay/ProgramaB.bp
+bp run samples/overlay/ProgramaA.bp        # con la VM Java; con --c, con la VM-C
 ```
 
 Lo que hay que mirar en la salida:
