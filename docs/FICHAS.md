@@ -14717,7 +14717,23 @@ mantiene sola.»*
   el de la BD crea también sus variables: con los packs, en `#875`.
 - **Hecho cuando:** desde el botón, como hoy, y por la IA, se listan, se ponen y se borran variables del ENV de una placa.
 
-#### 🧬 `#891` — los guiones: los comandos del IDE, uno por línea en un fichero, que lanza la persona o la IA; y con ellos, instalar la GUI o la BD con sus variables de entorno (abierta el 25-nov · idea de Eduardo · lo de las variables, de `#876` y `#875` · hecha el mismo día, a falta de verla Eduardo y de probar los de las placas con pantalla)
+#### 🧬 `#892` — en la C3, la C5 y la C6 el IDE graba el motor de la P4, o ninguno: elige el motor de un pack por la arquitectura («riscv», que son dos), no por la receta que publica la placa (abierta el 25-nov · vista con los guiones (`#891`) en la C5 · **de antes: está en la V7.0, la V8.0 y la V8.1 publicadas** · arreglada el mismo día; lo publicado, por decidir)
+
+- **Lo visto:** tras `gui-esp32c5`, «GUI: el pack de la GUI esta, pero su motor no cargo: otra convencion de coma flotante», y el
+  `DriverSpi` grabado sin motor (8 KB; con él, 16).
+- **La causa:** al grabar un pack, el IDE elegía la familia con `NpackReloc.porTargetAot(archName(arch))`. El 243 del INFO es
+  «riscv» en la P4 (RISC-V con FPU, `ilp32f`) y en la C3, la C5 y la C6 (sin ella, `ilp32`), y «riscv» es el destino de la
+  P4. De `Gui.pack`, que lleva los tres motores, grababa el de la P4, que la placa rechaza; de `GuiMini.pack` y
+  `DriverSpi.pack`, que sólo llevan el de la C3, la C5 y la C6, ninguno (lo avisa en la consola). Comprobado sin placa con
+  el jar de la V8.1 publicada. El AOT del IDE sí mira la receta, desde `#441`.
+- **Por qué no se vio:** los packs de la C5 y la C6 se grababan con `wire_serie.py pack … riscv-imc`, no con el IDE.
+- **El arreglo:** `PacksPlaca.destino`: por la receta (`aotReceta` del INFO), y sin ella (una imagen de antes de V7) por la
+  arquitectura, como siempre. También para `bp placa … pack`.
+- **Probado:** `PacksSmoke` (el motor que toca a cada receta, y los que lleva cada pack de la instalación); y en las placas, con
+  los guiones: la C5 (`DriverSpi`, 16 KB; `GuiShot`, bien, y su captura), la P4 y la DK2.
+- **Por decidir (Eduardo):** si se publica un parche de la V8.1 (sólo el IDE) o va con V9.
+
+#### 🧬 `#891` — los guiones: los comandos del IDE, uno por línea en un fichero, que lanza la persona o la IA; y con ellos, instalar la GUI o la BD con sus variables de entorno (abierta el 25-nov · idea de Eduardo · lo de las variables, de `#876` y `#875` · hecha el mismo día y probada en la Metro, la C5, la P4 y la DK2)
 
 - **La idea (Eduardo, 25-nov**, a si instalar la GUI o la BD pone también sus variables): *«2) También. Un matiz sobre 2, a mi
   me recuerda a un pequeño programa o un script. Estoy pensando si con todos los comandos que estamos proporcionando a la IA,
@@ -14747,7 +14763,12 @@ mantiene sola.»*
   - **Probado:** `GuionSmoke` (nuevo: con los comandos de la placa de verdad contra el micro simulado), `EntornoSmoke`,
     `PacksSmoke` y `ComandosSmoke`; y el IDE entero sin ventana: el menú, la consola y un guion que formatea, reinicia, graba,
     compila y ejecuta en el PC y en el simulado. `doc_frags`, 0 FALLO.
-  - **Falta**, con Eduardo: lanzarlo él y la IA en la Metro (`bd-metro`); y los de las placas con pantalla, en cada una.
+  - **Con Eduardo, en las placas:** la Metro, `bd-metro`, lanzado por él desde el menú (8 pasos, 41 s; SQLite y `modSoftI2C`,
+    bien) y por la IA, con su «No» (parado, sin tocar nada); las preguntas de `mostrar` y de cambiar una variable, en la
+    pantalla (*«1) si»*, se leen bien); y por la IA, con su «Sí» a cada una: la C5, `gui-esp32c5` (29 s), donde salió `#892`; la
+    P4 de Waveshare, `gui-bd-esp32p4-waveshare` (186 s: el cable), y la DK2, `gui-stm32-dk2` (105 s). En las tres, `GuiShot` y
+    su captura; en la P4, además, SQLite. El de la C5, con la `Stdlib` también, como la llevaba la suya (y la tabla de
+    `INSTALAR_FIRMWARE`). Sin probar en su placa: los de la C6, los del kit de la P4, `gui-esp32p4-waveshare` y `bd-stm32-dk2`.
 - **Instalar la GUI o la BD con sus variables (de `#876`; Eduardo, 23-nov):** *«Cuando se instala el pack de LVGL o el de BD
   además hay que crear las variables de entorno correspondientes»*. Es poner las que falten, reiniciar (la placa aparta el
   bloque de RAM de los motores al arrancar, y el motor se sella para él) y grabar los packs, en su orden: un guion por placa,

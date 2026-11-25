@@ -14,5 +14,6 @@ entorno_poner rw clave=packRam valor=512
 placa_reiniciar reconectar
 
 // Los packs
+pack_grabar pack=Stdlib
 pack_grabar pack=Gui
 pack_grabar pack=DriverSpi
