@@ -22,11 +22,29 @@ button, the display, the connectors. **Do not invent a pin number**: look here, 
 
 Image: `bpvm_pico.uf2`.
 
-*(to be read from the board)*
+| | |
+|---|---|
+| Microcontroller | `rp2350a`, QFN-60 |
+| The program's | 0-29 |
+| Analog | 26-29 |
+| PWM | all the program's |
+| Pulse counter | all the program's |
+| Open drain | all the program's |
+| I2C 0 | SCL 1, 5, 9, 13, 17, 21, 25, 29 · SDA 0, 4, 8, 12, 16, 20, 24, 28 |
+| I2C 1 | SCL 3, 7, 11, 15, 19, 23, 27 · SDA 2, 6, 10, 14, 18, 22, 26 |
+| SPI 0 | SCK 2, 6, 18, 22 · MOSI 3, 7, 19, 23 · MISO 0, 4, 16, 20 |
+| SPI 1 | SCK 10, 14, 26 · MOSI 11, 15, 27 · MISO 8, 12, 24, 28 |
+| UART 0 | TX 0, 12, 16, 28 · RX 1, 13, 17, 29 |
+| UART 1 | TX 4, 8, 20, 24 · RX 5, 9, 21, 25 |
+
+*(From the image's code; still to be read from the board.)*
+
+0-22 and 26-28 reach the connector. 23, 24, 25 and 29 are the board's: its power supply's mode, VBUS sensing, the LED and the VSYS measurement (the SDK's file, below).
 
 Its documentation:
 
 - [The pinout (PDF)](https://datasheets.raspberrypi.com/pico/Pico-2-Pinout.pdf)
+- [Its pins in the Raspberry Pi SDK (text)](https://raw.githubusercontent.com/raspberrypi/pico-sdk/master/src/boards/include/boards/pico2.h)
 - [The board's datasheet, with its schematic (PDF)](https://datasheets.raspberrypi.com/pico/pico-2-datasheet.pdf)
 - [The Pico page](https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html)
 - [The RP2350 datasheet (PDF)](https://datasheets.raspberrypi.com/rp2350/rp2350-datasheet.pdf)
@@ -35,7 +53,23 @@ Its documentation:
 
 Image: `bpvm_pico.uf2`.
 
-*(to be read from the board)*
+| | |
+|---|---|
+| Microcontroller | `rp2350b`, QFN-80 |
+| The program's | 0-46 |
+| Analog | 40-46 |
+| PWM | all the program's |
+| Pulse counter | all the program's |
+| Open drain | all the program's |
+| I2C 0 | SCL 1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45 · SDA 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44 |
+| I2C 1 | SCL 3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43 · SDA 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46 |
+| SPI 0 | SCK 2, 6, 18, 22, 34, 38 · MOSI 3, 7, 19, 23, 35, 39 · MISO 0, 4, 16, 20, 32, 36 |
+| SPI 1 | SCK 10, 14, 26, 30, 42, 46 · MOSI 11, 15, 27, 31, 43 · MISO 8, 12, 24, 28, 40, 44 |
+| UART 0 | TX 0, 12, 16, 28, 32, 44 · RX 1, 13, 17, 29, 33, 45 |
+| UART 1 | TX 4, 8, 20, 24, 36, 40 · RX 5, 9, 21, 25, 37, 41 |
+| The system's: not for the program | 47: the flash or the PSRAM |
+
+*(From the image's code; still to be read from the board.)*
 
 Its documentation:
 

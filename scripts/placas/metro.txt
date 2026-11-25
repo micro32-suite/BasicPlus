@@ -1,0 +1,14 @@
+origen: el código de la imagen (s_rp_caps_b, bpgenvm-c/pico/main.c; el GP47, board_desc.c)
+micro: rp2350b
+paquete: QFN-80
+fabricante: Raspberry Pi
+pines: 0-46
+analógicos: 40-46
+pwm: 0-46
+pulsos: 0-46
+colector abierto: 0-46
+sólo entrada: ninguno
+uart: 0, 1
+i2c: 0, 1
+spi: 0, 1
+sistema: 47 (de la flash o la PSRAM)

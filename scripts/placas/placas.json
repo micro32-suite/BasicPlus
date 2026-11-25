@@ -12,9 +12,12 @@
    "id": "pico2",
    "nombre": "Raspberry Pi Pico 2",
    "imagen": "bpvm_pico.uf2",
+   "nota_es": "Al conector salen el 0-22 y el 26-28. El 23, el 24, el 25 y el 29 son de la placa: el modo de su fuente, la presencia de VBUS, el LED y la medida de VSYS (el fichero del SDK, abajo).",
+   "nota_en": "0-22 and 26-28 reach the connector. 23, 24, 25 and 29 are the board's: its power supply's mode, VBUS sensing, the LED and the VSYS measurement (the SDK's file, below).",
    "buses": "rp2350",
    "enlaces": [
     ["El pinout (PDF)", "The pinout (PDF)", "https://datasheets.raspberrypi.com/pico/Pico-2-Pinout.pdf"],
+    ["Sus pines en el SDK de Raspberry Pi (texto)", "Its pins in the Raspberry Pi SDK (text)", "https://raw.githubusercontent.com/raspberrypi/pico-sdk/master/src/boards/include/boards/pico2.h"],
     ["La hoja de datos de la placa, con su esquema (PDF)", "The board's datasheet, with its schematic (PDF)", "https://datasheets.raspberrypi.com/pico/pico-2-datasheet.pdf"],
     ["La página de las Pico", "The Pico page", "https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html"],
     ["La hoja de datos del RP2350 (PDF)", "The RP2350 datasheet (PDF)", "https://datasheets.raspberrypi.com/rp2350/rp2350-datasheet.pdf"]

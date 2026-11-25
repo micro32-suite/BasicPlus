@@ -22,11 +22,29 @@ la pantalla, los conectores. **No te inventes un número de pin**: mira aquí o 
 
 La imagen: `bpvm_pico.uf2`.
 
-*(a falta de preguntárselo a la placa)*
+| | |
+|---|---|
+| Micro | `rp2350a`, QFN-60 |
+| Los del programa | 0-29 |
+| Analógicos | 26-29 |
+| PWM | todos los del programa |
+| Contador de pulsos | todos los del programa |
+| Colector abierto | todos los del programa |
+| I2C 0 | SCL 1, 5, 9, 13, 17, 21, 25, 29 · SDA 0, 4, 8, 12, 16, 20, 24, 28 |
+| I2C 1 | SCL 3, 7, 11, 15, 19, 23, 27 · SDA 2, 6, 10, 14, 18, 22, 26 |
+| SPI 0 | SCK 2, 6, 18, 22 · MOSI 3, 7, 19, 23 · MISO 0, 4, 16, 20 |
+| SPI 1 | SCK 10, 14, 26 · MOSI 11, 15, 27 · MISO 8, 12, 24, 28 |
+| UART 0 | TX 0, 12, 16, 28 · RX 1, 13, 17, 29 |
+| UART 1 | TX 4, 8, 20, 24 · RX 5, 9, 21, 25 |
+
+*(Del código de la imagen; a falta de preguntárselo a la placa.)*
+
+Al conector salen el 0-22 y el 26-28. El 23, el 24, el 25 y el 29 son de la placa: el modo de su fuente, la presencia de VBUS, el LED y la medida de VSYS (el fichero del SDK, abajo).
 
 Su documentación:
 
 - [El pinout (PDF)](https://datasheets.raspberrypi.com/pico/Pico-2-Pinout.pdf)
+- [Sus pines en el SDK de Raspberry Pi (texto)](https://raw.githubusercontent.com/raspberrypi/pico-sdk/master/src/boards/include/boards/pico2.h)
 - [La hoja de datos de la placa, con su esquema (PDF)](https://datasheets.raspberrypi.com/pico/pico-2-datasheet.pdf)
 - [La página de las Pico](https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html)
 - [La hoja de datos del RP2350 (PDF)](https://datasheets.raspberrypi.com/rp2350/rp2350-datasheet.pdf)
@@ -35,7 +53,23 @@ Su documentación:
 
 La imagen: `bpvm_pico.uf2`.
 
-*(a falta de preguntárselo a la placa)*
+| | |
+|---|---|
+| Micro | `rp2350b`, QFN-80 |
+| Los del programa | 0-46 |
+| Analógicos | 40-46 |
+| PWM | todos los del programa |
+| Contador de pulsos | todos los del programa |
+| Colector abierto | todos los del programa |
+| I2C 0 | SCL 1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45 · SDA 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44 |
+| I2C 1 | SCL 3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43 · SDA 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46 |
+| SPI 0 | SCK 2, 6, 18, 22, 34, 38 · MOSI 3, 7, 19, 23, 35, 39 · MISO 0, 4, 16, 20, 32, 36 |
+| SPI 1 | SCK 10, 14, 26, 30, 42, 46 · MOSI 11, 15, 27, 31, 43 · MISO 8, 12, 24, 28, 40, 44 |
+| UART 0 | TX 0, 12, 16, 28, 32, 44 · RX 1, 13, 17, 29, 33, 45 |
+| UART 1 | TX 4, 8, 20, 24, 36, 40 · RX 5, 9, 21, 25, 37, 41 |
+| Del sistema: no son para el programa | 47: la flash o la PSRAM |
+
+*(Del código de la imagen; a falta de preguntárselo a la placa.)*
 
 Su documentación:
 

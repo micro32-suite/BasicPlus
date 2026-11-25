@@ -2,7 +2,8 @@
 # placas_doc.py — 25-nov-2026 (V9 H1.10, #861): docs/PLACAS.md y docs/en/PLACAS.md, los pines de cada placa y los enlaces a
 # la documentación de su fabricante. No se editan a mano: salen de
 #   - scripts/placas/placas.json  el nombre de cada placa, su imagen y sus enlaces (lo que no sabe la imagen);
-#   - scripts/placas/<id>.txt     lo que contesta la placa (samples/PinesPlaca.bp);
+#   - scripts/placas/<id>.txt     lo que contesta la placa (samples/PinesPlaca.bp). Con una línea «origen: …», lo mismo sacado
+#                                 del código de la imagen, hasta preguntarle: se dice debajo de su tabla y sigue faltando;
 #   - scripts/placas/buses.json   por qué pines sale cada bus en la RP2350 y en las STM32 (placas_buses.py).
 #
 #   python -I -X utf8 scripts/placas_doc.py                   escribe los dos
@@ -187,11 +188,15 @@ def escribe(en):
         out.append('## %s\n' % p['nombre'])
         out.append(('Image: `%s`.\n' if en else 'La imagen: `%s`.\n') % p['imagen'])
         r = responde(p['id'])
-        if r is None:
+        if r is None or 'origen' in r:
             faltan.append(p['id'])
+        if r is None:
             out.append('*(to be read from the board)*\n' if en else '*(a falta de preguntárselo a la placa)*\n')
         else:
             out.append('\n'.join(tabla(p, r, en)) + '\n')
+            if 'origen' in r:
+                out.append("*(From the image's code; still to be read from the board.)*\n" if en
+                           else '*(Del código de la imagen; a falta de preguntárselo a la placa.)*\n')
         nota = p.get('nota_en' if en else 'nota_es')
         if nota:
             out.append(nota + '\n')
@@ -227,6 +232,8 @@ def main():
             return 1
         f = os.path.join(DATOS, a[1] + '.txt')
         hay = io.open(f, encoding='utf-8').read() if os.path.isfile(f) else None
+        if hay is not None:   # lo sacado del código se compara con lo que contesta, sin su línea
+            hay = ''.join(l for l in hay.splitlines(True) if not l.startswith('origen:'))
         if a[0] == '--lee':
             io.open(f, 'w', encoding='utf-8', newline='\n').write(t)
             print('placas_doc: %s, %s' % (a[1], 'igual' if hay == t else 'nuevo' if hay is None else 'CAMBIA'))

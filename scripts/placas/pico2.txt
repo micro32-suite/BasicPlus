@@ -1,0 +1,13 @@
+origen: el código de la imagen (s_rp_caps_a, bpgenvm-c/pico/main.c)
+micro: rp2350a
+paquete: QFN-60
+fabricante: Raspberry Pi
+pines: 0-29
+analógicos: 26-29
+pwm: 0-29
+pulsos: 0-29
+colector abierto: 0-29
+sólo entrada: ninguno
+uart: 0, 1
+i2c: 0, 1
+spi: 0, 1
