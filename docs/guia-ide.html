@@ -193,6 +193,7 @@
     <li><a href="#debug">11. Depurar</a></li>
     <li><a href="#autorun">12. Dispositivo autónomo</a></li>
     <li><a href="#ia">13. La IA maneja el IDE</a></li>
+    <li style="padding-left:0.9rem;font-size:0.9em"><a href="#ia-ejemplo">13.1 Un ejemplo: una estación meteorológica</a></li>
     <li><a href="#guiones">14. Guiones</a></li>
   </ul>
   <h2>Volúmenes</h2>
@@ -1351,6 +1352,57 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   avisa). Con tu sí, el servidor se enciende como desde el menú; con un no, el IDE se queda
   abierto sin él. Sin carpeta (<code>--ia</code> a secas), la eliges tú. Y cómo acabó se lo dice
   a la IA en una línea de su salida (<code>[ia] servidor para la IA en …</code>, o por qué no).
+</p>
+
+<h3 id="ia-ejemplo">13.1 Un ejemplo: una estación meteorológica</h3>
+<p>
+  Para la V8.5 se le hizo a una IA (Claude Code) el encargo de alguien que no sabe programar, tal
+  cual, sin prepararle nada: una carpeta vacía, la instalación de BasicPlus, su IDE con el servidor
+  encendido y una ESP32-P4 recién borrada, sin nada; el sensor, un BME280, ya conectado a la placa.
+</p>
+<blockquote>
+  «Tengo un ESP32-P4 con una pantalla vertical de 4,3" y un sensor barométrico. Quiero que me
+  hagas una pequeña estación meteorológica que enseñe en la pantalla la temperatura y la presión en
+  la parte superior, y en la parte inferior un gráfico con la evolución de la presión. Los datos se
+  refrescan cada minuto y se guardan en una base de datos. No sé programar: dime qué tengo que
+  conectar y dónde. Hazlo con BasicPlus: lo tengo instalado y su IDE está abierto.»
+</blockquote>
+<ul>
+  <li><strong>En 4 minutos, la aplicación hecha y probada en el PC.</strong> No leyó la
+      documentación entera: la consultó. En medio minuto, la chuleta de una página, la ficha de su
+      placa en <code>PLACAS</code>, una búsqueda de los sensores de presión en la referencia, la
+      lista de los módulos con <code>bp api</code> y los ejemplos del sensor, de la gráfica y de la
+      base de datos. A los dos minutos escribió el programa combinándolos, y compiló a la
+      primera.</li>
+  <li><strong>No se fió de sí misma.</strong> Antes de tocar la placa lo probó en el micro simulado
+      (§6.1), con medidas inventadas, y miró la captura de su pantalla.</li>
+  <li><strong>En la placa, otros 16 minutos:</strong> le grabó la imagen de BasicPlus, los packs y
+      el programa, y la dejó arrancando sola. La persona intervino siete veces, y ninguna para
+      programar: decir en qué pines estaba el sensor y en qué puerto la placa, que la placa era
+      nueva, dar el sí para grabarla, encender el servidor del IDE, pegarle su consola y decirle que
+      la pantalla se veía bien.</li>
+  <li><strong>Lo que no se le pidió, también:</strong> la estación arranca sola al enchufarla, sin
+      el PC; al arrancar recupera lo guardado; si el sensor deja de contestar, lo dice y lo vuelve a
+      buscar; y la base de datos no crece sin fin.</li>
+</ul>
+<p>
+  En total, 26 minutos, con tres tropiezos de las herramientas que ya están arreglados: que la placa
+  estaba en blanco, el IDE no lo decía; una espera se le quedaba corta; y dos grabaciones de packs
+  se cruzaron.
+</p>
+<p>
+  <strong>Por qué puede, si el lenguaje es nuevo.</strong> Sus piezas no lo son: la sintaxis de
+  BASIC y de Pascal, las clases como en Java, SQL; todo eso lo conoce de miles de programas. Lo que
+  BasicPlus tiene de propio (<code>:=</code>, <code>endif</code>, que la fuente de la pantalla no
+  tiene acentos…) está en la guía para la IA que deja el IDE, escrita justo para quien llega de
+  otro lenguaje. Y puede comprobar lo que hace sin nadie: los errores del compilador dicen cómo se
+  escribe, el micro simulado le da una captura y <code>bp test</code> le dice si va.
+</p>
+<p class="warn">
+  <strong>Lo que no conviene olvidar.</strong> Es rápida cuando lo que se le pide se parece a lo que
+  hay en los ejemplos; algo de verdad nuevo, como el driver de un sensor que no está en
+  <code>bpdevices</code>, le costará más. Y se equivoca con la misma seguridad con que acierta: que
+  la placa estaba en blanco no lo vio hasta que se lo dijeron. Lo que importa, compruébalo tú.
 </p>
 
 <h2 id="guiones">14. Guiones</h2>

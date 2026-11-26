@@ -461,6 +461,24 @@ bpide.bat --ia=C:\work\with-the-ai
 
 The first thing the IDE does is ask you whether you allow it, with the folder in view (if it is too broad —the root of a disk, your user folder, Documents or the Desktop—, it warns you). With your yes, the server is turned on as from the menu; with a no, the IDE stays open without it. With no folder (a bare `--ia`), you choose it. And it tells the AI how it went in a line of its output (`[ia] servidor para la IA en …`, or why not).
 
+<a id="ia-ejemplo"></a>
+### 13.1 An example: a weather station
+
+For V8.5 an AI (Claude Code) was given the order of someone who cannot program, as is, with nothing prepared for it: an empty folder, the BasicPlus installation, its IDE with the server on, and an ESP32-P4 just erased, with nothing on it; the sensor, a BME280, already wired to the board.
+
+> «I have an ESP32-P4 with a vertical 4.3" screen and a barometric sensor. I want you to make me a small weather station that shows the temperature and the pressure at the top of the screen, and at the bottom a chart of how the pressure changes. The data are refreshed every minute and saved in a database. I cannot program: tell me what I have to connect and where. Do it with BasicPlus: I have it installed and its IDE is open.» (The order was in Spanish.)
+
+- **In 4 minutes, the application written and tested on the PC.** It did not read the documentation through: it looked things up. In half a minute, the one-page cheat sheet, its board's entry in `PLACAS`, a search of the reference for pressure sensors, the list of modules with `bp api`, and the samples for the sensor, the chart and the database. Two minutes in, it wrote the program by combining them, and it compiled the first time.
+- **It did not take its own word for it.** Before touching the board, it tried it on the simulated micro (§6.1), with made-up readings, and looked at the capture of its screen.
+- **On the board, 16 more minutes:** it flashed the BasicPlus image, the packs and the program, and left it starting by itself. The person stepped in seven times, and none of them to program: to say which pins the sensor was on and which port the board was on, that the board was new, to give the yes to flash it, to turn on the IDE's server, to paste it the IDE's console and to tell it the screen looked right.
+- **What it was not asked for, too:** the station starts by itself when plugged in, without the PC; on starting, it recovers what was saved; if the sensor stops answering, it says so and looks for it again; and the database does not grow without end.
+
+In all, 26 minutes, with three stumbles of the tools, all since fixed: the IDE did not say that the board was blank; a wait was too short for it; and two pack burns crossed.
+
+**Why it can, if the language is new.** Its pieces are not: the syntax of BASIC and Pascal, classes as in Java, SQL; it knows all of that from thousands of programs. What is BasicPlus's own (`:=`, `endif`, the screen font having no accented letters…) is in the guide for AI assistants that the IDE leaves, written precisely for someone coming from another language. And it can check what it does with no one's help: the compiler's errors say how to write it, the simulated micro gives it a capture and `bp test` tells it whether it works.
+
+> **Worth remembering.** It is fast when what it is asked resembles what is in the samples; something really new, such as the driver for a sensor that is not in `bpdevices`, will cost it more. And it is wrong with the same confidence as it is right: it did not see that the board was blank until it was told. What matters, check it yourself.
+
 <a id="guiones"></a>
 ## 14. Scripts (guiones)
 
