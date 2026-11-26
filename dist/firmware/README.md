@@ -46,6 +46,11 @@ hizo con la receta del repo, en `C:\tmp\p4x_repro`, y se probó la misma: la pla
 con la GUI. El firmware de la C6 es el que lleva la P4 de Waveshare desde la prueba de la
 WiFi.
 
+**En la V8.5 (26-nov), las nueve se hicieron de una vez, del mismo árbol, y antes de la
+ronda**, que las graba de aquí. Cada una lleva dentro su versión (`#907`): que todas digan
+la 8.5 y que sus módulos embebidos sean los de `bpstdlib` lo comprueba
+`python bpgenvm-c/scripts/check_mods_embebidos.py --imagenes dist/firmware`.
+
 Desde V7 LVGL, el motor de la GUI, no va en ninguna imagen —la P4 y la DK2 llevan en la
 suya sólo el driver de su panel; la C5 y la C6, ni eso—: llega en los packs de la GUI, que
 no se sellan aquí. Viven en `packs/` y los vigila el empaquetador
@@ -65,7 +70,7 @@ Y antes de publicar se comprueba que nadie la ha tocado:
 cd dist/firmware && sha256sum -c SHA256SUMS.txt
 ```
 
-`SHA256SUMS.txt` **sí va al repo**; los binarios **no** (son unos 5,5 MB y van dentro del
+`SHA256SUMS.txt` **sí va al repo**; los binarios **no** (son unos 12 MB y van dentro del
 ZIP, en `firmware/`). Así queda escrito en el historial qué se probó exactamente, sin
 engordar el repo. Y el informe de `tanda.py` de cada placa (`compat/informes/`) anota el
 sello de la imagen que corría (`imageCrc`, del `HELLO`).
