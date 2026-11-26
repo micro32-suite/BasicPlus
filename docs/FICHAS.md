@@ -91,10 +91,11 @@ en §ABIERTAS, en el bloque de V9:
 publica el viernes 27-nov si es posible —*«OK, entonces publicamos el viernes si es posible.»*—, con lo
 hecho desde la V8.1. Congelada de hecho desde el 25-nov: no se hace código nuevo, sólo se arreglan fallos —*«de hecho ya hemos
 congelado, no hacemos código nuevo salvo para corregir bugs»*—; la congelación formal, tras la prueba de la IA con el ZIP nuevo
-(*«No podemos congelar codigo hasta que pasemos la prueba de la IA»*). Lo que falta, en orden: el ZIP de prueba y la IA; lo que vea
-Eduardo de lo hecho; la versión (8.1 → 8.5), las nueve imágenes, los packs y el repaso de `PUBLICAR.md`; el lote de las once placas
-(y en él, `#902` en la S3, `#861`, `#890`, `#892` y los guiones sin probar); y la publicación, con su OK. Fuera, por decisión suya:
-`#865`, `#879`, `#884` y el H2.4.
+(*«No podemos congelar codigo hasta que pasemos la prueba de la IA»*). Hecho el 26-nov: el ZIP de prueba y la IA; la versión, 8.5
+(`9736a953`); las nueve imágenes, de una vez y del mismo árbol, selladas en `dist/firmware` (`bd57c065`: todas dicen la 8.5), y los
+packs. Lo que falta, en orden: lo que vea Eduardo de lo hecho; el repaso de `PUBLICAR.md`; el lote de las once placas, desde
+`dist/firmware` (y en él, `#902` en la S3, `#861`, `#890`, `#892` y los guiones sin probar); y la publicación, con su OK. Fuera, por
+decisión suya: `#865`, `#879`, `#884` y el H2.4.
 
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
