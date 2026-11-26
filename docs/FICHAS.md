@@ -15296,6 +15296,41 @@ mantiene sola.»*
 - El ejemplo de la hoja de datos del fabricante da 256 menos lo leído, y es al revés: −10 °C salían 10. **Probado** con un bus que
   contesta como el sensor, en las dos VMs: −0,0625, −10,5 y −40 (antes, 0,0625, 10,5 y 40).
 
+#### ✅ `#916` — en la P4, la pantalla parpadea cada vez que se escribe en la flash (abierta el 26-nov · vista por Eduardo en la estación de la prueba de la IA · de siempre · hecha y **CERRADA** el mismo día, `9fa56d2` del runtime)
+
+- **Lo visto:** la estación que hizo la IA (`#912`… la prueba de la V8.5) parpadeaba más o menos cada minuto: cuando medía.
+- **Acotado** en la P4 con un programa de cuatro fases de 20 s, Eduardo mirando: nada, la gráfica entera redibujada cada 3 s, un
+  fichero de 4 KB escrito cada 3 s y un INSERT de SQLite cada 3 s. *«la 3 parpadea»*, *«la 4 mas todavía»*: la flash, no el dibujo.
+- **La causa** (una hipótesis, *«Es una hipótesis»*, probada antes de tocar el repositorio): mientras se borra o se escribe la flash
+  el IDF apaga la caché, y con ella las interrupciones que no están marcadas para correr así; la del puente DSI y la del DW-GDMA, que
+  relanzan cada refresco de la pantalla, no lo estaban. La de Eduardo, los dos CS del bus a la vez, no cabe en la P4: la flash y la
+  PSRAM van por controladores distintos (`FLASH_SPI0/1` y `PSRAM_MSPI0/1`, en el IDF).
+- **Hecho:** `CONFIG_LCD_DSI_ISR_CACHE_SAFE=y` en `esp32p4/sdkconfig.defaults` (y en la `sdkconfig`); vale para la P4X, que parte de
+  ella. **Probado** con una variante compilada aparte, la misma prueba: *«4 no parpadea»*, *«la 3 tampoco»*; y la imagen del
+  repositorio, en la placa.
+
+#### ⬜ `#913` — dos grabaciones de packs a la vez se estropean las dos, y el IDE deja empezar la segunda (abierta el 26-nov · la prueba de la IA de la V8.5)
+
+- La IA lanzó el guion de la placa; su llamada se le cortó por tiempo (`#914`) mientras el IDE seguía grabando, y lanzó ella otra
+  grabación del mismo pack: las dos, por el mismo cable, y la placa rechazó las dos («sesión de burn inválida (begin/data/end
+  desordenados)»). La guía para IA promete que a lo que llega a destiempo el IDE contesta «ocupada».
+- **Por hacer:** una grabación (o un formateo, o un borrado de pack) cada vez; a lo demás que cambie la zona, «ocupada: está grabando
+  SQLite (el guion …, paso 8 de 9)»; y que el error diga qué pasó.
+
+#### ⬜ `#914` — una orden larga del IDE (un guion, grabar el pack de la GUI) se le corta a la IA por tiempo, a los 60 s, y el IDE sigue (abierta el 26-nov · la prueba de la IA de la V8.5)
+
+- *«The operation timed out»*, a los 63 s del guion y a los 61 del `pack_grabar` del pack de la GUI: el cliente de la IA deja de
+  esperar; el IDE no se entera y la orden sigue. La primera vez la IA creyó que había acabado (`#913`); la segunda, esperó.
+- **Por hacer:** la guía para IA lo dice (sigue en marcha; `packs_listar` dice cuándo ha acabado; no lances otra), y con `#913`, el
+  «ocupada» dice qué está en marcha.
+
+#### ⬜ `#915` — `bp placa COMx info` contra una placa en blanco se queda esperando, sin decir nada (abierta el 26-nov · la prueba de la IA de la V8.5)
+
+- Con la P4 recién borrada, la orden de la IA se quedó colgada hasta que la paró la persona, y se quedó con el puerto; la IA no vio que
+  la placa no tenía la imagen (*«Le he tenido que decir que la placa está vacia»*). Por reproducir, con la placa en blanco.
+- **Por hacer:** un plazo, y un mensaje que diga qué hacer: «no contesta como una placa de BasicPlus: si es nueva, grábale la imagen
+  (docs/INSTALAR_FIRMWARE.md)»; lo mismo al conectar desde el IDE.
+
 #### ✅ `#912` — los resultados de ejecutar (la IA) mezclan lo que imprime el programa con lo de compilar, subir y ejecutar (abierta el 25-nov · de la prueba final · hecha y **CERRADA** el mismo día, `f0f2ec5` de `toolchain`)
 
 - La IA tenía que buscar en la `salida` de la consola lo que imprimió su programa. **Hecho** (Eduardo: *«4) si»*): `imprime`, sólo lo
