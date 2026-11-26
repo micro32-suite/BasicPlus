@@ -500,7 +500,9 @@ t.<span class="fn">align</span>(Gui.Align.TOP_MID, <span class="num">0</span>, <
   <code>x</code>, <code>y</code>, <code>width</code>, <code>height</code> —o todo de golpe con
   <code>setBounds(x,&nbsp;y,&nbsp;w,&nbsp;h)</code>—. Un <code>Gui.Panel</code> es un contenedor simple para agrupar
   widgets; admite scroll opcional con <code>scrollDir</code> (<code>Gui.ScrollDir.VER</code>, <code>HOR</code>,
-  <code>BOTH</code> o <code>NONE</code>).
+  <code>BOTH</code> o <code>NONE</code>). <strong>Nada se desplaza si el programa no lo pide</strong>: la pantalla, un panel y la
+  página de una pestaña nacen con <code>NONE</code> (V9; hasta entonces, en la placa se desplazaban aunque lo dijera). La lista,
+  el campo de texto y la tabla sí se desplazan: es parte de lo que son.
 </p>
 <pre><code><span class="kw">var</span> p: Gui.<span class="type">Panel</span> := Gui.<span class="fn">Panel</span>(scr)
 p.x := <span class="num">10</span>
@@ -521,8 +523,8 @@ p.scrollDir := Gui.ScrollDir.VER</code></pre>
   <tr><td>720 o más</td><td>22&nbsp;px (2 + 20)</td><td>156 × 56</td></tr>
 </table>
 <p>
-  Lo que no cabe se recorta, y en la placa, con sus barras, se desplaza con el dedo. Para cubrir un panel entero, un hijo de su
-  tamaño, centrado (<code>align(Gui.Align.CENTER, 0, 0)</code>), y <code>scrollDir := Gui.ScrollDir.NONE</code> en el panel.
+  Lo que no cabe se recorta, sin barras, salvo que el panel se desplace (su <code>scrollDir</code>). Para cubrir un panel entero,
+  un hijo de su tamaño, centrado (<code>align(Gui.Align.CENTER, 0, 0)</code>).
   Todo esto es de LVGL; desde V9, la VM Java lo hace igual, con el margen de su pantalla, la de 480 × 320.
 </p>
 <div class="note">
@@ -923,7 +925,7 @@ boton1.onClick := pantalla::boton1_onClick</code></pre>
     flechas, Inicio y Fin; en un deslizador, las flechas cambian el valor. Un clic en un campo también le da el foco. Sin
     un teclado conectado nadie tiene el foco, y la GUI se ve como siempre.</li>
   <li><strong>El ratón</strong> mueve una flecha y hace clic, y la rueda desplaza lo que haya bajo la flecha (una lista,
-    un panel que no cabe). Con una pantalla táctil, van los dos.</li>
+    un panel que se desplaza). Con una pantalla táctil, van los dos.</li>
 </ul>
 <p>
   <strong>Las teclas tal cual:</strong> la pantalla tiene su evento, <code>onKey</code>, con todas las teclas —también las

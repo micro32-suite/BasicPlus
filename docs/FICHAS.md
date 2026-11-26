@@ -15237,7 +15237,7 @@ mantiene sola.»*
 - **La guía vieja:** la carpeta de la prueba tenía la de un ZIP anterior, y la IA trabajó media prueba con ella (el IDE la pone al
   día al abrirse, `#893`). La copia que deja el IDE dice ahora, bajo el título, cuál es la de ahora. `GuiaIaSmoke`.
 
-#### ⬜ `#909` — un `Panel` se desplaza aunque su `scrollDir` sea `NONE`, y lo que cabe dentro es menos de lo que mide (abierta el 25-nov · vista al mirar `#905` · de siempre · el tamaño, hecho el mismo día, `f0f2ec5` de `toolchain` · el desplazamiento, decidido: no se desplaza si no se pide; por hacer)
+#### 🧬 `#909` — un `Panel` se desplaza aunque su `scrollDir` sea `NONE`, y lo que cabe dentro es menos de lo que mide (abierta el 25-nov · vista al mirar `#905` · de siempre · el tamaño, hecho el mismo día, `f0f2ec5` de `toolchain` · el desplazamiento, hecho el 26-nov, `afee60f` del runtime · a falta de verlo Eduardo)
 
 - La guía (§19.4) y `Gui.bp` dicen que el desplazamiento es opcional y por defecto `NONE`, y `scrollDir` da 0; pero en LVGL un
   objeto nace desplazable en las dos direcciones, con sus barras si no cabe, y nadie se lo quita. Hacerlo verdad puede romper a
@@ -15278,6 +15278,11 @@ mantiene sola.»*
   nace desplazable y el programador lo quita. Por hacer, lo primero del 26-nov, antes del ZIP: en `gui.c`, la pantalla, los paneles
   (también la ventana) y las páginas de pestaña nacen con lo que dice su `scrollDir` (`NONE`); la lista, el campo de texto y la tabla
   conservan el suyo, que es parte de lo que son. Va en el `Gui.pack` y el `GuiMini.pack` (se regraban); la guía, §19.4.
+- **El desplazamiento, hecho** (26-nov): en `gui.c`, `aplica_desplazamiento`, lo que dice el `scrollDir` del nodo, al crear la
+  pantalla, un panel y la página de una pestaña, y al cambiarlo. Los cuatro motores de LVGL, recompilados (48 B más), y el `Gui.pack` y
+  el `GuiMini.pack`, rehechos; en el modelo y en la VM Java no cambia nada (el volcado, igual). **Probado** con capturas, en la VM-C
+  con su ventana y en la P4 con el `Gui.pack` nuevo: sin pedirlo, ni el panel ni la pantalla tienen barras, aunque algo no quepa; con
+  `scrollDir`, vuelven las dos. La guía (§19.4 y la rueda, §22.6), en los dos idiomas.
 
 #### ✅ `#910` — el ZIP de prueba de la V8.5 llevaba las nueve imágenes de la V8.1, y nadie lo dijo (abierta el 25-nov · al ir a grabar la P4 · hecha y **CERRADA** el mismo día, `394dfb7` del runtime)
 

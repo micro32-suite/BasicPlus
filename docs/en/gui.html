@@ -502,7 +502,9 @@ t.<span class="fn">align</span>(Gui.Align.TOP_MID, <span class="num">0</span>, <
   <code>x</code>, <code>y</code>, <code>width</code>, <code>height</code> properties — or all at once
   with <code>setBounds(x,&nbsp;y,&nbsp;w,&nbsp;h)</code>. A <code>Gui.Panel</code> is a simple container
   to group widgets; it supports optional scrolling via <code>scrollDir</code>
-  (<code>Gui.ScrollDir.VER</code>, <code>HOR</code>, <code>BOTH</code> or <code>NONE</code>).
+  (<code>Gui.ScrollDir.VER</code>, <code>HOR</code>, <code>BOTH</code> or <code>NONE</code>). <strong>Nothing scrolls unless
+  the program asks for it</strong>: the screen, a panel and the page of a tab are born with <code>NONE</code> (V9; until then, on
+  the board they scrolled even though it said so). The list, the text field and the table do scroll: it is part of what they are.
 </p>
 <pre><code><span class="kw">var</span> p: Gui.<span class="type">Panel</span> := Gui.<span class="fn">Panel</span>(scr)
 p.x := <span class="num">10</span>
@@ -523,8 +525,8 @@ p.scrollDir := Gui.ScrollDir.VER</code></pre>
   <tr><td>720 or more</td><td>22&nbsp;px (2 + 20)</td><td>156 × 56</td></tr>
 </table>
 <p>
-  What does not fit is cut off and, on the board, scrolls with the finger, with its bars. To cover a whole panel, a child of its
-  size, centered (<code>align(Gui.Align.CENTER, 0, 0)</code>), and <code>scrollDir := Gui.ScrollDir.NONE</code> on the panel. All
+  What does not fit is cut off, with no bars, unless the panel scrolls (its <code>scrollDir</code>). To cover a whole panel, a
+  child of its size, centered (<code>align(Gui.Align.CENTER, 0, 0)</code>). All
   this is LVGL's; since V9, the Java VM does the same, with the padding of its screen, the 480 × 320 one.
 </p>
 <div class="note">
@@ -933,7 +935,7 @@ boton.onClick := pantalla::boton_onClick</code></pre>
     the arrows, Home and End; in a slider, the arrows change the value. Clicking a field also gives it the focus. With no
     keyboard connected nobody has the focus, and the GUI looks as always.</li>
   <li><strong>The mouse</strong> moves an arrow and clicks, and the wheel scrolls whatever is under the arrow (a list, a
-    panel that does not fit). With a touch screen, both work.</li>
+    panel that scrolls). With a touch screen, both work.</li>
 </ul>
 <p>
   <strong>The keys as they come:</strong> the screen has its event, <code>onKey</code>, with every key —also the ones the

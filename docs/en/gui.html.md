@@ -189,7 +189,7 @@ t.align(Gui.Align.TOP_MID, 0, 20)
 <a id="conceptos-geom"></a>
 ### 19.4 Explicit geometry and Panel
 
-As an alternative to `align`, a widget is positioned and sized by hand with the `x`, `y`, `width`, `height` properties — or all at once with `setBounds(x, y, w, h)`. A `Gui.Panel` is a simple container to group widgets; it supports optional scrolling via `scrollDir` (`Gui.ScrollDir.VER`, `HOR`, `BOTH` or `NONE`).
+As an alternative to `align`, a widget is positioned and sized by hand with the `x`, `y`, `width`, `height` properties — or all at once with `setBounds(x, y, w, h)`. A `Gui.Panel` is a simple container to group widgets; it supports optional scrolling via `scrollDir` (`Gui.ScrollDir.VER`, `HOR`, `BOTH` or `NONE`). **Nothing scrolls unless the program asks for it**: the screen, a panel and the page of a tab are born with `NONE` (V9; until then, on the board they scrolled even though it said so). The list, the text field and the table do scroll: it is part of what they are.
 
 ```
 var p: Gui.Panel := Gui.Panel(scr)
@@ -208,7 +208,7 @@ p.scrollDir := Gui.ScrollDir.VER
 | from 321 to 719 | 18 px (2 + 16) | 164 × 64 |
 | 720 or more | 22 px (2 + 20) | 156 × 56 |
 
-What does not fit is cut off and, on the board, scrolls with the finger, with its bars. To cover a whole panel, a child of its size, centered (`align(Gui.Align.CENTER, 0, 0)`), and `scrollDir := Gui.ScrollDir.NONE` on the panel. All this is LVGL's; since V9, the Java VM does the same, with the padding of its screen, the 480 × 320 one.
+What does not fit is cut off, with no bars, unless the panel scrolls (its `scrollDir`). To cover a whole panel, a child of its size, centered (`align(Gui.Align.CENTER, 0, 0)`). All this is LVGL's; since V9, the Java VM does the same, with the padding of its screen, the 480 × 320 one.
 
 > **BasicPlus does not draw free shapes** (lines, circles, canvas): the interface is composed out of widgets. For a colored rectangle, a `Panel` with `setBgColor` is enough. A pixel-level drawing canvas would be a future extension; it is not there today.
 
@@ -631,7 +631,7 @@ And a consequence that is easy to miss: **with no subscriber, nothing happens**.
 With a keyboard or a mouse connected (over Bluetooth, with [`Air.Bluetooth`](referencia.html.md#stdlib-air-bt)), the GUI uses them on its own, without writing anything (V8):
 
 - **The keyboard** types into the control that has the focus. Tab and Shift+Tab move to the next and the previous control, in the order they were created; Enter presses the focused button; in a field, Backspace, Delete, the arrows, Home and End; in a slider, the arrows change the value. Clicking a field also gives it the focus. With no keyboard connected nobody has the focus, and the GUI looks as always.
-- **The mouse** moves an arrow and clicks, and the wheel scrolls whatever is under the arrow (a list, a panel that does not fit). With a touch screen, both work.
+- **The mouse** moves an arrow and clicks, and the wheel scrolls whatever is under the arrow (a list, a panel that scrolls). With a touch screen, both work.
 
 **The keys as they come:** the screen has its event, `onKey`, with every key —also the ones the GUI uses—, on the GUI thread, like a click. The key is the one of [`Keyboards`](referencia.html.md#stdlib-keyboards) (a 32-bit number: the code in the low part and the state in the high part) and its character (`""` for a special key). The last screen created, or loaded with `load()`, gets them.
 
