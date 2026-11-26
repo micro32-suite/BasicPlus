@@ -15298,7 +15298,7 @@ mantiene sola.»*
 
 #### ✅ `#916` — en la P4, la pantalla parpadea cada vez que se escribe en la flash (abierta el 26-nov · vista por Eduardo en la estación de la prueba de la IA · de siempre · hecha y **CERRADA** el mismo día, `9fa56d2` del runtime)
 
-- **Lo visto:** la estación que hizo la IA (`#912`… la prueba de la V8.5) parpadeaba más o menos cada minuto: cuando medía.
+- **Lo visto:** la estación que hizo la IA en su prueba de la V8.5 parpadeaba más o menos cada minuto: cuando medía.
 - **Acotado** en la P4 con un programa de cuatro fases de 20 s, Eduardo mirando: nada, la gráfica entera redibujada cada 3 s, un
   fichero de 4 KB escrito cada 3 s y un INSERT de SQLite cada 3 s. *«la 3 parpadea»*, *«la 4 mas todavía»*: la flash, no el dibujo.
 - **La causa** (una hipótesis, *«Es una hipótesis»*, probada antes de tocar el repositorio): mientras se borra o se escribe la flash
@@ -15309,27 +15309,35 @@ mantiene sola.»*
   ella. **Probado** con una variante compilada aparte, la misma prueba: *«4 no parpadea»*, *«la 3 tampoco»*; y la imagen del
   repositorio, en la placa.
 
-#### ⬜ `#913` — dos grabaciones de packs a la vez se estropean las dos, y el IDE deja empezar la segunda (abierta el 26-nov · la prueba de la IA de la V8.5)
+#### ✅ `#913` — dos grabaciones de packs a la vez se estropean las dos, y el IDE deja empezar la segunda (abierta el 26-nov · la prueba de la IA de la V8.5 · hecha y **CERRADA** el mismo día, `e1b94fa` de `toolchain`)
 
 - La IA lanzó el guion de la placa; su llamada se le cortó por tiempo (`#914`) mientras el IDE seguía grabando, y lanzó ella otra
   grabación del mismo pack: las dos, por el mismo cable, y la placa rechazó las dos («sesión de burn inválida (begin/data/end
   desordenados)»). La guía para IA promete que a lo que llega a destiempo el IDE contesta «ocupada».
-- **Por hacer:** una grabación (o un formateo, o un borrado de pack) cada vez; a lo demás que cambie la zona, «ocupada: está grabando
-  SQLite (el guion …, paso 8 de 9)»; y que el error diga qué pasó.
+- **Hecho** (`PacksPlaca.cambiando`): grabar, retirar o formatear, uno cada vez; lo que llega mientras contesta «la placa está ocupada:
+  grabando el pack Stdlib.pack (desde las 19:10:44). En la zona de packs, una cosa cada vez: cuando acabe, «packs_listar» lo dirá (sigue
+  en marcha aunque a quien la pidió se le haya cortado la espera)». Listar, sí. **Probado** con el IDE sin ventana y el micro simulado, y
+  en `PacksSmoke` (su paso 12).
 
-#### ⬜ `#914` — una orden larga del IDE (un guion, grabar el pack de la GUI) se le corta a la IA por tiempo, a los 60 s, y el IDE sigue (abierta el 26-nov · la prueba de la IA de la V8.5)
+#### ✅ `#914` — una orden larga del IDE (un guion, grabar el pack de la GUI) se le corta a la IA por tiempo, a los 60 s, y el IDE sigue (abierta el 26-nov · la prueba de la IA de la V8.5 · hecha y **CERRADA** el mismo día, con `#913`)
 
 - *«The operation timed out»*, a los 63 s del guion y a los 61 del `pack_grabar` del pack de la GUI: el cliente de la IA deja de
   esperar; el IDE no se entera y la orden sigue. La primera vez la IA creyó que había acabado (`#913`); la segunda, esperó.
-- **Por hacer:** la guía para IA lo dice (sigue en marcha; `packs_listar` dice cuándo ha acabado; no lances otra), y con `#913`, el
-  «ocupada» dice qué está en marcha.
+- **Hecho:** la guía para IA lo dice (sigue en marcha; `packs_listar` dice cuándo ha acabado; no lances otra), y con `#913`, el
+  «ocupada» dice qué está en marcha. El plazo es del cliente de la IA, no del IDE.
 
-#### ⬜ `#915` — `bp placa COMx info` contra una placa en blanco se queda esperando, sin decir nada (abierta el 26-nov · la prueba de la IA de la V8.5)
+#### ✅ `#915` — `bp placa COMx info` contra una placa en blanco se queda esperando, sin decir nada (abierta el 26-nov · la prueba de la IA de la V8.5 · hecha y **CERRADA** el mismo día, `e1b94fa` de `toolchain`)
 
 - Con la P4 recién borrada, la orden de la IA se quedó colgada hasta que la paró la persona, y se quedó con el puerto; la IA no vio que
   la placa no tenía la imagen (*«Le he tenido que decir que la placa está vacia»*). Por reproducir, con la placa en blanco.
-- **Por hacer:** un plazo, y un mensaje que diga qué hacer: «no contesta como una placa de BasicPlus: si es nueva, grábale la imagen
-  (docs/INSTALAR_FIRMWARE.md)»; lo mismo al conectar desde el IDE.
+- **Reproducido sin la placa:** un puerto callado (el COM1) da «handshake no completado» a los 6 s; una placa de mentira que repite lo de
+  la ROM de una ESP32 en blanco («invalid header: 0xffffffff»), colgado. La espera del saludo se alargaba mientras llegaran bytes
+  (`esperarPorActividad`, `#454`), y la ROM no calla.
+- **Hecho:** el saludo, con tope (10 s); y al conectar, desde el IDE o con `bp`, lo que pasa: «no contesta como una placa de BasicPlus:
+  llega otra cosa («invalid header: 0xffffffff»). Si la placa es nueva o la has borrado, grábale la imagen de BasicPlus
+  (docs/INSTALAR_FIRMWARE.md)», o, si calla, «no contesta: ¿es el puerto de la placa?…». La guía para IA lo dice, y la del IDE (§13),
+  el orden: primero el servidor, después la IA, y «con BasicPlus». **Probado:** la placa de mentira (11 s, y el mensaje), el COM1 y la
+  P4 de verdad, que conecta como antes; en `LatidoSmoke`.
 
 #### ✅ `#912` — los resultados de ejecutar (la IA) mezclan lo que imprime el programa con lo de compilar, subir y ejecutar (abierta el 25-nov · de la prueba final · hecha y **CERRADA** el mismo día, `f0f2ec5` de `toolchain`)
 

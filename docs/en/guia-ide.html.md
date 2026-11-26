@@ -451,6 +451,7 @@ An AI assistant (Claude Code, for instance) can drive the IDE: open a source, co
 - When you turn it on, you choose **the AI's folder**: only inside it can the AI open, save, upload and download files. Better a folder just for the work with the AI. The IDE leaves the guide for AI assistants in it (`AGENTS.md`, and a `CLAUDE.md` that points to it), unless they are already there; the one another IDE left, unless you have changed it, it brings up to date.
 - Each IDE command is a tool for the AI: the same as the menus and the buttons, the board's environment variables (§9.3) and its packs (§10.3) included. What it does shows up in the console, with `[ia]`. Formatting the packs area, which cannot be undone, is asked of you first, every time.
 - **IA → Cómo conectar…** tells where it listens and the command to connect Claude Code, once: `claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp`.
+- **The order** (V9): first the server, with its folder, and then the AI, opened in that folder. The AI reads the guide the IDE leaves there when it starts: opened before, it does not see it. And tell it to do it with BasicPlus: otherwise, with an ESP32 board it may go for Espressif's tools.
 
 **If it is the AI that opens the IDE**, it opens it with `--ia` and the folder it works in:
 

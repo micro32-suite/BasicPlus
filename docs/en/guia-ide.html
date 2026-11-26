@@ -1344,6 +1344,9 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   <li><strong>IA → Cómo conectar…</strong> tells where it listens and the command to connect
       Claude Code, once:
       <code>claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp</code>.</li>
+  <li><strong>The order</strong> (V9): first the server, with its folder, and then the AI, opened in that folder. The AI
+      reads the guide the IDE leaves there when it starts: opened before, it does not see it. And tell it to do it with
+      BasicPlus: otherwise, with an ESP32 board it may go for Espressif's tools.</li>
 </ul>
 <p>
   <strong>If it is the AI that opens the IDE</strong>, it opens it with <code>--ia</code> and
