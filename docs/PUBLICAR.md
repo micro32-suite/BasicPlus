@@ -1,4 +1,4 @@
-# Checklist de publicación — Micro32 Suite v8.1 (BasicPlus)
+# Checklist de publicación — Micro32 Suite v8.5 (BasicPlus)
 
 Doc de mantenedor (no enlazado desde la portada). Los repositorios públicos **ya existen**:
 `micro32-suite/BasicPlus` (hasta la V8.1, `legio-e/BasicPlus`), con `micro32-suite/toolchain` y
@@ -51,6 +51,26 @@ una suma, una cosa que verificar.**
 ⚠️ Si algún día se vuelven a soltar, hay que revisar `docs/INSTALAR_FIRMWARE.md`
 (las dos versiones): dice de dónde se saca la imagen, y esa frase depende de esta
 decisión.
+
+---
+
+## ⏳ PRE-FLIGHT DE V8.5 — en curso (congelada el 26-nov)
+
+Lo hecho desde la V8.1 (la IA, el IDE, el I2C por software y los arreglos), sin nada más. Lo que no necesita placas, pasado
+la noche del 26-nov sobre el árbol congelado; lo demás, para el lote y el ZIP.
+
+| comprobación | resultado |
+|---|---|
+| Suites `lexer-java` · `miVM` | 26-nov: **463/463** · **75/75** (contadas en `surefire-reports`) |
+| `compat/compat.sh check` | 26-nov, con la 8.5: **VERDE** en 22:03 —paridad 221/221 en MOD9, 212 y 9 SKIP en MOD8, 221/221 con dos workers; C 117/117; cápsula V6 59; sim 16/16, sombra 15/15, norma 9/9; el estrés, `packs-abi` (6 `.mdn`, ABI 9) y la stdlib embebida, con la versión de las imágenes y la del producto, la misma (8.5); ninguna línea `!! stderr:`— |
+| `samples_sweep.py` | 26-nov: **421 OK, 0 FALLO** (los 2 avisos de import omitido de siempre); `bp test` sobre `samples/pruebas`, todas bien |
+| `h13-errores.sh` | 26-nov: **165/165** |
+| `doc_frags.py` · `enlaces_docs.py` | 26-nov: **0 FALLO** en 29 documentos —880 bloques; 381 de BP compilados (209 OK, 169 trozos, 3 errores esperados) y **80** módulos de JC—; los enlaces internos, **1 768** en 98 documentos, y 0 rotos en lo que se publica (los 3 de `V4_IDEAS.md` de siempre) |
+| `seo_paginas.py --comprobar` · `docs_md.py --comprobar` | 26-nov: por cambiar, 0 (21 páginas) · los 11 ficheros, al día |
+| Las **9** imágenes en `dist/firmware/` (y el firmware de la C6: 10 ficheros) | 26-nov: las nueve de una vez, del mismo árbol (`bd57c065`); `sha256sum -c`, **10 OK**; en cada `_merged` de las ESP32, la aplicación exacta en 0x10000; `check_mods_embebidos.py --imagenes`: todas dicen **la 8.5** y llevan los módulos de `bpstdlib` (18; las STM32, 17); las dos P4, con `#916` |
+| Los **5** packs | `Gui` y `GuiMini`, rehechos el 26-nov con `#909`; `SQLite` y `DriverSpi`, el 26-nov; el `Stdlib.pack`, del 25-nov. Falta el guardián del empaquetador (`#679`) |
+| `tanda.py` en las placas | pendiente: el lote de las once, desde `dist/firmware` |
+| Micro simulado y VM-C con LVGL, ZIP, carpeta limpia, la IA, `pruebas.html`, las portadas | pendiente |
 
 ---
 
