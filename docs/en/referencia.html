@@ -1186,7 +1186,7 @@ sleep(<span class="num">60000</span>)          <span class="comment">// and the 
 
 <h3 id="stdlib-assert">13.20 <code>Assert</code> (the checks of a test)</h3>
 <p>
-  The checks of a test (<code>import Assert</code>, V9): each one that fails throws <code>Assert.Failure</code> —a
+  The checks of a test (<code>import Assert</code>, V8.5): each one that fails throws <code>Assert.Failure</code> —a
   <code>RuntimeError</code>— with a short message, and the test ends with 1 and its trace says the line. The tests of a
   program or of a project are run by <code>bp test</code> (<a href="#cli">§16</a>), on both PC VMs. It is not embedded
   in the firmwares: on a board, the IDE uploads it when a program uses it.
@@ -1370,7 +1370,7 @@ sleep(<span class="num">60000</span>)          <span class="comment">// and the 
           <code>mode</code>: <code>Pin.INPUT</code>, <code>Pin.OUTPUT</code> or, since V7,
           <code>Pin.OPEN_COLLECTOR</code> (open-drain output: it starts released, <code>off()</code> pulls the
           line down and <code>on()</code> releases it — a resistor makes it high —, and <code>value()</code>
-          reads the line; on RP2350, whose pad does not have it, emulated since V9).
+          reads the line; on RP2350, whose pad does not have it, emulated since V8.5).
           <strong>The common layer validates it against the micro's capability table</strong>
           (<a href="#stdlib-machine-caps">§Machine</a>) and the pin states, by name:
           "el pin 99 no existe en esp32c5", "el pin 26 está en uso analógico: primero release()". And on a
@@ -1466,7 +1466,7 @@ light.release()                                            <span class="comment"
 <h3 id="stdlib-i2c">14.3 <code>I2c</code></h3>
 <p>
   Multi-slave I²C master bus over 2 wires (SDA + SCL): the one of a peripheral of the micro — on the
-  Pico 2 there are 2 (<code>i2c0</code>, <code>i2c1</code>) — or, since V9, a software one. Byte
+  Pico 2 there are 2 (<code>i2c0</code>, <code>i2c1</code>) — or, since V8.5, a software one. Byte
   buffers are passed as <code>integer[]</code> where each slot
   carries one byte in the low 8 bits.
 </p>
@@ -1481,7 +1481,7 @@ light.release()                                            <span class="comment"
   bus.release()
 <span class="kw">end</span> main</code></pre>
 <p>
-  <b>A bus is an <code>I2c.I2C</code></b> (V9), whichever it is: it is the base class, and what a device
+  <b>A bus is an <code>I2c.I2C</code></b> (V8.5), whichever it is: it is the base class, and what a device
   library asks for. <code>I2c.HardI2C(id, sda, scl, baudrate)</code> is a peripheral's, and
   <code>modSoftI2C.SoftI2C(sda, scl)</code> a software one (<a href="#stdlib-softi2c">§14.3.1</a>), for when
   there are no buses left or the pins do not match. <strong>You go from one to the other by changing
@@ -1521,18 +1521,18 @@ light.release()                                            <span class="comment"
       <td>Runs an <code>I2c.Transaction</code> (below). Returns the bytes moved, or
           <code>-1</code>.</td></tr>
   <tr><td><code>readReg(addr, reg): integer</code></td>
-      <td>V9: the value of one register of the device (0..255), or <code>-1</code> if it does not
+      <td>V8.5: the value of one register of the device (0..255), or <code>-1</code> if it does not
           answer.</td></tr>
   <tr><td><code>readRegs(addr, reg, data, count): integer</code></td>
-      <td>V9: <code>count</code> bytes from register <code>reg</code> on, in one transaction.</td></tr>
+      <td>V8.5: <code>count</code> bytes from register <code>reg</code> on, in one transaction.</td></tr>
   <tr><td><code>writeReg(addr, reg, value): integer</code></td>
-      <td>V9: writes one register. <code>-1</code> if it does not answer.</td></tr>
+      <td>V8.5: writes one register. <code>-1</code> if it does not answer.</td></tr>
   <tr><td><code>scan(): integer[]</code></td>
       <td>The addresses from <code>0x08</code> to <code>0x77</code> that answer. Each one is probed with a
           0-byte write: some sensors do not answer a read unless they hold a finished measurement (up to
           V8 one byte was read, and they did not show up).</td></tr>
   <tr><td><code>isPresent(addr): boolean</code></td>
-      <td>V9: whether somebody answers at <code>addr</code> (the same probe).</td></tr>
+      <td>V8.5: whether somebody answers at <code>addr</code> (the same probe).</td></tr>
   <tr><td><code>release()</code></td>
       <td>Lets the bus go: if nobody else uses it and it is not the board's, it is closed and its pins
           become free. A second time does nothing; using it afterwards is a <code>RuntimeError</code>
@@ -1545,7 +1545,7 @@ light.release()                                            <span class="comment"
   <code>writeRead</code>; the rest is done with them.
 </p>
 
-<h4 id="stdlib-softi2c">14.3.1 <code>modSoftI2C</code> — software I²C (V9)</h4>
+<h4 id="stdlib-softi2c">14.3.1 <code>modSoftI2C</code> — software I²C (V8.5)</h4>
 <p>
   <code>modSoftI2C.SoftI2C(sda, scl)</code>, or <code>SoftI2C(sda, scl, baudrate)</code>: an I²C bus on any
   two pins that can drive open-drain (<code>Machine.openDrainPins()</code>). It lives in its own module
@@ -3103,7 +3103,7 @@ mo.onWheel := screen::wheel
   The installation brings the libraries of some devices, with their source, in <code>bpdevices/</code>. They are imported
   like those of the library (<code>import Bmp280</code>), but they do not live on the board: they belong to the program, and
   the IDE and <code>bp</code> upload them with it. On the PC, the compiler leaves their copy beside the program, in its
-  output folder (V9). The I2C ones ask for a bus (<a href="#stdlib-i2c">§14.3</a>): an <code>I2c.HardI2C</code> or a
+  output folder (V8.5). The I2C ones ask for a bus (<a href="#stdlib-i2c">§14.3</a>): an <code>I2c.HardI2C</code> or a
   software one. Their whole API, with <code>bp api Bmp280</code>.
 </p>
 <table>
@@ -3460,7 +3460,7 @@ imported exactly like one living in <code>/lib</code>.</p>
   From the command line, everything goes through <code>bp</code> (at the root of the installation:
   <code>bp.bat</code>, and <code>bp</code> for bash). <code>bp build</code> compiles a source or a
   project (the <code>.mod</code> goes to <code>out/</code> next to the source) and only says where it
-  went, or the errors, each one with its file (<code>App.bp:7:15: error semántico: …</code>, V9): the first
+  went, or the errors, each one with its file (<code>App.bp:7:15: error semántico: …</code>, V8.5): the first
   ten, or all of them with <code>--max-errores=0</code>; <code>bp run</code>
   compiles if needed and runs on the Java VM (with <code>--c</code>, on the C VM), and exits with the
   program's code (a project that comes out as a pack, in its pack: on the PC that is where its resources are,
@@ -3474,7 +3474,7 @@ bp run samples/blink.bp            (compiles and runs)
 bp run --c samples/out/Blink.mod   (on the C VM)</code></pre>
 
 <p>
-  <strong>On a board or on the simulated micro</strong> (V9), without opening the IDE: <code>bp run --placa=COM22</code>
+  <strong>On a board or on the simulated micro</strong> (V8.5), without opening the IDE: <code>bp run --placa=COM22</code>
   (or the IP of a board on the network) and <code>bp run --sim</code> compile, upload what is needed —the same as the
   IDE's <em>Run on Device</em>: only what the board does not already have— and run; the output and the exit code, as
   with the PC VMs, and the argument, after the program. The simulated micro is the IDE's, with its settings and its
@@ -3497,7 +3497,7 @@ bp placa COM22 pack Stdlib             (burns the installation's Stdlib.pack on 
 </p>
 
 <p>
-  <strong>The API of a module</strong> (V9): <code>bp api Collections</code> writes it in BP —its public declarations,
+  <strong>The API of a module</strong> (V8.5): <code>bp api Collections</code> writes it in BP —its public declarations,
   as they are written, without the bodies—, taken from its <code>.mod</code>, which carries it. It finds the module the
   way an <code>import</code> written in that folder would: the standard library, the libraries of the
   <a href="#cli-vmcfg">BpVM.cfg</a> and the packs (also <code>SQLite</code> and <code>Orm</code>, which come without
@@ -3510,7 +3510,7 @@ bp api Collections        (its API: Map, SyncList…)
 bp api out/MyLib.mod      (the API of one of yours, compiled)</code></pre>
 
 <p>
-  <strong>Tests</strong> (V9): <code>bp test</code> runs the programs of the <code>tests/</code> folder (or the ones it
+  <strong>Tests</strong> (V8.5): <code>bp test</code> runs the programs of the <code>tests/</code> folder (or the ones it
   is given) on both PC VMs, each in its own process, with no screen and with a time limit (<code>--tiempo=N</code>, 60 s
   if not given: a test that does not end does not hang the others). A test passes if it compiles, ends with 0 on both,
   prints the same on both and, if it has its <code>X.out</code> beside it, prints that; <code>bp test --guarda</code>
@@ -3530,8 +3530,8 @@ bp test --guarda tests/PruebaGui.bp   (writes tests/PruebaGui.out)</code></pre>
   <tr><th>Option</th><th>Effect</th></tr>
   <tr><td><code>--tokens</code></td><td>Dump of the lexer's tokens.</td></tr>
   <tr><td><code>--ast</code></td><td>Dump of the AST.</td></tr>
-  <tr><td><code>--quiet</code></td><td>Only the errors and warnings; if it compiles, nothing (V9).</td></tr>
-  <tr><td><code>--max-errores=&lt;n&gt;</code></td><td>How many errors are written at most (V9): 10 if not given; with 0, all of them. Warnings do not count.</td></tr>
+  <tr><td><code>--quiet</code></td><td>Only the errors and warnings; if it compiles, nothing (V8.5).</td></tr>
+  <tr><td><code>--max-errores=&lt;n&gt;</code></td><td>How many errors are written at most (V8.5): 10 if not given; with 0, all of them. Warnings do not count.</td></tr>
   <tr><td><code>--compile &lt;dir&gt;</code></td><td>Compiles to <code>.mod</code> (the interface goes inside).</td></tr>
   <tr><td><code>--interface &lt;dir&gt;</code></td><td>Only parses and builds the interface — no code, no output file.</td></tr>
   <tr><td><code>--project &lt;file.bpbuild&gt;</code></td><td>Compiles the whole project (<a href="#cli-bpbuild">.bpbuild</a>); with <code>"out": "pack"</code>, it assembles the pack (§15.3).</td></tr>
@@ -3539,7 +3539,7 @@ bp test --guarda tests/PruebaGui.bp   (writes tests/PruebaGui.out)</code></pre>
   <tr><td><code>--stdlibDir=&lt;dir&gt;</code></td><td>The standard library to compile against (V7). It overrides the <code>stdlibDir</code> of the <a href="#cli-vmcfg">BpVM.cfg</a> the compiler finds by itself.</td></tr>
   <tr><td><code>--formato=9|8</code></td><td>The <code>.mod</code> format (V7): <code>9</code>, V7's and the default; <code>8</code>, the previous one, as an emergency exit (§17.1). What needs v9's class table is not in <code>8</code>: for instance, a string stored in an <code>Object</code> cannot be printed (V8).</td></tr>
   <tr><td><code>--backend=jvm|mivm</code></td><td>Backend (mivm is the default).</td></tr>
-  <tr><td><code>-h</code>, <code>--help</code></td><td>The options (V9).</td></tr>
+  <tr><td><code>-h</code>, <code>--help</code></td><td>The options (V8.5).</td></tr>
 </table>
 <p>
   With <code>--compile</code>, the driver is recursive: it finds the
@@ -3570,12 +3570,12 @@ bp test --guarda tests/PruebaGui.bp   (writes tests/PruebaGui.out)</code></pre>
   <li><code>--no-config</code> ignores any auto-discovered BpVM.cfg
       and starts with defaults.</li>
   <li><code>--no-screen</code>: no window. The GUI runs without a screen and <code>Gui.run()</code>
-      returns as soon as it has nothing to do; the same name as in the C VM. <em>V9.</em></li>
+      returns as soon as it has nothing to do; the same name as in the C VM. <em>V8.5.</em></li>
   <li><code>-h</code>, <code>--help</code>: the options (also in the C VM and in the simulated
       micro).</li>
 </ul>
 <p>
-  <strong>The two outputs</strong> (V9): on standard output, only what the program prints, the
+  <strong>The two outputs</strong> (V8.5): on standard output, only what the program prints, the
   same in both VMs, so <code>bp run X.bp &gt; a</code> and <code>bp run --c X.bp &gt; b</code> give
   the same file. What belongs to the VM goes to standard error: its diagnostics
   (<code>[miVM] …</code>, <code>[bpvm] …</code>) and, if the program dies, the error and its
@@ -3712,7 +3712,7 @@ bp test --guarda tests/PruebaGui.bp   (writes tests/PruebaGui.out)</code></pre>
   <li><code>dependencies</code> (array of strings, optional): each entry
       is a directory (looks for any <code>.mod</code> inside when resolving
       imports) or a specific <code>.mod</code> file. The one the program imports is copied to
-      <code>outDir</code> (V9), which is where the PC's VMs look for it; if it changes, it is copied again
+      <code>outDir</code> (V8.5), which is where the PC's VMs look for it; if it changes, it is copied again
       when compiling.</li>
   <li><code>version</code> (integer, optional; V7): the project's <strong>generation</strong>.
       Every <code>.mod</code> it compiles carries it in its header, and the version rule (§17.1)

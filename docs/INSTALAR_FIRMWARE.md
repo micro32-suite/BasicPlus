@@ -540,7 +540,7 @@ con su táctil) va en la imagen.
 ### De una vez: el guion de tu placa
 
 Con la placa conectada, en el IDE: **Guiones → Ejecutar un guion…** y el de las
-tablas (V9; están en `guiones/`). Comprueba que es esa placa, formatea su zona
+tablas (V8.5; están en `guiones/`). Comprueba que es esa placa, formatea su zona
 de packs —lo pregunta antes, con los que se pierden; con un «No», no toca
 nada—, pone sus variables en el ENV, la reinicia y graba los packs. Es lo mismo
 que sigue, a mano. Los guiones, en la [guía del IDE §14](guia-ide.html#guiones).
@@ -680,7 +680,7 @@ Está también en el botón **Info** («Versión») y en `bp placa COM22 info`; 
 `bp run --placa`, si no es la misma, lo avisa. El Info da además el micro, la
 flash, la RAM y la PSRAM, el bloque de RAM de los packs («RAM packs») y la **ABI
 de nativo** de la imagen: «9 (la misma que genera este IDE)» es que la placa carga
-el nativo que genera este IDE (es la 9 de V7 a V9; en la S3, que no tiene AOT,
+el nativo que genera este IDE (es la 9 de V7 a la V8.5; en la S3, que no tiene AOT,
 «sin receta»). No muestra la fecha de compilación de la imagen.
 
 Si un programa acaba en la placa con «lib 'I2c' presente pero no exporta…» y la

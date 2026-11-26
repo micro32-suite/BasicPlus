@@ -7,7 +7,7 @@
 # del pom (al subirla, aquí también). En Windows (Git Bash), java es de Windows: rutas de Windows y «;».
 DIR="$(cd "$(dirname "$0")" && pwd)"
 FE="$DIR/toolchain/lexer-java/target/basicplus-frontend.jar"
-IDE="$DIR/toolchain/BpIde/target/BpIde-8.1.jar"
+IDE="$DIR/toolchain/BpIde/target/BpIde-8.5.jar"
 case "$(uname -s)" in
     MINGW*|MSYS*|CYGWIN*) CP="$(cygpath -w "$FE");$(cygpath -w "$IDE")" ;;
     *) CP="$FE:$IDE" ;;

@@ -280,7 +280,7 @@
 </p>
 
 <p>
-  <strong>All at once, with a script</strong> (V9; <a href="guia-ide.html#guiones-instalacion">IDE guide
+  <strong>All at once, with a script</strong> (V8.5; <a href="guia-ide.html#guiones-instalacion">IDE guide
   §14.1</a>): in the IDE, <strong>Guiones → Ejecutar un guion…</strong> (run a script) and
   <code>bd-metro</code>, <code>bd-stm32-dk2</code> or, with the graphical interface,
   <code>gui-bd-esp32p4-kit</code> or <code>gui-bd-esp32p4-waveshare</code>. It formats the packs area
@@ -291,7 +291,7 @@
   <strong>On the PC: the simulated micro.</strong> The simulator shipped with the IDE carries
   the engine <strong>linked in</strong> since V6, and when the IDE makes it, it burns into it the pack
   without the boards' engines (<code>SQLite.mod</code> and <code>Orm.mod</code>): the
-  examples on this page run without a board. One made before V9 does not have it, because the whole pack did
+  examples on this page run without a board. One made before V8.5 does not have it, because the whole pack did
   not fit (<em>«falta el modulo 'SQLite'»</em>): burn it once, with the packs manager or with
   <code>bp placa sim pack SQLite</code>. If you build the simulator yourself, that is
   <code>make sim LVGL=1 SQLITE=1</code>. The PC's two VMs do not
@@ -457,13 +457,13 @@ w.<span class="fn">eq</span>(<span class="str">"sensor_id"</span>, <span class="
   It reads the project's <code>@BD</code> annotations and writes a module with one DAO per
   entity. The file opens by warning that it is <strong>not to be edited</strong>, and carries a
   <code>@generado</code> fingerprint: if nothing changed, the generator says <code>ya al dia</code>
-  and leaves it alone. The entities may be written in BP or in JC (V9); the DAO is written in BP.
+  and leaves it alone. The entities may be written in BP or in JC (V8.5); the DAO is written in BP.
 </p>
 
 <p>
   If the project lists its <code>sources</code>, the DAO goes there like the rest, even if it does not exist yet
   (<code>"sources": ["Garden.bp", "GardenDao.bp", "Watering.bp"]</code>): the project opens all the same, and
-  until you generate it the build says that it is missing and how to generate it (V9).
+  until you generate it the build says that it is missing and how to generate it (V8.5).
 </p>
 
 <h2 id="crud">6. The operations (CRUD)</h2>

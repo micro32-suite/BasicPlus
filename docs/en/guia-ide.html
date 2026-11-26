@@ -221,7 +221,7 @@
 </p>
 <pre><code>bpide.bat</code></pre>
 <p>or, by hand:</p>
-<pre><code>java -jar BpIde-8.1.jar</code></pre>
+<pre><code>java -jar BpIde-8.5.jar</code></pre>
 <p>
   And for the command line, in the same folder, <code>bp</code>: <code>bp run samples/blink.bp</code>
   compiles and runs, and <code>bp help</code> tells the rest (<a href="referencia.html#cli">reference §16</a>).
@@ -307,7 +307,7 @@
   coexists with an undeclared identifier in another function further down:
   the first failure does not hide the second. Spurious cascades are pruned
   (an already-faulty operand produces no derived errors) and, if there are
-  many, the first ten come out and an «… y más» («and more», V9). In JC, the same.
+  many, the first ten come out and an «… y más» («and more», V8.5). In JC, the same.
 </p>
 
 <h3 id="jc">4.1 JC: <code>.jc</code> files and translation</h3>
@@ -461,7 +461,7 @@
   IDE pops a form and execution pauses until you fill it in: text fields,
   numeric fields, checkboxes and drop-downs as declared by the program. If
   the AI (§13) or a script (§14) launched it, whoever launched it gives the
-  data, with <code>responder</code>; the form does not come up for you (V9).
+  data, with <code>responder</code>; the form does not come up for you (V8.5).
 </p>
 <p><img src="../img/ide-prompt.png" alt="IO.prompt form shown during a Run"></p>
 <p class="note">
@@ -563,7 +563,7 @@
 <p>
   In the Explorer: pick the <em>serial board (v1)</em> backend, the micro's
   COM port and press <strong>Connect</strong>. The panel's bar says who answers
-  and the version of its image (V9: «bpvm-esp32p4, imagen 8.5», image 8.5). If it
+  and the version of its image (V8.5: «bpvm-esp32p4, imagen 8.5», image 8.5). If it
   is not this installation's, the Console warns and says what to do: with an older
   one, new things may not link or not work (flash the installation's on the board).
   An image older than 8.5 does not say its version, and that is what you read
@@ -752,7 +752,7 @@ sd · sd mount   — SD card diagnostics (see below)</code></pre>
   <tr><td><code>log</code> · <code>logclr</code></td><td>read the board's log · clear it</td></tr>
   <tr><td><code>save</code> · <code>reset</code> · <code>cls</code></td><td>save · reboot the device · clear the console</td></tr>
   <tr><td><code>help error</code></td><td>what each exit code means (the table below)</td></tr>
-  <tr><td><code>comandos [text]</code></td><td>the IDE's commands, with their parameters (V9): they are typed here as in a script (§14)</td></tr>
+  <tr><td><code>comandos [text]</code></td><td>the IDE's commands, with their parameters (V8.5): they are typed here as in a script (§14)</td></tr>
 </table>
 
 <p>
@@ -1220,7 +1220,7 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   with the window open, you see what it does. And formatting the area, if it is the AI
   that asks for it, is asked of you first. Without opening the IDE,
   <code>bp placa COM22 packs</code> lists them and <code>bp placa COM22 pack Stdlib</code>
-  burns one (V9; <a href="referencia.html#cli">§16 of the reference</a>).
+  burns one (V8.5; <a href="referencia.html#cli">§16 of the reference</a>).
 </p>
 <p>
   When burning, the IDE <strong>prepares the pack for that board</strong>: from a
@@ -1344,7 +1344,7 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   <li><strong>IA → Cómo conectar…</strong> tells where it listens and the command to connect
       Claude Code, once:
       <code>claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp</code>.</li>
-  <li><strong>The order</strong> (V9): first the server, with its folder, and then the AI, opened in that folder. The AI
+  <li><strong>The order</strong> (V8.5): first the server, with its folder, and then the AI, opened in that folder. The AI
       reads the guide the IDE leaves there when it starts: opened before, it does not see it. And tell it to do it with
       BasicPlus: otherwise, with an ESP32 board it may go for Espressif's tools.</li>
 </ul>

@@ -33,9 +33,9 @@ SQLite=4
 
 In megabytes: four is what the P4 uses; **the minimum is 2** and the maximum 4095. Since V7 there is also a generic key, `packRam=<KB>`, in kilobytes and without that minimum, which **takes precedence over `SQLite=`** when both are there; with it the Discovery, which has no PSRAM, runs `SqlDemo` with `packRam=512`. The block belongs to **all** the engines on the board: if it also loads the graphical interface's, SQLite gets whatever LVGL leaves. With no block —neither key, `SQLite=` below 2 or a value that does not fit— the pack will not start; boot says so on its `packs:` line, and the IDE's INFO under «RAM packs», with the remedy.
 
-**All at once, with a script** (V9; [IDE guide §14.1](guia-ide.html.md#guiones-instalacion)): in the IDE, **Guiones → Ejecutar un guion…** (run a script) and `bd-metro`, `bd-stm32-dk2` or, with the graphical interface, `gui-bd-esp32p4-kit` or `gui-bd-esp32p4-waveshare`. It formats the packs area (it asks first), sets the memory, reboots the board and burns the packs.
+**All at once, with a script** (V8.5; [IDE guide §14.1](guia-ide.html.md#guiones-instalacion)): in the IDE, **Guiones → Ejecutar un guion…** (run a script) and `bd-metro`, `bd-stm32-dk2` or, with the graphical interface, `gui-bd-esp32p4-kit` or `gui-bd-esp32p4-waveshare`. It formats the packs area (it asks first), sets the memory, reboots the board and burns the packs.
 
-> **On the PC: the simulated micro.** The simulator shipped with the IDE carries the engine **linked in** since V6, and when the IDE makes it, it burns into it the pack without the boards' engines (`SQLite.mod` and `Orm.mod`): the examples on this page run without a board. One made before V9 does not have it, because the whole pack did not fit (*«falta el modulo 'SQLite'»*): burn it once, with the packs manager or with `bp placa sim pack SQLite`. If you build the simulator yourself, that is `make sim LVGL=1 SQLITE=1`. The PC's two VMs do not have it —`bp run` and `bp run --c`; *Run* and *Run Window*, in the IDE—: there, a program with SQLite ends with *«falta el modulo 'SQLite'»*. Without a board, it runs on the simulated micro: `bp run --sim`.
+> **On the PC: the simulated micro.** The simulator shipped with the IDE carries the engine **linked in** since V6, and when the IDE makes it, it burns into it the pack without the boards' engines (`SQLite.mod` and `Orm.mod`): the examples on this page run without a board. One made before V8.5 does not have it, because the whole pack did not fit (*«falta el modulo 'SQLite'»*): burn it once, with the packs manager or with `bp placa sim pack SQLite`. If you build the simulator yourself, that is `make sim LVGL=1 SQLITE=1`. The PC's two VMs do not have it —`bp run` and `bp run --c`; *Run* and *Run Window*, in the IDE—: there, a program with SQLite ends with *«falta el modulo 'SQLite'»*. Without a board, it runs on the simulated micro: `bp run --sim`.
 
 <a id="sinorm"></a>
 ## 2. Without the ORM: plain SQL
@@ -162,9 +162,9 @@ In the IDE: the **«DAO build»** button (or menu). From the command line:
 bp frontend --project my/project.bpbuild --dao
 ```
 
-It reads the project's `@BD` annotations and writes a module with one DAO per entity. The file opens by warning that it is **not to be edited**, and carries a `@generado` fingerprint: if nothing changed, the generator says `ya al dia` and leaves it alone. The entities may be written in BP or in JC (V9); the DAO is written in BP.
+It reads the project's `@BD` annotations and writes a module with one DAO per entity. The file opens by warning that it is **not to be edited**, and carries a `@generado` fingerprint: if nothing changed, the generator says `ya al dia` and leaves it alone. The entities may be written in BP or in JC (V8.5); the DAO is written in BP.
 
-If the project lists its `sources`, the DAO goes there like the rest, even if it does not exist yet (`"sources": ["Garden.bp", "GardenDao.bp", "Watering.bp"]`): the project opens all the same, and until you generate it the build says that it is missing and how to generate it (V9).
+If the project lists its `sources`, the DAO goes there like the rest, even if it does not exist yet (`"sources": ["Garden.bp", "GardenDao.bp", "Watering.bp"]`): the project opens all the same, and until you generate it the build says that it is missing and how to generate it (V8.5).
 
 <a id="crud"></a>
 ## 6. The operations (CRUD)

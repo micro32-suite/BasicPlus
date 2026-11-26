@@ -221,7 +221,7 @@
 </p>
 <pre><code>bpide.bat</code></pre>
 <p>o, si lo prefieres a mano:</p>
-<pre><code>java -jar BpIde-8.1.jar</code></pre>
+<pre><code>java -jar BpIde-8.5.jar</code></pre>
 <p>
   Y para la línea de órdenes, en la misma carpeta, <code>bp</code>: <code>bp run samples/blink.bp</code>
   compila y ejecuta, y <code>bp help</code> cuenta lo demás (<a href="referencia.html#cli">referencia §16</a>).
@@ -309,7 +309,7 @@
   identificador no declarado: el fallo de la primera no oculta el de la
   segunda. Las cascadas espurias se podan (un operando ya erróneo no
   genera errores derivados) y, si hay muchos, salen los diez primeros y
-  un «… y más» (V9). En JC, igual.
+  un «… y más» (V8.5). En JC, igual.
 </p>
 
 <h3 id="jc">4.1 JC: los <code>.jc</code> y la traducción</h3>
@@ -462,7 +462,7 @@
   rellenas: campos de texto, numéricos, casillas y desplegables según
   lo que el programa declare. Si lo lanzó la IA (§13) o un guion (§14),
   los datos los da quien lo lanzó, con <code>responder</code>; a ti no
-  te sale el formulario (V9).
+  te sale el formulario (V8.5).
 </p>
 <p><img src="img/ide-prompt.png" alt="Formulario de IO.prompt desplegado durante un Run"></p>
 <p class="note">
@@ -564,7 +564,7 @@
 <p>
   En el Explorador: elige backend <em>Placa (serial v1)</em>, el puerto
   COM del micro y pulsa <strong>Connect</strong>. La barra del panel dice quién
-  contesta y la versión de su imagen (V9: «bpvm-esp32p4, imagen 8.5»). Si no es la
+  contesta y la versión de su imagen (V8.5: «bpvm-esp32p4, imagen 8.5»). Si no es la
   de esta instalación, la Consola lo avisa y dice qué hacer: con una más vieja, lo
   nuevo puede no enlazar o no ir (graba en la placa la de la instalación). Una
   imagen anterior a la 8.5 no dice su versión, y así se lee. El árbol muestra el
@@ -749,7 +749,7 @@ sd · sd mount   — diagnóstico de la tarjeta (ver abajo)</code></pre>
   <tr><td><code>log</code> · <code>logclr</code></td><td>ver el log de la placa · vaciarlo</td></tr>
   <tr><td><code>save</code> · <code>reset</code> · <code>cls</code></td><td>guardar · reiniciar el dispositivo · limpiar la consola</td></tr>
   <tr><td><code>help error</code></td><td>qué significa cada código de salida (la tabla de abajo)</td></tr>
-  <tr><td><code>comandos [texto]</code></td><td>los comandos del IDE, con sus parámetros (V9): se escriben aquí como en un guion (§14)</td></tr>
+  <tr><td><code>comandos [texto]</code></td><td>los comandos del IDE, con sus parámetros (V8.5): se escriben aquí como en un guion (§14)</td></tr>
 </table>
 
 <p>
@@ -1214,7 +1214,7 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   La IA (§13) los lista, los graba y los retira con los mismos comandos que estos
   botones: con la ventana abierta se ve lo que hace. Y formatear la zona, si lo pide
   ella, se te pregunta antes. Sin abrir el IDE, <code>bp placa COM22 packs</code> los
-  lista y <code>bp placa COM22 pack Stdlib</code> graba uno (V9;
+  lista y <code>bp placa COM22 pack Stdlib</code> graba uno (V8.5;
   <a href="referencia.html#cli">§16 de la referencia</a>).
 </p>
 <p>
@@ -1336,7 +1336,7 @@ sd=clk:43,cmd:44,d0:39,pwr:45,pwralto:0               <span class="comment">// E
   <li><strong>IA → Cómo conectar…</strong> dice dónde escucha y la orden para conectar
       Claude Code, una vez:
       <code>claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp</code>.</li>
-  <li><strong>El orden</strong> (V9): primero el servidor, con su carpeta, y después la IA, abierta en esa carpeta. La guía
+  <li><strong>El orden</strong> (V8.5): primero el servidor, con su carpeta, y después la IA, abierta en esa carpeta. La guía
       que deja el IDE la IA la lee al empezar: abierta antes, no la ve. Y dile que lo haga con BasicPlus: si no, con una
       placa ESP32 puede irse a las herramientas de Espressif.</li>
 </ul>

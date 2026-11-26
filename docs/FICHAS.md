@@ -86,7 +86,9 @@ en §ABIERTAS, en el bloque de V9:
 | **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA; cada acción del IDE, un comando, con la `Action` de Swing como su cara en la ventana y MCP como la de la IA (Eduardo, 22-nov). Va antes que el H1 | ⏳ abierto el 22-nov; H2.1, el análisis, H2.2, los comandos (53, probados por Eduardo), y H2.3, la IA por MCP (probado por una IA de verdad en la Pico 2 y en la VM-C), hechos; H2.4 (el depurador, por la IA), analizado y aplazado a una segunda fase (23-nov; el 25, fuera de la V8.5): lo que haga falta, lo dirá el uso, en el H1 |
 | **H3** | **el I2C y el SPI por software** (Eduardo, 24-nov): una clase base por bus, la del periférico y la de software, que se intercambian cambiando sólo el constructor; las de software, cada una en su módulo (`#881`–`#884`) | ⏳ abierto el 24-nov; el I2C, hecho y visto en las tres familias con un sensor; el SPI, analizado |
 
-**La V8.5** (Eduardo, 25-nov): se publica el viernes 27-nov si es posible —*«OK, entonces publicamos el viernes si es posible.»*—, con lo
+**La V8.5 — CONGELADA el 26-nov** (Eduardo: *«OK, congelamos»*, pasada la prueba de la IA y arreglado lo que encontró, `#913` a
+`#916`; *«si no hay tiempo podemos publicar el sábado, no nos hemos comprometido a ninguna fecha»*). Lo de antes: (Eduardo, 25-nov) se
+publica el viernes 27-nov si es posible —*«OK, entonces publicamos el viernes si es posible.»*—, con lo
 hecho desde la V8.1. Congelada de hecho desde el 25-nov: no se hace código nuevo, sólo se arreglan fallos —*«de hecho ya hemos
 congelado, no hacemos código nuevo salvo para corregir bugs»*—; la congelación formal, tras la prueba de la IA con el ZIP nuevo
 (*«No podemos congelar codigo hasta que pasemos la prueba de la IA»*). Lo que falta, en orden: el ZIP de prueba y la IA; lo que vea

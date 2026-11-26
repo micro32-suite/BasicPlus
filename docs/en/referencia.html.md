@@ -578,7 +578,7 @@ sleep(60000)          // and the next shift, with new threads
 <a id="stdlib-assert"></a>
 ### 13.20 `Assert` (the checks of a test)
 
-The checks of a test (`import Assert`, V9): each one that fails throws `Assert.Failure` —a `RuntimeError`— with a short message, and the test ends with 1 and its trace says the line. The tests of a program or of a project are run by `bp test` ([§16](#cli)), on both PC VMs. It is not embedded in the firmwares: on a board, the IDE uploads it when a program uses it.
+The checks of a test (`import Assert`, V8.5): each one that fails throws `Assert.Failure` —a `RuntimeError`— with a short message, and the test ends with 1 and its trace says the line. The tests of a program or of a project are run by `bp test` ([§16](#cli)), on both PC VMs. It is not embedded in the firmwares: on a board, the IDE uploads it when a program uses it.
 
 | Function | Description |
 |---|---|
@@ -682,7 +682,7 @@ end main
 
 | Member | Description |
 |---|---|
-| `Pin(num, mode)` | Constructor. Configures the pin automatically. `mode`: `Pin.INPUT`, `Pin.OUTPUT` or, since V7, `Pin.OPEN_COLLECTOR` (open-drain output: it starts released, `off()` pulls the line down and `on()` releases it — a resistor makes it high —, and `value()` reads the line; on RP2350, whose pad does not have it, emulated since V9). **The common layer validates it against the micro's capability table** ([§Machine](#stdlib-machine-caps)) and the pin states, by name: "el pin 99 no existe en esp32c5", "el pin 26 está en uso analógico: primero release()". And on a board with the screen in the image (the P4, the DK2), its pins are the screen's from boot: "el pin 26 de esp32p4 es de la pantalla: no se puede usar" (`#669`). Its touch panel's I2C, instead, is a board bus and is shared: "el pin 7 es del I2C 0" (below, `I2c`). |
+| `Pin(num, mode)` | Constructor. Configures the pin automatically. `mode`: `Pin.INPUT`, `Pin.OUTPUT` or, since V7, `Pin.OPEN_COLLECTOR` (open-drain output: it starts released, `off()` pulls the line down and `on()` releases it — a resistor makes it high —, and `value()` reads the line; on RP2350, whose pad does not have it, emulated since V8.5). **The common layer validates it against the micro's capability table** ([§Machine](#stdlib-machine-caps)) and the pin states, by name: "el pin 99 no existe en esp32c5", "el pin 26 está en uso analógico: primero release()". And on a board with the screen in the image (the P4, the DK2), its pins are the screen's from boot: "el pin 26 de esp32p4 es de la pantalla: no se puede usar" (`#669`). Its touch panel's I2C, instead, is a board bus and is shared: "el pin 7 es del I2C 0" (below, `I2c`). |
 | `on()` | Drives the pin HIGH (only if it is `OUTPUT`). |
 | `off()` | Drives the pin LOW (only if it is `OUTPUT`). |
 | `toggle()` | Toggles HIGH↔LOW. Convenient for blinking. |
@@ -729,7 +729,7 @@ Functional constants (return literals): `INPUT()`, `OUTPUT()`, `LOW()`, `HIGH()`
 <a id="stdlib-i2c"></a>
 ### 14.3 `I2c`
 
-Multi-slave I²C master bus over 2 wires (SDA + SCL): the one of a peripheral of the micro — on the Pico 2 there are 2 (`i2c0`, `i2c1`) — or, since V9, a software one. Byte buffers are passed as `integer[]` where each slot carries one byte in the low 8 bits.
+Multi-slave I²C master bus over 2 wires (SDA + SCL): the one of a peripheral of the micro — on the Pico 2 there are 2 (`i2c0`, `i2c1`) — or, since V8.5, a software one. Byte buffers are passed as `integer[]` where each slot carries one byte in the low 8 bits.
 
 ```
 import I2c
@@ -744,7 +744,7 @@ function main(arg: string)
 end main
 ```
 
-**A bus is an `I2c.I2C`** (V9), whichever it is: it is the base class, and what a device library asks for. `I2c.HardI2C(id, sda, scl, baudrate)` is a peripheral's, and `modSoftI2C.SoftI2C(sda, scl)` a software one ([§14.3.1](#stdlib-softi2c)), for when there are no buses left or the pins do not match. **You go from one to the other by changing only the constructor**: methods, limits and errors are the same. And when it is opened, a device that was left halfway through a read — the board was reset in the middle — is taken out of there.
+**A bus is an `I2c.I2C`** (V8.5), whichever it is: it is the base class, and what a device library asks for. `I2c.HardI2C(id, sda, scl, baudrate)` is a peripheral's, and `modSoftI2C.SoftI2C(sda, scl)` a software one ([§14.3.1](#stdlib-softi2c)), for when there are no buses left or the pins do not match. **You go from one to the other by changing only the constructor**: methods, limits and errors are the same. And when it is opened, a device that was left halfway through a read — the board was reset in the middle — is taken out of there.
 
 ```
 import I2c
@@ -771,17 +771,17 @@ end main
 | `read(addr, data, count): integer` | Reads `count` bytes (at most 256) into `data`. Returns the bytes read, or `-1` if it does not answer. |
 | `writeRead(addr, tx, ntx, rx, nrx): integer` | Writes and reads in **one** transaction, with a *repeated start* between them (V7). Returns the bytes read, or `-1`. |
 | `execute(addr, t): integer` | Runs an `I2c.Transaction` (below). Returns the bytes moved, or `-1`. |
-| `readReg(addr, reg): integer` | V9: the value of one register of the device (0..255), or `-1` if it does not answer. |
-| `readRegs(addr, reg, data, count): integer` | V9: `count` bytes from register `reg` on, in one transaction. |
-| `writeReg(addr, reg, value): integer` | V9: writes one register. `-1` if it does not answer. |
+| `readReg(addr, reg): integer` | V8.5: the value of one register of the device (0..255), or `-1` if it does not answer. |
+| `readRegs(addr, reg, data, count): integer` | V8.5: `count` bytes from register `reg` on, in one transaction. |
+| `writeReg(addr, reg, value): integer` | V8.5: writes one register. `-1` if it does not answer. |
 | `scan(): integer[]` | The addresses from `0x08` to `0x77` that answer. Each one is probed with a 0-byte write: some sensors do not answer a read unless they hold a finished measurement (up to V8 one byte was read, and they did not show up). |
-| `isPresent(addr): boolean` | V9: whether somebody answers at `addr` (the same probe). |
+| `isPresent(addr): boolean` | V8.5: whether somebody answers at `addr` (the same probe). |
 | `release()` | Lets the bus go: if nobody else uses it and it is not the board's, it is closed and its pins become free. A second time does nothing; using it afterwards is a `RuntimeError` («`I2C 1: ya se soltó con release()`»). |
 
 `I2c.Bus` is `HardI2C` under the name it had up to V8: what is written with it does not change. And a class of your own can be an `I2c.I2C` too — a multiplexer, a simulated sensor for a test —: it extends it and provides its `write`, `read` and `writeRead`; the rest is done with them.
 
 <a id="stdlib-softi2c"></a>
-#### 14.3.1 `modSoftI2C` — software I²C (V9)
+#### 14.3.1 `modSoftI2C` — software I²C (V8.5)
 
 `modSoftI2C.SoftI2C(sda, scl)`, or `SoftI2C(sda, scl, baudrate)`: an I²C bus on any two pins that can drive open-drain (`Machine.openDrainPins()`). It lives in its own module so that only those who use it pay for it.
 
@@ -1655,7 +1655,7 @@ end wheel
 <a id="stdlib-devices"></a>
 ### 14.22 The devices: `bpdevices`
 
-The installation brings the libraries of some devices, with their source, in `bpdevices/`. They are imported like those of the library (`import Bmp280`), but they do not live on the board: they belong to the program, and the IDE and `bp` upload them with it. On the PC, the compiler leaves their copy beside the program, in its output folder (V9). The I2C ones ask for a bus ([§14.3](#stdlib-i2c)): an `I2c.HardI2C` or a software one. Their whole API, with `bp api Bmp280`.
+The installation brings the libraries of some devices, with their source, in `bpdevices/`. They are imported like those of the library (`import Bmp280`), but they do not live on the board: they belong to the program, and the IDE and `bp` upload them with it. On the PC, the compiler leaves their copy beside the program, in its output folder (V8.5). The I2C ones ask for a bus ([§14.3](#stdlib-i2c)): an `I2c.HardI2C` or a software one. Their whole API, with `bp api Bmp280`.
 
 | Module | What it is | How it is used |
 |---|---|---|
@@ -1856,7 +1856,7 @@ The complete case, end to end, is in [databases](basedatos.html.md) and in `bpst
 <a id="cli"></a>
 ## 16. Compilation & execution
 
-From the command line, everything goes through `bp` (at the root of the installation: `bp.bat`, and `bp` for bash). `bp build` compiles a source or a project (the `.mod` goes to `out/` next to the source) and only says where it went, or the errors, each one with its file (`App.bp:7:15: error semántico: …`, V9): the first ten, or all of them with `--max-errores=0`; `bp run` compiles if needed and runs on the Java VM (with `--c`, on the C VM), and exits with the program's code (a project that comes out as a pack, in its pack: on the PC that is where its resources are, §15.3); `bp png` turns a capture into a PNG (§23.5 of the graphics guide); and `bp help` tells it all. The standard library is the one in [BpVM.cfg](#cli-vmcfg) and, with none in sight, the installation's. Below are the compiler and the Java VM with all their options: `bp frontend` and `bp vm`.
+From the command line, everything goes through `bp` (at the root of the installation: `bp.bat`, and `bp` for bash). `bp build` compiles a source or a project (the `.mod` goes to `out/` next to the source) and only says where it went, or the errors, each one with its file (`App.bp:7:15: error semántico: …`, V8.5): the first ten, or all of them with `--max-errores=0`; `bp run` compiles if needed and runs on the Java VM (with `--c`, on the C VM), and exits with the program's code (a project that comes out as a pack, in its pack: on the PC that is where its resources are, §15.3); `bp png` turns a capture into a PNG (§23.5 of the graphics guide); and `bp help` tells it all. The standard library is the one in [BpVM.cfg](#cli-vmcfg) and, with none in sight, the installation's. Below are the compiler and the Java VM with all their options: `bp frontend` and `bp vm`.
 
 ```
 bp build samples/blink.bp          (writes samples/out/Blink.mod)
@@ -1864,7 +1864,7 @@ bp run samples/blink.bp            (compiles and runs)
 bp run --c samples/out/Blink.mod   (on the C VM)
 ```
 
-**On a board or on the simulated micro** (V9), without opening the IDE: `bp run --placa=COM22` (or the IP of a board on the network) and `bp run --sim` compile, upload what is needed —the same as the IDE's *Run on Device*: only what the board does not already have— and run; the output and the exit code, as with the PC VMs, and the argument, after the program. The simulated micro is the IDE's, with its settings and its folder: if it is not running, `bp` starts it and stops it at the end. `bp placa` does the rest: `ls` (its files), `get` (download one), `stop` (stop what is running), `info` (which board it is and the version of its image), `packs` (the ones burnt on it and the room left) and `pack` (burn one: a `.pack`, or one of the installation's by its name; like the IDE, it prepares it for that board). A board, or the simulated micro, serves one client at a time: with the IDE connected to it, `bp` cannot, and says so.
+**On a board or on the simulated micro** (V8.5), without opening the IDE: `bp run --placa=COM22` (or the IP of a board on the network) and `bp run --sim` compile, upload what is needed —the same as the IDE's *Run on Device*: only what the board does not already have— and run; the output and the exit code, as with the PC VMs, and the argument, after the program. The simulated micro is the IDE's, with its settings and its folder: if it is not running, `bp` starts it and stops it at the end. `bp placa` does the rest: `ls` (its files), `get` (download one), `stop` (stop what is running), `info` (which board it is and the version of its image), `packs` (the ones burnt on it and the room left) and `pack` (burn one: a `.pack`, or one of the installation's by its name; like the IDE, it prepares it for that board). A board, or the simulated micro, serves one client at a time: with the IDE connected to it, `bp` cannot, and says so.
 
 ```
 bp run --sim samples/blink.bp          (on the simulated micro)
@@ -1876,7 +1876,7 @@ bp placa COM22 pack Stdlib             (burns the installation's Stdlib.pack on 
 
 The board's paths start with `/` (`/app/Blink.mod`). In Git Bash, with two (`//app/Blink.mod`): bash turns `/app` into a Windows path before it reaches `bp`, and `bp` says so if that happens.
 
-**The API of a module** (V9): `bp api Collections` writes it in BP —its public declarations, as they are written, without the bodies—, taken from its `.mod`, which carries it. It finds the module the way an `import` written in that folder would: the standard library, the libraries of the [BpVM.cfg](#cli-vmcfg) and the packs (also `SQLite` and `Orm`, which come without source); or a `.mod`, by its path. On its own, `bp api` lists the modules that can be imported. With `--todo`, also what only a subclass sees and what belongs to the system (the names that start with `__`, [§3.2 of the manual](manual.html.md#identificadores)).
+**The API of a module** (V8.5): `bp api Collections` writes it in BP —its public declarations, as they are written, without the bodies—, taken from its `.mod`, which carries it. It finds the module the way an `import` written in that folder would: the standard library, the libraries of the [BpVM.cfg](#cli-vmcfg) and the packs (also `SQLite` and `Orm`, which come without source); or a `.mod`, by its path. On its own, `bp api` lists the modules that can be imported. With `--todo`, also what only a subclass sees and what belongs to the system (the names that start with `__`, [§3.2 of the manual](manual.html.md#identificadores)).
 
 ```
 bp api                    (the modules that can be imported)
@@ -1884,7 +1884,7 @@ bp api Collections        (its API: Map, SyncList…)
 bp api out/MyLib.mod      (the API of one of yours, compiled)
 ```
 
-**Tests** (V9): `bp test` runs the programs of the `tests/` folder (or the ones it is given) on both PC VMs, each in its own process, with no screen and with a time limit (`--tiempo=N`, 60 s if not given: a test that does not end does not hang the others). A test passes if it compiles, ends with 0 on both, prints the same on both and, if it has its `X.out` beside it, prints that; `bp test --guarda` writes each one's `X.out` with what it prints now (look at it before taking it as good). The checks, with the [`Assert`](#stdlib-assert) module. In a project (its `.bpbuild` in the folder, or named), the project is compiled first, and each test into its output folder: that way it finds its modules. One line per test, a failing one with its reason; it exits with 0 if they all pass. A GUI is tested the same way: [§24.4 of the graphics guide](gui.html.md#ref-pruebas). An example, a project with its tests: `samples/pruebas`.
+**Tests** (V8.5): `bp test` runs the programs of the `tests/` folder (or the ones it is given) on both PC VMs, each in its own process, with no screen and with a time limit (`--tiempo=N`, 60 s if not given: a test that does not end does not hang the others). A test passes if it compiles, ends with 0 on both, prints the same on both and, if it has its `X.out` beside it, prints that; `bp test --guarda` writes each one's `X.out` with what it prints now (look at it before taking it as good). The checks, with the [`Assert`](#stdlib-assert) module. In a project (its `.bpbuild` in the folder, or named), the project is compiled first, and each test into its output folder: that way it finds its modules. One line per test, a failing one with its reason; it exits with 0 if they all pass. A GUI is tested the same way: [§24.4 of the graphics guide](gui.html.md#ref-pruebas). An example, a project with its tests: `samples/pruebas`.
 
 ```
 bp test                   (those of tests/: «bien   tests/PruebaPila.bp» · «2 pruebas: 2 bien, 0 mal»)
@@ -1902,8 +1902,8 @@ bp frontend <file.bp> [options]
 |---|---|
 | `--tokens` | Dump of the lexer's tokens. |
 | `--ast` | Dump of the AST. |
-| `--quiet` | Only the errors and warnings; if it compiles, nothing (V9). |
-| `--max-errores=<n>` | How many errors are written at most (V9): 10 if not given; with 0, all of them. Warnings do not count. |
+| `--quiet` | Only the errors and warnings; if it compiles, nothing (V8.5). |
+| `--max-errores=<n>` | How many errors are written at most (V8.5): 10 if not given; with 0, all of them. Warnings do not count. |
 | `--compile <dir>` | Compiles to `.mod` (the interface goes inside). |
 | `--interface <dir>` | Only parses and builds the interface — no code, no output file. |
 | `--project <file.bpbuild>` | Compiles the whole project ([.bpbuild](#cli-bpbuild)); with `"out": "pack"`, it assembles the pack (§15.3). |
@@ -1911,7 +1911,7 @@ bp frontend <file.bp> [options]
 | `--stdlibDir=<dir>` | The standard library to compile against (V7). It overrides the `stdlibDir` of the [BpVM.cfg](#cli-vmcfg) the compiler finds by itself. |
 | `--formato=9\|8` | The `.mod` format (V7): `9`, V7's and the default; `8`, the previous one, as an emergency exit (§17.1). What needs v9's class table is not in `8`: for instance, a string stored in an `Object` cannot be printed (V8). |
 | `--backend=jvm\|mivm` | Backend (mivm is the default). |
-| `-h`, `--help` | The options (V9). |
+| `-h`, `--help` | The options (V8.5). |
 
 With `--compile`, the driver is recursive: it finds the `.bp` of the missing imports, builds their interfaces first (INTERFACE mode), then compiles the module, and finally recurses in FULL mode to produce the `.mod` of the deps.
 
@@ -1929,10 +1929,10 @@ bp vm [options] <file.mod>
 - `-d` dumps the bytecode (integrated disassembler).
 - `--config <file>` loads a JSON config ([BpVM.cfg](#cli-vmcfg)) from the given path.
 - `--no-config` ignores any auto-discovered BpVM.cfg and starts with defaults.
-- `--no-screen`: no window. The GUI runs without a screen and `Gui.run()` returns as soon as it has nothing to do; the same name as in the C VM. *V9.*
+- `--no-screen`: no window. The GUI runs without a screen and `Gui.run()` returns as soon as it has nothing to do; the same name as in the C VM. *V8.5.*
 - `-h`, `--help`: the options (also in the C VM and in the simulated micro).
 
-**The two outputs** (V9): on standard output, only what the program prints, the same in both VMs, so `bp run X.bp > a` and `bp run --c X.bp > b` give the same file. What belongs to the VM goes to standard error: its diagnostics (`[miVM] …`, `[bpvm] …`) and, if the program dies, the error and its trace, with the file, the line and the function (` en Prueba.bp:5 (calcula)`). The exit code says how it ended.
+**The two outputs** (V8.5): on standard output, only what the program prints, the same in both VMs, so `bp run X.bp > a` and `bp run --c X.bp > b` give the same file. What belongs to the VM goes to standard error: its diagnostics (`[miVM] …`, `[bpvm] …`) and, if the program dies, the error and its trace, with the file, the line and the function (` en Prueba.bp:5 (calcula)`). The exit code says how it ended.
 
 <a id="cli-vmcfg"></a>
 #### BpVM.cfg — VM configuration
@@ -2024,7 +2024,7 @@ Fields:
 - `sourceDir` (string, **required**): directory with the project's `.bp` files.
 - `outDir` (string, **required**): directory where the compiler emits the `.mod` files. Created on demand.
 - `main` (string, **required**): the logical name of the main module (without extension). The compiler looks for `<sourceDir>/<main>.bp`.
-- `dependencies` (array of strings, optional): each entry is a directory (looks for any `.mod` inside when resolving imports) or a specific `.mod` file. The one the program imports is copied to `outDir` (V9), which is where the PC's VMs look for it; if it changes, it is copied again when compiling.
+- `dependencies` (array of strings, optional): each entry is a directory (looks for any `.mod` inside when resolving imports) or a specific `.mod` file. The one the program imports is copied to `outDir` (V8.5), which is where the PC's VMs look for it; if it changes, it is copied again when compiling.
 - `version` (integer, optional; V7): the project's **generation**. Every `.mod` it compiles carries it in its header, and the version rule (§17.1) uses it: a dependency older than the one the module needs is rejected at load time. Without it, 0. It is not the `"version"` of the `"pack"` section (§15.3), which is free text.
 
 **Import resolution in project mode**:

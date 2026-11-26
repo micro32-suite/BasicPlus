@@ -189,7 +189,7 @@ t.align(Gui.Align.TOP_MID, 0, 20)
 <a id="conceptos-geom"></a>
 ### 19.4 Explicit geometry and Panel
 
-As an alternative to `align`, a widget is positioned and sized by hand with the `x`, `y`, `width`, `height` properties — or all at once with `setBounds(x, y, w, h)`. A `Gui.Panel` is a simple container to group widgets; it supports optional scrolling via `scrollDir` (`Gui.ScrollDir.VER`, `HOR`, `BOTH` or `NONE`). **Nothing scrolls unless the program asks for it**: the screen, a panel and the page of a tab are born with `NONE` (V9; until then, on the board they scrolled even though it said so). The list, the text field and the table do scroll: it is part of what they are.
+As an alternative to `align`, a widget is positioned and sized by hand with the `x`, `y`, `width`, `height` properties — or all at once with `setBounds(x, y, w, h)`. A `Gui.Panel` is a simple container to group widgets; it supports optional scrolling via `scrollDir` (`Gui.ScrollDir.VER`, `HOR`, `BOTH` or `NONE`). **Nothing scrolls unless the program asks for it**: the screen, a panel and the page of a tab are born with `NONE` (V8.5; until then, on the board they scrolled even though it said so). The list, the text field and the table do scroll: it is part of what they are.
 
 ```
 var p: Gui.Panel := Gui.Panel(scr)
@@ -208,7 +208,7 @@ p.scrollDir := Gui.ScrollDir.VER
 | from 321 to 719 | 18 px (2 + 16) | 164 × 64 |
 | 720 or more | 22 px (2 + 20) | 156 × 56 |
 
-What does not fit is cut off, with no bars, unless the panel scrolls (its `scrollDir`). To cover a whole panel, a child of its size, centered (`align(Gui.Align.CENTER, 0, 0)`). All this is LVGL's; since V9, the Java VM does the same, with the padding of its screen, the 480 × 320 one.
+What does not fit is cut off, with no bars, unless the panel scrolls (its `scrollDir`). To cover a whole panel, a child of its size, centered (`align(Gui.Align.CENTER, 0, 0)`). All this is LVGL's; since V8.5, the Java VM does the same, with the padding of its screen, the 480 × 320 one.
 
 > **BasicPlus does not draw free shapes** (lines, circles, canvas): the interface is composed out of widgets. For a colored rectangle, a `Panel` with `setBgColor` is enough. A pixel-level drawing canvas would be a future extension; it is not there today.
 
@@ -843,7 +843,7 @@ Gui.join()
 
 **Pump before capturing.** The LVGL theme animates state transitions (the check of a `Checkbox` takes ~100 ms to appear): a capture right after `cb.checked := true`, without a loop iteration, comes out with the box empty. The capture is what is seen at that instant, not the model.
 
-On the board the file lands in the file system (a relative path, from its root: `"MyApp.shot"` is `/MyApp.shot`; to leave it elsewhere, the full path, `"/data/MyApp.shot"`) and is downloaded with the `get` command of the IDE console —since V7, also while the program is running: the board sends it in chunks, between its output— or, without the IDE, with `bp placa` (V9, §16 of the reference). On the PC, `bp png` turns it into a PNG:
+On the board the file lands in the file system (a relative path, from its root: `"MyApp.shot"` is `/MyApp.shot`; to leave it elsewhere, the full path, `"/data/MyApp.shot"`) and is downloaded with the `get` command of the IDE console —since V7, also while the program is running: the board sends it in chunks, between its output— or, without the IDE, with `bp placa` (V8.5, §16 of the reference). On the PC, `bp png` turns it into a PNG:
 
 ```
 bp placa COM22 get MyApp.shot   (downloads it from the board at COM22)
@@ -867,9 +867,9 @@ Summary of the public surface of the `Gui` module. The detailed semantics are in
 | `Gui.stop()` | Asks the loop to end; does not wait. Can be called from another thread or from a handler. |
 | `Gui.join()` | Waits for the loop to end. |
 | `Gui.shot(path): integer` | Captures the screen to a `.shot` and returns the bytes written; `RuntimeError` on failure (§23.5). |
-| `Gui.click(w)` | A click on widget `w`, like the user's: raises its `onClick` (V9). To test a GUI with nobody in front of it (§24.4). |
-| `Gui.change(w)` | Raises `w`'s `onChange`, as if the user changed its value; it does not touch the value: it is whatever the program sets (`cb.checked := true`) (V9, §24.4). |
-| `Gui.dumpTree(): string` | The screen's tree, as text: what a test compares (V9, §24.4). |
+| `Gui.click(w)` | A click on widget `w`, like the user's: raises its `onClick` (V8.5). To test a GUI with nobody in front of it (§24.4). |
+| `Gui.change(w)` | Raises `w`'s `onChange`, as if the user changed its value; it does not touch the value: it is whatever the program sets (`cb.checked := true`) (V8.5, §24.4). |
+| `Gui.dumpTree(): string` | The screen's tree, as text: what a test compares (V8.5, §24.4). |
 | `Gui.loadFont(path): integer` | Loads a `.bin` font (LVGL binfont) and returns its id (§21.2). |
 | `Gui.setRotation(deg)` | Screen orientation: 0, 90, 180, 270 (§23.4). |
 | `Gui.Color(rgb): Color` | `0xRRGGBB` color for `setBgColor`/`setTextColor` (§21.1). |
@@ -950,7 +950,7 @@ In every constructor `parent` is a `Container` (§24.2). The classes marked *(Co
 <a id="ref-pruebas"></a>
 ### 24.4 Testing a GUI with nobody in front of it
 
-A GUI is tested like any program (V9): a test in `tests/`, which `bp test` runs on both PC VMs, with no screen ([§16 of the reference](referencia.html.md#cli)). What the user would do, the test does: `Gui.click(w)`, a click, and `Gui.change(w)`, a change of value (the value, whatever the program set before). And what is checked: what the handlers did, with [`Assert`](referencia.html.md#stdlib-assert), and the screen's tree, `Gui.dumpTree()`, which the test prints and `bp test` compares with its `.out`.
+A GUI is tested like any program (V8.5): a test in `tests/`, which `bp test` runs on both PC VMs, with no screen ([§16 of the reference](referencia.html.md#cli)). What the user would do, the test does: `Gui.click(w)`, a click, and `Gui.change(w)`, a change of value (the value, whatever the program set before). And what is checked: what the handlers did, with [`Assert`](referencia.html.md#stdlib-assert), and the screen's tree, `Gui.dumpTree()`, which the test prints and `bp test` compares with its `.out`.
 
 **The click, before `Gui.run()`.** With no screen, `Gui.run()` handles whatever is in the queue and returns; whatever were injected afterwards nobody would handle, and `Gui.click` says so with an error («el lazo de la GUI acabó; sin pantalla, el clic va antes de Gui.run()»: the GUI loop ended; with no screen, the click goes before Gui.run(), §18.4). With `Gui.start()`, the same: with no screen, the loop ends as soon as it has no work left.
 
@@ -997,7 +997,7 @@ screen [480x320 align=0 +0,0]
     label "Pulsa" [-1x-1 align=4 +0,0]
 ```
 
-The whole project, with another test: `samples/pruebas`. The old names (`Gui.__guiClick`, `Gui.__guiChange`, `Gui.__guiDumpTree`) still work; on a board with the library from before V9, only those: the new ones come with its `Stdlib.pack`.
+The whole project, with another test: `samples/pruebas`. The old names (`Gui.__guiClick`, `Gui.__guiChange`, `Gui.__guiDumpTree`) still work; on a board with the library from before V8.5, only those: the new ones come with its `Stdlib.pack`.
 
 <a id="matices"></a>
 ## 25. Fine print and limitations

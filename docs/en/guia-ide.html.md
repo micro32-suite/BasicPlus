@@ -16,7 +16,7 @@ bpide.bat
 or, by hand:
 
 ```
-java -jar BpIde-8.1.jar
+java -jar BpIde-8.5.jar
 ```
 
 And for the command line, in the same folder, `bp`: `bp run samples/blink.bp` compiles and runs, and `bp help` tells the rest ([reference §16](referencia.html.md#cli)).
@@ -56,7 +56,7 @@ Above them, the toolbar. On the left, files and project; in the middle, executio
 
 ![Errors tab with several diagnostics](../img/ide-errores.png)
 
-The compiler **does not stop at the first error** and does not drown in cascades: it recovers at statement/function level and keeps going, so a single pass surfaces the real errors of the whole module. In the screenshot, a lexical+syntactic error (a `=` where a `:=` belongs — the language assigns with `:=`) coexists with an undeclared identifier in another function further down: the first failure does not hide the second. Spurious cascades are pruned (an already-faulty operand produces no derived errors) and, if there are many, the first ten come out and an «… y más» («and more», V9). In JC, the same.
+The compiler **does not stop at the first error** and does not drown in cascades: it recovers at statement/function level and keeps going, so a single pass surfaces the real errors of the whole module. In the screenshot, a lexical+syntactic error (a `=` where a `:=` belongs — the language assigns with `:=`) coexists with an undeclared identifier in another function further down: the first failure does not hide the second. Spurious cascades are pruned (an already-faulty operand produces no derived errors) and, if there are many, the first ten come out and an «… y más» («and more», V8.5). In JC, the same.
 
 <a id="jc"></a>
 ### 4.1 JC: `.jc` files and translation
@@ -109,7 +109,7 @@ On completion, the Console closes with the exit code, the reason and **the execu
 
 If it ends with an **uncaught error**, the Console also says **where**, on the board and on the PC: the line of the error and the calls that led to it, up to 8, each with its file —`en Prueba.bp:23`, `llamado desde Prueba.bp:9` (at…, called from…)—. The board does not have the `.dbg`: it gives positions, and the IDE translates them with the one in the output folder. The frames inside the standard library stay as positions (`Collections+1815`); and on the board, if the error starts inside a compiled `native` function, the line is that of its caller —to see its own, remove the `native`— ([manual §11](manual.html.md#excepciones)).
 
-If the program asks the user for data with `IO.prompt`, the IDE pops a form and execution pauses until you fill it in: text fields, numeric fields, checkboxes and drop-downs as declared by the program. If the AI (§13) or a script (§14) launched it, whoever launched it gives the data, with `responder`; the form does not come up for you (V9).
+If the program asks the user for data with `IO.prompt`, the IDE pops a form and execution pauses until you fill it in: text fields, numeric fields, checkboxes and drop-downs as declared by the program. If the AI (§13) or a script (§14) launched it, whoever launched it gives the data, with `responder`; the form does not come up for you (V8.5).
 
 ![IO.prompt form shown during a Run](../img/ide-prompt.png)
 
@@ -143,7 +143,7 @@ The IDE **autodetects** it (the standard Arm GNU Toolchain install location, or 
 <a id="placa"></a>
 ## 6. Connecting to the board
 
-In the Explorer: pick the *serial board (v1)* backend, the micro's COM port and press **Connect**. The panel's bar says who answers and the version of its image (V9: «bpvm-esp32p4, imagen 8.5», image 8.5). If it is not this installation's, the Console warns and says what to do: with an older one, new things may not link or not work (flash the installation's on the board). An image older than 8.5 does not say its version, and that is what you read («imagen anterior a la 8.5»). The tree shows the device's internal filesystem:
+In the Explorer: pick the *serial board (v1)* backend, the micro's COM port and press **Connect**. The panel's bar says who answers and the version of its image (V8.5: «bpvm-esp32p4, imagen 8.5», image 8.5). If it is not this installation's, the Console warns and says what to do: with an older one, new things may not link or not work (flash the installation's on the board). An image older than 8.5 does not say its version, and that is what you read («imagen anterior a la 8.5»). The tree shows the device's internal filesystem:
 
 - `/app` — your programs (uploaded `.mod`).
 - `/lib` — the standard library embedded in the firmware. The firmware restores it by itself on every boot, module by module: if it is missing, if the one there is an older version, or if it is the same version but different (size or CRC); a newer one —the one the IDE uploaded with a program that needs it— is left alone (except on the STM32, which empty `/lib` on every boot and restore it from the image: what the IDE uploaded does not survive a restart, and the next Run uploads it again). And with the `Stdlib.pack` burnt, whatever the pack serves with the same bytes **leaves `/lib`**: it is loaded from the pack, from flash, without spending RAM (§10.3). Whatever is in `/app` is never touched.
@@ -210,7 +210,7 @@ sd · sd mount   — SD card diagnostics (see below)
 | `log` · `logclr` | read the board's log · clear it |
 | `save` · `reset` · `cls` | save · reboot the device · clear the console |
 | `help error` | what each exit code means (the table below) |
-| `comandos [text]` | the IDE's commands, with their parameters (V9): they are typed here as in a script (§14) |
+| `comandos [text]` | the IDE's commands, with their parameters (V8.5): they are typed here as in a script (§14) |
 
 **The run argument.** `Main` may declare a string parameter with a default value; `run` passes it after the file, quoted or not, and if nothing is passed the source's default applies:
 
@@ -409,7 +409,7 @@ In the board management window (§9), on the right. The table lists the burnt pa
 - **Borrar** (delete) — marks it as retired. It stops being used *immediately*, but **still takes up space** until compaction: on NOR flash you can cross something out without erasing, and crossing out is safe. That is why the table also shows the retired ones — it is the truth about the space. The board lists up to 16: the active ones always, and in the room left the most recently retired; if the chain is longer, the summary says how many older retired ones are not listed (the usage bar counts them all).
 - **Formatear zona…** (format area) — leaves it blank. It is also the way out when the area carries leftovers from a previous use of that flash: the summary then says «zona sin formatear» (area not formatted).
 
-The AI (§13) lists, burns and retires them with the same commands as these buttons: with the window open, you see what it does. And formatting the area, if it is the AI that asks for it, is asked of you first. Without opening the IDE, `bp placa COM22 packs` lists them and `bp placa COM22 pack Stdlib` burns one (V9; [§16 of the reference](referencia.html.md#cli)).
+The AI (§13) lists, burns and retires them with the same commands as these buttons: with the window open, you see what it does. And formatting the area, if it is the AI that asks for it, is asked of you first. Without opening the IDE, `bp placa COM22 packs` lists them and `bp placa COM22 pack Stdlib` burns one (V8.5; [§16 of the reference](referencia.html.md#cli)).
 
 When burning, the IDE **prepares the pack for that board**: from a pack with a native engine it keeps the one for its architecture and seals it for the place the board gives it in the flash and in its RAM block (§9.3, `packRam`); if the engine does not fit in the block, it says so before sending anything. And it warns, though it burns anyway, if that pack is going to lack something on the board: another pack it declares it needs, or standard library modules it does not carry and the board does not have («graba tambien el Stdlib.pack», burn the Stdlib.pack too).
 
@@ -451,7 +451,7 @@ An AI assistant (Claude Code, for instance) can drive the IDE: open a source, co
 - When you turn it on, you choose **the AI's folder**: only inside it can the AI open, save, upload and download files. Better a folder just for the work with the AI. The IDE leaves the guide for AI assistants in it (`AGENTS.md`, and a `CLAUDE.md` that points to it), unless they are already there; the one another IDE left, unless you have changed it, it brings up to date.
 - Each IDE command is a tool for the AI: the same as the menus and the buttons, the board's environment variables (§9.3) and its packs (§10.3) included. What it does shows up in the console, with `[ia]`. Formatting the packs area, which cannot be undone, is asked of you first, every time.
 - **IA → Cómo conectar…** tells where it listens and the command to connect Claude Code, once: `claude mcp add --transport http basicplus http://127.0.0.1:7340/mcp`.
-- **The order** (V9): first the server, with its folder, and then the AI, opened in that folder. The AI reads the guide the IDE leaves there when it starts: opened before, it does not see it. And tell it to do it with BasicPlus: otherwise, with an ESP32 board it may go for Espressif's tools.
+- **The order** (V8.5): first the server, with its folder, and then the AI, opened in that folder. The AI reads the guide the IDE leaves there when it starts: opened before, it does not see it. And tell it to do it with BasicPlus: otherwise, with an ESP32 board it may go for Espressif's tools.
 
 **If it is the AI that opens the IDE**, it opens it with `--ia` and the folder it works in:
 

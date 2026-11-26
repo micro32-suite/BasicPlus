@@ -553,7 +553,7 @@ The P4 and the DK2 take no driver pack: the driver for their display
 ### All at once: your board's script
 
 With the board connected, in the IDE: **Guiones → Ejecutar un guion…** (run a
-script) and the one in the tables (V9; they are in `guiones/`). It checks that it
+script) and the one in the tables (V8.5; they are in `guiones/`). It checks that it
 is that board, formats its packs area —it asks first, with the packs that will be
 lost; with a «No», it touches nothing—, sets its ENV variables, reboots it and
 burns the packs. It is the same as what follows, by hand. Scripts, in the
@@ -702,7 +702,7 @@ It is also in the **Info** button («Versión») and in `bp placa COM22 info`; a
 RAM and PSRAM, the packs' RAM block («RAM packs») and the image's **native ABI**
 («ABI nativo»): «9 (la misma que genera este IDE)» (the same one this IDE
 generates) means that the board loads the native code this IDE generates (it is 9
-from V7 to V9; on the S3, which has no AOT, «sin receta», no recipe). It does not
+from V7 to V8.5; on the S3, which has no AOT, «sin receta», no recipe). It does not
 show the image's build date.
 
 If a program ends on the board with «lib 'I2c' presente pero no exporta…» and the

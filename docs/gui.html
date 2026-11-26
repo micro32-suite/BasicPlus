@@ -501,7 +501,7 @@ t.<span class="fn">align</span>(Gui.Align.TOP_MID, <span class="num">0</span>, <
   <code>setBounds(x,&nbsp;y,&nbsp;w,&nbsp;h)</code>—. Un <code>Gui.Panel</code> es un contenedor simple para agrupar
   widgets; admite scroll opcional con <code>scrollDir</code> (<code>Gui.ScrollDir.VER</code>, <code>HOR</code>,
   <code>BOTH</code> o <code>NONE</code>). <strong>Nada se desplaza si el programa no lo pide</strong>: la pantalla, un panel y la
-  página de una pestaña nacen con <code>NONE</code> (V9; hasta entonces, en la placa se desplazaban aunque lo dijera). La lista,
+  página de una pestaña nacen con <code>NONE</code> (V8.5; hasta entonces, en la placa se desplazaban aunque lo dijera). La lista,
   el campo de texto y la tabla sí se desplazan: es parte de lo que son.
 </p>
 <pre><code><span class="kw">var</span> p: Gui.<span class="type">Panel</span> := Gui.<span class="fn">Panel</span>(scr)
@@ -525,7 +525,7 @@ p.scrollDir := Gui.ScrollDir.VER</code></pre>
 <p>
   Lo que no cabe se recorta, sin barras, salvo que el panel se desplace (su <code>scrollDir</code>). Para cubrir un panel entero,
   un hijo de su tamaño, centrado (<code>align(Gui.Align.CENTER, 0, 0)</code>).
-  Todo esto es de LVGL; desde V9, la VM Java lo hace igual, con el margen de su pantalla, la de 480 × 320.
+  Todo esto es de LVGL; desde la V8.5, la VM Java lo hace igual, con el margen de su pantalla, la de 480 × 320.
 </p>
 <div class="note">
   <p><strong>BasicPlus no dibuja formas libres</strong> (líneas, círculos, canvas): la interfaz se compone con
@@ -1222,7 +1222,7 @@ Gui.<span class="fn">join</span>()</code></pre>
   En la placa el fichero queda en el sistema de archivos (una ruta relativa, desde su raíz: <code>"MiApp.shot"</code>
   es <code>/MiApp.shot</code>; para dejarlo en otro sitio, la ruta entera, <code>"/data/MiApp.shot"</code>) y se baja
   con el <code>get</code> de la consola del IDE —desde V7, también con el programa en marcha: la placa lo manda a
-  trozos, entre su salida— o, sin el IDE, con <code>bp placa</code> (V9, §16 de la referencia). En el PC se pasa a
+  trozos, entre su salida— o, sin el IDE, con <code>bp placa</code> (V8.5, §16 de la referencia). En el PC se pasa a
   PNG con <code>bp png</code>:
 </p>
 <pre><code>bp placa COM22 get MiApp.shot   (la baja de la placa del COM22)
@@ -1247,9 +1247,9 @@ bp png MiApp.shot               (deja MiApp.png al lado)</code></pre>
   <tr><td><code>Gui.stop()</code></td><td>Pide al lazo que termine; no espera. Se puede llamar desde otro hilo o desde un handler.</td></tr>
   <tr><td><code>Gui.join()</code></td><td>Espera a que el lazo termine.</td></tr>
   <tr><td><code>Gui.shot(path): integer</code></td><td>Captura la pantalla a un <code>.shot</code> y devuelve los bytes escritos; <code>RuntimeError</code> si falla (§23.5).</td></tr>
-  <tr><td><code>Gui.click(w)</code></td><td>Un clic en el widget <code>w</code>, como el del usuario: levanta su <code>onClick</code> (V9). Para probar una GUI sin nadie delante (§24.4).</td></tr>
-  <tr><td><code>Gui.change(w)</code></td><td>Levanta el <code>onChange</code> de <code>w</code>, como si el usuario cambiara su valor; el valor no lo toca: es el que le ponga el programa (<code>cb.checked := true</code>) (V9, §24.4).</td></tr>
-  <tr><td><code>Gui.dumpTree(): string</code></td><td>El árbol de la pantalla, como texto: lo que se compara en una prueba (V9, §24.4).</td></tr>
+  <tr><td><code>Gui.click(w)</code></td><td>Un clic en el widget <code>w</code>, como el del usuario: levanta su <code>onClick</code> (V8.5). Para probar una GUI sin nadie delante (§24.4).</td></tr>
+  <tr><td><code>Gui.change(w)</code></td><td>Levanta el <code>onChange</code> de <code>w</code>, como si el usuario cambiara su valor; el valor no lo toca: es el que le ponga el programa (<code>cb.checked := true</code>) (V8.5, §24.4).</td></tr>
+  <tr><td><code>Gui.dumpTree(): string</code></td><td>El árbol de la pantalla, como texto: lo que se compara en una prueba (V8.5, §24.4).</td></tr>
   <tr><td><code>Gui.loadFont(path): integer</code></td><td>Carga una fuente <code>.bin</code> (binfont LVGL) y devuelve su id (§21.2).</td></tr>
   <tr><td><code>Gui.setRotation(deg)</code></td><td>Orientación de la pantalla: 0, 90, 180, 270 (§23.4).</td></tr>
   <tr><td><code>Gui.Color(rgb): Color</code></td><td>Color <code>0xRRGGBB</code> para <code>setBgColor</code>/<code>setTextColor</code> (§21.1).</td></tr>
@@ -1337,7 +1337,7 @@ bp png MiApp.shot               (deja MiApp.png al lado)</code></pre>
 
 <h3 id="ref-pruebas">24.4 Probar una GUI sin nadie delante</h3>
 <p>
-  Una GUI se prueba como cualquier programa (V9): una prueba en <code>tests/</code>, que <code>bp test</code> pasa en las
+  Una GUI se prueba como cualquier programa (V8.5): una prueba en <code>tests/</code>, que <code>bp test</code> pasa en las
   dos VMs del PC, sin pantalla (<a href="referencia.html#cli">§16 de la referencia</a>). Lo que haría el usuario lo hace
   la prueba: <code>Gui.click(w)</code>, un clic, y <code>Gui.change(w)</code>, un cambio de valor (el valor, el que le
   ponga antes el programa). Y lo que se comprueba: lo que hicieron los manejadores, con
@@ -1392,7 +1392,7 @@ end PruebaGui</code></pre>
 <p>
   El proyecto entero, con otra prueba: <code>samples/pruebas</code>. Los nombres de siempre
   (<code>Gui.__guiClick</code>, <code>Gui.__guiChange</code>, <code>Gui.__guiDumpTree</code>) siguen valiendo; en una
-  placa con la librería de antes de V9, sólo ésos: los nuevos llegan con su <code>Stdlib.pack</code>.
+  placa con la librería de antes de la V8.5, sólo ésos: los nuevos llegan con su <code>Stdlib.pack</code>.
 </p>
 
 <!-- ============================================================ -->

@@ -9,7 +9,7 @@ rem La consola, en UTF-8 mientras dura (los mensajes llevan acentos); al acabar,
 setlocal
 for /f "tokens=2 delims=:." %%a in ('chcp') do set "BP_CP=%%a"
 chcp 65001 >nul
-java -Dfile.encoding=UTF-8 -cp "%~dp0toolchain\lexer-java\target\basicplus-frontend.jar;%~dp0toolchain\BpIde\target\BpIde-8.1.jar" basicplus.bp.Bp %*
+java -Dfile.encoding=UTF-8 -cp "%~dp0toolchain\lexer-java\target\basicplus-frontend.jar;%~dp0toolchain\BpIde\target\BpIde-8.5.jar" basicplus.bp.Bp %*
 set "BP_RC=%ERRORLEVEL%"
 if defined BP_CP chcp %BP_CP% >nul
 exit /b %BP_RC%

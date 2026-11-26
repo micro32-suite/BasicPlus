@@ -1270,7 +1270,7 @@ In JC they are written as in C#: `interface Poligono : Forma { function int lado
 <a id="modulos"></a>
 ## 10. Modules
 
-**A module's data.** A module's data —its module variables, its literals (each distinct one, once), its constants and what describes each class— **have no cap since V9** (until V8, 64 KB; before, 32): the ones more than 64 KB away from the code are read with a slightly longer instruction, and what rules is the board's memory. For something really big, split it into two modules (each one carries its own) or read it from a file.
+**A module's data.** A module's data —its module variables, its literals (each distinct one, once), its constants and what describes each class— **have no cap since V8.5** (until V8, 64 KB; before, 32): the ones more than 64 KB away from the code are read with a slightly longer instruction, and what rules is the board's memory. For something really big, split it into two modules (each one carries its own) or read it from a file.
 
 <a id="raiz"></a>
 ### 10.0 The root module: `Core`

@@ -503,7 +503,7 @@ t.<span class="fn">align</span>(Gui.Align.TOP_MID, <span class="num">0</span>, <
   with <code>setBounds(x,&nbsp;y,&nbsp;w,&nbsp;h)</code>. A <code>Gui.Panel</code> is a simple container
   to group widgets; it supports optional scrolling via <code>scrollDir</code>
   (<code>Gui.ScrollDir.VER</code>, <code>HOR</code>, <code>BOTH</code> or <code>NONE</code>). <strong>Nothing scrolls unless
-  the program asks for it</strong>: the screen, a panel and the page of a tab are born with <code>NONE</code> (V9; until then, on
+  the program asks for it</strong>: the screen, a panel and the page of a tab are born with <code>NONE</code> (V8.5; until then, on
   the board they scrolled even though it said so). The list, the text field and the table do scroll: it is part of what they are.
 </p>
 <pre><code><span class="kw">var</span> p: Gui.<span class="type">Panel</span> := Gui.<span class="fn">Panel</span>(scr)
@@ -527,7 +527,7 @@ p.scrollDir := Gui.ScrollDir.VER</code></pre>
 <p>
   What does not fit is cut off, with no bars, unless the panel scrolls (its <code>scrollDir</code>). To cover a whole panel, a
   child of its size, centered (<code>align(Gui.Align.CENTER, 0, 0)</code>). All
-  this is LVGL's; since V9, the Java VM does the same, with the padding of its screen, the 480 × 320 one.
+  this is LVGL's; since V8.5, the Java VM does the same, with the padding of its screen, the 480 × 320 one.
 </p>
 <div class="note">
   <p><strong>BasicPlus does not draw free shapes</strong> (lines, circles, canvas): the interface is
@@ -1239,7 +1239,7 @@ Gui.<span class="fn">join</span>()</code></pre>
   On the board the file lands in the file system (a relative path, from its root: <code>"MyApp.shot"</code> is
   <code>/MyApp.shot</code>; to leave it elsewhere, the full path, <code>"/data/MyApp.shot"</code>) and is
   downloaded with the <code>get</code> command of the IDE console —since V7, also while the program is running:
-  the board sends it in chunks, between its output— or, without the IDE, with <code>bp placa</code> (V9, §16 of the
+  the board sends it in chunks, between its output— or, without the IDE, with <code>bp placa</code> (V8.5, §16 of the
   reference). On the PC, <code>bp png</code> turns it into a PNG:
 </p>
 <pre><code>bp placa COM22 get MyApp.shot   (downloads it from the board at COM22)
@@ -1264,9 +1264,9 @@ bp png MyApp.shot               (leaves MyApp.png next to it)</code></pre>
   <tr><td><code>Gui.stop()</code></td><td>Asks the loop to end; does not wait. Can be called from another thread or from a handler.</td></tr>
   <tr><td><code>Gui.join()</code></td><td>Waits for the loop to end.</td></tr>
   <tr><td><code>Gui.shot(path): integer</code></td><td>Captures the screen to a <code>.shot</code> and returns the bytes written; <code>RuntimeError</code> on failure (§23.5).</td></tr>
-  <tr><td><code>Gui.click(w)</code></td><td>A click on widget <code>w</code>, like the user's: raises its <code>onClick</code> (V9). To test a GUI with nobody in front of it (§24.4).</td></tr>
-  <tr><td><code>Gui.change(w)</code></td><td>Raises <code>w</code>'s <code>onChange</code>, as if the user changed its value; it does not touch the value: it is whatever the program sets (<code>cb.checked := true</code>) (V9, §24.4).</td></tr>
-  <tr><td><code>Gui.dumpTree(): string</code></td><td>The screen's tree, as text: what a test compares (V9, §24.4).</td></tr>
+  <tr><td><code>Gui.click(w)</code></td><td>A click on widget <code>w</code>, like the user's: raises its <code>onClick</code> (V8.5). To test a GUI with nobody in front of it (§24.4).</td></tr>
+  <tr><td><code>Gui.change(w)</code></td><td>Raises <code>w</code>'s <code>onChange</code>, as if the user changed its value; it does not touch the value: it is whatever the program sets (<code>cb.checked := true</code>) (V8.5, §24.4).</td></tr>
+  <tr><td><code>Gui.dumpTree(): string</code></td><td>The screen's tree, as text: what a test compares (V8.5, §24.4).</td></tr>
   <tr><td><code>Gui.loadFont(path): integer</code></td><td>Loads a <code>.bin</code> font (LVGL binfont) and returns its id (§21.2).</td></tr>
   <tr><td><code>Gui.setRotation(deg)</code></td><td>Screen orientation: 0, 90, 180, 270 (§23.4).</td></tr>
   <tr><td><code>Gui.Color(rgb): Color</code></td><td><code>0xRRGGBB</code> color for <code>setBgColor</code>/<code>setTextColor</code> (§21.1).</td></tr>
@@ -1354,7 +1354,7 @@ bp png MyApp.shot               (leaves MyApp.png next to it)</code></pre>
 
 <h3 id="ref-pruebas">24.4 Testing a GUI with nobody in front of it</h3>
 <p>
-  A GUI is tested like any program (V9): a test in <code>tests/</code>, which <code>bp test</code> runs on both PC VMs,
+  A GUI is tested like any program (V8.5): a test in <code>tests/</code>, which <code>bp test</code> runs on both PC VMs,
   with no screen (<a href="referencia.html#cli">§16 of the reference</a>). What the user would do, the test does:
   <code>Gui.click(w)</code>, a click, and <code>Gui.change(w)</code>, a change of value (the value, whatever the program
   set before). And what is checked: what the handlers did, with
@@ -1409,7 +1409,7 @@ end PruebaGui</code></pre>
     label "Pulsa" [-1x-1 align=4 +0,0]</code></pre>
 <p>
   The whole project, with another test: <code>samples/pruebas</code>. The old names (<code>Gui.__guiClick</code>,
-  <code>Gui.__guiChange</code>, <code>Gui.__guiDumpTree</code>) still work; on a board with the library from before V9,
+  <code>Gui.__guiChange</code>, <code>Gui.__guiDumpTree</code>) still work; on a board with the library from before V8.5,
   only those: the new ones come with its <code>Stdlib.pack</code>.
 </p>
 
