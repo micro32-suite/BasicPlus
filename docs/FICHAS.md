@@ -86,7 +86,7 @@ en §ABIERTAS, en el bloque de V9:
 | **H2** | **la IA maneja el IDE** (`#728`): cargar un fuente, compilar, conectar a un dispositivo, ejecutar, depurar y cerrar, desde la IA; cada acción del IDE, un comando, con la `Action` de Swing como su cara en la ventana y MCP como la de la IA (Eduardo, 22-nov). Va antes que el H1 | ⏳ abierto el 22-nov; H2.1, el análisis, H2.2, los comandos (53, probados por Eduardo), y H2.3, la IA por MCP (probado por una IA de verdad en la Pico 2 y en la VM-C), hechos; H2.4 (el depurador, por la IA), analizado y aplazado a una segunda fase (23-nov; el 25, fuera de la V8.5): lo que haga falta, lo dirá el uso, en el H1 |
 | **H3** | **el I2C y el SPI por software** (Eduardo, 24-nov): una clase base por bus, la del periférico y la de software, que se intercambian cambiando sólo el constructor; las de software, cada una en su módulo (`#881`–`#884`) | ⏳ abierto el 24-nov; el I2C, hecho y visto en las tres familias con un sensor; el SPI, analizado |
 
-**La V8.5 — CONGELADA el 26-nov** (Eduardo: *«OK, congelamos»*, pasada la prueba de la IA y arreglado lo que encontró, `#913` a
+**La V8.5 — PUBLICADA el 27-nov** (abajo, «🚀 V8.5 PUBLICADA»; CONGELADA el 26-nov) (Eduardo: *«OK, congelamos»*, pasada la prueba de la IA y arreglado lo que encontró, `#913` a
 `#916`; *«si no hay tiempo podemos publicar el sábado, no nos hemos comprometido a ninguna fecha»*). Lo de antes: (Eduardo, 25-nov) se
 publica el viernes 27-nov si es posible —*«OK, entonces publicamos el viernes si es posible.»*—, con lo
 hecho desde la V8.1. Congelada de hecho desde el 25-nov: no se hace código nuevo, sólo se arreglan fallos —*«de hecho ya hemos
@@ -94,9 +94,29 @@ congelado, no hacemos código nuevo salvo para corregir bugs»*—; la congelaci
 (*«No podemos congelar codigo hasta que pasemos la prueba de la IA»*). Hecho el 26-nov: el ZIP de prueba y la IA; la versión, 8.5
 (`9736a953`); las nueve imágenes, de una vez y del mismo árbol, selladas en `dist/firmware` (`bd57c065`: todas dicen la 8.5), y los
 packs. Hecho el 27-nov: el lote de las once placas, desde `dist/firmware` (`a0c7b1a9`: los nueve guiones, y `#861`, `#890`,
-`#892` y `#902`, vistos), y lo que tenía que ver Eduardo, con el ZIP de prueba (*«Las pruebas OK»*): las fichas, cerradas. Lo que
-falta: `pruebas.html`, las notas y las portadas, el ZIP y la publicación, con su OK. Fuera, por decisión suya: `#865`, `#879`,
+`#892` y `#902`, vistos), y lo que tenía que ver Eduardo, con el ZIP de prueba (*«Las pruebas OK»*): las fichas, cerradas. Y el
+27-nov, también: `pruebas.html`, las notas y las portadas, el ZIP y, con su OK (*«OK, adelante»*), la publicación. Fuera, por decisión suya: `#865`, `#879`,
 `#884`, el H2.4 y `#917` (*«A V9, con una nota»*).
+
+## 🚀 V8.5 PUBLICADA — 27-nov-2026 · la IA
+
+Lo hecho de V9 hasta el 25-nov, adelantado (Eduardo, 25-nov: *«Quizás podemos sacar una versión 8.5 con lo que tenemos
+hasta ahora, los parches y la IA»*): el IDE habla MCP y una IA programa la placa (H1 y H2), el I2C por software (H3) y los
+arreglos, algunos de lo publicado. **V9 sigue en curso.**
+
+| qué | dónde |
+|---|---|
+| commits publicados | BasicPlus `c97a82b3`, `toolchain` `1281289`, `runtime` `42ec213` · el del traspaso, después |
+| etiquetas | `v8.5` (anotada, «Micro32 Suite v8.5») en los tres |
+| release | https://github.com/micro32-suite/BasicPlus/releases/tag/v8.5 («Micro32 Suite v8.5», Latest) |
+| artefacto **único** | `Micro32-Suite-8.5-win.zip` — 36.549.747 B, `sha256 ada1e18c…10c9` |
+| web | https://micro32-suite.github.io/BasicPlus/ y `/en/`, build `built` sobre `c97a82b3` |
+
+**Verificado, no supuesto:** el ZIP **bajado de la release** es, byte a byte, el de `dist`; la web sirve lo de la 8.5 (las
+portadas, el §13.1 de la guía del IDE y `pruebas.html`). Antes, la red y el pre-flight sin placas, en verde; el lote de las
+once placas, con las imágenes de `dist/firmware` y los packs por el IDE del ZIP de prueba (`a0c7b1a9`); y Eduardo, con ese
+ZIP, lo que estaba por ver (*«Las pruebas OK»*). Lo que salió, `#917`, a V9 con una nota (*«A V9, con una nota»*). Eduardo,
+para publicar: *«OK, adelante»*.
 
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 

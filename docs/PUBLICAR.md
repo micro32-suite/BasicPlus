@@ -54,10 +54,11 @@ decisión.
 
 ---
 
-## ⏳ PRE-FLIGHT DE V8.5 — en curso (congelada el 26-nov)
+## ✅ PRE-FLIGHT DE V8.5 (pasado el 26 y el 27-nov; V8.5 publicada el 27-nov)
 
 Lo hecho desde la V8.1 (la IA, el IDE, el I2C por software y los arreglos), sin nada más. Lo que no necesita placas, pasado
-la noche del 26-nov sobre el árbol congelado; lo demás, para el lote y el ZIP.
+la noche del 26-nov sobre el árbol congelado; lo demás, el 27-nov. Como en V8.1, esta tabla, completa, entra en el commit
+de después de la etiqueta (el árbol de `v8.5`, `c97a82b3`, lleva la de dentro del ZIP).
 
 | comprobación | resultado |
 |---|---|
@@ -72,7 +73,9 @@ la noche del 26-nov sobre el árbol congelado; lo demás, para el lote y el ZIP.
 | `tanda.py` en las placas | 27-nov, el lote de las **once** (`compat/informes/lote_v85_27nov.md`, `a0c7b1a9`): cada una con su imagen de `dist/firmware` (las once dicen la 8.5 al conectar) y sus packs grabados por el IDE del ZIP de prueba, con los nueve guiones (cinco, probados por primera vez); la tanda de 28 (las 24 del lote final de V8 y las cuatro de V9), sin nada nuevo —`lastModified` en dos, las de pantalla saltadas en las placas sin ella, `MachineId` y `GuiShot` no peta; las seis capturas, miradas—. La P4X llevaba en `/lib` un `Gui.mod` viejo que tapaba al pack (`GuiWinJson` difería): quitado, idéntica. Y vistos en las placas `#861`, `#890`, `#892` y `#902` |
 | Micro simulado y VM-C con LVGL | 27-nov: `make sim LVGL=1 SQLITE=1` y `make LVGL=1`: **2 075** `lv_` y **305** `sqlite3_` en el simulado; la VM-C importa `SDL2.dll`. Después, `make` y `make sim`, al sabor de la red |
 | El ZIP de prueba, en una carpeta limpia | 27-nov: `Micro32-Suite-8.5-prueba-win.zip`, 35 MB, sha256 `29bfd30a…`, sus guardianes en verde; su `firmware/`, el de `dist/firmware`. Desplegado en `C:\tmp\prueba_Ia\v85c`: con su IDE se grabaron los packs del lote, y Eduardo vio lo que estaba por ver (*«Las pruebas OK»*). Lo que salió, `#917` (un `out/` de otra versión), a V9 con una nota |
-| `pruebas.html`, las notas, las portadas, el ZIP definitivo y la publicación | pendiente |
+| `pruebas.html`, las notas y las portadas | 27-nov (`95243341`): `pruebas.html` con estos números, en los dos idiomas; las notas, con la introducción de Eduardo; las cuatro portadas (la insignia de la web seguía en «V7»), y su guarda: **4 OK** —17 355 / 17 879 / 27 712 / 27 466 B; 20 / 20 / 7 / 7—; las cabeceras, al día; los enlaces, sin rotos en lo que se publica |
+| ZIP montado y verificado por dentro | 27-nov: `Micro32-Suite-8.5-win.zip`, 35 MB (36.549.747 B), sha256 **`ada1e18c…`**, sus guardianes en verde. Frente al de prueba (`29bfd30a…`, con el que se grabaron las once y Eduardo vio lo suyo): los mismos ficheros; cambian los documentos de ese día y el micro simulado (7 bytes, la hora de compilación); el IDE, el compilador, la VM-C, los packs y el firmware, byte a byte (`sha256sum -c`, 10 OK) |
+| Publicación | 27-nov (Eduardo: *«OK, adelante»*): `v8.5` (anotada) en los tres, sobre `c97a82b3`, `1281289` y `42ec213`; el push, de dentro afuera; Pages `built` sobre `c97a82b3`, sirviendo lo de la 8.5; la release «Micro32 Suite v8.5», Latest, con el ZIP bajado igual byte a byte |
 
 ---
 
