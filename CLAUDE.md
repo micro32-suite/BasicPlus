@@ -180,15 +180,16 @@ Antes de bucear en el código, el doc correcto suele ahorrar el viaje:
 ## Convenciones de trabajo
 
 - **Idioma:** español (código, docs, commits, conversación).
-- **Versión actual:** **V8.1, publicada el 21-nov-2026: la suite** (`#802`; tag `v8.1` en los tres
-  repositorios de `micro32-suite`; su ZIP, `dist/Micro32-Suite-8.1-win.zip`, es el oráculo de «¿lo he
-  roto yo hoy?»). No cambió nada del producto de V8 (20-nov, tag `v8.0`): la red y el Bluetooth, JC
-  (BasicPlus con la ropa de Java y C#) y la ESP32-P4X; nueve imágenes, once placas. **En curso: V9,
-  desde el 21-nov** (Eduardo: *«Lo de la versión 8 ya es historia»*; sus hitos los nombra él): lo que
-  V8 le pasa, en `docs/FICHAS.md` §ABIERTAS (lo que queda abierto en el bloque V8) y en
+- **Versión actual:** **V8.5, publicada el 27-nov-2026: la IA** (tag `v8.5` en los tres repositorios de
+  `micro32-suite`; su ZIP, `dist/Micro32-Suite-8.5-win.zip`, es el oráculo de «¿lo he roto yo hoy?»): lo
+  hecho de V9 hasta el 25-nov —el IDE habla MCP y una IA programa la placa (H1 y H2), el I2C por software
+  (H3)— y los arreglos, algunos de lo publicado. Antes, la V8.1 (21-nov, tag `v8.1`): la suite (`#802`),
+  sin cambios del producto de V8 (20-nov, tag `v8.0`: la red y el Bluetooth, JC y la ESP32-P4X; nueve
+  imágenes, once placas). **En curso: V9, desde el 21-nov** (Eduardo: *«Lo de la versión 8 ya es
+  historia»*; sus hitos los nombra él): lo que queda, en `docs/FICHAS.md` §ABIERTAS y en
   `docs/PENDIENTES.md` («Para V9»); el cuaderno de V8, `docs/V8_IDEAS.md`. Con V9 abierta, nada se
-  sube a GitHub hasta cerrarla (salvo el parche de un fallo de lo publicado). V7 se publicó el 13-oct
-  (tag `v7.0`).
+  sube a GitHub hasta cerrarla (salvo el parche de un fallo de lo publicado, o una versión intermedia
+  como la 8.5, con el OK de Eduardo). V7 se publicó el 13-oct (tag `v7.0`).
   **El proyecto entra en su madurez** (Eduardo, 20-nov): cada vez menos cambios internos;
   mejorar librerías y soportar más dispositivos, poco a poco, sin prisas.
 - **`docs/FICHAS.md` es la fuente única de verdad.** Decisión de Eduardo (17-ago):
