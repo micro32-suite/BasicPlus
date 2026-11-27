@@ -68,9 +68,11 @@ la noche del 26-nov sobre el árbol congelado; lo demás, para el lote y el ZIP.
 | `doc_frags.py` · `enlaces_docs.py` | 26-nov: **0 FALLO** en 29 documentos —880 bloques; 381 de BP compilados (209 OK, 169 trozos, 3 errores esperados) y **80** módulos de JC—; los enlaces internos, **1 768** en 98 documentos, y 0 rotos en lo que se publica (los 3 de `V4_IDEAS.md` de siempre) |
 | `seo_paginas.py --comprobar` · `docs_md.py --comprobar` | 26-nov: por cambiar, 0 (21 páginas) · los 11 ficheros, al día |
 | Las **9** imágenes en `dist/firmware/` (y el firmware de la C6: 10 ficheros) | 26-nov: las nueve de una vez, del mismo árbol (`bd57c065`); `sha256sum -c`, **10 OK**; en cada `_merged` de las ESP32, la aplicación exacta en 0x10000; `check_mods_embebidos.py --imagenes`: todas dicen **la 8.5** y llevan los módulos de `bpstdlib` (18; las STM32, 17); las dos P4, con `#916` |
-| Los **5** packs | `Gui` y `GuiMini`, rehechos el 26-nov con `#909`; `SQLite` y `DriverSpi`, el 26-nov; el `Stdlib.pack`, del 25-nov. Falta el guardián del empaquetador (`#679`) |
-| `tanda.py` en las placas | pendiente: el lote de las once, desde `dist/firmware` |
-| Micro simulado y VM-C con LVGL, ZIP, carpeta limpia, la IA, `pruebas.html`, las portadas | pendiente |
+| Los **5** packs | `Gui` y `GuiMini`, rehechos el 26-nov con `#909`; `SQLite` y `DriverSpi`, el 26-nov; el `Stdlib.pack`, del 25-nov. 27-nov: los guardianes del empaquetador, en verde en el ZIP de prueba (el `Stdlib.pack`, los 37 módulos byte a byte) |
+| `tanda.py` en las placas | 27-nov, el lote de las **once** (`compat/informes/lote_v85_27nov.md`, `a0c7b1a9`): cada una con su imagen de `dist/firmware` (las once dicen la 8.5 al conectar) y sus packs grabados por el IDE del ZIP de prueba, con los nueve guiones (cinco, probados por primera vez); la tanda de 28 (las 24 del lote final de V8 y las cuatro de V9), sin nada nuevo —`lastModified` en dos, las de pantalla saltadas en las placas sin ella, `MachineId` y `GuiShot` no peta; las seis capturas, miradas—. La P4X llevaba en `/lib` un `Gui.mod` viejo que tapaba al pack (`GuiWinJson` difería): quitado, idéntica. Y vistos en las placas `#861`, `#890`, `#892` y `#902` |
+| Micro simulado y VM-C con LVGL | 27-nov: `make sim LVGL=1 SQLITE=1` y `make LVGL=1`: **2 075** `lv_` y **305** `sqlite3_` en el simulado; la VM-C importa `SDL2.dll`. Después, `make` y `make sim`, al sabor de la red |
+| El ZIP de prueba, en una carpeta limpia | 27-nov: `Micro32-Suite-8.5-prueba-win.zip`, 35 MB, sha256 `29bfd30a…`, sus guardianes en verde; su `firmware/`, el de `dist/firmware`. Desplegado en `C:\tmp\prueba_Ia\v85c`: con su IDE se grabaron los packs del lote, y Eduardo vio lo que estaba por ver (*«Las pruebas OK»*). Lo que salió, `#917` (un `out/` de otra versión), a V9 con una nota |
+| `pruebas.html`, las notas, las portadas, el ZIP definitivo y la publicación | pendiente |
 
 ---
 

@@ -93,9 +93,10 @@ hecho desde la V8.1. Congelada de hecho desde el 25-nov: no se hace código nuev
 congelado, no hacemos código nuevo salvo para corregir bugs»*—; la congelación formal, tras la prueba de la IA con el ZIP nuevo
 (*«No podemos congelar codigo hasta que pasemos la prueba de la IA»*). Hecho el 26-nov: el ZIP de prueba y la IA; la versión, 8.5
 (`9736a953`); las nueve imágenes, de una vez y del mismo árbol, selladas en `dist/firmware` (`bd57c065`: todas dicen la 8.5), y los
-packs. Lo que falta, en orden: lo que vea Eduardo de lo hecho; el repaso de `PUBLICAR.md`; el lote de las once placas, desde
-`dist/firmware` (y en él, `#902` en la S3, `#861`, `#890`, `#892` y los guiones sin probar); y la publicación, con su OK. Fuera, por
-decisión suya: `#865`, `#879`, `#884` y el H2.4.
+packs. Hecho el 27-nov: el lote de las once placas, desde `dist/firmware` (`a0c7b1a9`: los nueve guiones, y `#861`, `#890`,
+`#892` y `#902`, vistos), y lo que tenía que ver Eduardo, con el ZIP de prueba (*«Las pruebas OK»*): las fichas, cerradas. Lo que
+falta: `pruebas.html`, las notas y las portadas, el ZIP y la publicación, con su OK. Fuera, por decisión suya: `#865`, `#879`,
+`#884`, el H2.4 y `#917` (*«A V9, con una nota»*).
 
 ## 🚀 V8.1 PUBLICADA — 21-nov-2026 · la suite (`#802`)
 
@@ -14062,7 +14063,7 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   (`toolchain/lexer-java/target/basicplus-frontend.jar`, de nombre fijo); en `.gitattributes`, sus finales de línea
   (el `.bat` CRLF, el de bash LF); y en `CLAUDE.md`, una línea. Probados los dos (y la consola vuelve a 850).
 
-#### 🧬 `#855` — H1.4: las VMs, para que las conduzca un programa: sin ventana, la salida del programa sola, la traza con su línea y `--help` (abierta el 22-nov · F-2, F-5, M-7 y M-8 del análisis · hecha el 23-nov, con lo de «Hecho cuando» cumplido; vista por Eduardo el mismo día —la traza, dos veces en el IDE: arreglado, `bf659ec` en `toolchain`—; por decidir, lo de `ERROR DE LINK`)
+#### ✅ `#855` — H1.4: las VMs, para que las conduzca un programa: sin ventana, la salida del programa sola, la traza con su línea y `--help` (abierta el 22-nov · F-2, F-5, M-7 y M-8 del análisis · hecha el 23-nov, con lo de «Hecho cuando» cumplido; vista por Eduardo el mismo día —la traza, dos veces en el IDE: arreglado, `bf659ec` en `toolchain`—; por decidir, lo de `ERROR DE LINK`)
 
 - **(a) miVM sin ventana, `--no-screen`**, el nombre de la VM-C y del micro simulado: hoy, sólo
   `-Djava.awt.headless=true`; con escritorio, abre su ventana y `Gui.run()` espera a que la cierren, y un proceso
@@ -14139,6 +14140,7 @@ deja en la carpeta del proyecto, donde una IA la encuentra sola.
   traduce sólo sin nadie conectado (`bp run`, o lanzada a mano); con un cliente (el IDE), la traduce él, como antes de
   `#855`. Probado: en el IDE, una vez; con `bp run`, una vez; `TrazaVmLocalSmoke`, bien. Esa prueba no lo veía: mira
   la traza que pone el IDE, no la salida de errores de la VM.
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
 #### ✅ `#856` — H1.5: los diagnósticos del compilador, para que los lea una máquina (abierta el 22-nov · M-4, M-5 y M-6 del análisis · **CERRADA el 23-nov**, `88041db` en `toolchain` y `be0311be`; probada por Eduardo en el IDE: el error de un módulo importado con su fichero delante, y el doble clic que lo abre, *«la primera parte salió bien»*)
 
@@ -14256,7 +14258,7 @@ analizarla. Es el suelo del H2 (`#728`).
   con él, las variables de entorno que piden la GUI y la BD: `#876`.
 - **Visto de paso:** en la consola del IDE, una línea en blanco tras cada línea del micro simulado (`#874`; ya pasaba).
 
-#### 🧬 `#858` — H1.7: lo que una IA lee: la interfaz de un módulo en texto, la documentación en Markdown, `llms.txt`, la chuleta de JC y ejemplos en JC (abierta el 22-nov · M-3, M-10, M-11, M-18 y M-19 del análisis · el análisis, el 23-nov, en `notas/V9_H1_ia.md`; (a), (b) y (d), hechas el mismo día, `7cee427` en `toolchain` y lo de abajo; (c) y (e), no: Eduardo, *«OK»*; a falta de verlo Eduardo, y (d) en la web, al cerrar V9)
+#### ✅ `#858` — H1.7: lo que una IA lee: la interfaz de un módulo en texto, la documentación en Markdown, `llms.txt`, la chuleta de JC y ejemplos en JC (abierta el 22-nov · M-3, M-10, M-11, M-18 y M-19 del análisis · el análisis, el 23-nov, en `notas/V9_H1_ia.md`; (a), (b) y (d), hechas el mismo día, `7cee427` en `toolchain` y lo de abajo; (c) y (e), no: Eduardo, *«OK»*; a falta de verlo Eduardo, y (d) en la web, al cerrar V9)
 
 - **(a) La interfaz de un módulo, en texto:** el `.mod` la lleva dentro, y `--interface DIR` escribe los `.bpi`, que no
   son para leer; falta un volcado de sus clases, funciones y propiedades públicas: el índice de la API, sin leer los
@@ -14297,8 +14299,9 @@ analizarla. Es el suelo del H2 (`#728`).
 - **Hecho cuando:** un comando imprime la API pública de `Collections.mod`; (b) y (c) existen y dicen lo mismo que su
   `.html`; (d), en `micro32-suite.github.io/BasicPlus/`; y (e), si se hace, `samplesJC/` con lo que se traduce,
   compilando en la red.
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
-#### 🧬 `#859` — H1.8: probar un programa sin nadie delante, también una GUI (abierta el 22-nov · M-12, M-13, H-011 y H-012 del análisis · el análisis, el 23-nov, en `notas/V9_H1_ia.md`; (a) y (b), hechas el mismo día, `e527b00` en `toolchain` y su commit en BasicPlus, con la red VERDE, a falta de verlas Eduardo; (c), (d) y (e), aplazadas: `#880`)
+#### ✅ `#859` — H1.8: probar un programa sin nadie delante, también una GUI (abierta el 22-nov · M-12, M-13, H-011 y H-012 del análisis · el análisis, el 23-nov, en `notas/V9_H1_ia.md`; (a) y (b), hechas el mismo día, `e527b00` en `toolchain` y su commit en BasicPlus, con la red VERDE, a falta de verlas Eduardo; (c), (d) y (e), aplazadas: `#880`)
 
 - **(a) Una forma estándar de probar un programa:** la salida esperada (el programa imprime; se compara con un fichero)
   y el código de salida, en las dos VMs —la paridad de `compat/`, para el usuario—, y un módulo de aserciones mínimo, que
@@ -14323,8 +14326,9 @@ analizarla. Es el suelo del H2 (`#728`).
   (Eduardo, 23-nov: *«3 lo aplazamos»*), con su análisis, en `#880`.
 - **Hecho cuando:** un comando ejecuta las pruebas de un proyecto y sale con 0 o 1; la §24 de `gui.html` lista la API
   de prueba de la GUI y un ejemplo de GUI se prueba solo. (Lo de (c), (d) y (e), en `#880`.)
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
-#### 🧬 `#860` — H1.9: los mensajes que enseñan: el arreglo en los de BP, y en JC las costumbres de Java (abierta el 22-nov · M-9, M-16 y M-17 del análisis · hechas las tres el 25-nov, a falta de verlas Eduardo)
+#### ✅ `#860` — H1.9: los mensajes que enseñan: el arreglo en los de BP, y en JC las costumbres de Java (abierta el 22-nov · M-9, M-16 y M-17 del análisis · hechas las tres el 25-nov, a falta de verlas Eduardo)
 
 - **(a) BP:** tres mensajes que dicen el fallo y no el arreglo —una sobrecarga que no casa (listar las candidatas), un
   miembro protegido (sugerir el público) y «'string' no tiene miembros» (nombrar las funciones: `strlen`, `upper`…)—;
@@ -14368,8 +14372,9 @@ analizarla. Es el suelo del H2 (`#728`).
     dos lenguas.
   - **Probado:** `MensajesQueEnsenanTest` (27; la suite, 449), los 165 ejemplos de error, los `.mod` de los 420 fuentes de
     `samples` con el compilador de antes y con éste, y los 37 de la stdlib, idénticos.
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
-#### 🧬 `#861` — H1.10: las placas, descritas para leer: sus pines y sus periféricos (abierta el 22-nov · la pregunta abierta del análisis)
+#### ✅ `#861` — H1.10: las placas, descritas para leer: sus pines y sus periféricos (abierta el 22-nov · la pregunta abierta del análisis)
 
 No hay, por placa, una descripción que se pueda leer de qué pines y periféricos tiene: `board.json` es sólo de las
 RP2350 y sólo lleva `name`, `variant`, `ledPin`, `neopixelPin` y `psramCsPin`; la imagen sabe qué pines son del sistema
@@ -14404,6 +14409,7 @@ no copiados a mano. Va con el tema principal de V9, las librerías de dispositiv
     (`s_rp_caps_a` y `s_rp_caps_b`, y el GP47, de la PSRAM), dicho debajo, y siguen por preguntar: `--mira` dirá si contestan
     lo mismo. Los buses de la Metro son los que da la guía de Adafruit (I2C 20-21, SPI 30-31-28, la SD en 34-35-36). Y un
     enlace más para la Pico 2, en texto: sus pines en el SDK de Raspberry Pi (un PDF no lo lee cualquiera).
+- **CERRADA el 27-nov:** en el lote de la V8.5, preguntadas las seis que faltaban (la Pico 2, la Metro, la C3, la C6 y los dos kits de la P4, con `placas_doc.py --lee`): `PLACAS`, con las once (`a0c7b1a9`).
 
 #### 🧩 H2 — la IA maneja el IDE (`#728`) (abierto el 22-nov)
 
@@ -14626,7 +14632,7 @@ lo mismo con el SPI.
   la S3, dos, 28 de 28.
 - **Hecho cuando:** en las tres familias, un pin en colector abierto se suelta, se baja y se lee.
 
-#### 🧬 `#883` — H3.3: las librerías de los dispositivos I2C (`bpdevices`), con el bus como objeto (abierta el 24-nov · hecha el mismo día)
+#### ✅ `#883` — H3.3: las librerías de los dispositivos I2C (`bpdevices`), con el bus como objeto (abierta el 24-nov · hecha el mismo día)
 
 - `Bmp280`, `Bme688`, `Mcp9804` y `Pca9554` pedían un NÚMERO de bus y llamaban a las funciones de `I2c`: sólo valían con el
   periférico. Ahora, un constructor más, con un `I2c.I2C`; el del número se queda: se engancha a ese bus —ya abierto, o
@@ -14635,6 +14641,7 @@ lo mismo con el SPI.
   array a un método de una clase de otro módulo revienta en el micro»), fuera: el 24-nov, en la Nucleo, va.
 - **Probado:** `Bmp280` en la Nucleo, con un `HardI2C`, un `Bus`, el número y un `SoftI2C`: la misma temperatura y la misma
   presión (19,9 grados y 1012,3 hPa). `Bme688`, su paridad en las dos VMs. `Mcp9804` y `Pca9554`, compiladas, sin su chip.
+- **CERRADA el 27-nov:** visto en la Nucleo con el BME280 (`HardI2C`, el bus, número y `SoftI2C`, lo mismo), y Eduardo conforme (*«Las pruebas OK»*).
 
 #### 🧬 `#884` — H3.4: el SPI por software: la base, la del periférico y la de software (abierta el 24-nov · analizada el mismo día, por decidir)
 
@@ -14644,7 +14651,7 @@ lo mismo con el SPI.
   un constructor más, con un `Spi.SPI`. Nada nuevo en C. Se prueba con un sensor de verdad por SPI (sin ACK, no se sabe si
   llegó): hace falta uno conectado.
 
-#### 🧬 `#890` — `scan()` e `isPresent()` no ven un dispositivo I2C que no contesta a una lectura (abierta el 24-nov · vista al hacer `#888` · Eduardo: *«1) si»* · hecha el mismo día)
+#### ✅ `#890` — `scan()` e `isPresent()` no ven un dispositivo I2C que no contesta a una lectura (abierta el 24-nov · vista al hacer `#888` · Eduardo: *«1) si»* · hecha el mismo día)
 
 - Las dos leen un byte (lo que había en todas las familias), y hay sensores que no contestan a una lectura si no tienen una
   medida hecha (los de Sensirion —SHT3x, SCD4x…—, según sus hojas de datos; ninguno aquí para probarlo): quien comprueba su
@@ -14653,6 +14660,7 @@ lo mismo con el SPI.
   como Arduino y MicroPython. Sólo cambia `I2c.mod`. En el PC cambian sus líneas (`write … bytes=[]` en vez de
   `read … count=1`). El contrato del H3, en las dos VMs, igual; las referencias, al día. Por ver en las placas, al grabarlas
   con lo del SPI.
+- **CERRADA el 27-nov:** visto en la Nucleo y, en el lote de la V8.5, en la S3 con el BME280: `scan()` da `[0x76]`, por el periférico y por software (`a0c7b1a9`).
 
 #### ✅ `#889` — un dispositivo I2C que se quedó a media lectura (la placa se reinició en medio) dejaba el bus del periférico sin contestar al abrirlo (abierta y **CERRADA el 24-nov** · vista en la Nucleo al repetir el contrato · 4b745f6 del runtime)
 
@@ -14719,7 +14727,7 @@ lo mismo con el SPI.
   2544 (lo que no son bits del cable, unos 0,15 ms por lectura, lo pone el programa). 2000 lecturas, ninguna mal. El
   contrato del H3, 43 iguales y ninguna distinta.
 
-#### 🧬 `#880` — lo aplazado del H1.8: la captura de la VM Java, el botón con tamaño puesto a mano y la ruta relativa de `Gui.shot` (abierta el 23-nov · Eduardo, al decidir `#859`: *«3 lo aplazamos»* · hecha el 25-nov, a falta de verla Eduardo)
+#### ✅ `#880` — lo aplazado del H1.8: la captura de la VM Java, el botón con tamaño puesto a mano y la ruta relativa de `Gui.shot` (abierta el 23-nov · Eduardo, al decidir `#859`: *«3 lo aplazamos»* · hecha el 25-nov, a falta de verla Eduardo)
 
 El análisis, el del 23-nov (`notas/V9_H1_ia.md`, «H1.8»):
 - **(c) La captura de la VM Java** (`Gui.shot` en miVM), frente a la de LVGL (las de la sonda del análisis): el fondo,
@@ -14745,6 +14753,7 @@ El análisis, el del 23-nov (`notas/V9_H1_ia.md`, «H1.8»):
     capturas de las dos VMs, con el botón del tamaño de su texto y con el suyo puesto. `Gui.mod` (51708 → 51746), el
     único módulo que cambia; el `Stdlib.pack`, rehecho; `tests/PruebaGui.out` y los árboles de la §24.4, con `align=4`.
   - **(e)** Dicho en la §23.5: una ruta relativa, desde la raíz; para dejarlo en otro sitio, la ruta entera.
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
 #### 🧬 `#879` — los comentarios de documentación (`/** … */`, como Javadoc): la documentación de la API, sacada del código, que se mantiene sola (abierta el 23-nov · idea de Eduardo, al hablar del H1.7 · por analizar, al acabar (a) y (b) de `#858`)
 
@@ -14766,7 +14775,7 @@ mantiene sola.»*
   guía para IA, en inglés); y si entra en V9.
 - **Hecho cuando:** por decidir, con su análisis.
 
-#### 🧬 `#878` — lo que el IDE dice que es el dispositivo al conectarse: «bpvm-java v1» para el micro simulado, y «bpvm-pico wire-v1» para cualquier placa por serie, también una ESP32 (abierta el 23-nov · vista al probar el H1 con Eduardo · pendiente)
+#### ✅ `#878` — lo que el IDE dice que es el dispositivo al conectarse: «bpvm-java v1» para el micro simulado, y «bpvm-pico wire-v1» para cualquier placa por serie, también una ESP32 (abierta el 23-nov · vista al probar el H1 con Eduardo · pendiente)
 
 - **Lo que pasa:** al conectarse, cada transporte devuelve una etiqueta fija (`helloLabel`): `BpvmBackend` (por TCP:
   la VM Java y el micro simulado), «bpvm-java v1 @ …»; `SerialBackend`, «bpvm-pico wire-v1 @ …»; `RedBackend`, «bpvm
@@ -14777,8 +14786,9 @@ mantiene sola.»*
   con lo que dice la placa de sí misma (su `boardName`, en el INFO).
 - **Hecho cuando:** conectado al micro simulado, a la P4 por serie y a la VM Java, lo que se dice de cada uno es lo que
   es. **Hecho el 25-nov, con `#869`.**
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
-#### 🧬 `#877` — un programa que se llama como un módulo de la stdlib no se sube al ejecutarlo en el PC: con `App`, «falta el modulo 'App'» (abierta el 23-nov · vista por Eduardo al probar el H1 · hecha el mismo día, a falta de verla Eduardo)
+#### ✅ `#877` — un programa que se llama como un módulo de la stdlib no se sube al ejecutarlo en el PC: con `App`, «falta el modulo 'App'» (abierta el 23-nov · vista por Eduardo al probar el H1 · hecha el mismo día, a falta de verla Eduardo)
 
 - **Lo que pasaba:** al ejecutar en el PC, el IDE sube a la carpeta del programa lo que hay en su `out/`, menos lo que
   se llama como un módulo de la stdlib (`uploadAppArtifacts`, con `stdlibBasenames`): eso lo resuelve la VM con su
@@ -14814,6 +14824,7 @@ mantiene sola.»*
     de JC, a un `package es.prueba;`, contesta «en JC es library, con su nombre entre comillas: library "es.prueba";» y sigue.
     La subida de un módulo sin `library` que se llama como uno de la stdlib se queda como está, dicho en el §10.1: ponerle
     una.
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*). Con el proyecto de ejemplo del ZIP; con el del repositorio salió otra cosa, `#917`.
 
 #### ✅ `#876` — las variables de entorno de la placa, como comandos, desde su botón y por la IA (abierta el 23-nov · Eduardo, al cerrar el H1.6 · **CERRADA el 25-nov**, `337286b` en `toolchain` y `520b6fa2`; instalar la GUI o la BD con sus variables, a `#875` y de ella a `#891`)
 
@@ -14850,7 +14861,7 @@ mantiene sola.»*
   el de la BD crea también sus variables: con los packs, en `#875`.
 - **Hecho cuando:** desde el botón, como hoy, y por la IA, se listan, se ponen y se borran variables del ENV de una placa.
 
-#### 🧬 `#892` — en la C3, la C5 y la C6 el IDE graba el motor de la P4, o ninguno: elige el motor de un pack por la arquitectura («riscv», que son dos), no por la receta que publica la placa (abierta el 25-nov · vista con los guiones (`#891`) en la C5 · **de antes: está en la V7.0, la V8.0 y la V8.1 publicadas** · arreglada el mismo día; lo publicado, por decidir)
+#### ✅ `#892` — en la C3, la C5 y la C6 el IDE graba el motor de la P4, o ninguno: elige el motor de un pack por la arquitectura («riscv», que son dos), no por la receta que publica la placa (abierta el 25-nov · vista con los guiones (`#891`) en la C5 · **de antes: está en la V7.0, la V8.0 y la V8.1 publicadas** · arreglada el mismo día; lo publicado, por decidir)
 
 - **Lo visto:** tras `gui-esp32c5`, «GUI: el pack de la GUI esta, pero su motor no cargo: otra convencion de coma flotante», y el
   `DriverSpi` grabado sin motor (8 KB; con él, 16).
@@ -14865,6 +14876,7 @@ mantiene sola.»*
 - **Probado:** `PacksSmoke` (el motor que toca a cada receta, y los que lleva cada pack de la instalación); y en las placas, con
   los guiones: la C5 (`DriverSpi`, 16 KB; `GuiShot`, bien, y su captura), la P4 y la DK2.
 - **Por decidir (Eduardo):** si se publica un parche de la V8.1 (sólo el IDE) o va con V9.
+- **CERRADA el 27-nov:** en el lote de la V8.5, por el camino del IDE (sus guiones): en la C6, el `GuiMini` con el motor RV32IMC (411 128 bytes, sellado; el de la P4, 771 416), y en la C5, el `Gui` y el `DriverSpi` podados para ella; las dos, con la GUI en la tanda (`a0c7b1a9`).
 
 #### ✅ `#891` — los guiones: los comandos del IDE, uno por línea en un fichero, que lanza la persona o la IA; y con ellos, instalar la GUI o la BD con sus variables de entorno (abierta el 25-nov · idea de Eduardo · lo de las variables, de `#876` y `#875` · **CERRADA el 25-nov**, `d7917fc` y `ed90f51` en `toolchain`, `94f689f2` y `f77fc584`; probada con Eduardo en la Metro, la C5, la P4 y la DK2, *«2) Cierra»*)
 
@@ -14957,7 +14969,7 @@ mantiene sola.»*
 - **Hecho cuando:** desde el botón, como hoy; la IA graba un pack en una placa y en el micro simulado, y lo ve en la
   lista; y `bp placa COM22 pack X.pack`, lo mismo.
 
-#### 🧬 `#874` — la consola del IDE, con una línea en blanco tras cada línea del micro simulado (abierta el 23-nov · vista al probar `#857` · hecha el mismo día, a falta de verla Eduardo)
+#### ✅ `#874` — la consola del IDE, con una línea en blanco tras cada línea del micro simulado (abierta el 23-nov · vista al probar `#857` · hecha el mismo día, a falta de verla Eduardo)
 
 - **Lo que pasa:** `SimRunner` acaba sus líneas en «\n» (`say`) y la consola del panel de la placa (el `outputSink` de
   `FrmMain`) les pone otro: tras cada `[sim] …`, una en blanco. Ya pasaba antes de `#857`, que no lo tocó.
@@ -14966,6 +14978,7 @@ mantiene sola.»*
   `toolchain`): las líneas de `SimRunner`, sin su «\n»; y otras tres del panel que también lo llevaban (`[sim ERROR]`,
   `[vm-java ERROR]` y la de aplicar la configuración). Probado: con el micro simulado arrancado, vaciado y con un
   programa, ninguna de sus 8 líneas seguida de una en blanco.
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
 #### ✅ `#873` — el servidor de la IA sólo se enciende desde la ventana (abierta el 23-nov · la prueba de la IA del H1.3, su punto 3 · decidida y hecha el mismo día · **CERRADA el 23-nov**, `6e3807d`, `7554040` y `4a91387` en `toolchain`, `8cf65b28`, `1494257c` y `046cdd0f`; probada por Eduardo: la IA abrió el IDE con su carpeta, la pregunta salió en la pantalla, y con su sí la IA lo manejó, *«Todo OK»*)
 
@@ -15011,7 +15024,7 @@ mantiene sola.»*
 - **Hecho** (`54ae845` en `toolchain`, con `#871`): sin el total, «Pila VM: 25 KB sin usar (marca de agua)». Si hiciera falta el
   total, que lo mande cada placa en su INFO.
 
-#### 🧬 `#871` — el micro simulado arrastra lo de antes (su FS, su flash y su zona de packs persisten): un parámetro para vaciarlo y que arranque como la primera vez (abierta el 23-nov · la prueba de la IA del H1.3, sus puntos 1 y 2 · hecha el mismo día; vista por Eduardo, que vio que borraba de más —su configuración—: arreglado, `bf659ec` en `toolchain`, a falta de verlo Eduardo)
+#### ✅ `#871` — el micro simulado arrastra lo de antes (su FS, su flash y su zona de packs persisten): un parámetro para vaciarlo y que arranque como la primera vez (abierta el 23-nov · la prueba de la IA del H1.3, sus puntos 1 y 2 · hecha el mismo día; vista por Eduardo, que vio que borraba de más —su configuración—: arreglado, `bf659ec` en `toolchain`, a falta de verlo Eduardo)
 
 - **Lo visto** (el informe de la IA, `C:\tmp\prueba_Ia\v81\INFORME-prueba-IA-8.1.md`): `NombresGui.bp`, con
   `Gui.__guiClick`, va en el PC, en la VM-C y en la P4, y falla en la Pico 2 y en el micro simulado: «lib 'Gui' presente
@@ -15057,6 +15070,7 @@ mantiene sola.»*
   simulado, `de_cero`).
 - **Para publicar V9:** con la regla que se queda, una placa con los packs de V8 y un programa que use lo que cambió de
   interfaz en V9 (como `__guiClick`) falla así; lo que lo evita es grabar los packs de V9 (`INSTALAR_FIRMWARE`).
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
 #### ✅ `#894` — las STM32 dan por buenos pines que su encapsulado no tiene (abierta el 25-nov · vista al preguntar a la DK2 sus pines, `#861` · de antes: desde la tabla de capacidades de V7 · hecha y **CERRADA** el mismo día, `ad7a6d5` del runtime)
 
@@ -15150,7 +15164,7 @@ mantiene sola.»*
   proyecto `library "mio"` que tiene su propio módulo `Log` (`import mio.Log`): `bp run`, `--c`, `--sim`, Run, y Run on
   Device en el simulado, dos veces; usa el suyo, y el `Log` de la stdlib sigue en su sitio. `ProyectoDaoTest`.
 
-#### 🧬 `#902` — las ESP32 de dos núcleos: tras una operación del I2C que nadie contesta, la siguiente podía darse por hecha sin estarlo, y la placa se reiniciaba (abierta el 25-nov · al repetir el punto 5 de la prueba final con la imagen nueva en la P4 · de antes: también en lo publicado · hecha el mismo día, `394dfb7` del runtime, medida en la P4 y, su táctil y su sonido a la vez, vistos por Eduardo: *«1) todo OK»*; falta la S3)
+#### ✅ `#902` — las ESP32 de dos núcleos: tras una operación del I2C que nadie contesta, la siguiente podía darse por hecha sin estarlo, y la placa se reiniciaba (abierta el 25-nov · al repetir el punto 5 de la prueba final con la imagen nueva en la P4 · de antes: también en lo publicado · hecha el mismo día, `394dfb7` del runtime, medida en la P4 y, su táctil y su sonido a la vez, vistos por Eduardo: *«1) todo OK»*; falta la S3)
 
 - **Qué pasa:** una operación que nadie contesta acaba en su STOP, y el IDF (6.1) vuelve en cuanto el bus queda libre: ni espera
   la interrupción de ese STOP, que se levanta un poco después, ni la limpia. Queda pendiente, y salta al poner las suyas la
@@ -15170,6 +15184,7 @@ mantiene sola.»*
   sondeo del códec—, ninguna mal. Y `samples/SoundDemo.bp`, para verlo con el dedo: se fabrica su WAV, y su deslizador cambia el
   volumen mientras suena (el táctil y el códec, a la vez por el I2C); en las dos VMs del PC, en silencio, igual.
 - **Falta:** en la S3, los 400 sondeos de una dirección vacía (sin nada conectado) y, con un sensor, las lecturas.
+- **CERRADA el 27-nov:** vista en la S3, en el lote de la V8.5, con el BME280: 0 de 400 sondeos falsos (sin nada conectado y con el sensor), y 0 mal en 200 lecturas seguidas y en 200 detrás de un «no», dos veces, sin reiniciarse (`a0c7b1a9`).
 
 #### ✅ `#903` — un dispositivo de `bpdevices` (o un módulo de `"dependencies"`) se compila y no se ejecuta en el PC: «falta el modulo 'Mcp9804'» (abierta el 25-nov · la prueba final, su punto 4 · de antes: también en lo publicado, en el Run del IDE · hecha y **CERRADA** el mismo día, `936b3ef` de `toolchain`)
 
@@ -15240,7 +15255,7 @@ mantiene sola.»*
 - **La guía vieja:** la carpeta de la prueba tenía la de un ZIP anterior, y la IA trabajó media prueba con ella (el IDE la pone al
   día al abrirse, `#893`). La copia que deja el IDE dice ahora, bajo el título, cuál es la de ahora. `GuiaIaSmoke`.
 
-#### 🧬 `#909` — un `Panel` se desplaza aunque su `scrollDir` sea `NONE`, y lo que cabe dentro es menos de lo que mide (abierta el 25-nov · vista al mirar `#905` · de siempre · el tamaño, hecho el mismo día, `f0f2ec5` de `toolchain` · el desplazamiento, hecho el 26-nov, `afee60f` del runtime · a falta de verlo Eduardo)
+#### ✅ `#909` — un `Panel` se desplaza aunque su `scrollDir` sea `NONE`, y lo que cabe dentro es menos de lo que mide (abierta el 25-nov · vista al mirar `#905` · de siempre · el tamaño, hecho el mismo día, `f0f2ec5` de `toolchain` · el desplazamiento, hecho el 26-nov, `afee60f` del runtime · a falta de verlo Eduardo)
 
 - La guía (§19.4) y `Gui.bp` dicen que el desplazamiento es opcional y por defecto `NONE`, y `scrollDir` da 0; pero en LVGL un
   objeto nace desplazable en las dos direcciones, con sus barras si no cabe, y nadie se lo quita. Hacerlo verdad puede romper a
@@ -15286,6 +15301,7 @@ mantiene sola.»*
   el `GuiMini.pack`, rehechos; en el modelo y en la VM Java no cambia nada (el volcado, igual). **Probado** con capturas, en la VM-C
   con su ventana y en la P4 con el `Gui.pack` nuevo: sin pedirlo, ni el panel ni la pantalla tienen barras, aunque algo no quepa; con
   `scrollDir`, vuelven las dos. La guía (§19.4 y la rueda, §22.6), en los dos idiomas.
+- **CERRADA el 27-nov:** vista por Eduardo: la captura de la VM Java (`GuiShot`), como en la placa (*«Las pruebas OK»*); el desplazamiento, en la P4 el 26-nov.
 
 #### ✅ `#910` — el ZIP de prueba de la V8.5 llevaba las nueve imágenes de la V8.1, y nadie lo dijo (abierta el 25-nov · al ir a grabar la P4 · hecha y **CERRADA** el mismo día, `394dfb7` del runtime)
 
@@ -15342,6 +15358,18 @@ mantiene sola.»*
   el orden: primero el servidor, después la IA, y «con BasicPlus». **Probado:** la placa de mentira (11 s, y el mensaje), el COM1 y la
   P4 de verdad, que conecta como antes; en `LatidoSmoke`.
 
+#### 🧬 `#917` — un módulo importado cuyo `.mod` de `out/` es de un formato anterior se da por al día por la fecha, y el programa no enlaza (abierta el 27-nov · vista por Eduardo al probar `#877` con el proyecto de ejemplo del repositorio · de antes: en lo publicado · **a V9**, Eduardo: *«A V9, con una nota»*)
+
+- **Lo visto:** Run de `samples/sampleproject` (el del repositorio): «ERROR DE LINK: lib 'Util' presente pero no exporta
+  'Util.greet(s)s' (la usa 'App'; version vieja?)». Su `out/` (ignorado por git) guardaba un `Util.mod` del 23-jul, MOD6, y
+  `src/Util.bp` es del 19-may.
+- **La causa:** al compilar un proyecto, un módulo importado cuyo `.mod` no es más viejo que su `.bp` no se recompila (el atajo de
+  `compileFull` para `depth > 0`, «(.mod fresco, skip)», `Main.java:956`): se mira la fecha, no el formato. Para el `.bpi`, sí
+  (`isBpiOutdated`). Igual en el IDE y con `bp build`; con el `out/` borrado, compila los dos en MOD9 y va.
+- **A quién le pasa:** a quien actualice con proyectos compilados por una versión de otro formato; el ZIP no trae `out/`.
+- **Para V9:** en el atajo, un `.mod` de un formato que no es el que se emite (MOD9, o MOD8 con `--formato=8`) no está al día. En las
+  notas de la V8.5: si un proyecto de una versión anterior da un error de enlace, se borra su `out/`.
+
 #### ✅ `#912` — los resultados de ejecutar (la IA) mezclan lo que imprime el programa con lo de compilar, subir y ejecutar (abierta el 25-nov · de la prueba final · hecha y **CERRADA** el mismo día, `f0f2ec5` de `toolchain`)
 
 - La IA tenía que buscar en la `salida` de la consola lo que imprimió su programa. **Hecho** (Eduardo: *«4) si»*): `imprime`, sólo lo
@@ -15350,15 +15378,16 @@ mantiene sola.»*
   los comandos, con el IDE sin ventana: un programa que acaba bien, uno que falla y uno que no compila, en el PC, en la ventana de la
   VM-C, en el micro simulado y en la P4. `SubidaSmoke`.
 
-#### 🧬 `#893` — la guía para IA que el IDE deja en una carpeta no se pone al día: se queda la de la primera vez (abierta el 25-nov · vista en la carpeta de pruebas: la del 23 no sabía de packs ni de guiones · hecha el mismo día)
+#### ✅ `#893` — la guía para IA que el IDE deja en una carpeta no se pone al día: se queda la de la primera vez (abierta el 25-nov · vista en la carpeta de pruebas: la del 23 no sabía de packs ni de guiones · hecha el mismo día)
 
 - El IDE la escribe si falta y no la vuelve a tocar (`GuiaIa.dejaEn`): con un IDE nuevo, o con la instalación en otra carpeta
   (lleva sus rutas), la IA leía la de antes.
 - **Hecho** (Eduardo: *«hacemos todo lo que propones»*): lleva al final una marca con la huella de su texto; la que dejó otro IDE
   y nadie ha cambiado se pone al día al encender el servidor; una cambiada, o sin la marca, no se toca, y se dice.
   `GuiaIaSmoke`. La guía del IDE (§13).
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
-#### 🧬 `#870` — la entrada del programa (`IO.prompt`): en el PC, un diálogo en la pantalla de Eduardo aunque lo lance la IA; en la placa, vacío y sin preguntar a nadie (abierta el 23-nov · el análisis del H2.4)
+#### ✅ `#870` — la entrada del programa (`IO.prompt`): en el PC, un diálogo en la pantalla de Eduardo aunque lo lance la IA; en la placa, vacío y sin preguntar a nadie (abierta el 23-nov · el análisis del H2.4)
 
 - **Lo que pasa:** con la VM del PC, el IDE contesta cada `PROMPT_REQUEST` con un diálogo (`PromptDialog`, en
   `FrmMain.runOnVmRemote`) y el programa espera, también si lo lanzó la IA: le sale a Eduardo, y la IA no puede contestar.
@@ -15378,8 +15407,9 @@ mantiene sola.»*
   depurando.
 - **Hecho cuando:** un programa con `IO.prompt`, lanzado desde la ventana, pregunta con el diálogo; lanzado por la IA, su
   resultado dice qué pide y la IA lo contesta.
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
-#### 🧬 `#869` (y `#878`, la misma) — el IDE presenta a la placa con un nombre puesto a mano: el micro simulado, como «bpvm-java v1»; cualquier placa por serie, como «bpvm-pico» (abierta el 22-nov · la tercera prueba de verdad del H2.3: la IA tuvo que mirar qué proceso atendía el puerto para saber que era la VM-C)
+#### ✅ `#869` (y `#878`, la misma) — el IDE presenta a la placa con un nombre puesto a mano: el micro simulado, como «bpvm-java v1»; cualquier placa por serie, como «bpvm-pico» (abierta el 22-nov · la tercera prueba de verdad del H2.3: la IA tuvo que mirar qué proceso atendía el puerto para saber que era la VM-C)
 
 - **Lo visto:** conectado al micro simulado, el resultado de conectar dice «bpvm-java v1 @ 127.0.0.1:5099»; la IA lo
   comprobó por su cuenta («Comprobé que quien atiende ese puerto (127.0.0.1:5099) es `bpvm-sim.exe`»).
@@ -15402,6 +15432,7 @@ mantiene sola.»*
   que no los tiene.
 - **Visto otra vez** (23-nov, la prueba de la IA del H1.3, su punto 4): «conectado a 127.0.0.1:5099 — bpvm-java v1», y la
   IA tuvo que mirar qué proceso escuchaba en el 5099 para saber que era la VM-C.
+- **CERRADA el 27-nov:** vista por Eduardo con el ZIP de prueba de la V8.5 (*«Las pruebas OK»*).
 
 #### ✅ `#868` — refrescar la placa justo después de un Run on Device: «la placa está ocupada ejecutando un programa (… parar)», y no lo está (abierta el 22-nov · salió en la batería de después de `#867`: una vez de cuatro, en la prueba del servidor MCP · **CERRADA el mismo día**, `f1a42b8` en `toolchain`)
 
