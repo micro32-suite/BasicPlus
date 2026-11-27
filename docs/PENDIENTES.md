@@ -442,6 +442,11 @@ escribir un programa.
   más UART en las ESP32 (hoy un programa tiene, como mucho, la 1 y la 2: las de más de la
   P4 y la de bajo consumo de la C5, la C6 y la P4, todavía no). Las dos, con los streams y
   los dispositivos, en V9.
+- **Un proyecto compilado con una versión anterior puede no enlazar** (`#917`, en lo publicado;
+  a V9). Al compilar un proyecto, un módulo importado cuyo `.mod` de `out/` es más nuevo que su
+  fuente no se vuelve a compilar, aunque sea de un formato anterior; y al ejecutarlo: «ERROR DE
+  LINK: lib '…' presente pero no exporta '…' (… ¿version vieja?)». Borra la carpeta `out/` del
+  proyecto y vuelve a compilarlo.
 
 ## 🔬 Prueba de resistencia larga (idea de Eduardo, 3-ago; hecha en V8)
 

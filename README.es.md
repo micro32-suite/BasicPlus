@@ -74,7 +74,7 @@ programa de una sintaxis a la otra.
 ## Pruébalo (Windows, sin compilar nada)
 
 1. Ten instalado **Java 8 o posterior**.
-2. Descarga **`Micro32-Suite-8.1-win.zip`** de la
+2. Descarga **`Micro32-Suite-8.5-win.zip`** de la
    [última versión](https://github.com/micro32-suite/BasicPlus/releases/latest)
    y descomprímelo donde quieras.
 3. Ejecuta **`bpide.bat`**. Abre `samples/blink.bp`, pulsa **Compile** y
@@ -106,14 +106,20 @@ código](#compilar-desde-el-código).
   pinta una ventana.
 - **WiFi y Bluetooth** en las ESP32 con PSRAM: el IDE sube, graba y ejecuta por
   la red; del Bluetooth, el teclado y el ratón.
+- **Una IA programa la placa**: el IDE habla MCP, así que una IA (Claude Code,
+  por ejemplo) puede escribir un programa, compilarlo, ejecutarlo en el PC, en el
+  micro simulado o en la placa, y grabar sus packs —sólo en tu PC, y
+  preguntándote antes lo que no se deshace—. Una persona que no programa encargó
+  una estación meteorológica para una ESP32-P4, y una IA la hizo en 26 minutos
+  ([el ejemplo](https://micro32-suite.github.io/BasicPlus/guia-ide.html#ia-ejemplo)).
 - **Código nativo donde cuenta**: una `native function` se compila por
   adelantado a Thumb-2 o RISC-V y viaja dentro del fichero de bytecode —
   40-90× sobre el intérprete en kernels de cómputo.
 - **Dos sintaxis, un compilador**: BasicPlus, y **JC** para quien viene de
   Java o de C#.
-- **Probado en hardware real**: la ronda de pruebas de V8 pasó en las once
-  placas, y cuatro de ellas corrieron 48 horas seguidas un programa que lo toca
-  todo, sin un error ni un reinicio. Todas las pruebas, con sus números, en
+- **Probado en hardware real**: la ronda de pruebas de la 8.5 pasó en las once
+  placas, y, para V8, cuatro de ellas corrieron 48 horas seguidas un programa que
+  lo toca todo, sin un error ni un reinicio. Todas las pruebas, con sus números, en
   **[Cómo se prueba BasicPlus](https://micro32-suite.github.io/BasicPlus/pruebas.html)**.
 
 ## Placas
@@ -245,7 +251,7 @@ bpgenvm-c/build/bpgenvm-c --libdir=bpstdlib samples/Blink.mod
 
 # 4. (Opcional) el IDE
 mvn -f toolchain/BpIde/pom.xml package
-java -jar toolchain/BpIde/target/BpIde-8.1.jar
+java -jar toolchain/BpIde/target/BpIde-8.5.jar
 ```
 
 Los firmwares se compilan con sus toolchains habituales (pico-sdk + ninja,
@@ -312,12 +318,13 @@ En **español** y en **[inglés](README.md)**, también en la
 
 ## Estado
 
-**Versión 8.1** (noviembre 2026). La V1 demostró la idea; la V2 la endureció y
+**Versión 8.5** (noviembre 2026). La V1 demostró la idea; la V2 la endureció y
 la amplió; la V3 le puso cara; la V4 le arregló los cimientos; la V5 le dio
 dónde guardar cosas; la V6 puso orden en el código de los microcontroladores;
 la V7 dejó una imagen por micro; **la V8 lo conecta**: la WiFi y el Bluetooth,
 JC y una placa más, la ESP32-P4X. La V8.1 no cambió nada del producto:
-reorganizó el proyecto como una suite.
+reorganizó el proyecto como una suite; **la 8.5 se lo da a una IA**: el IDE
+habla MCP, y una IA puede programar una placa directamente.
 
 Cada versión, en las [releases](https://github.com/micro32-suite/BasicPlus/releases)
 y en las [notas de versión](docs/RELEASES.md).

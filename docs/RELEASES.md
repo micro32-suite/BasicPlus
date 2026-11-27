@@ -1,8 +1,104 @@
 # Notas de versión — BasicPlus
 
 > Borrador del cuerpo de la *release* de GitHub. La etiqueta propuesta es
-> `v8.1` (v1 cerró en `v1.0`, v2 en `v2.0`, v3 en `v3.0`/`v3.0.1`, v4 en `v4.0`, v5 en
-> `v5.0`, v6 en `v6.0`, v7 en `v7.0`, v8 en `v8.0`). Ajusta versión/fecha al publicar.
+> `v8.5` (v1 cerró en `v1.0`, v2 en `v2.0`, v3 en `v3.0`/`v3.0.1`, v4 en `v4.0`, v5 en
+> `v5.0`, v6 en `v6.0`, v7 en `v7.0`, v8 en `v8.0`, la suite en `v8.1`). Ajusta versión/fecha al publicar.
+
+---
+
+## v8.5 — noviembre 2026 · la IA
+
+Nueva versión, la 8.5. Normalmente esperamos a tener una versión completa antes de publicar, pero hemos descubierto
+algunos bugs, así que hemos preferido corregirlos y adelantar la publicación de una nueva versión.
+
+Lo principal de esta versión es la incorporación al IDE de la comunicación MCP: ahora una IA puede programar una placa
+directamente, utilizando el lenguaje y las comunicaciones. El desarrollo de aplicaciones con una IA es sorprendentemente
+rápido y permite a casi cualquier persona desarrollar aplicaciones para las placas. De todas formas, conviene saber un
+poco de pines, memoria, buses de comunicación, dispositivos, etc.
+
+Poco más: seguimos trabajando en la próxima versión, con más novedades y el soporte de alguna placa adicional.
+
+### La IA programa la placa
+
+- **El IDE, por MCP.** Un servidor del propio IDE (**IA → Servidor para la IA**), sólo en este PC y apagado hasta que
+  lo enciendes, con la carpeta en la que la IA puede trabajar. Cada comando del IDE es una herramienta para la IA:
+  abrir, compilar, ejecutar en el PC, en el micro simulado o en la placa, depurar, las variables de entorno y los packs
+  de la placa, los guiones. Lo que no se deshace, como formatear la zona de packs, se le pregunta antes a la persona.
+  Con `bpide.bat --ia=<carpeta>` lo abre la propia IA, y el IDE pregunta si la autorizas
+  ([guía del IDE, §13](guia-ide.html#ia)).
+- **Un ejemplo:** el encargo de una persona que no programa —una estación meteorológica en una ESP32-P4, con la
+  temperatura, la presión y su gráfica, y una base de datos—, hecho por una IA en 26 minutos, de la placa en blanco a la
+  estación funcionando ([§13.1](guia-ide.html#ia-ejemplo)).
+- **Lo que lee la IA:** una guía para IA (`AGENTS.md`), que el IDE deja en su carpeta; la documentación en Markdown y
+  `llms.txt`; la API de cada módulo, en texto (`bp api`); y las placas, con sus pines y sus periféricos (`PLACAS.md`).
+- **`bp`**, las herramientas por línea de órdenes: `build`, `run` (en las dos VMs del PC, en el micro simulado o en una
+  placa), `test` (con el módulo `Assert`), `api`, `placa` y `png`.
+- **Mensajes que enseñan:** cada error del compilador dice cómo se escribe (los diez primeros de una vez), y en JC, las
+  costumbres de Java; la traza, con su fichero y su línea; y lo que imprime el programa, aparte de lo demás.
+
+### El IDE
+
+- **Todo es un comando**, lo mismo desde un menú, un botón, un guion o la IA.
+- **Los guiones:** un fichero con comandos del IDE, uno por línea. La instalación trae nueve, para instalar la interfaz
+  gráfica o la base de datos en cada placa: sus variables de entorno y sus packs, en orden
+  ([guía del IDE, §14](guia-ide.html#guiones)).
+- **Las variables de entorno y los packs de la placa**, como comandos (y `bp placa … pack`); en la zona de packs, una cosa
+  cada vez.
+- **Al conectarse**, la versión de la imagen de la placa, con un aviso si no es la de la instalación; y una placa en
+  blanco, o que no es de BasicPlus, lo dice en vez de quedarse esperando.
+- **El micro simulado**, «Vaciarlo (como la primera vez)»; y la VM Java del panel, «Arrancar».
+
+### El lenguaje y las bibliotecas
+
+- **El I2C por software** (`modSoftI2C.SoftI2C`), con la misma base que el del periférico (`I2c.HardI2C`): sólo cambia el
+  constructor, y funciona en dos pines cualesquiera. Las librerías de los dispositivos (`bpdevices`), con el bus como
+  objeto; `scan()` e `isPresent()` sondean como Arduino y MicroPython; y el colector abierto
+  (`Gpio.Pin.OPEN_COLLECTOR`).
+- **Los datos de un módulo, sin el tope de 64 KB.**
+- **La tabla de objetos** crece con más margen cuando hay tablas grandes y varios hilos.
+
+### Fallos corregidos
+
+Los que venían de versiones publicadas:
+
+- En la C3, la C5 y la C6 el IDE grababa el motor de la interfaz gráfica de la P4, o ninguno (desde la V7.0).
+- El segundo Run on Device de un programa que sale en pack lo borraba de la placa (desde la V7.0).
+- En las ESP32 de dos núcleos (la S3 y la P4), tras una operación del I2C que nadie contesta, la siguiente podía darse
+  por hecha sin estarlo, y la placa se reiniciaba.
+- En la P4, la pantalla parpadeaba cada vez que se escribía en la flash.
+- `Mcp9804`: por debajo de cero, la temperatura salía en positivo.
+- En las STM32: el I2C del periférico iba siempre a 100 kHz, se pidiera lo que se pidiera; el contador de pulsos no
+  funcionaba; y se daban por buenos pines que su encapsulado no tiene.
+- Un `Panel` se desplazaba aunque no se le pidiera, y en la VM Java lo que cabía dentro no era lo mismo que en la placa:
+  ahora nada se desplaza si el programa no lo pide, y la VM Java pone el borde y el margen de LVGL.
+- Un micro simulado recién hecho no tenía la base de datos.
+
+Y lo que salió al preparar esta versión, entre otras cosas: el Connect que fallaba a veces, un módulo `Main` con una
+`function Main()` que se ejecutaba dos veces, y dos grabaciones de packs a la vez, que se estropeaban las dos.
+
+### Al actualizar desde la V8.1
+
+- **Graba en cada placa la imagen de la 8.5** (en `firmware/`; [cómo](INSTALAR_FIRMWARE.md)). Desde ahora la imagen dice
+  su versión, y el IDE avisa si no es la de la instalación.
+- **Vuelve a grabar sus packs:** el `Stdlib.pack` y los de la interfaz gráfica han cambiado. Lo más fácil, con el guion
+  de tu placa. Y quita de `/app` y de `/lib` las copias sueltas de la biblioteca estándar que tengas de antes: tapan a
+  las del pack.
+- **Un micro simulado de una versión anterior** no tiene el `SQLite.pack`: grábaselo, o «Vaciarlo».
+- **Un proyecto compilado con una versión anterior** puede dar, al ejecutarlo, un error de enlace («… no exporta …
+  ¿version vieja?»): borra su carpeta `out/` y vuelve a compilarlo. Lo arreglaremos en la próxima versión.
+
+### Lo que todavía no
+
+Run on Device contra la VM Java del panel; el depurador, desde la IA; el SPI por software; la documentación de la API
+sacada de los comentarios del código; y lo del `out/` de una versión anterior.
+
+### Lo verificado antes de publicar
+
+La red de siempre (la paridad de las dos VMs, 221 de 221 programas; MOD8, 212; con dos hilos de trabajo, 221; las 117
+pruebas de C; el micro simulado, 16 de 16), las suites (463 del compilador y 75 de la VM Java), los 421 programas de
+ejemplo, los 165 programas de error y los fragmentos de la documentación (381 de BP y 80 módulos de JC), sin un fallo.
+Las once placas, cada una con la imagen y los packs de la 8.5 (los packs, por el IDE y con sus guiones) y la tanda de 28
+programas, sin nada nuevo. Y una IA, con el encargo de una persona que no programa.
 
 ---
 

@@ -85,42 +85,41 @@
 
 <h2>By the numbers</h2>
 <p>
-  Measured on 18 and 19 November 2026, in the pre-release check of V8 (the compiler's tests and
-  the net, on the 19th, after its last fixes). The numbers are redone each time a version is
+  Measured on 26 and 27 November 2026, in the pre-release check of 8.5 (the net and the compiler's
+  tests, on the 26th; the boards, on the 27th). The numbers are redone each time a version is
   published.
 </p>
 <table>
   <tr><th>Test</th><th>What it checks</th><th>Result</th></tr>
   <tr><td>The corpus, on both VMs</td>
-      <td>217 programs: the same output, byte for byte</td><td class="num">217 of 217</td></tr>
+      <td>221 programs: the same output, byte for byte</td><td class="num">221 of 221</td></tr>
   <tr><td>… in MOD8</td>
       <td>the same ones, compiled to MOD8, the module format before MOD9</td>
-      <td>209 of 209 (8 use what only the new format has)</td></tr>
+      <td>212 of 212 (9 use what only the new format has)</td></tr>
   <tr><td>… with two worker threads</td>
-      <td>the same ones, with two worker threads at once</td><td class="num">217 of 217</td></tr>
+      <td>the same ones, with two worker threads at once</td><td class="num">221 of 221</td></tr>
   <tr><td>The V6 capsule</td>
       <td>59 programs compiled by the published V6 compiler</td><td class="num">59 of 59</td></tr>
   <tr><td>The C tests</td>
       <td>inside the C VM</td><td class="num">117 of 117</td></tr>
   <tr><td>The simulated micro · shadowing · the version rule</td>
       <td>the IDE's simulator · the order in which modules are looked up · module versions</td>
-      <td class="num">15 · 15 · 9, all</td></tr>
+      <td class="num">16 · 15 · 9, all</td></tr>
   <tr><td>The compiler and the Java VM</td>
-      <td>their own tests</td><td class="num">404 and 66, all</td></tr>
+      <td>their own tests</td><td class="num">463 and 75, all</td></tr>
   <tr><td>All the samples</td>
-      <td>415 sample programs, compiled</td><td class="num">415 of 415</td></tr>
+      <td>421 sample programs, compiled</td><td class="num">421 of 421</td></tr>
   <tr><td>The error programs</td>
-      <td>39 programs that must fail, with what each error says</td>
-      <td class="num">151 of 151</td></tr>
+      <td>40 programs that must fail, with what each error says</td>
+      <td class="num">165 of 165</td></tr>
   <tr><td>The documentation's examples</td>
       <td>every code snippet in the manuals, compiled</td>
-      <td class="num">377 of 377, and 78 JC modules</td></tr>
+      <td class="num">381 of 381, and 80 JC modules</td></tr>
   <tr><td>The test round on the boards</td>
-      <td>24 programs on all eleven boards, with the image that is published</td>
-      <td>as on the PC, except for what differs on purpose; and a hang on the ESP32-P4, once (on
-          15 November), not seen again in 400 consecutive runs and 500 screen captures</td></tr>
+      <td>28 programs on all eleven boards, with the image that is published and its packs</td>
+      <td>as on the PC, except for what differs on purpose</td></tr>
   <tr><td>The endurance test</td>
-      <td>48 hours straight, on four boards</td><td>without a single error or reboot</td></tr>
+      <td>48 hours straight, on four boards (for V8)</td><td>without a single error or reboot</td></tr>
 </table>
 
 <h2>The golden rule: two machines, the same output</h2>
@@ -154,12 +153,12 @@
 
 <h3>The corpus, on both VMs</h3>
 <p>
-  217 programs — the samples, and many written while fixing a bug, so that it does not come
+  221 programs — the samples, and many written while fixing a bug, so that it does not come
   back — are compiled and run on both VMs, and their output has to be identical. And twice more:
   compiled to MOD8, the module format before MOD9, because the VMs still load it, and with two
   worker threads at once, because the same program has to say the same
   thing with one as with two. And the corpus grows with each version: in V7 there were 149
-  programs; today, 217.
+  programs; today, 221.
 </p>
 
 <h3>What came before keeps working</h3>
@@ -199,7 +198,7 @@
       other threads had already used up the freed space, and it gave up with a false «out of
       memory». Now, before giving up, that thread collects the garbage itself.</li>
   <li><strong>The simulated micro,</strong> the one the IDE uses when there is no board: it is
-      built and tested with its 15 cases.</li>
+      built and tested with its 16 cases.</li>
   <li><strong>Shadowing:</strong> the order in which modules are looked up (the program's folder,
       the library, the packs) is the same on both VMs, and if one of your modules shadows one in
       the library, you are warned. 15 cases.</li>
@@ -222,16 +221,16 @@
 
 <h2>The compiler</h2>
 <ul>
-  <li><strong>Their own tests:</strong> 404 for the compiler and 66 for the Java VM.</li>
-  <li><strong>The error programs.</strong> 39 programs that must fail, with 151 checks. Failing
+  <li><strong>Their own tests:</strong> 463 for the compiler and 75 for the Java VM.</li>
+  <li><strong>The error programs.</strong> 40 programs that must fail, with 165 checks. Failing
       is not enough: each error has to say what it is supposed to say. If one that should fail
       starts compiling, a rule of the language has been lost; if the message changes, the
       diagnosis has got worse — or better, and then it is updated deliberately.</li>
-  <li><strong>All the samples:</strong> the 415 sample programs are compiled with today's
+  <li><strong>All the samples:</strong> the 421 sample programs are compiled with today's
       compiler. While V6 was being prepared, this sweep found six published samples that no
       longer compiled.</li>
-  <li><strong>The documentation.</strong> Every example in the manuals is compiled (377 BP
-      snippets and 78 JC modules, across 29 pages): an example that does not compile is a documentation bug, and a line the
+  <li><strong>The documentation.</strong> Every example in the manuals is compiled (381 BP
+      snippets and 80 JC modules, across 29 pages): an example that does not compile is a documentation bug, and a line the
       manual shows as an error (<code>// compile error: …</code>) has to produce it. And when the
       package is put together, it is checked that no link in the help is left broken.</li>
 </ul>
@@ -247,7 +246,8 @@
   date, or a screen test on a board that has no screen). For V7, 50 programs on ten boards; for
   V8, in the final batch of 18 November, the 24 new programs on nine boards of three
   architectures: ARM, Xtensa and RISC-V; on the 19th, on the new board, the ESP32-P4X; and on
-  the 20th, on the P4 kit: all eleven.
+  the 20th, on the P4 kit: all eleven. For 8.5, on 27 November, 28 programs on all eleven, each
+  with its packs burnt by the IDE, with the installation's scripts.
 </p>
 <p>
   What the test round catches, the PC does not see. In the batch of 15 November, the new ESP32-C6
@@ -357,7 +357,7 @@ python scripts/doc_frags.py                # the documentation's examples</pre>
 </p>
 
 <footer>
-  Measured on 18 and 19 November 2026, for V8. The numbers are redone in the pre-release check of each
+  Measured on 26 and 27 November 2026, for 8.5. The numbers are redone in the pre-release check of each
   version.
 </footer>
 

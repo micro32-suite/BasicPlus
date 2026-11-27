@@ -10,22 +10,22 @@ This page goes through them all: what each one checks, how many cases it has and
 
 ## By the numbers
 
-Measured on 18 and 19 November 2026, in the pre-release check of V8 (the compiler's tests and the net, on the 19th, after its last fixes). The numbers are redone each time a version is published.
+Measured on 26 and 27 November 2026, in the pre-release check of 8.5 (the net and the compiler's tests, on the 26th; the boards, on the 27th). The numbers are redone each time a version is published.
 
 | Test | What it checks | Result |
 |---|---|---|
-| The corpus, on both VMs | 217 programs: the same output, byte for byte | 217 of 217 |
-| … in MOD8 | the same ones, compiled to MOD8, the module format before MOD9 | 209 of 209 (8 use what only the new format has) |
-| … with two worker threads | the same ones, with two worker threads at once | 217 of 217 |
+| The corpus, on both VMs | 221 programs: the same output, byte for byte | 221 of 221 |
+| … in MOD8 | the same ones, compiled to MOD8, the module format before MOD9 | 212 of 212 (9 use what only the new format has) |
+| … with two worker threads | the same ones, with two worker threads at once | 221 of 221 |
 | The V6 capsule | 59 programs compiled by the published V6 compiler | 59 of 59 |
 | The C tests | inside the C VM | 117 of 117 |
-| The simulated micro · shadowing · the version rule | the IDE's simulator · the order in which modules are looked up · module versions | 15 · 15 · 9, all |
-| The compiler and the Java VM | their own tests | 404 and 66, all |
-| All the samples | 415 sample programs, compiled | 415 of 415 |
-| The error programs | 39 programs that must fail, with what each error says | 151 of 151 |
-| The documentation's examples | every code snippet in the manuals, compiled | 377 of 377, and 78 JC modules |
-| The test round on the boards | 24 programs on all eleven boards, with the image that is published | as on the PC, except for what differs on purpose; and a hang on the ESP32-P4, once (on 15 November), not seen again in 400 consecutive runs and 500 screen captures |
-| The endurance test | 48 hours straight, on four boards | without a single error or reboot |
+| The simulated micro · shadowing · the version rule | the IDE's simulator · the order in which modules are looked up · module versions | 16 · 15 · 9, all |
+| The compiler and the Java VM | their own tests | 463 and 75, all |
+| All the samples | 421 sample programs, compiled | 421 of 421 |
+| The error programs | 40 programs that must fail, with what each error says | 165 of 165 |
+| The documentation's examples | every code snippet in the manuals, compiled | 381 of 381, and 80 JC modules |
+| The test round on the boards | 28 programs on all eleven boards, with the image that is published and its packs | as on the PC, except for what differs on purpose |
+| The endurance test | 48 hours straight, on four boards (for V8) | without a single error or reboot |
 
 ## The golden rule: two machines, the same output
 
@@ -41,7 +41,7 @@ No change to the virtual machines, the compiler or the standard library goes in 
 
 ### The corpus, on both VMs
 
-217 programs — the samples, and many written while fixing a bug, so that it does not come back — are compiled and run on both VMs, and their output has to be identical. And twice more: compiled to MOD8, the module format before MOD9, because the VMs still load it, and with two worker threads at once, because the same program has to say the same thing with one as with two. And the corpus grows with each version: in V7 there were 149 programs; today, 217.
+221 programs — the samples, and many written while fixing a bug, so that it does not come back — are compiled and run on both VMs, and their output has to be identical. And twice more: compiled to MOD8, the module format before MOD9, because the VMs still load it, and with two worker threads at once, because the same program has to say the same thing with one as with two. And the corpus grows with each version: in V7 there were 149 programs; today, 221.
 
 ### What came before keeps working
 
@@ -56,7 +56,7 @@ No change to the virtual machines, the compiler or the standard library goes in 
 117 tests written in C exercise what a sample program cannot reach: the debugger core (pauses, steps, a Stop at a breakpoint, several threads), the native functions compiled to C against their interpreted version (a single one of those tests makes 494 comparisons), the filesystems and the SD card, the flash, the garbage collector, the threads and their scheduler, the packs and tight memory. Alongside them:
 
 - **The stress tests:** the object table growing without end, a tight heap with one, two and four worker threads on both VMs, and threads yielding their turn to one another. On 15 November they caught a race: two threads ran out of room in the object table at the same time; one of them collected the garbage, and when the other tried again, the other threads had already used up the freed space, and it gave up with a false «out of memory». Now, before giving up, that thread collects the garbage itself.
-- **The simulated micro,** the one the IDE uses when there is no board: it is built and tested with its 15 cases.
+- **The simulated micro,** the one the IDE uses when there is no board: it is built and tested with its 16 cases.
 - **Shadowing:** the order in which modules are looked up (the program's folder, the library, the packs) is the same on both VMs, and if one of your modules shadows one in the library, you are warned. 15 cases.
 
 ## The tests that test the tests
@@ -67,16 +67,16 @@ And two rules: a test that is skipped counts as a failure, and so does one that 
 
 ## The compiler
 
-- **Their own tests:** 404 for the compiler and 66 for the Java VM.
-- **The error programs.** 39 programs that must fail, with 151 checks. Failing is not enough: each error has to say what it is supposed to say. If one that should fail starts compiling, a rule of the language has been lost; if the message changes, the diagnosis has got worse — or better, and then it is updated deliberately.
-- **All the samples:** the 415 sample programs are compiled with today's compiler. While V6 was being prepared, this sweep found six published samples that no longer compiled.
-- **The documentation.** Every example in the manuals is compiled (377 BP snippets and 78 JC modules, across 29 pages): an example that does not compile is a documentation bug, and a line the manual shows as an error (`// compile error: …`) has to produce it. And when the package is put together, it is checked that no link in the help is left broken.
+- **Their own tests:** 463 for the compiler and 75 for the Java VM.
+- **The error programs.** 40 programs that must fail, with 165 checks. Failing is not enough: each error has to say what it is supposed to say. If one that should fail starts compiling, a rule of the language has been lost; if the message changes, the diagnosis has got worse — or better, and then it is updated deliberately.
+- **All the samples:** the 421 sample programs are compiled with today's compiler. While V6 was being prepared, this sweep found six published samples that no longer compiled.
+- **The documentation.** Every example in the manuals is compiled (381 BP snippets and 80 JC modules, across 29 pages): an example that does not compile is a documentation bug, and a line the manual shows as an error (`// compile error: …`) has to produce it. And when the package is put together, it is checked that no link in the help is left broken.
 
 ## On the boards
 
 ### The test round
 
-Before a release, each board is flashed with the image from the ZIP that is about to be published — the same one you will install — and is put through the test round: a series of programs that run on the PC and on the board. The PC's output is the reference, and the board's has to match it, except for what differs on purpose (a filesystem with no modification date, or a screen test on a board that has no screen). For V7, 50 programs on ten boards; for V8, in the final batch of 18 November, the 24 new programs on nine boards of three architectures: ARM, Xtensa and RISC-V; on the 19th, on the new board, the ESP32-P4X; and on the 20th, on the P4 kit: all eleven.
+Before a release, each board is flashed with the image from the ZIP that is about to be published — the same one you will install — and is put through the test round: a series of programs that run on the PC and on the board. The PC's output is the reference, and the board's has to match it, except for what differs on purpose (a filesystem with no modification date, or a screen test on a board that has no screen). For V7, 50 programs on ten boards; for V8, in the final batch of 18 November, the 24 new programs on nine boards of three architectures: ARM, Xtensa and RISC-V; on the 19th, on the new board, the ESP32-P4X; and on the 20th, on the P4 kit: all eleven. For 8.5, on 27 November, 28 programs on all eleven, each with its packs burnt by the IDE, with the installation's scripts.
 
 What the test round catches, the PC does not see. In the batch of 15 November, the new ESP32-C6 image had moved its memory block by 4 KB, and the graphical interface engines would not load until their packs were burned again.
 
@@ -127,4 +127,4 @@ The test round (`bpgenvm-c/tools/tanda.py`) and the endurance test need boards; 
 
 If you find a bug, [tell us](https://github.com/micro32-suite/BasicPlus/issues): it is the best help there is.
 
-Measured on 18 and 19 November 2026, for V8. The numbers are redone in the pre-release check of each version.
+Measured on 26 and 27 November 2026, for 8.5. The numbers are redone in the pre-release check of each version.

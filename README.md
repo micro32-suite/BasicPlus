@@ -74,7 +74,7 @@ one syntax to the other.
 ## Try it (Windows, nothing to build)
 
 1. Have **Java 8 or later** installed.
-2. Download **`Micro32-Suite-8.1-win.zip`** from the
+2. Download **`Micro32-Suite-8.5-win.zip`** from the
    [latest release](https://github.com/micro32-suite/BasicPlus/releases/latest)
    and unzip it anywhere.
 3. Run **`bpide.bat`**. Open `samples/blink.bp`, press **Compile** and then
@@ -107,14 +107,20 @@ source](#build-from-source).
   paints a window.
 - **WiFi and Bluetooth** on the ESP32s with PSRAM: the IDE uploads, burns and
   runs over the network; from Bluetooth, a keyboard and a mouse.
+- **An AI programs the board**: the IDE speaks MCP, so an AI (Claude Code, for
+  one) can write a program, compile it, run it on the PC, on the simulated micro
+  or on the board, and burn its packs — on your PC only, asking you first before
+  anything that cannot be undone. Someone who cannot program ordered a weather
+  station for an ESP32-P4, and an AI built it in 26 minutes
+  ([the example](https://micro32-suite.github.io/BasicPlus/en/guia-ide.html#ia-ejemplo)).
 - **Native code where it counts**: a `native function` is compiled ahead of
   time to Thumb-2 or RISC-V and travels inside the bytecode file — 40-90× the
   interpreter on compute kernels.
 - **Two syntaxes, one compiler**: BasicPlus, and **JC** for those who come from
   Java or C#.
-- **Tested on real hardware**: the V8 test round passed on all eleven boards,
-  and four of them ran a program that touches everything for 48 hours in a
-  row, without a single error or restart. Every test, with its numbers, in
+- **Tested on real hardware**: the 8.5 test round passed on all eleven boards,
+  and, for V8, four of them ran a program that touches everything for 48 hours
+  in a row, without a single error or restart. Every test, with its numbers, in
   **[How BasicPlus is tested](https://micro32-suite.github.io/BasicPlus/en/pruebas.html)**.
 
 ## Boards
@@ -246,7 +252,7 @@ bpgenvm-c/build/bpgenvm-c --libdir=bpstdlib samples/Blink.mod
 
 # 4. (Optional) the IDE
 mvn -f toolchain/BpIde/pom.xml package
-java -jar toolchain/BpIde/target/BpIde-8.1.jar
+java -jar toolchain/BpIde/target/BpIde-8.5.jar
 ```
 
 The firmwares are built with their usual toolchains (pico-sdk + ninja,
@@ -315,11 +321,13 @@ In **English** and **[Spanish](README.es.md)**, also on the
 
 ## Status
 
-**Version 8.1** (November 2026). V1 proved the idea; V2 hardened and broadened
+**Version 8.5** (November 2026). V1 proved the idea; V2 hardened and broadened
 it; V3 gave it a face; V4 fixed its foundations; V5 gave it somewhere to put
 things; V6 put the microcontroller code in order; V7 left one image per micro;
 **V8 connects it**: WiFi and Bluetooth, JC and one more board, the ESP32-P4X.
-V8.1 changed nothing in the product: it reorganized the project as a suite.
+V8.1 changed nothing in the product: it reorganized the project as a suite;
+**8.5 hands it to an AI**: the IDE speaks MCP, and an AI can program a board
+directly.
 
 Each version, in the [releases](https://github.com/micro32-suite/BasicPlus/releases)
 and the [release notes](docs/RELEASES.md) *(Spanish)*.

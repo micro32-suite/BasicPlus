@@ -6,7 +6,7 @@
 
 A general-purpose language for 32-bit microcontrollers: modern BASIC syntax, object orientation, a **graphical interface** and a first-class debugger. It compiles to bytecode that runs **identically** on the PC and on the micro.
 
-- V7
+- V8.5
 - RP2350 · ESP32 S3/C3/C5/C6/P4 · STM32
 - Two VMs · one byte-identical output
 - Handle-based memory
@@ -56,6 +56,8 @@ var cold: List := dao.list(w.lt("value", 22.0d))
 
 The engine does not live inside the VM: it is burned separately, in a **pack**, so only those who use it pay for it — and it runs from flash without eating RAM. [How it works, in full →](basedatos.html.md)
 
+**New in 8.5: an AI programs the board.** The IDE speaks MCP: an AI — Claude Code, for one — opens the sources, compiles, runs on the PC, on the simulated micro or on the board, and burns its packs and its settings, on your PC only and asking you first before anything that cannot be undone. It is surprisingly fast: someone who cannot program ordered a weather station for an ESP32-P4, and the AI built it in 26 minutes, from the blank board to the working station ([the example, in the IDE guide](guia-ide.html.md#ia-ejemplo)). And a good number of bugs fixed, some of them from published versions. Details in the [v8.5 release](https://github.com/micro32-suite/BasicPlus/releases/tag/v8.5) and the [release notes](../RELEASES.md) *(Spanish)*; the download, `Micro32-Suite-8.5-win.zip`.
+
 **New in V8.** This version brings three big things:
 
 - **WiFi and Bluetooth** on the ESP32s with PSRAM — the S3, the C5 and the Waveshare P4, which carries its radio in its ESP32-C6: the board joins the network by itself at boot and the IDE works with it without a cable; from Bluetooth, for now, the keyboard and the mouse. Both radios are off by default, and switch themselves off after ten minutes unused.
@@ -64,7 +66,7 @@ The engine does not live inside the VM: it is burned separately, in a **pack**, 
 
 And also: what was pending from V7 and what came up along the way, fixed; strings, much faster (on the Pico 2, walking a 2 KB one went from 535 to 20 ms); sound on the Waveshare P4; and an image for the **ESP32-P4X**, the new revision of the P4, from the same code. Nine images for eleven boards. Details in the [v8.0 release](https://github.com/micro32-suite/BasicPlus/releases/tag/v8.0) and the [release notes](../RELEASES.md) *(Spanish)*; what V7 brought — packs, one image per micro and the second core — is in the [v7.0 release](https://github.com/micro32-suite/BasicPlus/releases/tag/v7.0).
 
-**V8.1** changes nothing in the product: it reorganizes the project as a suite. BasicPlus moves to the [micro32-suite](https://github.com/micro32-suite) organization, together with **toolchain** (the compiler, the IDE and the Java VM) and **runtime** (the C VM and the firmware), each with its own history. The download is now called `Micro32-Suite-8.1-win.zip`, in the [v8.1 release](https://github.com/micro32-suite/BasicPlus/releases/tag/v8.1).
+**V8.1** changes nothing in the product: it reorganizes the project as a suite. BasicPlus moves to the [micro32-suite](https://github.com/micro32-suite) organization, together with **toolchain** (the compiler, the IDE and the Java VM) and **runtime** (the C VM and the firmware), each with its own history; and the download became `Micro32-Suite` ([v8.1 release](https://github.com/micro32-suite/BasicPlus/releases/tag/v8.1)).
 
 ## Getting started
 

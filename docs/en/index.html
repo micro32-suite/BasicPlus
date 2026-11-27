@@ -186,7 +186,7 @@
     <strong>identically</strong> on the PC and on the micro.
   </p>
   <div class="badges">
-    <span class="badge">V7</span>
+    <span class="badge">V8.5</span>
     <span class="badge">RP2350 · ESP32 S3/C3/C5/C6/P4 · STM32</span>
     <span class="badge">Two VMs · one byte-identical output</span>
     <span class="badge">Handle-based memory</span>
@@ -252,6 +252,18 @@
 
 
 <p style="margin-top:1.4rem">
+  <strong>New in 8.5: an AI programs the board.</strong> The IDE speaks MCP: an AI — Claude Code, for
+  one — opens the sources, compiles, runs on the PC, on the simulated micro or on the board, and
+  burns its packs and its settings, on your PC only and asking you first before anything that
+  cannot be undone. It is surprisingly fast: someone who cannot program ordered a weather station
+  for an ESP32-P4, and the AI built it in 26 minutes, from the blank board to the working station
+  (<a href="guia-ide.html#ia-ejemplo">the example, in the IDE guide</a>). And a good number of bugs
+  fixed, some of them from published versions. Details in the
+  <a href="https://github.com/micro32-suite/BasicPlus/releases/tag/v8.5">v8.5 release</a> and the
+  <a href="../RELEASES.md">release notes</a> <em>(Spanish)</em>; the download,
+  <code>Micro32-Suite-8.5-win.zip</code>.
+</p>
+<p style="margin-top:1.4rem">
   <strong>New in V8.</strong> This version brings three big things:
 </p>
 <ul>
@@ -284,9 +296,8 @@
   <strong>V8.1</strong> changes nothing in the product: it reorganizes the project as a suite.
   BasicPlus moves to the <a href="https://github.com/micro32-suite">micro32-suite</a>
   organization, together with <strong>toolchain</strong> (the compiler, the IDE and the Java VM)
-  and <strong>runtime</strong> (the C VM and the firmware), each with its own history. The
-  download is now called <code>Micro32-Suite-8.1-win.zip</code>, in the
-  <a href="https://github.com/micro32-suite/BasicPlus/releases/tag/v8.1">v8.1 release</a>.
+  and <strong>runtime</strong> (the C VM and the firmware), each with its own history; and the
+  download became <code>Micro32-Suite</code> (<a href="https://github.com/micro32-suite/BasicPlus/releases/tag/v8.1">v8.1 release</a>).
 </p>
 
 <h2>Getting started</h2>

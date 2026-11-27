@@ -186,7 +186,7 @@
     <strong>idéntico</strong> en el PC y en el micro.
   </p>
   <div class="badges">
-    <span class="badge">V7</span>
+    <span class="badge">V8.5</span>
     <span class="badge">RP2350 · ESP32 S3/C3/C5/C6/P4 · STM32</span>
     <span class="badge">Memoria por handles</span>
     <span class="badge">Dos VMs · una salida byte-idéntica</span>
@@ -251,6 +251,17 @@
 </p>
 
 <p style="margin-top:1.4rem">
+  <strong>Nuevo en la 8.5: una IA programa la placa.</strong> El IDE habla MCP: una IA —Claude Code,
+  por ejemplo— abre los fuentes, compila, ejecuta en el PC, en el micro simulado o en la placa, y
+  graba sus packs y sus ajustes, sólo en tu PC y preguntándote antes lo que no se deshace. Es
+  sorprendentemente rápido: una persona que no programa encargó una estación meteorológica para
+  una ESP32-P4, y la IA la hizo en 26 minutos, de la placa en blanco a la estación funcionando
+  (<a href="guia-ide.html#ia-ejemplo">el ejemplo, en la guía del IDE</a>). Y unos cuantos fallos
+  corregidos, algunos de versiones publicadas. Detalle en la
+  <a href="https://github.com/micro32-suite/BasicPlus/releases/tag/v8.5">release v8.5</a> y las
+  <a href="RELEASES.md">notas de versión</a>; la descarga, <code>Micro32-Suite-8.5-win.zip</code>.
+</p>
+<p style="margin-top:1.4rem">
   <strong>Nuevo en V8.</strong> Esta versión trae tres cosas grandes:
 </p>
 <ul>
@@ -283,9 +294,8 @@
   <strong>La V8.1</strong> no cambia nada del producto: reorganiza el proyecto como una suite.
   BasicPlus pasa a la organización <a href="https://github.com/micro32-suite">micro32-suite</a>,
   junto a <strong>toolchain</strong> (el compilador, el IDE y la VM Java) y <strong>runtime</strong>
-  (la VM C y el firmware), cada uno con su historia. La descarga se llama ahora
-  <code>Micro32-Suite-8.1-win.zip</code>, en la
-  <a href="https://github.com/micro32-suite/BasicPlus/releases/tag/v8.1">release v8.1</a>.
+  (la VM C y el firmware), cada uno con su historia; y la descarga pasó a llamarse
+  <code>Micro32-Suite</code> (<a href="https://github.com/micro32-suite/BasicPlus/releases/tag/v8.1">release v8.1</a>).
 </p>
 
 <h2>Empezar</h2>
