@@ -37,8 +37,6 @@ Image: `bpvm_pico.uf2`.
 | UART 0 | TX 0, 12, 16, 28 · RX 1, 13, 17, 29 |
 | UART 1 | TX 4, 8, 20, 24 · RX 5, 9, 21, 25 |
 
-*(From the image's code; still to be read from the board.)*
-
 0-22 and 26-28 reach the connector. 23, 24, 25 and 29 are the board's: its power supply's mode, VBUS sensing, the LED and the VSYS measurement (the SDK's file, below).
 
 Its documentation:
@@ -68,8 +66,6 @@ Image: `bpvm_pico.uf2`.
 | UART 0 | TX 0, 12, 16, 28, 32, 44 · RX 1, 13, 17, 29, 33, 45 |
 | UART 1 | TX 4, 8, 20, 24, 36, 40 · RX 5, 9, 21, 25, 37, 41 |
 | The system's: not for the program | 47: the flash or the PSRAM |
-
-*(From the image's code; still to be read from the board.)*
 
 Its documentation:
 
@@ -106,7 +102,18 @@ Its documentation:
 
 Image: `bpvm_esp32c3_merged.bin`.
 
-*(to be read from the board)*
+| | |
+|---|---|
+| Microcontroller | `esp32c3` |
+| The program's | 0-10, 20-21 |
+| Analog | 0-5 |
+| PWM | all the program's |
+| Pulse counter | none |
+| Open drain | all the program's |
+| I2C | 0: any of the program's |
+| SPI | 2: any of the program's |
+| UART | 1: any of the program's |
+| The system's: not for the program | 11-17: the flash or the PSRAM; 18-19: the IDE's cable (the wire) |
 
 Its documentation:
 
@@ -145,7 +152,18 @@ Its documentation:
 
 Image: `bpvm_esp32c6_merged.bin`.
 
-*(to be read from the board)*
+| | |
+|---|---|
+| Microcontroller | `esp32c6` |
+| The program's | 0-11, 14-23 |
+| Analog | 0-6 |
+| PWM | all the program's |
+| Pulse counter | all the program's |
+| Open drain | all the program's |
+| I2C | 0: any of the program's |
+| SPI | 2: any of the program's |
+| UART | 1: any of the program's |
+| The system's: not for the program | 12-13: the IDE's cable (the wire); 24-30: the flash or the PSRAM |
 
 The display and the TF slot go through pins of the program's: those of its ENV lines ([the panel lines](INSTALAR_FIRMWARE.md#panel-spi)), and its schematic names them.
 
@@ -160,7 +178,18 @@ Its documentation:
 
 Image: `bpvm_esp32p4_merged.bin`.
 
-*(to be read from the board)*
+| | |
+|---|---|
+| Microcontroller | `esp32p4` |
+| The program's | 0-25, 28-36, 39-54 |
+| Analog | 16-23, 49-54 |
+| PWM | all the program's |
+| Pulse counter | all the program's |
+| Open drain | all the program's |
+| I2C | 0, 1: any of the program's |
+| SPI | 2, 3: any of the program's |
+| UART | 1, 2: any of the program's |
+| The system's: not for the program | 26-27: the display; 37-38: the IDE's cable (the wire) |
 
 I2C 0 is the board's (the touch), on 7 (SDA) and 8 (SCL), at 100 kHz, and it is shared: `I2c.HardI2C(0, 7, 8, 100000)` uses it along with the board (its addresses are taken). For a sensor of yours, better I2C 1, on another two: `I2c.HardI2C(1, 28, 29, 100000)`.
 
@@ -201,7 +230,18 @@ Its documentation:
 
 Image: `bpvm_esp32p4x_merged.bin`.
 
-*(to be read from the board)*
+| | |
+|---|---|
+| Microcontroller | `esp32p4` |
+| The program's | 0-23, 28-54 |
+| Analog | 16-23, 49-54 |
+| PWM | all the program's |
+| Pulse counter | all the program's |
+| Open drain | all the program's |
+| I2C | 0, 1: any of the program's |
+| SPI | 2, 3: any of the program's |
+| UART | 1, 2: any of the program's |
+| The system's: not for the program | 24-25: the IDE's cable (the wire); 26-27: the display |
 
 I2C 0 is the board's (the touch), on 7 (SDA) and 8 (SCL), at 100 kHz, and it is shared: `I2c.HardI2C(0, 7, 8, 100000)` uses it along with the board (its addresses are taken). For a sensor of yours, better I2C 1, on another two: `I2c.HardI2C(1, 28, 29, 100000)`.
 

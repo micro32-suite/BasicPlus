@@ -1,4 +1,3 @@
-origen: el código de la imagen (s_rp_caps_b, bpgenvm-c/pico/main.c; el GP47, board_desc.c)
 micro: rp2350b
 paquete: QFN-80
 fabricante: Raspberry Pi

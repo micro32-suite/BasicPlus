@@ -1,0 +1,14 @@
+micro: esp32c3
+paquete:
+fabricante: Espressif
+pines: 0-10, 20-21
+analógicos: 0-5
+pwm: 0-10, 20-21
+pulsos: ninguno
+colector abierto: 0-10, 20-21
+sólo entrada: ninguno
+uart: 1
+i2c: 0
+spi: 2
+sistema: 11-17 (de la flash o la PSRAM)
+sistema: 18-19 (del cable del IDE (el wire))

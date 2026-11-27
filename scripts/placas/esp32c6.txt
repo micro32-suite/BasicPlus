@@ -1,0 +1,14 @@
+micro: esp32c6
+paquete:
+fabricante: Espressif
+pines: 0-11, 14-23
+analógicos: 0-6
+pwm: 0-11, 14-23
+pulsos: 0-11, 14-23
+colector abierto: 0-11, 14-23
+sólo entrada: ninguno
+uart: 1
+i2c: 0
+spi: 2
+sistema: 12-13 (del cable del IDE (el wire))
+sistema: 24-30 (de la flash o la PSRAM)

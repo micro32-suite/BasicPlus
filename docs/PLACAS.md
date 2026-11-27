@@ -37,8 +37,6 @@ La imagen: `bpvm_pico.uf2`.
 | UART 0 | TX 0, 12, 16, 28 · RX 1, 13, 17, 29 |
 | UART 1 | TX 4, 8, 20, 24 · RX 5, 9, 21, 25 |
 
-*(Del código de la imagen; a falta de preguntárselo a la placa.)*
-
 Al conector salen el 0-22 y el 26-28. El 23, el 24, el 25 y el 29 son de la placa: el modo de su fuente, la presencia de VBUS, el LED y la medida de VSYS (el fichero del SDK, abajo).
 
 Su documentación:
@@ -68,8 +66,6 @@ La imagen: `bpvm_pico.uf2`.
 | UART 0 | TX 0, 12, 16, 28, 32, 44 · RX 1, 13, 17, 29, 33, 45 |
 | UART 1 | TX 4, 8, 20, 24, 36, 40 · RX 5, 9, 21, 25, 37, 41 |
 | Del sistema: no son para el programa | 47: la flash o la PSRAM |
-
-*(Del código de la imagen; a falta de preguntárselo a la placa.)*
 
 Su documentación:
 
@@ -106,7 +102,18 @@ Su documentación:
 
 La imagen: `bpvm_esp32c3_merged.bin`.
 
-*(a falta de preguntárselo a la placa)*
+| | |
+|---|---|
+| Micro | `esp32c3` |
+| Los del programa | 0-10, 20-21 |
+| Analógicos | 0-5 |
+| PWM | todos los del programa |
+| Contador de pulsos | ninguno |
+| Colector abierto | todos los del programa |
+| I2C | 0: cualquiera de los del programa |
+| SPI | 2: cualquiera de los del programa |
+| UART | 1: cualquiera de los del programa |
+| Del sistema: no son para el programa | 11-17: la flash o la PSRAM; 18-19: el cable del IDE (el wire) |
 
 Su documentación:
 
@@ -145,7 +152,18 @@ Su documentación:
 
 La imagen: `bpvm_esp32c6_merged.bin`.
 
-*(a falta de preguntárselo a la placa)*
+| | |
+|---|---|
+| Micro | `esp32c6` |
+| Los del programa | 0-11, 14-23 |
+| Analógicos | 0-6 |
+| PWM | todos los del programa |
+| Contador de pulsos | todos los del programa |
+| Colector abierto | todos los del programa |
+| I2C | 0: cualquiera de los del programa |
+| SPI | 2: cualquiera de los del programa |
+| UART | 1: cualquiera de los del programa |
+| Del sistema: no son para el programa | 12-13: el cable del IDE (el wire); 24-30: la flash o la PSRAM |
 
 La pantalla y la ranura TF van por pines de los del programa: los de sus líneas del ENV ([las líneas del panel](INSTALAR_FIRMWARE.md#panel-spi)), y su esquema los nombra.
 
@@ -160,7 +178,18 @@ Su documentación:
 
 La imagen: `bpvm_esp32p4_merged.bin`.
 
-*(a falta de preguntárselo a la placa)*
+| | |
+|---|---|
+| Micro | `esp32p4` |
+| Los del programa | 0-25, 28-36, 39-54 |
+| Analógicos | 16-23, 49-54 |
+| PWM | todos los del programa |
+| Contador de pulsos | todos los del programa |
+| Colector abierto | todos los del programa |
+| I2C | 0, 1: cualquiera de los del programa |
+| SPI | 2, 3: cualquiera de los del programa |
+| UART | 1, 2: cualquiera de los del programa |
+| Del sistema: no son para el programa | 26-27: la pantalla; 37-38: el cable del IDE (el wire) |
 
 El I2C 0 es de la placa (el táctil), en el 7 (SDA) y el 8 (SCL), a 100 kHz, y se comparte: `I2c.HardI2C(0, 7, 8, 100000)` lo usa con ella (sus direcciones, ya cogidas). Para un sensor tuyo, mejor el I2C 1, en otros dos: `I2c.HardI2C(1, 28, 29, 100000)`.
 
@@ -201,7 +230,18 @@ Su documentación:
 
 La imagen: `bpvm_esp32p4x_merged.bin`.
 
-*(a falta de preguntárselo a la placa)*
+| | |
+|---|---|
+| Micro | `esp32p4` |
+| Los del programa | 0-23, 28-54 |
+| Analógicos | 16-23, 49-54 |
+| PWM | todos los del programa |
+| Contador de pulsos | todos los del programa |
+| Colector abierto | todos los del programa |
+| I2C | 0, 1: cualquiera de los del programa |
+| SPI | 2, 3: cualquiera de los del programa |
+| UART | 1, 2: cualquiera de los del programa |
+| Del sistema: no son para el programa | 24-25: el cable del IDE (el wire); 26-27: la pantalla |
 
 El I2C 0 es de la placa (el táctil), en el 7 (SDA) y el 8 (SCL), a 100 kHz, y se comparte: `I2c.HardI2C(0, 7, 8, 100000)` lo usa con ella (sus direcciones, ya cogidas). Para un sensor tuyo, mejor el I2C 1, en otros dos: `I2c.HardI2C(1, 28, 29, 100000)`.
 
